@@ -9,7 +9,6 @@ import {
   MapPin,
   Building,
   Settings,
-  Globe,
   Instagram,
   Music2,
   FileCheck,
@@ -73,4 +72,4 @@ export const SCOPE_ICONS: { [key: string]: any } = {
   instagram_account: Instagram,
   x_account: User,
   tiktok_account: Music2,
-}; 
+};

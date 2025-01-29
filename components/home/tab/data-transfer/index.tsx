@@ -1,7 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { ArrowRight, Database } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { ScopeSelector } from "@/components/general/scope-selector";
 import { ScopeItems } from "@/lib/scopes";
 import { useAuth } from "@/app/hooks/useAuth";
@@ -45,9 +46,9 @@ export function DataTransferTab({
         <>
           {isMobileDevice() ? (
             <Button
+              className="w-full h-12 sm:h-14 px-6 sm:px-8 rounded-full text-sm font-normal border-2 border-gray-200"
               variant="default"
               onClick={() => (window.location.href = sessionData.url)}
-              className="w-full h-12 sm:h-14 px-6 sm:px-8 rounded-full text-sm font-normal border-2 border-gray-200"
             >
               Open Didit App (to continue)
               <div className="bg-white/20 rounded-full p-1 ml-2">
@@ -55,19 +56,19 @@ export function DataTransferTab({
               </div>
             </Button>
           ) : (
-            <QRViewer url={sessionData.url} status={sessionStatus} />
+            <QRViewer status={sessionStatus} url={sessionData.url} />
           )}
         </>
       )}
 
-      {decisionData && <JsonViewer title="Decision Data" data={decisionData} />}
+      {decisionData && <JsonViewer data={decisionData} title="Decision Data" />}
 
       <div className="flex flex-col py-8 space-y-8">
         <div className="flex justify-between items-center">
           <Button
-            onClick={handleCreateSession}
-            variant="default"
             className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-8 rounded-full bg-[#2667ff] hover:bg-[#2667ff]/90 text-sm sm:text-base font-normal"
+            variant="default"
+            onClick={handleCreateSession}
           >
             {sessionData || decisionData ? (
               <>

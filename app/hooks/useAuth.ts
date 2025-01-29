@@ -22,12 +22,14 @@ export function useAuth() {
   // Handle code from URL and localStorage
   useEffect(() => {
     const urlCode = searchParams.get("code");
+
     if (urlCode) {
       setCode(urlCode);
       localStorage.setItem("code", urlCode);
       window.history.replaceState({}, document.title, window.location.pathname);
     } else {
       const storedCode = localStorage.getItem("code");
+
       if (storedCode) {
         setCode(storedCode);
       }
@@ -37,6 +39,7 @@ export function useAuth() {
   // Handle authentication state
   useEffect(() => {
     const storedAccessToken = localStorage.getItem("accessToken");
+
     if (storedAccessToken) {
       setIsLoggedIn(true);
       fetchUserData(storedAccessToken);
@@ -49,8 +52,10 @@ export function useAuth() {
     if (code && !isLoggedIn) {
       try {
         const response = await fetch(`/api/token?code=${code}`);
+
         if (response.ok) {
           const data = await response.json();
+
           localStorage.setItem("accessToken", data.access_token);
           setIsLoggedIn(true);
           localStorage.removeItem("code");
@@ -71,8 +76,10 @@ export function useAuth() {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+
       if (response.ok) {
         const data = await response.json();
+
         setUserData(data);
       } else {
         console.error("Error fetching user data:", response.statusText);
@@ -105,23 +112,26 @@ export function useAuth() {
       }
 
       const result = await response.json();
+
       setSessionData(result);
       setSessionStatus(null);
       setDecisionData(null);
+
       return result;
     } catch (error) {
       console.error("Error creating session:", error);
+
       return null;
     }
   };
 
   const checkSessionStatus = async (
     sessionId: string,
-    sessionToken: string
+    sessionToken: string,
   ) => {
     try {
       const response = await fetch(
-        `/api/auth?sessionId=${sessionId}&action=status&sessionToken=${sessionToken}`
+        `/api/auth?sessionId=${sessionId}&action=status&sessionToken=${sessionToken}`,
       );
 
       if (!response.ok) {
@@ -129,12 +139,15 @@ export function useAuth() {
       }
 
       const statusData = await response.json();
+
       setSessionStatus(statusData.status);
 
       // If status is confirmed, get the decision data and stop polling
       if (statusData.status === "confirmed") {
         const decision = await getSessionDecision(sessionId);
+
         setDecisionData(decision);
+
         return true;
       }
 
@@ -147,6 +160,7 @@ export function useAuth() {
       return false;
     } catch (error) {
       console.error("Error checking session status:", error);
+
       return true; // Stop polling on error
     }
   };
@@ -154,12 +168,15 @@ export function useAuth() {
   const getSessionDecision = async (sessionId: string) => {
     try {
       const response = await fetch(`/api/auth?sessionId=${sessionId}`);
+
       if (!response.ok) {
         throw new Error("Failed to fetch decision data");
       }
+
       return await response.json();
     } catch (error) {
       console.error("Error getting session decision:", error);
+
       return null;
     }
   };
@@ -176,6 +193,7 @@ export function useAuth() {
 
     if (sessionData) {
       const wsUrl = new URL(BASE_URL + "/auth/ws/notifications/");
+
       wsUrl.protocol = wsUrl.protocol.replace("http", "ws");
       wsUrl.searchParams.append("token", sessionData.session_token);
 
@@ -183,6 +201,7 @@ export function useAuth() {
 
       ws.onmessage = async (event) => {
         const data = JSON.parse(event.data);
+
         if (
           data.message?.status === "confirmed" ||
           data.message?.status === "declined" ||
@@ -191,8 +210,9 @@ export function useAuth() {
         ) {
           const shouldStop = await checkSessionStatus(
             sessionData.session_id,
-            sessionData.session_token
+            sessionData.session_token,
           );
+
           if (shouldStop) {
             if (ws) ws.close();
             if (intervalId) clearInterval(intervalId);
@@ -205,8 +225,9 @@ export function useAuth() {
       intervalId = setInterval(async () => {
         const shouldStop = await checkSessionStatus(
           sessionData.session_id,
-          sessionData.session_token
+          sessionData.session_token,
         );
+
         if (shouldStop) {
           clearInterval(intervalId);
           if (ws) ws.close();
@@ -222,15 +243,16 @@ export function useAuth() {
 
   const isMobileDevice = () => {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
+      navigator.userAgent,
     );
   };
 
   const createSessionWithScope = async (
-    scopeItems: Record<string, boolean>
+    scopeItems: Record<string, boolean>,
   ) => {
     if (sessionData || decisionData) {
       resetSession();
+
       return;
     }
 

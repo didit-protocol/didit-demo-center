@@ -2,9 +2,10 @@
 
 import { QRCodeSVG } from "qrcode.react";
 import { Copy } from "lucide-react";
+import { useState } from "react";
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
 interface QRViewerProps {
   url: string;
@@ -36,22 +37,27 @@ export function QRViewer({ url, status }: QRViewerProps) {
       </CardHeader>
       <CardContent className="p-6 relative bg-gray-50">
         <Button
-          variant="ghost"
-          size="icon"
           className="absolute right-12 top-4 text-gray-500 hover:text-gray-900"
+          size="icon"
+          variant="ghost"
           onClick={copyToClipboard}
         >
           <Copy className="h-5 w-5" />
           <span className="sr-only">Copy URL</span>
         </Button>
+        {copied && (
+          <div className="absolute right-12 top-12 text-sm text-green-600">
+            Copied!
+          </div>
+        )}
         <div className="flex justify-center p-4 rounded-lg">
           <div className="bg-white p-4 rounded-lg shadow-sm">
             <QRCodeSVG
-              value={url}
-              size={200}
-              level="H"
               className="rounded"
               includeMargin={true}
+              level="H"
+              size={200}
+              value={url}
             />
           </div>
         </div>

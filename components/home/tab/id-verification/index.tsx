@@ -1,7 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { ArrowRight, ScanLine } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { useVerification } from "@/app/hooks/useVerification";
 
 export function IdVerificationTab() {
@@ -74,9 +75,9 @@ export function IdVerificationTab() {
       <div className="flex flex-col py-8 space-y-8">
         <div className="flex justify-between items-center">
           <Button
-            onClick={handleCreateSession}
-            disabled={isLoading}
             className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-8 rounded-full bg-[#2667ff] hover:bg-[#2667ff]/90 text-sm sm:text-base font-normal"
+            disabled={isLoading}
+            onClick={handleCreateSession}
           >
             {isLoading ? (
               "Creating session..."

@@ -22,9 +22,14 @@ export function ScopeSelector({
       <div className="grid grid-cols-2 xs:grid-cols-2 lg:grid-cols-3 gap-2">
         {Object.entries(scopeItems).map(([item, isSelected]) => {
           const Icon = SCOPE_ICONS[item] || SCOPE_ICONS.user_id;
+
           return (
             <div
               key={item}
+              className={`
+                flex items-center space-x-3 p-2 sm:p-3 rounded-lg cursor-pointer transition-colors
+                ${isSelected ? "bg-[#f4f4f6]" : "bg-white hover:bg-[#f4f4f6]"}
+              `}
               role="button"
               tabIndex={0}
               onClick={() =>
@@ -36,10 +41,6 @@ export function ScopeSelector({
                   setScopeItems({ ...scopeItems, [item]: !isSelected });
                 }
               }}
-              className={`
-                flex items-center space-x-3 p-2 sm:p-3 rounded-lg cursor-pointer transition-colors
-                ${isSelected ? "bg-[#f4f4f6]" : "bg-white hover:bg-[#f4f4f6]"}
-              `}
             >
               <div className="flex items-center flex-1 min-w-0 space-x-2 sm:space-x-3">
                 <div className="bg-[#f4f4f6] p-1.5 sm:p-2 rounded-full flex-shrink-0">
@@ -55,13 +56,13 @@ export function ScopeSelector({
                 </div>
               </div>
               <Checkbox
-                id={item}
                 checked={isSelected}
+                className="rounded-sm flex-shrink-0"
+                id={item}
+                tabIndex={-1}
                 onCheckedChange={() =>
                   setScopeItems({ ...scopeItems, [item]: !isSelected })
                 }
-                className="rounded-sm flex-shrink-0"
-                tabIndex={-1}
               />
             </div>
           );

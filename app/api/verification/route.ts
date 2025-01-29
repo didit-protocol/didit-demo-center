@@ -8,6 +8,7 @@ function isSessionExpired(createdAt: string): boolean {
   const now = new Date();
   const diffInHours =
     (now.getTime() - sessionDate.getTime()) / (1000 * 60 * 60);
+
   return diffInHours > 24;
 }
 
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
   if (!sessionId) {
     return NextResponse.json(
       { error: "Session ID is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -32,7 +33,7 @@ export async function GET(request: NextRequest) {
           Authorization: `Bearer ${clientToken}`,
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -44,7 +45,7 @@ export async function GET(request: NextRequest) {
     if (isSessionExpired(data.created_at)) {
       return NextResponse.json(
         { error: "Session has expired" },
-        { status: 410 }
+        { status: 410 },
       );
     }
 
@@ -52,7 +53,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch verification data" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -66,7 +67,7 @@ export async function POST(request: NextRequest) {
     if (!body.callback || !body.vendor_data) {
       return NextResponse.json(
         { error: "Callback URL and vendor data are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -88,11 +89,12 @@ export async function POST(request: NextRequest) {
     }
 
     const result = await response.json();
+
     return NextResponse.json(result);
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to create verification session" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

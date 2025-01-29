@@ -1,4 +1,5 @@
 import { FileCheck, LogIn, FileUp } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 
 interface DemoSelectorProps {
@@ -35,13 +36,17 @@ export function DemoSelector({
   ];
 
   // Group demos by category
-  const groupedDemos = demos.reduce((acc, demo) => {
-    if (!acc[demo.category]) {
-      acc[demo.category] = [];
-    }
-    acc[demo.category].push(demo);
-    return acc;
-  }, {} as Record<string, typeof demos>);
+  const groupedDemos = demos.reduce(
+    (acc, demo) => {
+      if (!acc[demo.category]) {
+        acc[demo.category] = [];
+      }
+      acc[demo.category].push(demo);
+
+      return acc;
+    },
+    {} as Record<string, typeof demos>,
+  );
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -58,12 +63,12 @@ export function DemoSelector({
         {demos.map((demo) => (
           <Button
             key={demo.id}
-            variant="outline"
             className={`w-full justify-center h-auto py-2 px-2 rounded-lg ${
               selectedDemo === demo.id
                 ? "border-[#2667ff] border-2 bg-blue-50"
                 : ""
             }`}
+            variant="outline"
             onClick={() => onDemoSelect(demo.id)}
           >
             <div className="flex flex-col items-center">
@@ -77,7 +82,6 @@ export function DemoSelector({
           </Button>
         ))}
       </div>
-
       {/* Desktop view - grouped by category */}
       <div className="hidden sm:block space-y-6">
         {Object.entries(groupedDemos).map(([category, categoryDemos]) => (
@@ -87,15 +91,15 @@ export function DemoSelector({
               {categoryDemos.map((demo) => (
                 <Button
                   key={demo.id}
-                  variant="outline"
                   className={`w-full justify-start h-auto py-4 px-6 rounded-xl ${
                     selectedDemo === demo.id
                       ? "border-[#2667ff] border-2 bg-blue-50"
                       : ""
                   }`}
+                  variant="outline"
                   onClick={() => onDemoSelect(demo.id)}
                 >
-                  <div className="flex flex-row items-start">
+                  <div className="flex flex-row items-center">
                     <demo.icon className="h-5 w-5 mr-3 shrink-0" />
                     <div className="text-left min-w-0">
                       <div className="font-medium text-base truncate">

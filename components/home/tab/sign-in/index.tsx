@@ -1,7 +1,8 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { LogIn, LogOut } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { AuthService } from "@/lib/auth-service";
 import { ScopeItems } from "@/lib/scopes";
 import { useAuth } from "@/app/hooks/useAuth";
@@ -19,6 +20,7 @@ export function SignInTab({ scopeItems, setScopeItems }: SignInTabProps) {
   const handleSignIn = () => {
     const selectedScopes = AuthService.getSelectedScopes(scopeItems);
     const authorizeUrl = AuthService.getAuthorizeUrl(selectedScopes);
+
     window.open(authorizeUrl, "_blank");
   };
 
@@ -31,7 +33,7 @@ export function SignInTab({ scopeItems, setScopeItems }: SignInTabProps) {
         <h2 className="text-lg sm:text-xl font-medium">Sign in with Didit</h2>
       </div>
       {isLoggedIn ? (
-        userData && <JsonViewer title="User Data" data={userData} />
+        userData && <JsonViewer data={userData} title="User Data" />
       ) : (
         <ScopeSelector scopeItems={scopeItems} setScopeItems={setScopeItems} />
       )}
@@ -40,9 +42,9 @@ export function SignInTab({ scopeItems, setScopeItems }: SignInTabProps) {
         <div className="flex justify-between items-center">
           {isLoggedIn ? (
             <Button
+              className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-8 rounded-full text-sm sm:text-base font-normal"
               variant="destructive"
               onClick={logout}
-              className="w-full sm:w-auto h-12 sm:h-14 px-6 sm:px-8 rounded-full text-sm sm:text-base font-normal"
             >
               <span>Logout</span>
               <div className="bg-white/20 rounded-full p-1 ml-2">

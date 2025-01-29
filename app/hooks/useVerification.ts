@@ -134,10 +134,10 @@ export interface VerificationDecision {
 
 export function useVerification() {
   const [sessionData, setSessionData] = useState<VerificationSession | null>(
-    null
+    null,
   );
   const [decisionData, setDecisionData] = useState<VerificationDecision | null>(
-    null
+    null,
   );
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -145,7 +145,7 @@ export function useVerification() {
   const createSession = async (
     features: string,
     callback: string,
-    vendor_data: string
+    vendor_data: string,
   ) => {
     setIsLoading(true);
     setError(null);
@@ -167,15 +167,17 @@ export function useVerification() {
 
       if (!response.ok) {
         throw new Error(
-          data.message || "Failed to create verification session"
+          data.message || "Failed to create verification session",
         );
       }
 
       setSessionData(data);
+
       return data;
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "An error occurred";
+
       setError(errorMessage);
       console.error("Error creating verification session:", err);
     } finally {
@@ -195,6 +197,7 @@ export function useVerification() {
       return data;
     } catch (err) {
       console.error("Error fetching session decision:", err);
+
       return { error: "Failed to fetch verification data" };
     }
   };

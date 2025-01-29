@@ -6,7 +6,6 @@ import { Suspense } from "react";
 
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
 
@@ -32,7 +31,7 @@ export default function RootLayout({
       <body
         className={clsx(
           "min-h-screen bg-white font-sans antialiased",
-          fontSans.variable
+          fontSans.variable,
         )}
       >
         <div className="relative flex flex-col h-screen">

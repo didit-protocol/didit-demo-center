@@ -26,6 +26,7 @@ export const AuthService = {
 
   getAuthorizeUrl: (selectedScopes: string[]) => {
     const scopes = [...selectedScopes];
+
     if (!scopes.includes("openid")) {
       scopes.push("openid");
     }

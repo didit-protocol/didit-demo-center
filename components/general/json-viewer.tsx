@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Copy } from "lucide-react";
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -29,10 +30,12 @@ export function JsonViewer({
 
   const formatJsonWithSyntaxHighlighting = (obj: any) => {
     const json = JSON.stringify(obj, null, 2);
+
     return json.split("\n").map((line, i) => {
       if (line.includes(":")) {
         const [key, ...rest] = line.split(":");
         const value = rest.join(":");
+
         return (
           <span key={i} className="block">
             <span className="text-blue-600">{key}</span>
@@ -45,6 +48,7 @@ export function JsonViewer({
           </span>
         );
       }
+
       return (
         <span key={i} className="block text-gray-800">
           {line}
@@ -68,18 +72,18 @@ export function JsonViewer({
       </CardHeader>
       <CardContent className={cn("p-6 relative bg-gray-50", contentClassName)}>
         <Button
-          variant="ghost"
-          size="icon"
           className="absolute right-12 top-4 text-gray-500 hover:text-gray-900"
+          size="icon"
+          variant="ghost"
           onClick={copyToClipboard}
         >
-          <Copy className="h-5 w-5" />
-          <span className="sr-only">Copy JSON</span>
+          <Copy className={cn("h-5 w-5", copied && "text-green-500")} />
+          <span className="sr-only">{copied ? "Copied" : "Copy JSON"}</span>
         </Button>
         <pre
           className={cn(
             "font-mono text-sm leading-relaxed p-4 rounded-lg overflow-auto h-full",
-            "scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent"
+            "scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent",
           )}
         >
           <code>{formatJsonWithSyntaxHighlighting(data)}</code>

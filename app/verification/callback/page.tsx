@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { JsonViewer } from "@/components/general/json-viewer";
 import {
   useVerification,
@@ -13,7 +14,7 @@ import {
 export default function VerificationCallback() {
   const router = useRouter();
   const [decisionData, setDecisionData] = useState<VerificationDecision | null>(
-    null
+    null,
   );
   const [error, setError] = useState<string | null>(null);
   const { getSessionDecision } = useVerification();
@@ -21,12 +22,14 @@ export default function VerificationCallback() {
   useEffect(() => {
     const fetchDecision = async () => {
       const sessionId = localStorage.getItem("verificationSessionId");
+
       if (sessionId) {
         try {
           const response = await getSessionDecision(sessionId);
+
           if (response?.error) {
             setError(
-              "More than 24 hours have passed since the session was created. Please create a new session."
+              "More than 24 hours have passed since the session was created. Please create a new session.",
             );
             localStorage.removeItem("verificationSessionId");
           } else {
@@ -44,9 +47,9 @@ export default function VerificationCallback() {
   return (
     <div className="container max-w-5xl mx-auto py-8 px-4 space-y-8">
       <Button
-        onClick={() => router.push("/")}
-        variant="ghost"
         className="gap-2"
+        variant="ghost"
+        onClick={() => router.push("/")}
       >
         <ArrowLeft className="h-4 w-4" />
         Return to Demo Center
@@ -59,10 +62,10 @@ export default function VerificationCallback() {
       ) : (
         decisionData && (
           <JsonViewer
-            title="Verification Results"
-            data={decisionData}
             className="h-[calc(100vh-12rem)]"
             contentClassName="h-[calc(100%-2rem)]"
+            data={decisionData}
+            title="Verification Results"
           />
         )
       )}
