@@ -16,7 +16,7 @@ export const siteConfig = {
     },
   ],
   links: {
-    github: "https://github.com/didit-protocol",
+    github: "https://github.com/didit-protocol/didit-demo-center",
     twitter: "https://x.com/Diditprotocol",
   },
 };
