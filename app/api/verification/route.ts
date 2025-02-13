@@ -75,13 +75,13 @@ export async function POST(request: NextRequest) {
       method: "POST",
       headers: {
         Authorization: `Bearer ${clientToken}`,
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
       },
-      body: JSON.stringify({
-        callback: body.callback,
+      body: new URLSearchParams({
         vendor_data: body.vendor_data,
+        callback: body.callback,
         features: body.features, // Optional
-      }),
+      }).toString(),
     });
 
     if (!response.ok) {
