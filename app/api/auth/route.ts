@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getClientToken } from "@/app/api/utils";
 import { BASE_URL } from "@/lib/auth-service";
 
 export async function GET(request: NextRequest) {
@@ -17,8 +16,6 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const clientToken = await getClientToken();
-
     if (action === "status") {
       if (!sessionToken) {
         return NextResponse.json(
@@ -32,7 +29,7 @@ export async function GET(request: NextRequest) {
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${clientToken}`,
+            "X-Api-Key": process.env.API_KEY || "",
             "Data-Session-Token": sessionToken,
             "Content-Type": "application/json",
           },
@@ -53,7 +50,7 @@ export async function GET(request: NextRequest) {
         {
           method: "GET",
           headers: {
-            Authorization: `Bearer ${clientToken}`,
+            "X-Api-Key": process.env.API_KEY || "",
             "Content-Type": "application/json",
           },
         },
@@ -77,14 +74,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const clientToken = await getClientToken();
-
     const body = await request.json();
 
     const response = await fetch(`${BASE_URL}/auth/v2/session/`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${clientToken}`,
+        "X-Api-Key": process.env.API_KEY || "",
         "Content-Type": "application/json",
       },
       body: JSON.stringify(body),

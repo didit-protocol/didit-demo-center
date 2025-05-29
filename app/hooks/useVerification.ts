@@ -1,136 +1,9 @@
 import { useState } from "react";
 
-export interface VerificationSession {
-  session_id: string;
-  session_token: string;
-  url: string;
-}
-
-export interface VerificationDecision {
-  session_id: string;
-  session_number: number;
-  session_url: string;
-  status: string;
-  vendor_data: string;
-  callback: string;
-  features: string;
-  kyc?: {
-    status: string;
-    ocr_status: string;
-    epassport_status: string;
-    document_type: string;
-    document_number: string;
-    personal_number: string;
-    portrait_image: string | null;
-    front_image: string | null;
-    front_video: string | null;
-    back_image: string | null;
-    back_video: string | null;
-    full_front_image: string | null;
-    full_back_image: string | null;
-    date_of_birth: string;
-    expiration_date: string;
-    date_of_issue: string;
-    issuing_state: string;
-    issuing_state_name: string;
-    first_name: string;
-    last_name: string;
-    full_name: string;
-    gender: string;
-    address: string;
-    formatted_address: string;
-    is_nfc_verified: boolean;
-    parsed_address: any | null;
-    place_of_birth: string;
-    marital_status: string;
-    nationality: string;
-    created_at: string;
-  };
-  aml?: {
-    status: string;
-    total_hits: number;
-    score: number;
-    hits: Array<{
-      id: string;
-      match: boolean;
-      score: number;
-      target: boolean;
-      caption: string;
-      datasets: string[];
-      features: Record<string, number>;
-      last_seen: string;
-      first_seen: string;
-      properties: {
-        name: string[];
-        alias?: string[];
-        notes?: string[];
-        gender?: string[];
-        topics?: string[];
-        position?: string[];
-      };
-      last_change: string;
-    }>;
-  };
-  face?: {
-    status: string;
-    face_match_status: string;
-    liveness_status: string;
-    face_match_similarity: number;
-    liveness_confidence: number;
-    source_image: string;
-    target_image: string;
-    video_url: string;
-  };
-  location?: {
-    status: string;
-    device_brand: string;
-    device_model: string;
-    browser_family: string;
-    os_family: string;
-    platform: string;
-    ip_country: string;
-    ip_country_code: string;
-    ip_state: string;
-    ip_city: string;
-    latitude: number;
-    longitude: number;
-    ip_address: string;
-    isp: string | null;
-    organization: string | null;
-    is_vpn_or_tor: boolean;
-    is_data_center: boolean;
-    time_zone: string;
-    time_zone_offset: string;
-    document_location: {
-      latitude: number;
-      longitude: number;
-    };
-    ip_location: {
-      latitude: number;
-      longitude: number;
-    };
-    distance_from_document_to_ip_km: {
-      distance: number;
-      direction: string;
-    };
-  };
-  warnings?: Array<{
-    feature: string;
-    risk: string;
-    additional_data: any | null;
-    log_type: string;
-    short_description: string;
-    long_description: string;
-  }>;
-  reviews?: Array<{
-    user: string;
-    new_status: string;
-    comment: string;
-    created_at: string;
-  }>;
-  extra_images: any[];
-  created_at: string;
-}
+import {
+  VerificationSession,
+  VerificationDecision,
+} from "../types/verification"; // Adjusted path assuming types dir is sibling to hooks
 
 export function useVerification() {
   const [sessionData, setSessionData] = useState<VerificationSession | null>(
@@ -143,9 +16,9 @@ export function useVerification() {
   const [error, setError] = useState<string | null>(null);
 
   const createSession = async (
-    features: string,
-    callback: string,
+    workflow_id: string,
     vendor_data: string,
+    callback: string,
   ) => {
     setIsLoading(true);
     setError(null);
@@ -157,9 +30,9 @@ export function useVerification() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          features,
-          callback,
+          workflow_id,
           vendor_data,
+          callback,
         }),
       });
 
@@ -218,3 +91,4 @@ export function useVerification() {
     resetSession,
   };
 }
+export type { VerificationDecision };

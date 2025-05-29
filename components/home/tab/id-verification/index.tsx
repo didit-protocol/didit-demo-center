@@ -10,11 +10,11 @@ export function IdVerificationTab() {
     useVerification();
 
   const handleCreateSession = async () => {
-    const callback = `${window.location.origin}/verification/callback`;
-    const features = "OCR + FACE";
+    const workflowId = process.env.NEXT_PUBLIC_WORKFLOW_ID || "";
     const vendorData = crypto.randomUUID();
+    const callback = `${window.location.origin}/verification/callback`;
 
-    const session = await createSession(features, callback, vendorData);
+    const session = await createSession(workflowId, vendorData, callback);
 
     if (session?.session_id) {
       // Store the new session ID

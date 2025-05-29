@@ -33,6 +33,7 @@ More technical details can be found at: [https://docs.didit.me](https://docs.did
 ```ini
 NEXT_PUBLIC_DIDIT_CLIENT_ID=
 DIDIT_CLIENT_SECRET=
+API_KEY=
 NEXT_PUBLIC_REDIRECT_URI=https://demos.didit.me/
 NEXT_PUBLIC_IS_STAGING=false
 ```

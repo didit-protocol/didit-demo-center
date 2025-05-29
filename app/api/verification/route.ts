@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getClientToken } from "@/app/api/utils";
 import { VERIFICATION_BASE_URL } from "@/lib/auth-service";
+import { VerificationDecision } from "@/app/types/verification";
 
 function isSessionExpired(createdAt: string): boolean {
   const sessionDate = new Date(createdAt);
@@ -24,33 +24,36 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const clientToken = await getClientToken();
     const response = await fetch(
-      `${VERIFICATION_BASE_URL}/v1/session/${sessionId}/decision/`,
+      `${VERIFICATION_BASE_URL}/v2/session/${sessionId}/decision/`,
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${clientToken}`,
+          "X-Api-Key": process.env.API_KEY || "",
           "Content-Type": "application/json",
         },
-      },
+      }
     );
 
     if (!response.ok) {
       throw new Error("Failed to fetch decision data");
     }
 
-    const data = await response.json();
+    const data: VerificationDecision = await response.json();
 
     if (isSessionExpired(data.created_at)) {
       return NextResponse.json(
         { error: "Session has expired" },
-        { status: 410 },
+        { status: 410 }
       );
     }
 
-    return NextResponse.json(data);
+    const { session_number, ...decisionWithoutSessionNumber } = data;
+
+    return NextResponse.json(decisionWithoutSessionNumber);
   } catch (error) {
+    console.error("Error in GET /api/verification:", error);
+
     return NextResponse.json(
       { error: "Failed to fetch verification data" },
       { status: 500 },
@@ -60,27 +63,26 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const clientToken = await getClientToken();
     const body = await request.json();
 
     // Validate required fields
-    if (!body.callback || !body.vendor_data) {
+    if (!body.callback || !body.vendor_data || !body.workflow_id) {
       return NextResponse.json(
-        { error: "Callback URL and vendor data are required" },
-        { status: 400 },
+        { error: "Callback URL, vendor data and workflow ID are required" },
+        { status: 400 }
       );
     }
 
-    const response = await fetch(`${VERIFICATION_BASE_URL}/v1/session/`, {
+    const response = await fetch(`${VERIFICATION_BASE_URL}/v2/session/`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${clientToken}`,
+        "X-Api-Key": process.env.API_KEY || "",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        callback: body.callback,
+        workflow_id: body.workflow_id,
         vendor_data: body.vendor_data,
-        features: body.features, // Optional
+        callback: body.callback,
       }),
     });
 

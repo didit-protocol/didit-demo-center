@@ -29,7 +29,7 @@ export default function VerificationCallback() {
 
           if (response?.error) {
             setError(
-              "More than 24 hours have passed since the session was created. Please create a new session.",
+              "There was an error retrieving your verification results. Please try again.",
             );
             localStorage.removeItem("verificationSessionId");
           } else {
