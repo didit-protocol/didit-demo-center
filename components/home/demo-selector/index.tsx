@@ -1,4 +1,4 @@
-import { FileCheck, LogIn, FileUp } from "lucide-react";
+import { FileCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -19,20 +19,6 @@ export function DemoSelector({
       description: "Government ID + Biometrics",
       category: "Identity Verification",
     },
-    {
-      id: "sign-in",
-      icon: LogIn,
-      title: "Sign In",
-      description: "Manage users access",
-      category: "Auth + Data",
-    },
-    {
-      id: "data-transfer",
-      icon: FileUp,
-      title: "Data transfer",
-      description: "Request data to authorize",
-      category: "Auth + Data",
-    },
   ];
 
   // Group demos by category
@@ -45,7 +31,7 @@ export function DemoSelector({
 
       return acc;
     },
-    {} as Record<string, typeof demos>,
+    {} as Record<string, typeof demos>
   );
 
   return (

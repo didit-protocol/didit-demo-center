@@ -42,10 +42,12 @@ export function IdVerificationTab() {
           platform combines advanced document verification, facial recognition,
           and reusable KYC features to facilitate quick and secure user
           onboarding.
-          <br />
-          <br />
-          <span className="font-semibold">Key Features:</span>
-          <ul className="list-disc pl-5 mt-2 space-y-1">
+        </p>
+        <div className="mt-4">
+          <p className="text-sm font-semibold text-gray-500 mb-2">
+            Key Features:
+          </p>
+          <ul className="list-disc pl-5 space-y-1 text-sm text-gray-500">
             <li>
               <span className="font-medium">Document Verification:</span>{" "}
               Supports over 3,000 document types from 200+ countries
@@ -67,7 +69,7 @@ export function IdVerificationTab() {
               compliant and ISO 27001 certified
             </li>
           </ul>
-        </p>
+        </div>
       </div>
 
       {error && <div className="text-red-500 text-sm mt-2">Error: {error}</div>}

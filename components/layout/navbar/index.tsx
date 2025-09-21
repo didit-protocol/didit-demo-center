@@ -21,6 +21,13 @@ export const Navbar = () => {
         </Link>
         <div className="flex items-center space-x-4">
           <Link
+            className="hidden sm:inline-flex items-center rounded-lg bg-[#2667ff] hover:bg-[#2667ff]/90 text-white px-4 py-2 text-sm font-semibold"
+            href="https://business.didit.me"
+            target="_blank"
+          >
+            Create a free account
+          </Link>
+          <Link
             className="text-gray-600 hover:text-gray-900"
             href={siteConfig.links.twitter}
             target="_blank"

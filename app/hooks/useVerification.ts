@@ -19,6 +19,7 @@ export function useVerification() {
     workflow_id: string,
     vendor_data: string,
     callback: string,
+    portrait_image?: string,
   ) => {
     setIsLoading(true);
     setError(null);
@@ -33,6 +34,7 @@ export function useVerification() {
           workflow_id,
           vendor_data,
           callback,
+          ...(portrait_image ? { portrait_image } : {}),
         }),
       });
 
