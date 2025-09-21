@@ -7,7 +7,7 @@ frontend:
         - pnpm install
     build:
       commands:
-        - env | grep -e DIDIT_CLIENT_SECRET -e API_KEY >> .env
+        - env | grep -e API_KEY >> .env
         - env | grep -e NEXT_PUBLIC_ >> .env
         - pnpm build
   artifacts:
