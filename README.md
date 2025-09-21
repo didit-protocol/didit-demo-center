@@ -1,47 +1,66 @@
 # Didit Demo Center
 
-This repository contains demos showcasing how to integrate Didit's identity verification and authentication solutions.
+This repository contains a streamlined demo for integrating Didit's identity verification workflows.
 
 ## Live Demo
-The demo is deployed at: [https://demos.didit.me](https://demos.didit.me)
 
-## Solutions Showcased
-### 1. Didit Identity Verification
-Demonstrates how to integrate:
-- **Document Verification**
-- **Face Verification / Biometric process**
+The demo is deployed at: https://demos.didit.me
 
-For a more detailed implementation, refer to the full demo repository: [Didit Full Demo](https://github.com/didit-protocol/didit-full-demo).
+## Workflows Showcased
 
-### 2. Didit Auth + Data Solution
-This solution covers:
-- **Sign In Solution** – Authenticate users seamlessly.
-- **Data Transfer Solution** – Enable secure data sharing.
+The demo includes multiple verification workflows such as:
+
+- Core KYC (Free)
+- Enhanced Compliance (KYC + AML)
+- Liveness Check Only
+- Biometric Authentication (requires user-provided portrait image for face match)
+- Multi-Factor Verification
+- Adaptive Age Verification (example triggers full ID check if estimated age is 15–25)
+- Proof of Address (PoA)
+
+Each workflow can be fully customized in the Didit Business Console. Switch between workflows in the UI to see different configurations and required steps.
+
+## Workflow IDs
+
+You will need Workflow IDs to run the flows in your own environment.
+
+1. Go to the Didit Business Console: https://business.didit.me
+2. Create a free account (or sign in)
+3. Create a new workflow or open an existing one
+4. Copy the Workflow ID from the workflow details screen
+
+Then update the demo’s config at `lib/workflows.ts` by replacing the placeholder IDs with your Workflow IDs.
 
 ## Technical Documentation
-More technical details can be found at: [https://docs.didit.me](https://docs.didit.me)
 
-## Running This Repository Locally
+Docs: https://docs.didit.me
+
+## Run Locally
 
 1. Clone the repository and navigate to the project directory.
-2. Copy `.env.example` and rename it to `.env`.
-3. Fill in the required values using the credentials from the application you created in the [Didit Business Console](https://business.didit.me):
-   - Navigate to `Users -> Settings -> Redirection URI`
-   - Ensure the redirect URI is correctly added
-
-### `.env.example`:
-```ini
-NEXT_PUBLIC_DIDIT_CLIENT_ID=
-DIDIT_CLIENT_SECRET=
-API_KEY=
-NEXT_PUBLIC_REDIRECT_URI=https://demos.didit.me/
-NEXT_PUBLIC_IS_STAGING=false
-```
-
-4. Install dependencies and start the development server:
+2. Copy `.env.example` to `.env`.
+3. Fill in `API_KEY` with the credentials from your app in the console (business.didit.me).
+4. Create or use the predefined workflows in your application and replace the placeholder IDs in `lib/workflows.ts` with your own.
+5. Install dependencies and start the dev server:
    ```sh
    npm install
    npm run dev
    ```
 
-Now, you're ready to explore the Didit integration in action!
+### `.env.example`
+
+```ini
+API_KEY=same-as-didit-client-secret
+NEXT_PUBLIC_REDIRECT_URI=https://demos.didit.me/
+NEXT_PUBLIC_IS_STAGING=false
+```
+
+## Notes & Tips
+
+- Sessions: In this demo, session results are available for a limited time window. If you receive HTTP 410 (Gone), create a new session and try again.
+- Security: `API_KEY` is used only on server-side API routes and must never be exposed client-side.
+- Biometric Authentication: This workflow requires a `portrait_image` (Base64, max 1MB) to perform face match when enabled.
+
+## Create a Free Account
+
+Get started in minutes at https://business.didit.me — create workflows, copy their IDs, and plug them into this demo.
