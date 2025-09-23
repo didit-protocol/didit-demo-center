@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+
 import {
   IdCard,
   ShieldCheck,
@@ -19,9 +20,13 @@ export type WorkflowConfig = {
   requiresPortrait?: boolean;
 };
 
+const isStaging = process.env.NEXT_PUBLIC_IS_STAGING === "true";
+
 export const WORKFLOWS: WorkflowConfig[] = [
   {
-    id: "7c1e467d-fe91-4ade-aa72-ec022fc67971",
+    id: isStaging
+      ? "2db28cd2-7713-405f-89ad-144613b7086e"
+      : "7c1e467d-fe91-4ade-aa72-ec022fc67971",
     title: "Core KYC (Free)",
     icon: IdCard,
     description:
@@ -40,7 +45,9 @@ export const WORKFLOWS: WorkflowConfig[] = [
     ],
   },
   {
-    id: "8c0f1388-39fd-48e3-904f-6efb3d372376",
+    id: isStaging
+      ? "c076a8bb-b0a1-482a-a257-c296391fac2f"
+      : "8c0f1388-39fd-48e3-904f-6efb3d372376",
     title: "Enhanced Compliance (KYC + AML)",
     icon: ShieldCheck,
     description:
@@ -60,7 +67,9 @@ export const WORKFLOWS: WorkflowConfig[] = [
     ],
   },
   {
-    id: "b5d5523f-bd45-4aa3-9ec5-0490172a22c1",
+    id: isStaging
+      ? "8aa86809-5156-4a73-8b09-cb3d6f882d27"
+      : "b5d5523f-bd45-4aa3-9ec5-0490172a22c1",
     title: "Liveness Check Only",
     icon: UserRoundCheck,
     description:
@@ -70,7 +79,9 @@ export const WORKFLOWS: WorkflowConfig[] = [
     features: ["Active Liveness", "Passive Liveness", "IP Analysis"],
   },
   {
-    id: "d1972e27-eeb8-4543-918b-6ac0846b7cc5",
+    id: isStaging
+      ? "9b610989-c77e-48ad-9c27-0668c6edd2be"
+      : "d1972e27-eeb8-4543-918b-6ac0846b7cc5",
     title: "Biometric Authentication",
     icon: Fingerprint,
     description:
@@ -81,7 +92,9 @@ export const WORKFLOWS: WorkflowConfig[] = [
     requiresPortrait: true,
   },
   {
-    id: "dbdb51a9-3763-4dcf-a32d-8fe5f40a699d",
+    id: isStaging
+      ? "e4cecdd1-fb1d-4992-8fba-4175aaa2ba76"
+      : "dbdb51a9-3763-4dcf-a32d-8fe5f40a699d",
     title: "Multi-Factor Verification",
     icon: Smartphone,
     description:
@@ -95,7 +108,9 @@ export const WORKFLOWS: WorkflowConfig[] = [
     features: ["Liveness Check", "Phone Verification", "IP Analysis"],
   },
   {
-    id: "0aa1d022-c1ee-47b0-8538-5c8c32515739",
+    id: isStaging
+      ? "8482aee5-38b8-46fd-914b-e1bc6edcadca"
+      : "0aa1d022-c1ee-47b0-8538-5c8c32515739",
     title: "Adaptive Age Verification",
     icon: Gauge,
     description:
@@ -113,7 +128,9 @@ export const WORKFLOWS: WorkflowConfig[] = [
     ],
   },
   {
-    id: "94f9c776-4362-488e-93ff-9dd2921af3f2",
+    id: isStaging
+      ? "8482aee5-38b8-46fd-914b-e1bc6edcadca"
+      : "94f9c776-4362-488e-93ff-9dd2921af3f2",
     title: "Proof of Address (PoA)",
     icon: Home,
     description:
