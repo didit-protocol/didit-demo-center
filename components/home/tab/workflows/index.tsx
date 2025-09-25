@@ -17,20 +17,18 @@ export function WorkflowsTab() {
   const { sessionData, decisionData, isLoading, error, createSession } =
     useVerification();
 
-  const [selectedWorkflowId, setSelectedWorkflowId] = React.useState<string>(
-    WORKFLOWS[0]?.id || ""
-  );
+  const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
 
   const selected = React.useMemo<WorkflowConfig | undefined>(
-    () => WORKFLOWS.find((w) => w.id === selectedWorkflowId) || WORKFLOWS[0],
-    [selectedWorkflowId]
+    () => WORKFLOWS[selectedIndex],
+    [selectedIndex],
   );
 
   const [isOpen, setIsOpen] = React.useState(false);
   const dropdownRef = React.useRef<HTMLDivElement | null>(null);
 
   const [portraitBase64, setPortraitBase64] = React.useState<string | null>(
-    null
+    null,
   );
   const [portraitError, setPortraitError] = React.useState<string | null>(null);
 
@@ -43,7 +41,9 @@ export function WorkflowsTab() {
         setIsOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
@@ -51,23 +51,26 @@ export function WorkflowsTab() {
     // Reset portrait state when changing workflows
     setPortraitBase64(null);
     setPortraitError(null);
-  }, [selectedWorkflowId]);
+  }, [selectedIndex]);
 
   const handleStart = async (workflowId: string) => {
     const vendorData = crypto.randomUUID();
     const callback = `${window.location.origin}/verification/callback`;
+
     if (selected?.requiresPortrait && !portraitBase64) {
       setPortraitError(
-        "Please upload a selfie (max 1MB) before starting this workflow."
+        "Please upload a selfie (max 1MB) before starting this workflow.",
       );
+
       return;
     }
     const session = await createSession(
       workflowId,
       vendorData,
       callback,
-      portraitBase64 || undefined
+      portraitBase64 || undefined,
     );
+
     if (session?.session_id) {
       localStorage.setItem("verificationSessionId", session.session_id);
       window.location.href = session.url;
@@ -75,25 +78,30 @@ export function WorkflowsTab() {
   };
 
   const handlePortraitChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const file = event.target.files?.[0];
+
     if (!file) return;
     if (!file.type.startsWith("image/")) {
       setPortraitError("Please select an image file.");
       setPortraitBase64(null);
+
       return;
     }
     if (file.size > 1024 * 1024) {
       setPortraitError("File too large. Max size is 1MB.");
       setPortraitBase64(null);
+
       return;
     }
     setPortraitError(null);
     const reader = new FileReader();
+
     reader.onload = () => {
       const result = reader.result as string;
       const base64 = result.includes(",") ? result.split(",")[1] : result;
+
       setPortraitBase64(base64);
     };
     reader.onerror = () => {
@@ -110,13 +118,13 @@ export function WorkflowsTab() {
         <div className="grid grid-cols-1 lg:grid-cols-[380px,1fr] gap-8">
           <div>
             {/* Mobile/Tablet: custom dropdown */}
-            <div className="space-y-2 relative lg:hidden" ref={dropdownRef}>
+            <div ref={dropdownRef} className="space-y-2 relative lg:hidden">
               <div className="text-sm font-medium text-gray-700">
                 Choose a workflow
               </div>
               <button
-                aria-haspopup="listbox"
                 aria-expanded={isOpen}
+                aria-haspopup="listbox"
                 className="relative w-full rounded-xl border border-gray-300 py-3 pl-3 pr-10 text-left bg-white focus:outline-none focus:ring-2 focus:ring-[#2667ff] shadow-sm"
                 onClick={() => setIsOpen((v) => !v)}
               >
@@ -143,22 +151,20 @@ export function WorkflowsTab() {
               </button>
               {isOpen && (
                 <div
-                  role="listbox"
                   className="absolute left-0 right-0 z-20 mt-2 w-full rounded-xl border border-gray-200 bg-white shadow-xl overflow-hidden"
+                  role="listbox"
                 >
                   <div className="max-h-[420px] overflow-y-auto p-1">
-                    {WORKFLOWS.map((wf) => (
+                    {WORKFLOWS.map((wf, idx) => (
                       <button
-                        key={wf.id}
-                        role="option"
-                        aria-selected={wf.id === selectedWorkflowId}
+                        key={`${wf.id}-${idx}`}
+                        aria-selected={selectedIndex === idx}
                         className={`w-full text-left rounded-lg px-3 py-3 hover:bg-blue-50 ${
-                          wf.id === selectedWorkflowId
-                            ? "bg-blue-50"
-                            : "bg-white"
+                          selectedIndex === idx ? "bg-blue-50" : "bg-white"
                         }`}
+                        role="option"
                         onClick={() => {
-                          setSelectedWorkflowId(wf.id);
+                          setSelectedIndex(idx);
                           setIsOpen(false);
                         }}
                       >
@@ -188,15 +194,15 @@ export function WorkflowsTab() {
                 Choose a workflow
               </div>
               <div className="grid grid-cols-1 gap-2">
-                {WORKFLOWS.map((wf) => (
+                {WORKFLOWS.map((wf, idx) => (
                   <button
-                    key={wf.id}
+                    key={`${wf.id}-${idx}`}
                     className={`text-left rounded-xl border p-4 hover:bg-blue-50 transition ${
-                      selected?.id === wf.id
+                      selectedIndex === idx
                         ? "border-[#2667ff] bg-blue-50"
                         : "border-gray-200 bg-white"
                     }`}
-                    onClick={() => setSelectedWorkflowId(wf.id)}
+                    onClick={() => setSelectedIndex(idx)}
                   >
                     <div className="flex items-start gap-3">
                       <span className="flex h-8 w-8 items-center justify-center rounded-md bg-blue-50">
@@ -276,8 +282,8 @@ export function WorkflowsTab() {
                     <input
                       accept="image/*"
                       className="block w-full text-sm text-gray-700 file:mr-3 file:rounded-md file:border file:border-gray-200 file:bg-white file:px-3 file:py-2 file:text-sm file:cursor-pointer"
-                      onChange={handlePortraitChange}
                       type="file"
+                      onChange={handlePortraitChange}
                     />
                   </div>
                   {portraitError && (
