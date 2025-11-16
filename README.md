@@ -20,6 +20,12 @@ The demo includes multiple verification workflows such as:
 
 Each workflow can be fully customized in the Didit Business Console. Switch between workflows in the UI to see different configurations and required steps.
 
+## Didit CAPTCHA
+
+The demo also includes a **Didit CAPTCHA** component — a bot-resistant CAPTCHA powered by liveness verification. Users complete a quick face check instead of solving puzzles, providing a better user experience while maintaining security.
+
+To use Didit CAPTCHA, you'll need to create a liveness-only workflow in the Didit Business Console and set the `DIDIT_LIVENESS_WORKFLOW_ID` environment variable.
+
 ## Workflow IDs
 
 You will need Workflow IDs to run the flows in your own environment.
@@ -53,13 +59,17 @@ Docs: https://docs.didit.me
 API_KEY=same-as-didit-client-secret
 NEXT_PUBLIC_REDIRECT_URI=https://demos.didit.me/
 NEXT_PUBLIC_IS_STAGING=false
+DIDIT_LIVENESS_WORKFLOW_ID=your-liveness-only-workflow-id
 ```
+
+**Note:** `DIDIT_LIVENESS_WORKFLOW_ID` is optional and only needed if you want to use the Didit CAPTCHA feature. Create a liveness-only workflow in the Didit Business Console and use its ID here.
 
 ## Notes & Tips
 
 - Sessions: In this demo, session results are available for a limited time window. If you receive HTTP 410 (Gone), create a new session and try again.
 - Security: `API_KEY` is used only on server-side API routes and must never be exposed client-side.
 - Biometric Authentication: This workflow requires a `portrait_image` (Base64, max 1MB) to perform face match when enabled.
+- Didit CAPTCHA: Requires a liveness-only workflow. Create one in the Didit Business Console and set `DIDIT_LIVENESS_WORKFLOW_ID` in your `.env` file.
 
 ## Create a Free Account
 

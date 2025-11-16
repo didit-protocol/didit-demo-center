@@ -8,6 +8,7 @@ import {
   Smartphone,
   Gauge,
   Home,
+  Shield,
 } from "lucide-react";
 export type WorkflowConfig = {
   id: string;
@@ -18,6 +19,7 @@ export type WorkflowConfig = {
   bestFor: string;
   features: string[];
   requiresPortrait?: boolean;
+  isCaptcha?: boolean;
 };
 
 const isStaging = process.env.NEXT_PUBLIC_IS_STAGING === "true";
@@ -141,5 +143,16 @@ export const WORKFLOWS: WorkflowConfig[] = [
     ],
     bestFor: "Enhanced due diligence in Banking and Fintech.",
     features: ["Proof of Address", "IP Analysis"],
+  },
+  {
+    id: "82f7360c-276e-4525-b7b3-59d8051e973c",
+    title: "Didit CAPTCHA",
+    icon: Shield,
+    description:
+      "A bot-resistant CAPTCHA powered by liveness verification. We're improving this flow so users verify their identity once periodically via liveness check, then their verified identity is reused to prove they're human—just by clicking the checkbox. This provides a better user experience while maintaining security.",
+    steps: ["Enter Email", "Complete Liveness Check", "Submit Form"],
+    bestFor: "Protecting forms and preventing bot submissions.",
+    features: ["Liveness Check", "IP Analysis"],
+    isCaptcha: true,
   },
 ];

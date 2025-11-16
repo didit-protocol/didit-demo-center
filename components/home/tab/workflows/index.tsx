@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useVerification } from "@/app/hooks/useVerification";
 import { WORKFLOWS, type WorkflowConfig } from "@/lib/workflows";
+import { DiditCaptchaTab } from "@/components/home/tab/didit-captcha";
 
 export function WorkflowsTab() {
   const { sessionData, decisionData, isLoading, error, createSession } =
@@ -224,19 +225,23 @@ export function WorkflowsTab() {
           </div>
           {selected && (
             <div className="space-y-5">
-              <div>
-                <div className="flex items-center gap-3">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-lg">
-                    <selected.icon className="h-5 w-5 text-[#2667ff]" />
-                  </span>
-                  <h3 className="text-xl font-semibold tracking-tight">
-                    {selected.title}
-                  </h3>
-                </div>
-                <p className="text-sm text-gray-500 mt-2">
-                  {selected.description}
-                </p>
-              </div>
+              {selected.isCaptcha ? (
+                <DiditCaptchaTab />
+              ) : (
+                <>
+                  <div>
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-lg">
+                        <selected.icon className="h-5 w-5 text-[#2667ff]" />
+                      </span>
+                      <h3 className="text-xl font-semibold tracking-tight">
+                        {selected.title}
+                      </h3>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-2">
+                      {selected.description}
+                    </p>
+                  </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="rounded-2xl border border-gray-200 p-4 bg-white">
@@ -336,6 +341,8 @@ export function WorkflowsTab() {
                   )}
                 </Button>
               </div>
+                </>
+              )}
             </div>
           )}
         </div>
