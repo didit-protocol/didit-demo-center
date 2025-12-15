@@ -131,7 +131,7 @@ export const WORKFLOWS: WorkflowConfig[] = [
   },
   {
     id: isStaging
-      ? "8482aee5-38b8-46fd-914b-e1bc6edcadca"
+      ? "016aa374-1672-4f57-a227-3fa750a6977c"
       : "94f9c776-4362-488e-93ff-9dd2921af3f2",
     title: "Proof of Address (PoA)",
     icon: Home,
