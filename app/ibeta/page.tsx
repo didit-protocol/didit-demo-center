@@ -118,11 +118,11 @@ export default function IBetaPage() {
             <Fingerprint className="w-12 h-12 text-gray-600" />
           </div>
           <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900">
-            iBeta Biometric Authentication
+            iBeta Biometric Verification
           </h1>
           <p className="text-gray-500 text-sm sm:text-base">
-            Upload a reference selfie, then verify your identity with a live
-            biometric check.
+            Full system with 1:1 matching and active liveness. Upload a
+            reference selfie, then verify your identity.
           </p>
         </div>
 

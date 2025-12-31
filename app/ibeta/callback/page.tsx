@@ -21,9 +21,9 @@ export default function IBetaCallback() {
         bg: "bg-green-50",
         border: "border-green-200",
         Icon: CheckCircle2,
-        label: "Liveness Verified",
+        label: "Verification Successful",
         description:
-          "The active liveness check has been successfully completed. The user has been verified as a real person.",
+          "The full system with 1:1 matching and active liveness check has been successfully completed. The user has been verified.",
       };
     }
     if (s === "rejected" || s === "declined" || s === "failed") {
@@ -32,9 +32,9 @@ export default function IBetaCallback() {
         bg: "bg-red-50",
         border: "border-red-200",
         Icon: XCircle,
-        label: "Liveness Failed",
+        label: "Verification Failed",
         description:
-          "The active liveness check has failed. The user could not be verified as a real person.",
+          "The full system with 1:1 matching and active liveness check has failed. The user could not be verified.",
       };
     }
     if (s.includes("review")) {
@@ -44,7 +44,7 @@ export default function IBetaCallback() {
         border: "border-amber-200",
         Icon: CircleAlert,
         label: "In Review",
-        description: "The liveness check requires manual review.",
+        description: "The verification requires manual review.",
       };
     }
 
@@ -54,7 +54,7 @@ export default function IBetaCallback() {
       border: "border-amber-200",
       Icon: CircleAlert,
       label: status || "Pending",
-      description: "The liveness check is being processed.",
+      description: "The verification is being processed.",
     };
   }, [status]);
 
@@ -66,7 +66,7 @@ export default function IBetaCallback() {
         onClick={() => router.push("/ibeta")}
       >
         <ArrowLeft className="h-4 w-4" />
-        Back to iBeta Liveness
+        Back to iBeta
       </Button>
 
       <div className="flex flex-col items-center space-y-6 py-8">
@@ -83,6 +83,10 @@ export default function IBetaCallback() {
             {statusMeta.description}
           </p>
         </div>
+      </div>
+
+      <div className="text-center text-xs text-gray-400">
+        Full system with 1:1 matching and active liveness
       </div>
 
       <div className="flex justify-center">
