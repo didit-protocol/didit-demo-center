@@ -1,11 +1,12 @@
 "use client";
 
+import type { WorkflowConfig } from "@/lib/workflows";
+
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import type { WorkflowConfig } from "@/lib/workflows";
 
 interface WorkflowCardProps {
   workflow: WorkflowConfig;
@@ -18,17 +19,17 @@ export function WorkflowCard({ workflow, onClick, index }: WorkflowCardProps) {
 
   return (
     <motion.button
-      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.04, duration: 0.3, ease: "easeOut" }}
-      onClick={onClick}
       className={cn(
         "group relative flex flex-col text-left",
         "rounded-xl bg-[#f5f5f7] p-5",
         "transition-all duration-200",
         "hover:bg-[#ebebed] hover:shadow-sm",
-        "focus:outline-none focus:ring-2 focus:ring-[#2567ff]/20 focus:ring-offset-2"
+        "focus:outline-none focus:ring-2 focus:ring-[#2567ff]/20 focus:ring-offset-2",
       )}
+      initial={{ opacity: 0, y: 12 }}
+      transition={{ delay: index * 0.04, duration: 0.3, ease: "easeOut" }}
+      onClick={onClick}
     >
       {/* Header row */}
       <div className="flex items-center gap-3 mb-3">

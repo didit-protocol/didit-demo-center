@@ -25,6 +25,7 @@ export default function VerificationCallback() {
 
   const statusMeta = useMemo(() => {
     const s = status.toLowerCase();
+
     if (s === "approved" || s === "success" || s === "completed") {
       return {
         label: "Approved",
@@ -55,6 +56,7 @@ export default function VerificationCallback() {
         borderColor: "border-amber-100",
       };
     }
+
     return {
       label: status || "Unknown",
       icon: CircleAlert,
@@ -78,8 +80,8 @@ export default function VerificationCallback() {
       <div className="section-container max-w-[800px]">
         {/* Back button */}
         <button
-          onClick={() => router.push("/")}
           className="btn-ghost inline-flex items-center gap-2 mb-8 -ml-2"
+          onClick={() => router.push("/")}
         >
           <ArrowLeft className="size-4" />
           Back to Demo Center
@@ -91,7 +93,8 @@ export default function VerificationCallback() {
             Verification Results
           </h1>
           <p className="text-body text-[#6e6e73]">
-            Your verification session has been processed. View the results below.
+            Your verification session has been processed. View the results
+            below.
           </p>
         </div>
 
@@ -99,14 +102,19 @@ export default function VerificationCallback() {
         <div className="badge-info mb-6 !py-2 !px-4">
           <FileText className="size-4" />
           <span>
-            This is a demo session. In production, verification data is returned via webhook.
+            This is a demo session. In production, verification data is returned
+            via webhook.
           </span>
         </div>
 
         {/* Status card */}
-        <div className={`card-base ${statusMeta.bgColor} ${statusMeta.borderColor} mb-6`}>
+        <div
+          className={`card-base ${statusMeta.bgColor} ${statusMeta.borderColor} mb-6`}
+        >
           <div className="flex items-center gap-4">
-            <div className={`flex size-12 items-center justify-center rounded-xl ${statusMeta.bgColor}`}>
+            <div
+              className={`flex size-12 items-center justify-center rounded-xl ${statusMeta.bgColor}`}
+            >
               <StatusIcon className={`size-6 ${statusMeta.iconColor}`} />
             </div>
             <div>
@@ -136,8 +144,8 @@ export default function VerificationCallback() {
               </p>
             </div>
             <button
-              onClick={copySessionId}
               className="flex size-9 items-center justify-center rounded-full bg-[#f5f5f7] text-[#6e6e73] transition-all hover:bg-[#e5e5e5] hover:text-[#1a1a1a]"
+              onClick={copySessionId}
             >
               {copied ? (
                 <Check className="size-4 text-[#15803d]" />
@@ -151,10 +159,10 @@ export default function VerificationCallback() {
         {/* Documentation link */}
         <div className="mt-8 pt-6 border-t border-[#f0f0f0]">
           <a
-            href="https://docs.didit.me"
-            target="_blank"
-            rel="noopener noreferrer"
             className="btn-ghost inline-flex items-center gap-2"
+            href="https://docs.didit.me"
+            rel="noopener noreferrer"
+            target="_blank"
           >
             <ExternalLink className="size-4" />
             View API Documentation

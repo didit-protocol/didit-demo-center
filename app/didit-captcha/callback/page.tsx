@@ -19,6 +19,7 @@ export default function DiditCaptchaCallback() {
 
       try {
         const storageKey = `didit-captcha-callback-${verificationSessionId}`;
+
         localStorage.setItem(storageKey, JSON.stringify(message));
 
         window.dispatchEvent(
@@ -26,7 +27,7 @@ export default function DiditCaptchaCallback() {
             key: storageKey,
             newValue: JSON.stringify(message),
             storageArea: localStorage,
-          })
+          }),
         );
 
         if (window.parent && window.parent !== window) {
@@ -66,18 +67,14 @@ export default function DiditCaptchaCallback() {
             <h1 className="text-title text-app-black mb-2">
               Verification Complete
             </h1>
-            <p className="text-body">
-              You can now close this window.
-            </p>
+            <p className="text-body">You can now close this window.</p>
           </>
         ) : (
           <>
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-100 mx-auto mb-4">
               <Loader2 className="h-7 w-7 text-accent animate-spin" />
             </div>
-            <h1 className="text-title text-app-black mb-2">
-              Processing...
-            </h1>
+            <h1 className="text-title text-app-black mb-2">Processing...</h1>
             <p className="text-body">
               Please wait while we process your verification.
             </p>

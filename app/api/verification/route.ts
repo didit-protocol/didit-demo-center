@@ -9,6 +9,7 @@ function isSessionExpired(createdAt: string): boolean {
   const sessionDate = new Date(createdAt);
   const now = new Date();
   const diffInMinutes = (now.getTime() - sessionDate.getTime()) / (1000 * 60);
+
   // Demo policy: sessions accessible for 60 minutes
   return diffInMinutes > 60;
 }
@@ -42,7 +43,7 @@ export async function GET(request: NextRequest) {
           "X-Api-Key": process.env.API_KEY || "",
           "Content-Type": "application/json",
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -54,10 +55,11 @@ export async function GET(request: NextRequest) {
     if (isSessionExpired(data.created_at)) {
       return withNoStore(
         { error: "Session results have expired" },
-        { status: 410 }
+        { status: 410 },
       );
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { session_number, ...decisionWithoutSessionNumber } = data;
 
     return withNoStore(decisionWithoutSessionNumber);
@@ -68,7 +70,7 @@ export async function GET(request: NextRequest) {
       { error: "Failed to fetch verification data" },
       {
         status: 500,
-      }
+      },
     );
   }
 }
@@ -81,7 +83,7 @@ export async function POST(request: NextRequest) {
     if (!body.callback || !body.vendor_data || !body.workflow_id) {
       return withNoStore(
         { error: "Callback URL, vendor data and workflow ID are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -111,7 +113,7 @@ export async function POST(request: NextRequest) {
       { error: "Failed to create verification session" },
       {
         status: 500,
-      }
+      },
     );
   }
 }

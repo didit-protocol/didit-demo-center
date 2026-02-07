@@ -1,5 +1,7 @@
 "use client";
 
+import type { WorkflowConfig } from "@/lib/workflows";
+
 import React, { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -15,7 +17,6 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import type { WorkflowConfig } from "@/lib/workflows";
 
 interface WorkflowDetailModalProps {
   workflow: WorkflowConfig | null;
@@ -35,24 +36,31 @@ export function WorkflowDetailModal({
   const [portraitImage, setPortraitImage] = useState<string | null>(null);
   const [portraitPreview, setPortraitPreview] = useState<string | null>(null);
 
-  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // Create preview URL
-      const previewUrl = URL.createObjectURL(file);
-      setPortraitPreview(previewUrl);
+  const handleFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
 
-      // Convert to base64
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        // Remove the data:image/...;base64, prefix
-        const base64Data = base64.split(",")[1];
-        setPortraitImage(base64Data);
-      };
-      reader.readAsDataURL(file);
-    }
-  }, []);
+      if (file) {
+        // Create preview URL
+        const previewUrl = URL.createObjectURL(file);
+
+        setPortraitPreview(previewUrl);
+
+        // Convert to base64
+        const reader = new FileReader();
+
+        reader.onloadend = () => {
+          const base64 = reader.result as string;
+          // Remove the data:image/...;base64, prefix
+          const base64Data = base64.split(",")[1];
+
+          setPortraitImage(base64Data);
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    [],
+  );
 
   const handleRemoveImage = useCallback(() => {
     setPortraitImage(null);
@@ -83,30 +91,35 @@ export function WorkflowDetailModal({
         <>
           {/* Backdrop */}
           <motion.div
-            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
             className="fixed inset-0 z-50 bg-[#1a1a1a]/60 backdrop-blur-sm"
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             onClick={handleClose}
           />
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 24 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 24 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-4 z-50 flex items-center justify-center sm:inset-8"
+            exit={{ opacity: 0, scale: 0.96, y: 24 }}
+            initial={{ opacity: 0, scale: 0.96, y: 24 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
+            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
             <div
+              aria-modal="true"
               className="relative w-full max-w-2xl max-h-[calc(100vh-4rem)] overflow-hidden rounded-2xl border border-[#e5e5e5] bg-white shadow-2xl"
+              role="dialog"
+              tabIndex={-1}
               onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.key === "Escape" && handleClose()}
             >
               {/* Close button */}
               <button
-                onClick={handleClose}
                 className="absolute right-4 top-4 z-10 flex size-9 items-center justify-center rounded-full bg-[#f5f5f7] text-[#6e6e73] transition-all hover:bg-[#e5e5e5] hover:text-[#1a1a1a]"
+                onClick={handleClose}
               >
                 <X className="size-4" />
               </button>
@@ -118,7 +131,10 @@ export function WorkflowDetailModal({
                   {/* Icon + Title row */}
                   <div className="flex items-center gap-3 pr-10">
                     <div className="icon-container-accent shrink-0">
-                      <IconComponent className="size-5 text-white sm:size-6" strokeWidth={1.5} />
+                      <IconComponent
+                        className="size-5 text-white sm:size-6"
+                        strokeWidth={1.5}
+                      />
                     </div>
                     <h2 className="text-headline text-[#1a1a1a]">
                       {workflow.title}
@@ -158,19 +174,20 @@ export function WorkflowDetailModal({
                         </span>
                       </div>
                       <p className="text-[12px] text-[#6e6e73] mb-4">
-                        Upload a photo of yourself. This will be used to match against the live selfie during authentication.
+                        Upload a photo of yourself. This will be used to match
+                        against the live selfie during authentication.
                       </p>
 
                       {portraitPreview ? (
                         <div className="relative inline-block">
                           <img
-                            src={portraitPreview}
                             alt="Portrait preview"
                             className="size-24 rounded-xl object-cover border border-[#e5e5e5]"
+                            src={portraitPreview}
                           />
                           <button
-                            onClick={handleRemoveImage}
                             className="absolute -right-2 -top-2 flex size-6 items-center justify-center rounded-full bg-[#dc3545] text-white shadow-lg transition-transform hover:scale-110"
+                            onClick={handleRemoveImage}
                           >
                             <Trash2 className="size-3" />
                           </button>
@@ -187,10 +204,10 @@ export function WorkflowDetailModal({
                             JPG, PNG up to 5MB
                           </span>
                           <input
-                            type="file"
                             accept="image/jpeg,image/png,image/jpg"
-                            onChange={handleFileChange}
                             className="hidden"
+                            type="file"
+                            onChange={handleFileChange}
                           />
                         </label>
                       )}
@@ -240,7 +257,10 @@ export function WorkflowDetailModal({
                           className="feature-pill feature-pill-selected"
                         >
                           <div className="flex size-4 items-center justify-center rounded-full bg-[#2567ff]">
-                            <Check className="size-2.5 text-white" strokeWidth={3} />
+                            <Check
+                              className="size-2.5 text-white"
+                              strokeWidth={3}
+                            />
                           </div>
                           {feature}
                         </div>
@@ -263,6 +283,7 @@ export function WorkflowDetailModal({
                       <div className="flex flex-wrap gap-2 mt-3">
                         {workflow.useCases.map((useCase, i) => {
                           const UseCaseIcon = useCase.icon;
+
                           return (
                             <span
                               key={i}
@@ -281,12 +302,13 @@ export function WorkflowDetailModal({
                 {/* Footer CTA */}
                 <div className="sticky bottom-0 border-t border-[#f0f0f0] bg-white p-4 sm:p-6">
                   <button
-                    onClick={handleStartClick}
-                    disabled={isLoading || !canStart}
                     className={cn(
                       "btn-primary w-full flex items-center justify-center gap-2",
-                      (isLoading || !canStart) && "opacity-70 pointer-events-none"
+                      (isLoading || !canStart) &&
+                        "opacity-70 pointer-events-none",
                     )}
+                    disabled={isLoading || !canStart}
+                    onClick={handleStartClick}
                   >
                     {isLoading ? (
                       <>

@@ -271,4 +271,4 @@ export interface VerificationDecision {
   ip_analysis?: IpAnalysis;
   reviews?: Review[];
   created_at: string;
-} 
+}

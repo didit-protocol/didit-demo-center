@@ -29,6 +29,7 @@ export function DiditCaptchaTab() {
 
     if (!diditSessionId) {
       setError("Please complete the Didit CAPTCHA first.");
+
       return;
     }
 
@@ -45,6 +46,7 @@ export function DiditCaptchaTab() {
       });
 
       const data = await res.json();
+
       if (!res.ok) {
         throw new Error(data.error || "Submission failed");
       }
@@ -65,47 +67,48 @@ export function DiditCaptchaTab() {
           <Shield className="h-6 w-6 text-accent" />
         </span>
         <div>
-          <h3 className="text-title text-app-black mb-1">
-            Didit CAPTCHA Demo
-          </h3>
+          <h3 className="text-title text-app-black mb-1">Didit CAPTCHA Demo</h3>
           <p className="text-body">
             Experience a bot-resistant CAPTCHA powered by liveness verification.
-            Users verify their humanity through a quick biometric check, providing 
-            a seamless yet secure experience. Enter your email, complete the face 
-            check, and submit to see it in action.
+            Users verify their humanity through a quick biometric check,
+            providing a seamless yet secure experience. Enter your email,
+            complete the face check, and submit to see it in action.
           </p>
         </div>
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form className="space-y-5" onSubmit={handleSubmit}>
         {/* Email field */}
         <div className="card-base max-w-lg">
           <label
-            htmlFor="work-email"
             className="flex items-center gap-2 text-label-lg text-app-black mb-3"
+            htmlFor="work-email"
           >
             <Mail className="h-4 w-4 text-accent" />
             Work Email
           </label>
           <input
-            id="work-email"
-            type="email"
             required
+            className="input-base"
+            id="work-email"
+            placeholder="[email protected]"
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="input-base"
-            placeholder="[email protected]"
           />
         </div>
 
         {/* CAPTCHA component */}
         <div className="card-base max-w-lg">
-          <label className="flex items-center gap-2 text-label-lg text-app-black mb-3">
+          <div className="flex items-center gap-2 text-label-lg text-app-black mb-3">
             <Shield className="h-4 w-4 text-accent" />
             Human Verification
-          </label>
-          <DiditCaptcha email={email || null} onVerified={handleCaptchaVerified} />
+          </div>
+          <DiditCaptcha
+            email={email || null}
+            onVerified={handleCaptchaVerified}
+          />
         </div>
 
         {/* Error message */}
@@ -123,8 +126,12 @@ export function DiditCaptchaTab() {
                 <CheckCircle2 className="h-4 w-4 text-green-600" />
               </div>
               <div>
-                <p className="text-label-lg text-green-800">Form submitted successfully!</p>
-                <p className="text-body-small text-green-700">Humanity confirmed via Didit.</p>
+                <p className="text-label-lg text-green-800">
+                  Form submitted successfully!
+                </p>
+                <p className="text-body-small text-green-700">
+                  Humanity confirmed via Didit.
+                </p>
               </div>
             </div>
           </div>
@@ -133,9 +140,9 @@ export function DiditCaptchaTab() {
         {/* Submit button */}
         <div className="pt-2">
           <Button
-            type="submit"
-            disabled={submitting || !diditSessionId}
             className="btn-primary h-12 px-8 text-[15px]"
+            disabled={submitting || !diditSessionId}
+            type="submit"
           >
             {submitting ? (
               <>

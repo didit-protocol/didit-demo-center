@@ -23,15 +23,16 @@ export async function POST(req: NextRequest) {
     if (!email || !diditSessionId) {
       return withNoStore(
         { error: "Email and Didit session are required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const apiKey = process.env.API_KEY;
+
     if (!apiKey) {
       return withNoStore(
         { error: "Server is not configured for Didit" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -44,15 +45,17 @@ export async function POST(req: NextRequest) {
           accept: "application/json",
           "X-Api-Key": apiKey,
         },
-      }
+      },
     );
 
     if (!res.ok) {
       const text = await res.text();
+
       console.error("Didit decision error (submit)", res.status, text);
+
       return withNoStore(
         { error: "Could not verify Didit CAPTCHA" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -66,7 +69,7 @@ export async function POST(req: NextRequest) {
     if (!verified) {
       return withNoStore(
         { error: "Didit CAPTCHA not completed successfully" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -74,7 +77,7 @@ export async function POST(req: NextRequest) {
     if (contactEmail && contactEmail.toLowerCase() !== email.toLowerCase()) {
       return withNoStore(
         { error: "Email does not match verified Didit session" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -85,10 +88,7 @@ export async function POST(req: NextRequest) {
     return withNoStore({ ok: true, message: "Form submitted successfully" });
   } catch (err) {
     console.error(err);
-    return withNoStore(
-      { error: "Unexpected server error" },
-      { status: 500 }
-    );
+
+    return withNoStore({ error: "Unexpected server error" }, { status: 500 });
   }
 }
-

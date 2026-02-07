@@ -54,15 +54,18 @@ export const WORKFLOWS: WorkflowConfig[] = [
     steps: [
       {
         title: "Scan an ID Document",
-        description: "User captures their government-issued ID using their device camera. Our AI extracts and validates all document data.",
+        description:
+          "User captures their government-issued ID using their device camera. Our AI extracts and validates all document data.",
       },
       {
         title: "Take a Quick Selfie",
-        description: "A passive liveness check confirms the user is real—no awkward movements required. Takes under 2 seconds.",
+        description:
+          "A passive liveness check confirms the user is real—no awkward movements required. Takes under 2 seconds.",
       },
       {
         title: "Get Verified in Seconds",
-        description: "Our AI matches the selfie to the ID photo and returns a decision in real-time. You're ready to onboard.",
+        description:
+          "Our AI matches the selfie to the ID photo and returns a decision in real-time. You're ready to onboard.",
       },
     ],
     bestFor: "Standard user onboarding for any industry.",
@@ -99,15 +102,18 @@ export const WORKFLOWS: WorkflowConfig[] = [
     steps: [
       {
         title: "Scan an ID Document",
-        description: "Capture and validate government-issued ID with AI-powered document verification and fraud detection.",
+        description:
+          "Capture and validate government-issued ID with AI-powered document verification and fraud detection.",
       },
       {
         title: "Perform a Simple Action",
-        description: "Active liveness requires a specific movement (like blinking or turning head) to ensure the person is physically present.",
+        description:
+          "Active liveness requires a specific movement (like blinking or turning head) to ensure the person is physically present.",
       },
       {
         title: "Automated AML Check",
-        description: "We screen against global sanctions lists, PEP databases, and adverse media in real-time—all in the background.",
+        description:
+          "We screen against global sanctions lists, PEP databases, and adverse media in real-time—all in the background.",
       },
     ],
     bestFor: "Fintech, Banking, and Crypto Exchanges.",
@@ -145,11 +151,13 @@ export const WORKFLOWS: WorkflowConfig[] = [
     steps: [
       {
         title: "Take a Selfie",
-        description: "User captures a quick selfie using their device camera. Works on any modern browser or mobile device.",
+        description:
+          "User captures a quick selfie using their device camera. Works on any modern browser or mobile device.",
       },
       {
         title: "Follow On-Screen Instructions",
-        description: "Active liveness prompts ensure a real person is present—detecting sophisticated attacks like deepfakes and injection attacks.",
+        description:
+          "Active liveness prompts ensure a real person is present—detecting sophisticated attacks like deepfakes and injection attacks.",
       },
     ],
     bestFor: "Securing password resets or high-risk transactions.",
@@ -181,11 +189,13 @@ export const WORKFLOWS: WorkflowConfig[] = [
     steps: [
       {
         title: "Take a New Selfie",
-        description: "User captures a fresh selfie. Our AI performs liveness detection to ensure they're physically present.",
+        description:
+          "User captures a fresh selfie. Our AI performs liveness detection to ensure they're physically present.",
       },
       {
         title: "Get Authenticated in Seconds",
-        description: "We match the new selfie against their verified identity photo. Instant, secure, passwordless access.",
+        description:
+          "We match the new selfie against their verified identity photo. Instant, secure, passwordless access.",
       },
     ],
     bestFor: "Passwordless login and securing existing user accounts.",
@@ -218,15 +228,18 @@ export const WORKFLOWS: WorkflowConfig[] = [
     steps: [
       {
         title: "Take a Selfie (Liveness Check)",
-        description: "Confirm the user is a real person with our AI-powered liveness detection.",
+        description:
+          "Confirm the user is a real person with our AI-powered liveness detection.",
       },
       {
         title: "Enter Phone Number",
-        description: "User provides their phone number to receive a one-time verification code.",
+        description:
+          "User provides their phone number to receive a one-time verification code.",
       },
       {
         title: "Validate OTP Code",
-        description: "Enter the code to prove possession of the phone. Biometrics + phone = verified identity.",
+        description:
+          "Enter the code to prove possession of the phone. Biometrics + phone = verified identity.",
       },
     ],
     bestFor: "Preventing fake accounts and adding a second factor.",
@@ -258,11 +271,13 @@ export const WORKFLOWS: WorkflowConfig[] = [
     steps: [
       {
         title: "Take a Selfie (AI Estimates Age)",
-        description: "Our AI analyzes the selfie to estimate the user's age. Most users pass instantly with zero friction.",
+        description:
+          "Our AI analyzes the selfie to estimate the user's age. Most users pass instantly with zero friction.",
       },
       {
         title: "Conditional ID Check",
-        description: "Only if the age falls in a 'buffer zone' (e.g., 15-25), we request an ID scan for verification.",
+        description:
+          "Only if the age falls in a 'buffer zone' (e.g., 15-25), we request an ID scan for verification.",
       },
     ],
     bestFor: "Social Media, iGaming, and age-restricted E-commerce.",
@@ -299,11 +314,13 @@ export const WORKFLOWS: WorkflowConfig[] = [
     steps: [
       {
         title: "Capture Address Document",
-        description: "User uploads or photographs a proof of address document like a utility bill, bank statement, or government letter.",
+        description:
+          "User uploads or photographs a proof of address document like a utility bill, bank statement, or government letter.",
       },
       {
         title: "Automated AI Analysis",
-        description: "Our AI extracts the address, validates the document type, and checks for signs of tampering or fraud.",
+        description:
+          "Our AI extracts the address, validates the document type, and checks for signs of tampering or fraud.",
       },
     ],
     bestFor: "Enhanced due diligence in Banking and Fintech.",

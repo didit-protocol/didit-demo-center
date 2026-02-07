@@ -65,8 +65,8 @@ export function JsonViewer({
       {/* Header */}
       <div className="flex items-center justify-between pb-4 border-b border-gray-100">
         <button
-          onClick={() => setIsExpanded(!isExpanded)}
           className="flex items-center gap-2 text-label-lg text-app-black hover:text-accent transition-colors"
+          onClick={() => setIsExpanded(!isExpanded)}
         >
           {isExpanded ? (
             <ChevronDown className="h-4 w-4 text-dusty-gray" />
@@ -90,7 +90,7 @@ export function JsonViewer({
               "flex h-8 w-8 items-center justify-center rounded-lg transition-colors",
               copied
                 ? "bg-green-100 text-green-600"
-                : "text-dusty-gray hover:bg-gray-100 hover:text-app-black"
+                : "text-dusty-gray hover:bg-gray-100 hover:text-app-black",
             )}
             onClick={copyToClipboard}
           >

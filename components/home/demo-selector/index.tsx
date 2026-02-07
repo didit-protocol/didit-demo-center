@@ -31,7 +31,7 @@ export function DemoSelector({
 
       return acc;
     },
-    {} as Record<string, typeof demos>
+    {} as Record<string, typeof demos>,
   );
 
   return (

@@ -59,10 +59,12 @@ export async function POST(req: NextRequest) {
 
     if (!res.ok) {
       const text = await res.text();
+
       console.error("Didit create session error", res.status, text);
+
       return withNoStore(
         { error: "Failed to create Didit session" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -74,10 +76,10 @@ export async function POST(req: NextRequest) {
     });
   } catch (err) {
     console.error("Didit session error", err);
+
     return withNoStore(
       { error: "Unexpected error creating Didit session" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-

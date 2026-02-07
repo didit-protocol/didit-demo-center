@@ -20,7 +20,11 @@ type VerifiedSession = {
 type DiditCaptchaProps = {
   email: string | null;
   metadata?: Record<string, unknown>;
-  onVerified: (result: { sessionId: string; email: string | null; isFromCache: boolean }) => void;
+  onVerified: (result: {
+    sessionId: string;
+    email: string | null;
+    isFromCache: boolean;
+  }) => void;
   disabled?: boolean;
   className?: string;
 };
@@ -29,6 +33,7 @@ type DiditCaptchaProps = {
 const getStoredSession = (userEmail: string): VerifiedSession | null => {
   try {
     const stored = localStorage.getItem(`${STORAGE_KEY_PREFIX}${userEmail}`);
+
     if (!stored) return null;
 
     const session: VerifiedSession = JSON.parse(stored);
@@ -36,6 +41,7 @@ const getStoredSession = (userEmail: string): VerifiedSession | null => {
     // Check if session has expired
     if (Date.now() - session.verifiedAt > SESSION_EXPIRY_MS) {
       localStorage.removeItem(`${STORAGE_KEY_PREFIX}${userEmail}`);
+
       return null;
     }
 
@@ -46,14 +52,22 @@ const getStoredSession = (userEmail: string): VerifiedSession | null => {
 };
 
 // Helper function to store verified session
-const storeVerifiedSession = (userEmail: string, sessId: string, status: string) => {
+const storeVerifiedSession = (
+  userEmail: string,
+  sessId: string,
+  status: string,
+) => {
   const session: VerifiedSession = {
     sessionId: sessId,
     email: userEmail,
     verifiedAt: Date.now(),
     status,
   };
-  localStorage.setItem(`${STORAGE_KEY_PREFIX}${userEmail}`, JSON.stringify(session));
+
+  localStorage.setItem(
+    `${STORAGE_KEY_PREFIX}${userEmail}`,
+    JSON.stringify(session),
+  );
 };
 
 export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
@@ -109,17 +123,22 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
         setIsVerified(false);
       }
     },
-    [email, onVerified]
+    [email, onVerified],
   );
 
   // Check for existing verified session on mount
   useEffect(() => {
     if (email) {
       const storedSession = getStoredSession(email);
+
       if (storedSession && storedSession.status === "Approved") {
         setIsVerified(true);
         verifiedSessionRef.current = storedSession.sessionId;
-        onVerified({ sessionId: storedSession.sessionId, email: storedSession.email, isFromCache: true });
+        onVerified({
+          sessionId: storedSession.sessionId,
+          email: storedSession.email,
+          isFromCache: true,
+        });
       }
     }
   }, [email, onVerified]);
@@ -130,6 +149,7 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
       if (event.key?.startsWith("didit-captcha-callback-") && event.newValue) {
         try {
           const data = JSON.parse(event.newValue);
+
           if (data.type === "DIDIT_VERIFICATION_SUCCESS" && data.sessionId) {
             if (sessionId === data.sessionId || !sessionId) {
               handleVerificationComplete(data.sessionId, data.status);
@@ -144,13 +164,16 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
 
     // Also poll localStorage directly (some browsers don't fire storage events in same tab)
     let localPollInterval: NodeJS.Timeout | null = null;
+
     if (sessionId && isModalOpen) {
       localPollInterval = setInterval(() => {
         const storageKey = `didit-captcha-callback-${sessionId}`;
         const stored = localStorage.getItem(storageKey);
+
         if (stored) {
           try {
             const data = JSON.parse(stored);
+
             if (data.type === "DIDIT_VERIFICATION_SUCCESS") {
               handleVerificationComplete(data.sessionId, data.status);
               localStorage.removeItem(storageKey);
@@ -163,6 +186,7 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
     }
 
     window.addEventListener("storage", handleStorage);
+
     return () => {
       window.removeEventListener("storage", handleStorage);
       if (localPollInterval) clearInterval(localPollInterval);
@@ -190,7 +214,9 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
         if (verifiedSessionRef.current) return;
 
         try {
-          const res = await fetch(`/api/didit-captcha/verify?sessionId=${encodeURIComponent(sessId)}`);
+          const res = await fetch(
+            `/api/didit-captcha/verify?sessionId=${encodeURIComponent(sessId)}`,
+          );
           const data = await res.json();
 
           if (data.verified && data.status === "Approved") {
@@ -206,12 +232,13 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
       // Poll every 3 seconds
       pollIntervalRef.current = setInterval(poll, 3000);
     },
-    [handleVerificationComplete]
+    [handleVerificationComplete],
   );
 
   const createSession = async () => {
     if (!email) {
       setError("Enter your email first.");
+
       return;
     }
 
@@ -232,6 +259,7 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
       });
 
       const data = await res.json();
+
       if (!res.ok) {
         throw new Error(data.error || "Failed to start verification");
       }
@@ -242,7 +270,9 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
       // Start polling for status updates
       startPolling(data.sessionId);
     } catch (e: unknown) {
-      const errorMessage = e instanceof Error ? e.message : "Could not start verification";
+      const errorMessage =
+        e instanceof Error ? e.message : "Could not start verification";
+
       console.error(e);
       setError(errorMessage);
       setIsLoading(false);
@@ -253,15 +283,22 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
     if (isVerified || disabled) return;
     if (!email) {
       setError("Enter your email first.");
+
       return;
     }
 
     // Check for existing verified session
     const storedSession = getStoredSession(email);
+
     if (storedSession && storedSession.status === "Approved") {
       setIsVerified(true);
       verifiedSessionRef.current = storedSession.sessionId;
-      onVerified({ sessionId: storedSession.sessionId, email: storedSession.email, isFromCache: true });
+      onVerified({
+        sessionId: storedSession.sessionId,
+        email: storedSession.email,
+        isFromCache: true,
+      });
+
       return;
     }
 
@@ -295,15 +332,15 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
             : "border-gray-200 hover:border-gray-300 hover:shadow-card",
           disabled && "cursor-not-allowed opacity-50",
           !email && !isVerified && "opacity-60",
-          className
+          className,
         )}
       >
         {/* Checkbox + Label */}
         <button
+          className="flex items-center gap-3 focus:outline-none disabled:cursor-not-allowed"
+          disabled={isLoading || !email || isVerified || disabled}
           type="button"
           onClick={handleCheckboxClick}
-          disabled={isLoading || !email || isVerified || disabled}
-          className="flex items-center gap-3 focus:outline-none disabled:cursor-not-allowed"
         >
           {/* Checkbox */}
           <div
@@ -313,15 +350,15 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
                 ? "bg-emerald-500"
                 : isLoading
                   ? "border-2 border-gray-300"
-                  : "border-2 border-gray-300 group-hover:border-accent"
+                  : "border-2 border-gray-300 group-hover:border-accent",
             )}
           >
             <AnimatePresence mode="wait">
               {isVerified ? (
                 <motion.div
                   key="check"
-                  initial={{ scale: 0, rotate: -45 }}
                   animate={{ scale: 1, rotate: 0 }}
+                  initial={{ scale: 0, rotate: -45 }}
                   transition={{ type: "spring", stiffness: 500, damping: 30 }}
                 >
                   <Check className="size-4 text-white" strokeWidth={3} />
@@ -329,9 +366,9 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
               ) : isLoading ? (
                 <motion.div
                   key="loading"
-                  initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
+                  initial={{ opacity: 0 }}
                 >
                   <Loader2 className="size-4 animate-spin text-accent" />
                 </motion.div>
@@ -343,7 +380,7 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
           <span
             className={cn(
               "select-none text-sm font-medium",
-              isVerified ? "text-emerald-700" : "text-app-black"
+              isVerified ? "text-emerald-700" : "text-app-black",
             )}
           >
             {isLoading ? "Verifying..." : isVerified ? "Verified" : "I'm human"}
@@ -354,8 +391,12 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
         <div className="flex items-center gap-1.5 opacity-70">
           <ShieldCheck className="size-5 text-accent" />
           <div className="flex flex-col">
-            <span className="text-[10px] font-semibold leading-tight text-graphite-gray">Didit</span>
-            <span className="text-[9px] leading-tight text-dusty-gray">CAPTCHA</span>
+            <span className="text-[10px] font-semibold leading-tight text-graphite-gray">
+              Didit
+            </span>
+            <span className="text-[9px] leading-tight text-dusty-gray">
+              CAPTCHA
+            </span>
           </div>
         </div>
       </div>
@@ -364,10 +405,10 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
       <AnimatePresence>
         {error && !isModalOpen && (
           <motion.p
-            initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
             className="mt-2 max-w-[320px] text-[13px] text-red-500"
+            exit={{ opacity: 0, y: -4 }}
+            initial={{ opacity: 0, y: -4 }}
           >
             {error}
           </motion.p>
@@ -378,26 +419,26 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
       <AnimatePresence>
         {isModalOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
             className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 px-2 pb-2 pt-4 backdrop-blur-sm sm:p-4"
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
             onClick={(e) => {
               if (e.target === e.currentTarget && !isLoading) closeModal();
             }}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ type: "spring", stiffness: 400, damping: 30 }}
               className="relative flex h-[calc(100dvh-32px)] max-h-[700px] w-full max-w-[800px] flex-col overflow-hidden rounded-xl bg-white shadow-elevated sm:h-[calc(100dvh-16px)] sm:max-h-[830px] sm:rounded-2xl"
+              exit={{ scale: 0.95, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
             >
               {/* Close button - always visible except during success */}
               {!showSuccess && (
                 <button
-                  onClick={closeModal}
                   className="absolute right-2 top-2 z-10 flex size-7 items-center justify-center rounded-full bg-black/5 text-gray-500 transition-colors hover:bg-black/10 hover:text-gray-700 sm:right-3 sm:top-3 sm:size-8"
+                  onClick={closeModal}
                 >
                   <X className="size-3.5 sm:size-4" />
                 </button>
@@ -407,29 +448,38 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
               {showSuccess ? (
                 // Success state
                 <motion.div
-                  initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="flex flex-1 flex-col items-center justify-center px-4 py-10 sm:px-8 sm:py-16"
+                  initial={{ opacity: 0 }}
                 >
                   <motion.div
-                    initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 20, delay: 0.1 }}
                     className="flex size-20 items-center justify-center rounded-full bg-emerald-500"
+                    initial={{ scale: 0 }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 400,
+                      damping: 20,
+                      delay: 0.1,
+                    }}
                   >
                     <motion.div
-                      initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      transition={{ delay: 0.3, type: "spring", stiffness: 400 }}
+                      initial={{ scale: 0 }}
+                      transition={{
+                        delay: 0.3,
+                        type: "spring",
+                        stiffness: 400,
+                      }}
                     >
                       <Check className="size-10 text-white" strokeWidth={3} />
                     </motion.div>
                   </motion.div>
                   <motion.p
-                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
                     className="mt-5 text-lg font-semibold text-gray-900"
+                    initial={{ opacity: 0, y: 10 }}
+                    transition={{ delay: 0.4 }}
                   >
                     Verification Complete!
                   </motion.p>
@@ -454,8 +504,12 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
                         <ShieldCheck className="size-3.5 text-white sm:size-4" />
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-gray-900 sm:text-sm">Quick Liveness Check</p>
-                        <p className="text-[10px] text-gray-500 sm:text-xs">Complete to continue</p>
+                        <p className="text-xs font-semibold text-gray-900 sm:text-sm">
+                          Quick Liveness Check
+                        </p>
+                        <p className="text-[10px] text-gray-500 sm:text-xs">
+                          Complete to continue
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -463,11 +517,11 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
                   {/* Iframe - sized to fit content, fills remaining space */}
                   <div className="relative min-h-[340px] w-full flex-1 bg-white sm:min-h-[400px]">
                     <iframe
-                      src={sessionUrl}
-                      className="absolute inset-0 size-full border-0"
-                      title="Didit verification"
-                      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation allow-modals"
                       allow="camera; microphone"
+                      className="absolute inset-0 size-full border-0"
+                      sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation allow-modals"
+                      src={sessionUrl}
+                      title="Didit verification"
                     />
                   </div>
 
@@ -484,11 +538,15 @@ export const DiditCaptcha: React.FC<DiditCaptchaProps> = ({
                   <div className="flex size-14 items-center justify-center rounded-full bg-red-100 sm:size-16">
                     <X className="size-6 text-red-500 sm:size-8" />
                   </div>
-                  <p className="mt-3 text-sm font-medium text-gray-900 sm:mt-4">Something went wrong</p>
-                  <p className="mt-1 text-center text-xs text-gray-500">{error}</p>
+                  <p className="mt-3 text-sm font-medium text-gray-900 sm:mt-4">
+                    Something went wrong
+                  </p>
+                  <p className="mt-1 text-center text-xs text-gray-500">
+                    {error}
+                  </p>
                   <button
-                    onClick={closeModal}
                     className="mt-5 rounded-xl bg-app-black px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-gray-800 sm:mt-6 sm:px-6"
+                    onClick={closeModal}
                   >
                     Close
                   </button>

@@ -21,11 +21,13 @@ export default function IBetaPage() {
     if (!file.type.startsWith("image/")) {
       setPortraitError("Please select an image file.");
       setPortraitBase64(null);
+
       return;
     }
     if (file.size > 1024 * 1024) {
       setPortraitError("File too large. Max size is 1MB.");
       setPortraitBase64(null);
+
       return;
     }
     setPortraitError(null);
@@ -34,6 +36,7 @@ export default function IBetaPage() {
     reader.onload = () => {
       const result = reader.result as string;
       const base64 = result.includes(",") ? result.split(",")[1] : result;
+
       setPortraitBase64(base64);
     };
     reader.onerror = () => {
@@ -45,6 +48,7 @@ export default function IBetaPage() {
 
   const handlePortraitChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+
     if (file) processFile(file);
   };
 
@@ -62,12 +66,14 @@ export default function IBetaPage() {
     event.preventDefault();
     setIsDragging(false);
     const file = event.dataTransfer.files?.[0];
+
     if (file) processFile(file);
   };
 
   const handleStartLiveness = async () => {
     if (!portraitBase64) {
       setError("Please upload a selfie before starting.");
+
       return;
     }
 
@@ -104,6 +110,7 @@ export default function IBetaPage() {
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "An error occurred";
+
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -208,5 +215,3 @@ export default function IBetaPage() {
     </div>
   );
 }
-
-

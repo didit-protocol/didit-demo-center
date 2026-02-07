@@ -26,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html suppressHydrationWarning lang="en">
       <head />
       <body
         className={clsx(
@@ -37,7 +37,7 @@ export default function RootLayout({
       >
         {/* Gradient background */}
         <div className="fixed inset-0 -z-10 bg-hero-gradient" />
-        
+
         <div className="relative flex min-h-screen flex-col">
           <Navbar />
           <main className="flex-1">

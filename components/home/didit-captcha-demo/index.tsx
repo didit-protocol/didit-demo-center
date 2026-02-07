@@ -15,7 +15,6 @@ import {
 
 import { cn } from "@/lib/utils";
 import { DiditCaptcha } from "@/components/didit-captcha";
-import { WORKFLOWS } from "@/lib/workflows";
 
 interface DiditCaptchaDemoProps {
   isOpen: boolean;
@@ -28,9 +27,6 @@ export function DiditCaptchaDemo({ isOpen, onClose }: DiditCaptchaDemoProps) {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-
-  // Get the CAPTCHA workflow data
-  const captchaWorkflow = WORKFLOWS.find((w) => w.isCaptcha);
 
   const handleCaptchaVerified = (data: {
     sessionId: string;
@@ -84,30 +80,35 @@ export function DiditCaptchaDemo({ isOpen, onClose }: DiditCaptchaDemoProps) {
         <>
           {/* Backdrop */}
           <motion.div
-            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
             className="fixed inset-0 z-50 bg-[#1a1a1a]/60 backdrop-blur-sm"
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             onClick={handleClose}
           />
 
           {/* Modal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 24 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.96, y: 24 }}
-            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-4 z-50 flex items-center justify-center sm:inset-8"
+            exit={{ opacity: 0, scale: 0.96, y: 24 }}
+            initial={{ opacity: 0, scale: 0.96, y: 24 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
           >
+            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
             <div
+              aria-modal="true"
               className="relative w-full max-w-2xl max-h-[calc(100vh-4rem)] overflow-hidden rounded-2xl border border-[#e5e5e5] bg-white shadow-2xl"
+              role="dialog"
+              tabIndex={-1}
               onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.key === "Escape" && handleClose()}
             >
               {/* Close button */}
               <button
-                onClick={handleClose}
                 className="absolute right-4 top-4 z-10 flex size-9 items-center justify-center rounded-full bg-[#f5f5f7] text-[#6e6e73] transition-all hover:bg-[#e5e5e5] hover:text-[#1a1a1a]"
+                onClick={handleClose}
               >
                 <X className="size-4" />
               </button>
@@ -119,7 +120,10 @@ export function DiditCaptchaDemo({ isOpen, onClose }: DiditCaptchaDemoProps) {
                   <div className="flex items-start gap-4">
                     {/* Icon */}
                     <div className="icon-container-accent shrink-0">
-                      <Shield className="size-5 text-white sm:size-6" strokeWidth={1.5} />
+                      <Shield
+                        className="size-5 text-white sm:size-6"
+                        strokeWidth={1.5}
+                      />
                     </div>
 
                     <div className="flex-1 min-w-0 pr-8">
@@ -127,8 +131,8 @@ export function DiditCaptchaDemo({ isOpen, onClose }: DiditCaptchaDemoProps) {
                         Didit CAPTCHA
                       </h2>
                       <p className="text-body text-[#6e6e73]">
-                        Human-only access with privacy-first biometric verification. 
-                        No more clicking traffic lights.
+                        Human-only access with privacy-first biometric
+                        verification. No more clicking traffic lights.
                       </p>
                     </div>
                   </div>
@@ -155,9 +159,9 @@ export function DiditCaptchaDemo({ isOpen, onClose }: DiditCaptchaDemoProps) {
                   {success ? (
                     /* Success state */
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       className="text-center py-8"
+                      initial={{ opacity: 0, scale: 0.95 }}
                     >
                       <div className="flex items-center justify-center mb-4">
                         <div className="flex size-16 items-center justify-center rounded-full bg-gradient-to-r from-[#dcfce7] to-[#d1fae5]">
@@ -168,12 +172,13 @@ export function DiditCaptchaDemo({ isOpen, onClose }: DiditCaptchaDemoProps) {
                         Verification Complete!
                       </h3>
                       <p className="text-body text-[#6e6e73] max-w-sm mx-auto">
-                        You&apos;ve been verified as human. In a real application, you&apos;d now have
-                        full access to protected features.
+                        You&apos;ve been verified as human. In a real
+                        application, you&apos;d now have full access to
+                        protected features.
                       </p>
                       <button
-                        onClick={handleClose}
                         className="btn-secondary mt-6"
+                        onClick={handleClose}
                       >
                         Close Demo
                       </button>
@@ -189,29 +194,33 @@ export function DiditCaptchaDemo({ isOpen, onClose }: DiditCaptchaDemoProps) {
                           </h3>
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-4">
+                        <form className="space-y-4" onSubmit={handleSubmit}>
                           {/* Email input */}
                           <div>
-                            <label className="block text-[13px] font-medium text-[#4b5058] mb-1.5">
+                            <label
+                              className="block text-[13px] font-medium text-[#4b5058] mb-1.5"
+                              htmlFor="captcha-demo-email"
+                            >
                               Your Email
                             </label>
                             <input
+                              required
+                              className="input-base"
+                              id="captcha-demo-email"
+                              placeholder="Enter your email to try the demo"
                               type="email"
                               value={email}
                               onChange={(e) => setEmail(e.target.value)}
-                              placeholder="Enter your email to try the demo"
-                              required
-                              className="input-base"
                             />
                           </div>
 
                           {/* CAPTCHA widget */}
                           <div className="rounded-xl bg-[#f5f5f7] p-4">
                             <DiditCaptcha
+                              className="w-full"
+                              disabled={!email}
                               email={email || null}
                               onVerified={handleCaptchaVerified}
-                              disabled={!email}
-                              className="w-full"
                             />
                           </div>
 
@@ -224,12 +233,13 @@ export function DiditCaptchaDemo({ isOpen, onClose }: DiditCaptchaDemoProps) {
 
                           {/* Submit button */}
                           <button
-                            type="submit"
-                            disabled={!email || !diditSessionId || submitting}
                             className={cn(
                               "btn-primary w-full flex items-center justify-center gap-2",
-                              (!email || !diditSessionId || submitting) && "opacity-50 pointer-events-none"
+                              (!email || !diditSessionId || submitting) &&
+                                "opacity-50 pointer-events-none",
                             )}
+                            disabled={!email || !diditSessionId || submitting}
+                            type="submit"
                           >
                             {submitting ? (
                               <>
@@ -256,9 +266,18 @@ export function DiditCaptchaDemo({ isOpen, onClose }: DiditCaptchaDemoProps) {
                         </div>
                         <div className="space-y-3">
                           {[
-                            { title: "Click the checkbox", desc: "A simple, familiar interaction" },
-                            { title: "Complete biometric check", desc: "Quick face scan in a popup window" },
-                            { title: "You're verified", desc: "Session cached for 48 hours" },
+                            {
+                              title: "Click the checkbox",
+                              desc: "A simple, familiar interaction",
+                            },
+                            {
+                              title: "Complete biometric check",
+                              desc: "Quick face scan in a popup window",
+                            },
+                            {
+                              title: "You're verified",
+                              desc: "Session cached for 48 hours",
+                            },
                           ].map((step, i) => (
                             <div
                               key={i}
@@ -287,13 +306,22 @@ export function DiditCaptchaDemo({ isOpen, onClose }: DiditCaptchaDemoProps) {
                           </h3>
                         </div>
                         <div className="flex flex-wrap gap-2">
-                          {["Biometric Check", "Session Caching", "Privacy First", "No Puzzles", "Fast Integration"].map((feature) => (
+                          {[
+                            "Biometric Check",
+                            "Session Caching",
+                            "Privacy First",
+                            "No Puzzles",
+                            "Fast Integration",
+                          ].map((feature) => (
                             <div
                               key={feature}
                               className="feature-pill feature-pill-selected"
                             >
                               <div className="flex size-4 items-center justify-center rounded-full bg-[#2567ff]">
-                                <Check className="size-2.5 text-white" strokeWidth={3} />
+                                <Check
+                                  className="size-2.5 text-white"
+                                  strokeWidth={3}
+                                />
                               </div>
                               {feature}
                             </div>

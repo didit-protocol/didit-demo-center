@@ -16,8 +16,7 @@ import { WORKFLOWS, type WorkflowConfig } from "@/lib/workflows";
 import { DiditCaptchaTab } from "@/components/home/tab/didit-captcha";
 
 export function WorkflowsTab() {
-  const { sessionData, decisionData, isLoading, error, createSession } =
-    useVerification();
+  const { isLoading, error, createSession } = useVerification();
 
   const [selectedIndex, setSelectedIndex] = React.useState<number>(0);
 
@@ -120,9 +119,9 @@ export function WorkflowsTab() {
         <div>
           {/* Mobile/Tablet: custom dropdown */}
           <div ref={dropdownRef} className="space-y-3 relative lg:hidden">
-            <label className="text-label-md text-graphite-gray">
+            <span className="text-label-md text-graphite-gray block">
               Choose a workflow
-            </label>
+            </span>
             <button
               aria-expanded={isOpen}
               aria-haspopup="listbox"
@@ -172,26 +171,36 @@ export function WorkflowsTab() {
                       }}
                     >
                       <div className="flex items-start gap-3">
-                        <span className={`flex h-10 w-10 items-center justify-center rounded-lg shrink-0 ${
-                          selectedIndex === idx ? "bg-accent/10" : "bg-gray-100"
-                        }`}>
-                          <wf.icon className={`h-4 w-4 ${selectedIndex === idx ? "text-accent" : "text-graphite-gray"}`} />
+                        <span
+                          className={`flex h-10 w-10 items-center justify-center rounded-lg shrink-0 ${
+                            selectedIndex === idx
+                              ? "bg-accent/10"
+                              : "bg-gray-100"
+                          }`}
+                        >
+                          <wf.icon
+                            className={`h-4 w-4 ${selectedIndex === idx ? "text-accent" : "text-graphite-gray"}`}
+                          />
                         </span>
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className={`text-label-lg ${selectedIndex === idx ? "text-accent" : "text-app-black"}`}>
+                            <span
+                              className={`text-label-lg ${selectedIndex === idx ? "text-accent" : "text-app-black"}`}
+                            >
                               {wf.title}
                             </span>
                             {wf.badge && (
-                              <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
-                                wf.badgeColor === "green"
-                                  ? "bg-green-100 text-green-700"
-                                  : wf.badgeColor === "purple"
-                                    ? "bg-purple-100 text-purple-700"
-                                    : wf.badgeColor === "orange"
-                                      ? "bg-orange-100 text-orange-700"
-                                      : "bg-blue-100 text-blue-700"
-                              }`}>
+                              <span
+                                className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                                  wf.badgeColor === "green"
+                                    ? "bg-green-100 text-green-700"
+                                    : wf.badgeColor === "purple"
+                                      ? "bg-purple-100 text-purple-700"
+                                      : wf.badgeColor === "orange"
+                                        ? "bg-orange-100 text-orange-700"
+                                        : "bg-blue-100 text-blue-700"
+                                }`}
+                              >
                                 {wf.badge}
                               </span>
                             )}
@@ -210,9 +219,9 @@ export function WorkflowsTab() {
 
           {/* Desktop: vertical list of workflow options */}
           <div className="hidden lg:block space-y-3">
-            <label className="text-label-md text-graphite-gray">
+            <span className="text-label-md text-graphite-gray block">
               Choose a workflow
-            </label>
+            </span>
             <div className="space-y-3">
               {WORKFLOWS.map((wf, idx) => (
                 <button
@@ -226,30 +235,42 @@ export function WorkflowsTab() {
                 >
                   {/* Header row with icon, title, and badge */}
                   <div className="flex items-start gap-3 mb-3">
-                    <span className={`flex h-11 w-11 items-center justify-center rounded-xl transition-colors shrink-0 ${
-                      selectedIndex === idx ? "bg-accent/10" : "bg-gray-100"
-                    }`}>
-                      <wf.icon className={`h-5 w-5 transition-colors ${
-                        selectedIndex === idx ? "text-accent" : "text-graphite-gray"
-                      }`} />
+                    <span
+                      className={`flex h-11 w-11 items-center justify-center rounded-xl transition-colors shrink-0 ${
+                        selectedIndex === idx ? "bg-accent/10" : "bg-gray-100"
+                      }`}
+                    >
+                      <wf.icon
+                        className={`h-5 w-5 transition-colors ${
+                          selectedIndex === idx
+                            ? "text-accent"
+                            : "text-graphite-gray"
+                        }`}
+                      />
                     </span>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className={`text-label-lg transition-colors ${
-                          selectedIndex === idx ? "text-accent" : "text-app-black"
-                        }`}>
+                        <span
+                          className={`text-label-lg transition-colors ${
+                            selectedIndex === idx
+                              ? "text-accent"
+                              : "text-app-black"
+                          }`}
+                        >
                           {wf.title}
                         </span>
                         {wf.badge && (
-                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
-                            wf.badgeColor === "green"
-                              ? "bg-green-100 text-green-700"
-                              : wf.badgeColor === "purple"
-                                ? "bg-purple-100 text-purple-700"
-                                : wf.badgeColor === "orange"
-                                  ? "bg-orange-100 text-orange-700"
-                                  : "bg-blue-100 text-blue-700"
-                          }`}>
+                          <span
+                            className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                              wf.badgeColor === "green"
+                                ? "bg-green-100 text-green-700"
+                                : wf.badgeColor === "purple"
+                                  ? "bg-purple-100 text-purple-700"
+                                  : wf.badgeColor === "orange"
+                                    ? "bg-orange-100 text-orange-700"
+                                    : "bg-blue-100 text-blue-700"
+                            }`}
+                          >
                             {wf.badge}
                           </span>
                         )}
@@ -302,9 +323,7 @@ export function WorkflowsTab() {
                     <h3 className="text-title text-app-black mb-1">
                       {selected.title}
                     </h3>
-                    <p className="text-body">
-                      {selected.description}
-                    </p>
+                    <p className="text-body">{selected.description}</p>
                   </div>
                 </div>
 
@@ -316,7 +335,9 @@ export function WorkflowsTab() {
                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
                         <ListChecks className="h-4 w-4 text-accent" />
                       </div>
-                      <span className="text-label-lg text-app-black">Steps</span>
+                      <span className="text-label-lg text-app-black">
+                        Steps
+                      </span>
                     </div>
                     <ol className="space-y-3">
                       {selected.steps.map((s, idx) => (
@@ -324,7 +345,16 @@ export function WorkflowsTab() {
                           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-100 text-label-sm text-graphite-gray shrink-0">
                             {idx + 1}
                           </span>
-                          <span className="text-body-md text-graphite-gray pt-0.5">{s}</span>
+                          <div className="pt-0.5">
+                            <span className="text-body-md text-app-black font-medium">
+                              {s.title}
+                            </span>
+                            {s.description && (
+                              <p className="text-body-sm text-graphite-gray mt-0.5">
+                                {s.description}
+                              </p>
+                            )}
+                          </div>
                         </li>
                       ))}
                     </ol>
@@ -336,14 +366,13 @@ export function WorkflowsTab() {
                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
                         <Layers className="h-4 w-4 text-accent" />
                       </div>
-                      <span className="text-label-lg text-app-black">Features</span>
+                      <span className="text-label-lg text-app-black">
+                        Features
+                      </span>
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {selected.features.map((f, idx) => (
-                        <span
-                          key={idx}
-                          className="badge"
-                        >
+                        <span key={idx} className="badge">
                           <Sparkles className="h-3 w-3 text-accent" />
                           {f}
                         </span>
@@ -359,10 +388,13 @@ export function WorkflowsTab() {
                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
                         <ShieldCheck className="h-4 w-4 text-accent" />
                       </div>
-                      <span className="text-label-lg text-app-black">Reference Selfie</span>
+                      <span className="text-label-lg text-app-black">
+                        Reference Selfie
+                      </span>
                     </div>
                     <p className="text-body-small mb-4">
-                      Upload a clear selfie (max 1MB). This will be matched against the live capture.
+                      Upload a clear selfie (max 1MB). This will be matched
+                      against the live capture.
                     </p>
                     <input
                       accept="image/*"
@@ -371,7 +403,9 @@ export function WorkflowsTab() {
                       onChange={handlePortraitChange}
                     />
                     {portraitError && (
-                      <p className="text-label-sm text-red-600 mt-2">{portraitError}</p>
+                      <p className="text-label-sm text-red-600 mt-2">
+                        {portraitError}
+                      </p>
                     )}
                     {portraitBase64 && !portraitError && (
                       <p className="text-label-sm text-green-600 mt-2 flex items-center gap-1.5">
@@ -388,7 +422,9 @@ export function WorkflowsTab() {
                     <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10">
                       <ShieldCheck className="h-4 w-4 text-accent" />
                     </div>
-                    <span className="text-label-lg text-app-black">Best For</span>
+                    <span className="text-label-lg text-app-black">
+                      Best For
+                    </span>
                   </div>
                   <p className="text-body">{selected.bestFor}</p>
                 </div>

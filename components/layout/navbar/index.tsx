@@ -14,8 +14,8 @@ export const Navbar = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link
-            href="/"
             className="flex items-center gap-2 transition-opacity hover:opacity-80"
+            href="/"
           >
             <Image
               priority
@@ -30,9 +30,9 @@ export const Navbar = () => {
           <div className="flex items-center gap-3">
             {/* Documentation link */}
             <Link
+              className="btn-ghost hidden items-center gap-1.5 sm:inline-flex"
               href="https://docs.didit.me"
               target="_blank"
-              className="btn-ghost hidden items-center gap-1.5 sm:inline-flex"
             >
               Documentation
               <ArrowUpRight className="size-3.5" />
@@ -40,9 +40,9 @@ export const Navbar = () => {
 
             {/* Get Started CTA */}
             <Link
+              className="btn-primary inline-flex items-center gap-1.5 !py-2 !px-4 !text-[13px]"
               href="https://business.didit.me"
               target="_blank"
-              className="btn-primary inline-flex items-center gap-1.5 !py-2 !px-4 !text-[13px]"
             >
               Get Started
               <ArrowUpRight className="size-3.5" />
