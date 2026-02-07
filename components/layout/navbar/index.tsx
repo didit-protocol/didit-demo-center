@@ -2,45 +2,52 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Twitter, Github } from "lucide-react";
-
-import { siteConfig } from "@/config/site";
+import { ArrowUpRight } from "lucide-react";
 
 export const Navbar = () => {
   return (
-    <header className="border-b border-gray-200">
-      <div className="max-w-[1200px] mx-auto flex items-center justify-between h-16 px-4">
-        <Link className="flex justify-start items-center gap-1" href="/">
-          <Image
-            priority
-            alt="Didit"
-            height={33}
-            src="/didit-logo-wordmark-black.svg"
-            width={80}
-          />
-        </Link>
-        <div className="flex items-center space-x-4">
+    <header className="sticky top-0 z-50 w-full">
+      {/* Glass background */}
+      <div className="absolute inset-0 glass-effect border-b border-[#e5e5e5]" />
+
+      <div className="relative mx-auto max-w-[1234px] px-4 sm:px-6 lg:px-10">
+        <div className="flex h-16 items-center justify-between">
+          {/* Logo */}
           <Link
-            className="hidden sm:inline-flex items-center rounded-lg bg-[#2667ff] hover:bg-[#2667ff]/90 text-white px-4 py-2 text-sm font-semibold"
-            href="https://business.didit.me"
-            target="_blank"
+            href="/"
+            className="flex items-center gap-2 transition-opacity hover:opacity-80"
           >
-            Create a free account
+            <Image
+              priority
+              alt="Didit"
+              height={32}
+              src="/didit-logo-wordmark-black.svg"
+              width={90}
+            />
           </Link>
-          <Link
-            className="text-gray-600 hover:text-gray-900"
-            href={siteConfig.links.twitter}
-            target="_blank"
-          >
-            <Twitter className="h-5 w-5" />
-          </Link>
-          <Link
-            className="text-gray-600 hover:text-gray-900"
-            href={siteConfig.links.github}
-            target="_blank"
-          >
-            <Github className="h-5 w-5" />
-          </Link>
+
+          {/* Right side */}
+          <div className="flex items-center gap-3">
+            {/* Documentation link */}
+            <Link
+              href="https://docs.didit.me"
+              target="_blank"
+              className="btn-ghost hidden items-center gap-1.5 sm:inline-flex"
+            >
+              Documentation
+              <ArrowUpRight className="size-3.5" />
+            </Link>
+
+            {/* Get Started CTA */}
+            <Link
+              href="https://business.didit.me"
+              target="_blank"
+              className="btn-primary inline-flex items-center gap-1.5 !py-2 !px-4 !text-[13px]"
+            >
+              Get Started
+              <ArrowUpRight className="size-3.5" />
+            </Link>
+          </div>
         </div>
       </div>
     </header>

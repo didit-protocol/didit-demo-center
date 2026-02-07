@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Copy } from "lucide-react";
+import { Copy, Check, Code2, ChevronDown, ChevronRight } from "lucide-react";
 
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 interface JsonViewerProps {
@@ -21,6 +19,7 @@ export function JsonViewer({
   contentClassName,
 }: JsonViewerProps) {
   const [copied, setCopied] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
@@ -38,19 +37,23 @@ export function JsonViewer({
 
         return (
           <span key={i} className="block">
-            <span className="text-blue-600">{key}</span>
-            <span className="text-gray-600">:</span>
+            <span className="text-accent">{key}</span>
+            <span className="text-dusty-gray">:</span>
             {value.includes('"') ? (
               <span className="text-green-600">{value}</span>
+            ) : value.includes("true") || value.includes("false") ? (
+              <span className="text-purple-600">{value}</span>
+            ) : value.includes("null") ? (
+              <span className="text-dusty-gray">{value}</span>
             ) : (
-              <span className="text-orange-600">{value}</span>
+              <span className="text-amber-600">{value}</span>
             )}
           </span>
         );
       }
 
       return (
-        <span key={i} className="block text-gray-800">
+        <span key={i} className="block text-graphite-gray">
           {line}
         </span>
       );
@@ -58,37 +61,63 @@ export function JsonViewer({
   };
 
   return (
-    <Card className={cn("w-full rounded-xl overflow-hidden", className)}>
-      <CardHeader className="flex flex-row items-center justify-between p-4 border-b">
-        <h3 className="text-sm font-medium text-gray-500">{title}</h3>
-        <div className="text-sm text-gray-500">
-          {new Date().toLocaleTimeString([], {
-            hour: "numeric",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: true,
-          })}
-        </div>
-      </CardHeader>
-      <CardContent className={cn("p-6 relative bg-gray-50", contentClassName)}>
-        <Button
-          className="absolute right-12 top-4 text-gray-500 hover:text-gray-900"
-          size="icon"
-          variant="ghost"
-          onClick={copyToClipboard}
+    <div className={cn("card-base overflow-hidden", className)}>
+      {/* Header */}
+      <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="flex items-center gap-2 text-label-lg text-app-black hover:text-accent transition-colors"
         >
-          <Copy className={cn("h-5 w-5", copied && "text-green-500")} />
-          <span className="sr-only">{copied ? "Copied" : "Copy JSON"}</span>
-        </Button>
-        <pre
-          className={cn(
-            "font-mono text-sm leading-relaxed p-4 rounded-lg overflow-auto h-full",
-            "scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent",
+          {isExpanded ? (
+            <ChevronDown className="h-4 w-4 text-dusty-gray" />
+          ) : (
+            <ChevronRight className="h-4 w-4 text-dusty-gray" />
           )}
-        >
-          <code>{formatJsonWithSyntaxHighlighting(data)}</code>
-        </pre>
-      </CardContent>
-    </Card>
+          <Code2 className="h-4 w-4 text-accent" />
+          <span>{title}</span>
+        </button>
+        <div className="flex items-center gap-3">
+          <span className="text-label-sm text-dusty-gray">
+            {new Date().toLocaleTimeString([], {
+              hour: "numeric",
+              minute: "2-digit",
+              second: "2-digit",
+              hour12: true,
+            })}
+          </span>
+          <button
+            className={cn(
+              "flex h-8 w-8 items-center justify-center rounded-lg transition-colors",
+              copied
+                ? "bg-green-100 text-green-600"
+                : "text-dusty-gray hover:bg-gray-100 hover:text-app-black"
+            )}
+            onClick={copyToClipboard}
+          >
+            {copied ? (
+              <Check className="h-4 w-4" />
+            ) : (
+              <Copy className="h-4 w-4" />
+            )}
+            <span className="sr-only">{copied ? "Copied" : "Copy JSON"}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Content */}
+      {isExpanded && (
+        <div className={cn("pt-4", contentClassName)}>
+          <pre
+            className={cn(
+              "font-mono text-[13px] leading-relaxed p-4 rounded-xl overflow-auto",
+              "bg-gray-50 border border-gray-100",
+              "max-h-[500px] custom-scrollbar",
+            )}
+          >
+            <code>{formatJsonWithSyntaxHighlighting(data)}</code>
+          </pre>
+        </div>
+      )}
+    </div>
   );
 }

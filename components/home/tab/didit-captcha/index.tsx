@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, ArrowRight, Mail, Shield } from "lucide-react";
 
 import { DiditCaptcha } from "@/components/didit-captcha";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ export function DiditCaptchaTab() {
   const handleCaptchaVerified = (data: {
     sessionId: string;
     email: string | null;
+    isFromCache: boolean;
   }) => {
     setDiditSessionId(data.sessionId);
     setError(null);
@@ -58,27 +59,34 @@ export function DiditCaptchaTab() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-xl font-semibold tracking-tight mb-2">
-          Didit CAPTCHA Demo
-        </h3>
-        <p className="text-sm text-gray-500">
-          Experience a bot-resistant CAPTCHA powered by liveness verification.
-          We&apos;re improving this flow so users verify their identity once
-          periodically via liveness check, then their verified identity is
-          reused to prove they&apos;re human—just by clicking the checkbox.
-          Enter your email, complete the quick face check, and submit the form
-          to test an example of the flow.
-        </p>
+      {/* Header */}
+      <div className="flex items-start gap-4">
+        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-accent/10 to-accent/5 shrink-0">
+          <Shield className="h-6 w-6 text-accent" />
+        </span>
+        <div>
+          <h3 className="text-title text-app-black mb-1">
+            Didit CAPTCHA Demo
+          </h3>
+          <p className="text-body">
+            Experience a bot-resistant CAPTCHA powered by liveness verification.
+            Users verify their humanity through a quick biometric check, providing 
+            a seamless yet secure experience. Enter your email, complete the face 
+            check, and submit to see it in action.
+          </p>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-5">
+        {/* Email field */}
+        <div className="card-base max-w-lg">
           <label
             htmlFor="work-email"
-            className="block text-sm font-medium mb-2 text-gray-700"
+            className="flex items-center gap-2 text-label-lg text-app-black mb-3"
           >
-            Work email
+            <Mail className="h-4 w-4 text-accent" />
+            Work Email
           </label>
           <input
             id="work-email"
@@ -86,39 +94,65 @@ export function DiditCaptchaTab() {
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full max-w-md border border-gray-300 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#2667ff]"
+            className="input-base"
             placeholder="[email protected]"
           />
         </div>
 
-        <div>
+        {/* CAPTCHA component */}
+        <div className="card-base max-w-lg">
+          <label className="flex items-center gap-2 text-label-lg text-app-black mb-3">
+            <Shield className="h-4 w-4 text-accent" />
+            Human Verification
+          </label>
           <DiditCaptcha email={email || null} onVerified={handleCaptchaVerified} />
         </div>
 
+        {/* Error message */}
         {error && (
-          <div className="text-sm text-red-500 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
-            {error}
+          <div className="badge-error px-4 py-3 rounded-xl max-w-lg">
+            <p className="text-label-md">{error}</p>
           </div>
         )}
 
+        {/* Success message */}
         {success && (
-          <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
-            <CheckCircle2 className="h-4 w-4" />
-            <span>Form submitted successfully! Humanity confirmed via Didit.</span>
+          <div className="card-base border-green-200 bg-green-50 max-w-lg">
+            <div className="flex items-center gap-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 shrink-0">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+              </div>
+              <div>
+                <p className="text-label-lg text-green-800">Form submitted successfully!</p>
+                <p className="text-body-small text-green-700">Humanity confirmed via Didit.</p>
+              </div>
+            </div>
           </div>
         )}
 
+        {/* Submit button */}
         <div className="pt-2">
           <Button
             type="submit"
             disabled={submitting || !diditSessionId}
-            className="rounded-lg bg-[#2667ff] hover:bg-[#2667ff]/90"
+            className="btn-primary h-12 px-8 text-[15px]"
           >
-            {submitting ? "Submitting…" : "Submit Form"}
+            {submitting ? (
+              <>
+                <div className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                <span>Submitting...</span>
+              </>
+            ) : (
+              <>
+                <span>Submit Form</span>
+                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </div>
+              </>
+            )}
           </Button>
         </div>
       </form>
     </div>
   );
 }
-

@@ -7,7 +7,7 @@ import { Suspense } from "react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
+import { fontSans, fontMono } from "@/config/fonts";
 
 export const metadata: Metadata = {
   title: {
@@ -26,18 +26,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head />
       <body
         className={clsx(
           "min-h-screen bg-white font-sans antialiased",
           fontSans.variable,
+          fontMono.variable,
         )}
       >
-        <div className="relative flex flex-col h-screen">
+        {/* Gradient background */}
+        <div className="fixed inset-0 -z-10 bg-hero-gradient" />
+        
+        <div className="relative flex min-h-screen flex-col">
           <Navbar />
-          <main className="container mx-auto max-w-7xl flex-grow">
-            <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+          <main className="flex-1">
+            <Suspense
+              fallback={
+                <div className="flex items-center justify-center min-h-[60vh]">
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                    <p className="text-body-small">Loading...</p>
+                  </div>
+                </div>
+              }
+            >
+              {children}
+            </Suspense>
           </main>
           <Footer />
         </div>
