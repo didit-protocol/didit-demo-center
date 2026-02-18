@@ -110,7 +110,7 @@ export function WorkflowDetailModal({
             {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
             <div
               aria-modal="true"
-              className="relative w-full max-w-2xl max-h-[calc(100vh-4rem)] overflow-hidden rounded-2xl border border-[#e5e5e5] bg-white shadow-2xl"
+              className="relative w-full max-w-2xl max-h-[calc(100dvh-4rem)] overflow-hidden rounded-2xl border border-[#e5e5e5] bg-white shadow-2xl"
               role="dialog"
               tabIndex={-1}
               onClick={(e) => e.stopPropagation()}
