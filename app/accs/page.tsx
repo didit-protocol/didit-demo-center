@@ -21,7 +21,7 @@ const ACCS_COMPONENTS: AccsComponent[] = [
     workflowId: "2d958679-f3bf-4747-8a38-9a40a29a6098",
     title: "Age Estimation",
     description:
-      "Facial age estimation from a live selfie with passive liveness. Returns Approved when the estimated age meets the 18+ threshold, Declined otherwise.",
+      "Facial age estimation from a live selfie with passive liveness. Challenge-25 policy: Approved only when the estimated age is over 25, Declined otherwise, so under-18 users are never accepted.",
     icon: ScanFace,
     buttonLabel: "Start Age Estimation Test",
   },
