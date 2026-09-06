@@ -1,11 +1,14 @@
 "use client";
 
 import type { Demo } from "@/lib/demos";
+import type { VerdictTone } from "@/lib/demos";
 
 import * as React from "react";
 import {
+  ArrowLeft,
   ArrowRight,
   Check,
+  CircleAlert,
   CircleCheck,
   CircleX,
   Copy,
@@ -16,31 +19,84 @@ import {
 
 import { DecisionJson } from "./decision-json";
 import { Modal, ModalCloseButton } from "./modal";
-import { statusTone, VERDICT_STYLE } from "./tone";
+import { VERDICT_STYLE } from "./tone";
 
 import { cn } from "@/lib/utils";
 import { DOC_LINKS } from "@/lib/docs";
 
-const STATUS_COPY: Record<
-  string,
-  { label: string; icon: typeof CircleCheck; description: string }
-> = {
+type StatusView = {
+  label: string;
+  icon: typeof CircleCheck;
+  description: string;
+  tone: VerdictTone | "neutral";
+};
+
+/**
+ * The states the pre-redesign callback page reported, kept verbatim so a
+ * returning integrator reads the same words - Approved, Declined, Pending,
+ * and an Unknown fallback that echoes whatever the hosted flow sent. "In
+ * Review" is added because it is a real session status the API returns and
+ * the old page folded it into Pending.
+ */
+const STATUS_VIEW: Record<string, StatusView> = {
   approved: {
     label: "Approved",
     icon: CircleCheck,
     description: "The identity has been successfully verified.",
+    tone: "approved",
   },
   declined: {
     label: "Declined",
     icon: CircleX,
     description: "The verification could not be completed.",
+    tone: "declined",
   },
   review: {
     label: "In Review",
     icon: Timer,
+    description: "The verification is being reviewed before a final decision.",
+    tone: "review",
+  },
+  pending: {
+    label: "Pending",
+    icon: Timer,
     description: "The verification is still being processed.",
+    tone: "review",
   },
 };
+
+/** Map a raw session status onto the view above, preserving the unknown case. */
+function statusView(raw: string): StatusView {
+  const s = raw.trim().toLowerCase();
+
+  if (["approved", "success", "completed"].includes(s))
+    return STATUS_VIEW.approved;
+  if (["declined", "rejected", "failed"].includes(s))
+    return STATUS_VIEW.declined;
+  if (s === "in review" || s === "in_review") return STATUS_VIEW.review;
+  if (
+    [
+      "pending",
+      "in progress",
+      "in_progress",
+      "processing",
+      "not started",
+      "not_started",
+      "awaiting user",
+      "resubmitted",
+    ].includes(s)
+  )
+    return STATUS_VIEW.pending;
+
+  return {
+    // The old page showed the raw status when it did not recognise it, which
+    // is the only way to debug a status the demo has not seen before.
+    label: raw || "Unknown",
+    icon: CircleAlert,
+    description: "The verification status is unknown.",
+    tone: "neutral",
+  };
+}
 
 export type ResultsState = {
   sessionId: string;
@@ -71,6 +127,7 @@ export function ResultsModal({
 }) {
   const [copied, setCopied] = React.useState(false);
   const [decision, setDecision] = React.useState<string>("");
+  const [decisionStatus, setDecisionStatus] = React.useState<string>("");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -83,6 +140,7 @@ export function ResultsModal({
 
     setLoading(true);
     setError(null);
+    setDecisionStatus("");
     fetch(`/api/verification?sessionId=${encodeURIComponent(sessionId)}`)
       .then(async (response) => {
         const data = await response.json();
@@ -98,6 +156,7 @@ export function ResultsModal({
           return;
         }
         setDecision(JSON.stringify(data, null, 2));
+        if (typeof data?.status === "string") setDecisionStatus(data.status);
       })
       .catch(() => {
         if (!cancelled) {
@@ -124,10 +183,10 @@ export function ResultsModal({
 
   if (!state) return null;
 
-  const tone = statusTone(state.status);
-  const style = VERDICT_STYLE[tone];
-  const copy = STATUS_COPY[tone];
-  const StatusIcon = copy.icon;
+  // The redirect carries a status; the decision, once it loads, is fresher.
+  const view = statusView(decisionStatus || state.status);
+  const style = VERDICT_STYLE[view.tone];
+  const StatusIcon = view.icon;
 
   return (
     <Modal
@@ -150,7 +209,7 @@ export function ResultsModal({
           </div>
           <ModalCloseButton onClose={onClose} />
         </div>
-        <div className="mt-3.5 inline-flex items-center gap-2 rounded-pill bg-blue-soft px-3 py-2">
+        <div className="mb-1 mt-4 inline-flex items-center gap-2 rounded-pill bg-blue-soft px-3 py-2">
           <FileText className="size-4 flex-none text-blue-deep" />
           <p className="m-0 text-xs text-blue-deep">
             This is a demo session. In production, verification data is returned
@@ -159,7 +218,7 @@ export function ResultsModal({
         </div>
       </div>
 
-      <div className="flex flex-1 flex-col gap-3.5 overflow-y-auto px-6 pb-6 pt-4.5">
+      <div className="flex flex-1 flex-col gap-3.5 overflow-y-auto px-6 pb-6 pt-5">
         <div
           className={cn(
             "flex flex-none items-center gap-3.5 rounded-xs border p-4",
@@ -177,9 +236,9 @@ export function ResultsModal({
                 style.text,
               )}
             >
-              Verification {copy.label}
+              Verification {view.label}
             </h3>
-            <p className="mt-1 text-[13px] text-muted">{copy.description}</p>
+            <p className="mt-1 text-[13px] text-muted">{view.description}</p>
           </div>
         </div>
 
@@ -230,11 +289,12 @@ export function ResultsModal({
         </a>
         <span className="hidden flex-1 sm:block" />
         <button
-          className="btn-muted h-11 flex-none px-[18px]"
+          className="btn-muted h-11 flex-none pl-3.5 pr-[18px]"
           type="button"
           onClick={onClose}
         >
-          Close
+          <ArrowLeft className="size-4" />
+          Back to Demo Center
         </button>
         <button
           className="btn-primary h-11 flex-none pl-[18px] pr-2.5"

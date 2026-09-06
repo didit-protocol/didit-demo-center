@@ -2,7 +2,15 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { ArrowRight, Check, Copy, Info, Loader2, Upload } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  Copy,
+  Info,
+  Loader2,
+  TriangleAlert,
+  Upload,
+} from "lucide-react";
 
 import { CodeBlock } from "./code-block";
 import { Modal, ModalCloseButton } from "./modal";
@@ -226,6 +234,20 @@ export function DemoDetailModal({
                 ))}
               </div>
             </div>
+
+            {demo.backendChecks && demo.backendChecks.length > 0 && (
+              <div className="flex items-start gap-2.5 rounded-xs bg-warning-bg p-3.5">
+                <TriangleAlert className="mt-px size-4 flex-none text-warning" />
+                <p className="m-0 text-xs leading-4 text-warning">
+                  {demo.backendChecks.join(" and ")}{" "}
+                  {demo.backendChecks.length > 1 ? "are" : "is"} a backend-only
+                  check: it runs automatically once its inputs exist, with no
+                  step in the flow, and it is billed from the first check with
+                  no free tier. This demo shows the decision it produces rather
+                  than screening a real person every time the page is opened.
+                </p>
+              </div>
+            )}
 
             <div>
               <p className="eyebrow eyebrow-muted mb-3">Modules included</p>

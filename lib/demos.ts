@@ -126,6 +126,16 @@ export type Demo = {
   trace?: TraceEntry[];
   /** Biometric auth needs a reference portrait before the session opens. */
   requiresPortrait?: boolean;
+  /**
+   * Backend-only features this flow would run (AML Screening, Database
+   * Validation). They execute automatically once their dependencies are met -
+   * the user never sees a step for them - and they are billed from the first
+   * check with no free tier. A demo that runs one spends money on every
+   * completed session with nothing on screen to warn you, which is why the
+   * public catalogue shows their result as a sample decision instead.
+   * See docs.didit.me/console/workflows#feature-node-categories.
+   */
+  backendChecks?: string[];
   /** Shown under the workflow id when the environment needs explaining. */
   note?: string;
 };
@@ -146,7 +156,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "Our foundational onboarding flow and the core of the Free KYC plan - a fast, compliant way to verify new users with no cost for the essential checks.",
     chips: ["ID Verification", "Passive Liveness", "Face Match 1:1"],
-    price: "Free · 500 checks per feature / month",
+    price: "Free · 500 checks / month, then $0.33",
     cta: "Launch session",
     workflowId: pick(
       "7c1e467d-fe91-4ade-aa72-ec022fc67971",
@@ -199,21 +209,22 @@ export const DEMOS: Demo[] = [
   {
     id: "kyc-aml",
     category: "KYC",
-    mode: "hosted",
+    mode: "api",
     icon: M("aml-screening"),
     title: "KYC + AML",
     subtitle: "Enhanced compliance",
     blurb:
       "Active liveness plus real-time screening against sanctions, PEP and adverse-media datasets.",
     longDescription:
-      "Built for regulated industries that need the highest assurance: robust KYC, higher-security active liveness, and real-time AML screening in one session.",
+      "Built for regulated industries that need the highest assurance: robust KYC, higher-security active liveness, and real-time AML screening in one session. AML runs as a backend-only check - there is no step for it in the flow - and it is billed per screening with no free tier, so this demo shows the decision it produces rather than screening a real person every time someone opens the page. Run the Core KYC demo to see the live half.",
     chips: ["Active Liveness", "AML Screening", "Face Match 1:1"],
-    price: "$0.30 KYC + $0.35 AML",
-    cta: "Launch session",
-    workflowId: pick(
-      "8c0f1388-39fd-48e3-904f-6efb3d372376",
-      "c076a8bb-b0a1-482a-a257-c296391fac2f",
-    ),
+    price: "$0.38 KYC · AML $0.20 when you add it",
+    cta: "Open sample decision",
+    // Deliberately not launchable: see `backendChecks`. The workflow ids are
+    // kept here so re-enabling is a one-line change if the demo organisation
+    // moves to a sandbox application, where nothing is billed.
+    workflowId: null,
+    backendChecks: ["AML Screening"],
     stats: [
       { value: "1,000+", label: "Sanction lists" },
       { value: "99.9%", label: "Accuracy" },
@@ -247,6 +258,105 @@ export const DEMOS: Demo[] = [
       "Lending",
     ],
     docsPath: "core-technology/aml-screening/overview",
+    request: {
+      method: "POST",
+      url: `${V3}/session/`,
+      docsPath: "sessions-api/create-session",
+      note: "The same session endpoint as any hosted flow - only the workflow_id changes. AML is a backend-only node inside that workflow: it runs automatically after ID Verification, with no step for the user, and is billed per screening with no free tier.",
+      body: `{
+  "workflow_id": "<your-kyc-aml-workflow-id>",
+  "vendor_data": "550e8400-e29b-41d4-a716-446655440000",
+  "callback": "https://demos.didit.me/verification/callback"
+}`,
+    },
+    sample: {
+      verdict: "In review · 2 AML hits to adjudicate",
+      summary:
+        "ID and liveness approved · screening raised a PEP match above the threshold",
+      score: "71.4",
+      scoreLabel: "Top match",
+      tone: "review",
+      sections: [
+        {
+          title: "Session · what each module returned",
+          rows: [
+            {
+              key: "id_verification.status",
+              value: "Approved · Identity Card, Spain",
+              tone: "approved",
+              strong: true,
+            },
+            { key: "liveness.status", value: "Approved · ACTIVE · 98.7" },
+            { key: "face_match.status", value: "Approved · 96.2" },
+            {
+              key: "aml.status",
+              value: "In Review · 2 hits",
+              tone: "review",
+              strong: true,
+            },
+            { key: "aml.score", value: "71.4 against a 60 threshold" },
+          ],
+        },
+      ],
+      listTitle: "AML hits",
+      items: [
+        {
+          name: "Ivan Petrov",
+          meta: "PEP · regional office · 2019-2024",
+          tag: "Match",
+          tone: "review",
+          score: "71.4",
+          avatar: FLAG("ru"),
+          detail:
+            "Name, date of birth and nationality align. Listed as a politically exposed person through a regional public office; no sanctions designation. The session lands In Review for an analyst rather than being declined outright.",
+          tags: ["peps", "name 0.94", "dob exact", "no sanctions"],
+        },
+        {
+          name: "Ivan Petrow",
+          meta: "Adverse media · 2021 reporting",
+          tag: "Weak",
+          tone: "neutral",
+          score: "38.2",
+          avatar: FLAG("de"),
+          detail:
+            "Transliteration variant with no date of birth on record. Below the threshold - auto-discounted, kept for the audit trail.",
+          tags: ["adverse-media", "name 0.71", "below threshold"],
+        },
+      ],
+    },
+    trace: [
+      {
+        label: "Session created",
+        detail: "workflow resolved to 5 modules",
+        ms: "110ms",
+        ok: true,
+      },
+      {
+        label: "ID Verification",
+        detail: "Spanish identity card · every field extracted and validated",
+        ms: "1,320ms",
+        ok: true,
+      },
+      {
+        label: "Active liveness + face match",
+        detail: "liveness 98.7 · portrait match 96.2",
+        ms: "2,140ms",
+        ok: true,
+      },
+      {
+        label: "AML screening · backend-only",
+        detail:
+          "ran automatically after ID Verification, with no step for the user - 1,043 datasets",
+        ms: "780ms",
+        ok: false,
+      },
+      {
+        label: "Decision",
+        detail: "In Review - top match 71.4 above the 60 threshold",
+        ms: "40ms",
+        ok: false,
+      },
+    ],
     response: `{
   "status": "In Review",
   "features": ["ID_VERIFICATION", "LIVENESS", "AML", "IP_ANALYSIS"],
@@ -272,7 +382,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "Confirm that a real, live person is performing a specific action without verifying identity against a document. A powerful tool against bots, deepfakes and injection attacks.",
     chips: ["Active Liveness", "Passive Liveness", "iBeta L2"],
-    price: "$0.10 per check",
+    price: "Free · 500 checks / month, then $0.10",
     cta: "Launch session",
     workflowId: pick(
       "b5d5523f-bd45-4aa3-9ec5-0490172a22c1",
@@ -325,7 +435,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "A fast, passwordless way to re-verify returning users: we biometrically match a new live selfie against the trusted photo from their approved KYC verification, preventing account takeover.",
     chips: ["Face Match 1:1", "Liveness", "Reference photo"],
-    price: "$0.15 per auth",
+    price: "$0.10 per authentication",
     cta: "Upload photo & launch",
     workflowId: pick(
       "d1972e27-eeb8-4543-918b-6ac0846b7cc5",
@@ -378,7 +488,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "Adds a layer of security by linking a biometric check to a verified communication channel - a real live person who also holds a specific phone number. Phone verification is a paid feature: it stays disabled until the organisation completes its first top-up.",
     chips: ["Liveness", "Phone Verification", "OTP"],
-    price: "$0.10 + $0.04 SMS",
+    price: "$0.10 liveness + $0.04 phone + carrier fee",
     cta: "Launch session",
     workflowId: pick(
       "dbdb51a9-3763-4dcf-a32d-8fe5f40a699d",
@@ -442,7 +552,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "The smartest way to handle age-gated content: low-friction, privacy-first estimation for most users, with a seamless fallback to a full ID check only when the estimate lands in the buffer zone.",
     chips: ["Age Estimation", "Conditional ID", "GDPR"],
-    price: "$0.05 estimate",
+    price: "$0.10 estimate · $0.15 ID only when it falls back",
     cta: "Launch session",
     workflowId: pick(
       "0aa1d022-c1ee-47b0-8538-5c8c32515739",
@@ -491,7 +601,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "The age-assurance route for regulated age gates: a selfie is turned into an estimated age with a confidence band, evaluated under the ISO/IEC 27566 age-assurance framework and the ACCS certification scheme. Nothing identifying leaves the session - you receive an age decision, not a person.",
     chips: ["Age Estimation", "ISO/IEC 27566", "No ID required"],
-    price: "$0.05 per estimate",
+    price: "$0.10 per estimate",
     cta: "Launch session",
     // ACCS conformance runs against the production engine, so this workflow has
     // no staging twin - the same id is used on both environments.
@@ -549,7 +659,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "Where estimation is not enough, this is the verification tier of the same ISO/IEC 27566 model: age is established from a government document - optionally read from the NFC chip - and returned to you as an age attribute. Your systems get the answer to the gate without holding the full date of birth.",
     chips: ["ID Verification", "NFC", "Age attribute only"],
-    price: "$0.30 per verification",
+    price: "$0.15 ID + $0.15 NFC + $0.05 face match",
     cta: "Launch session",
     workflowId: "a8942aa3-3bfe-4e1c-b322-d0d43e7ec31f",
     note: "Production workflow - ACCS conformance runs against the production engine.",
@@ -610,7 +720,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "Verify a user's residential address for enhanced due diligence - a critical step for high-level financial compliance and risk management.",
     chips: ["PoA", "Address parsing", "Tamper detection"],
-    price: "$0.25 per document",
+    price: "$0.20 per document",
     cta: "Launch session",
     workflowId: pick(
       "94f9c776-4362-488e-93ff-9dd2921af3f2",
@@ -664,7 +774,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "Ask the questions your policy requires without bolting on a second tool. Questions branch on earlier answers and on module results, and every answer lands in the same decision payload as an audit record.",
     chips: ["Questionnaires", "Conditional logic", "Audit trail"],
-    price: "Included in workflow",
+    price: "$0.10 per questionnaire",
     cta: "Launch session",
     workflowId: null,
     workflowPlaceholder: true,
@@ -721,7 +831,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "KYB without the spreadsheet. We resolve the legal entity in the official registry, reconcile the documents you were given against it, and return a structured company profile with a risk verdict.",
     chips: ["Registry lookup", "Document AI", "Entity risk"],
-    price: "$4.50 per company",
+    price: "From $2.00 · $4-5 with shareholders",
     cta: "Open sample case",
     workflowId: null,
     stats: [
@@ -924,7 +1034,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "Ownership rarely stops at the first layer. We traverse corporate shareholders until we reach natural persons, compute effective ownership through each path, and screen every person we surface.",
     chips: ["Ownership graph", "PEP & sanctions", "Per-person KYC"],
-    price: "$1.20 per person",
+    price: "$5.00 - $9.00 registry UBOs + KYC per person",
     cta: "Open sample case",
     workflowId: null,
     stats: [
@@ -1109,7 +1219,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "Post every payment event to one endpoint and get a decision back synchronously. Rules combine amount, velocity, counterparty risk and the customer's KYC profile; anything above your threshold opens a case with the triggering evidence attached.",
     chips: ["Rule engine", "Case management", "Webhooks"],
-    price: "$0.01 per event",
+    price: "$0.02 per screened transaction",
     cta: "Open sample feed",
     workflowId: null,
     stats: [
@@ -1306,7 +1416,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "Screen a wallet address against on-chain risk before accepting a deposit or signing a payout. We attribute counterparties, break exposure down by category and hop distance, and return a score you can threshold on - $0.02 bring-your-own-key, roughly 10x cheaper than going direct.",
     chips: ["Exposure by hop", "Sanctions addresses", "Multi-chain"],
-    price: "$0.02 BYOK",
+    price: "$0.15 per screen · $0.02 with your own key",
     cta: "Open sample wallet",
     workflowId: null,
     stats: [
@@ -1471,7 +1581,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "Already have verified identity data? Screen it directly. One call returns scored hits across 1,000+ sanctions and PEP datasets plus adverse media, with the matching properties so an analyst can adjudicate - and optional ongoing monitoring that pushes a webhook when a subject's status changes.",
     chips: ["Sanctions", "PEP", "Adverse media", "Ongoing"],
-    price: "$0.35 per screen",
+    price: "$0.20 per screen",
     cta: "Open sample hits",
     workflowId: null,
     stats: [
@@ -1644,7 +1754,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "One person, many accounts is the cheapest fraud there is. Every new selfie is searched against your own index of previously verified faces, so duplicate signups and banned users trying to return are caught at the door.",
     chips: ["1:N search", "Duplicate accounts", "Ban evasion"],
-    price: "$0.20 per search",
+    price: "$0.05 per search",
     cta: "Search sample gallery",
     workflowId: null,
     stats: [
@@ -1815,7 +1925,7 @@ vendor_data=user-8821`,
     longDescription:
       "A CAPTCHA powered by liveness verification. Users complete a quick face check instead of solving puzzles - better experience, and far harder to farm out than image grids. Requires a liveness-only workflow in the console.",
     chips: ["Bot resistance", "Drop-in widget", "Liveness-backed"],
-    price: "Free with liveness flow",
+    price: "Free · 500 liveness checks / month",
     cta: "Try the widget",
     workflowId: "82f7360c-276e-4525-b7b3-59d8051e973c",
     note: "The dedicated CAPTCHA liveness workflow, also used by /api/didit-captcha.",
@@ -1866,7 +1976,7 @@ vendor_data=user-8821`,
     longDescription:
       "Included with every workflow at no extra cost. We attach the network and device context of the session - VPN or Tor use, data-centre ranges, carrier, platform - plus the distance between the IP, the ID document's issuing state and the address on a proof-of-address document.",
     chips: ["VPN / Tor", "Data centre", "Geo distance"],
-    price: "Included free",
+    price: "Free · 500 checks / month, then $0.03",
     cta: "Open sample signals",
     workflowId: null,
     stats: [
@@ -1888,11 +1998,7 @@ vendor_data=user-8821`,
         body: "Use VPN, data-centre and distance flags in your own risk logic or in workflow branching.",
       },
     ],
-    modules: [
-      { icon: M("ip-analysis"), label: "IP Analysis" },
-      { icon: M("database-validation"), label: "Database Validation" },
-      { icon: M("monitoring"), label: "Ongoing Monitoring" },
-    ],
+    modules: [{ icon: M("ip-analysis"), label: "Device & IP Analysis" }],
     bestFor: "Any flow that needs cheap fraud context.",
     useCases: [
       "All industries",
