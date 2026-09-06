@@ -154,6 +154,14 @@ export function Catalogue() {
         return;
       }
 
+      if (demo.backendChecks && demo.backendChecks.length > 0) {
+        // A hosted demo must never run a backend-only paid check: it would
+        // bill on every completed session with no step on screen to show it.
+        setPlaygroundDemo(demo);
+
+        return;
+      }
+
       if (!demo.workflowId) {
         setStartError(
           "This workflow is not published on this environment yet - create it in the console and drop its id into lib/demos.ts.",
