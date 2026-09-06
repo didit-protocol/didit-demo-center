@@ -837,7 +837,7 @@ export const DEMOS: Demo[] = [
     stats: [
       { value: "150+", label: "Registries" },
       { value: "~90s", label: "Median case" },
-      { value: "$4.50", label: "Per company" },
+      { value: "From $2.00", label: "Per company" },
     ],
     steps: [
       {
@@ -1414,7 +1414,7 @@ export const DEMOS: Demo[] = [
     blurb:
       "Score an address before you let value move - direct and indirect exposure, by hop.",
     longDescription:
-      "Screen a wallet address against on-chain risk before accepting a deposit or signing a payout. We attribute counterparties, break exposure down by category and hop distance, and return a score you can threshold on - $0.02 bring-your-own-key, roughly 10x cheaper than going direct.",
+      "Screen a wallet address against on-chain risk before accepting a deposit or signing a payout. We attribute counterparties, break exposure down by category and hop distance, and return a score you can threshold on - $0.15 a screen on our provider, or $0.02 when you bring your own key.",
     chips: ["Exposure by hop", "Sanctions addresses", "Multi-chain"],
     price: "$0.15 per screen · $0.02 with your own key",
     cta: "Open sample wallet",
@@ -1974,13 +1974,13 @@ vendor_data=user-8821`,
     blurb:
       "VPN, data-centre and geo-distance signals attached to every verification you run.",
     longDescription:
-      "Included with every workflow at no extra cost. We attach the network and device context of the session - VPN or Tor use, data-centre ranges, carrier, platform - plus the distance between the IP, the ID document's issuing state and the address on a proof-of-address document.",
+      "On the free tier of every workflow - 500 checks a month, then $0.03. We attach the network and device context of the session - VPN or Tor use, data-centre ranges, carrier, platform - plus the distance between the IP, the ID document's issuing state and the address on a proof-of-address document.",
     chips: ["VPN / Tor", "Data centre", "Geo distance"],
     price: "Free · 500 checks / month, then $0.03",
     cta: "Open sample signals",
     workflowId: null,
     stats: [
-      { value: "Free", label: "With any flow" },
+      { value: "500 free", label: "Per month, then $0.03" },
       { value: "3-point", label: "Geo distance" },
       { value: "Per session", label: "Attached" },
     ],
