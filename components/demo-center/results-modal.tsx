@@ -17,7 +17,6 @@ import {
   Timer,
 } from "lucide-react";
 
-import { DecisionJson } from "./decision-json";
 import { Modal, ModalCloseButton } from "./modal";
 import { VERDICT_STYLE } from "./tone";
 
@@ -110,9 +109,9 @@ export type ResultsState = {
  * It is the same surface for both entry points: the Didit SDK's `onComplete`
  * (which fires in place, so the catalogue never navigates away) and a return to
  * /verification/callback (which the hosted flow redirects to when the user
- * finishes on another device). The decision itself is fetched from this app's
- * own /api/verification route, so what you read here is the real payload for a
- * real session - not a fixture.
+ * finishes on another device). Like the pre-redesign page, it reports only the
+ * status the hosted flow's redirect carries - it does not fetch the session's
+ * decision, so a demo visitor never sees another person's verification data.
  */
 export function ResultsModal({
   state,
@@ -126,53 +125,8 @@ export function ResultsModal({
   onRunAnother: () => void;
 }) {
   const [copied, setCopied] = React.useState(false);
-  const [decision, setDecision] = React.useState<string>("");
-  const [decisionStatus, setDecisionStatus] = React.useState<string>("");
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState<string | null>(null);
 
   const sessionId = state?.sessionId ?? "";
-
-  React.useEffect(() => {
-    if (!open || !sessionId) return;
-
-    let cancelled = false;
-
-    setLoading(true);
-    setError(null);
-    setDecisionStatus("");
-    fetch(`/api/verification?sessionId=${encodeURIComponent(sessionId)}`)
-      .then(async (response) => {
-        const data = await response.json();
-
-        if (cancelled) return;
-        if (!response.ok) {
-          setError(
-            data?.error ??
-              "The decision could not be fetched for this session yet.",
-          );
-          setDecision("");
-
-          return;
-        }
-        setDecision(JSON.stringify(data, null, 2));
-        if (typeof data?.status === "string") setDecisionStatus(data.status);
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setError(
-            "The decision could not be fetched - check your connection.",
-          );
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [open, sessionId]);
 
   React.useEffect(() => {
     if (!copied) return;
@@ -183,8 +137,7 @@ export function ResultsModal({
 
   if (!state) return null;
 
-  // The redirect carries a status; the decision, once it loads, is fresher.
-  const view = statusView(decisionStatus || state.status);
+  const view = statusView(state.status);
   const style = VERDICT_STYLE[view.tone];
   const StatusIcon = view.icon;
 
@@ -268,13 +221,6 @@ export function ResultsModal({
             )}
           </button>
         </div>
-
-        <DecisionJson
-          endpoint="GET /v3/session/{id}/decision/"
-          error={error}
-          json={decision}
-          loading={loading}
-        />
       </div>
 
       <div className="flex flex-none flex-wrap items-center gap-3 border-t border-line px-6 py-4">
