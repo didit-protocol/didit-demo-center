@@ -1,57 +1,69 @@
 # Didit Demo Center
 
-This repository contains a streamlined demo for integrating Didit's identity verification workflows.
+The catalogue behind [demos.didit.me](https://demos.didit.me): every Didit
+module, runnable. 18 pre-built workflows across KYC, KYB, monitoring and fraud,
+each with the request that created it.
 
-## Live Demo
+## Two kinds of demo
 
-The demo is deployed at: https://demos.didit.me
+The distinction runs through the whole app, so it is worth stating once:
 
-## Workflows Showcased
+| Mode | What "Start demo" does | Billed |
+| --- | --- | --- |
+| **Hosted flow** | Creates a **real** session through `/api/verification` and opens the real hosted flow in the Didit web SDK modal on your device. | Yes - the workflow's modules run |
+| **API demo** | Opens a playground showing the real endpoint, headers and body, then replays a **fixture** response with a run trace. | No - nothing is sent |
 
-The demo includes multiple verification workflows such as:
+KYB, key people & UBO, transaction monitoring, wallet screening, standalone AML,
+face search and IP analysis are API demos: they are server-to-server surfaces
+with no hosted flow to open. Everything else is a hosted flow.
 
-- Core KYC (Free)
-- Enhanced Compliance (KYC + AML)
-- Liveness Check Only
-- Biometric Authentication (requires user-provided portrait image for face match)
-- Multi-Factor Verification
-- Adaptive Age Verification (example triggers full ID check if estimated age is 15–25)
-- Proof of Address (PoA)
+The catalogue lives in [`lib/demos.ts`](lib/demos.ts) - one file, one source of
+truth for workflow ids, copy, modules, endpoints, sample decisions and docs
+links.
 
-Each workflow can be fully customized in the Didit Business Console. Switch between workflows in the UI to see different configurations and required steps.
+## Results are a modal
 
-## Didit CAPTCHA
+A finished session never navigates you away from the catalogue. The web SDK's
+`onComplete` opens the results modal in place, which fetches the real decision
+from `GET /v3/session/{id}/decision/` through this app's own server route.
 
-The demo also includes a **Didit CAPTCHA** component — a bot-resistant CAPTCHA powered by liveness verification. Users complete a quick face check instead of solving puzzles, providing a better user experience while maintaining security.
+`/verification/callback` still exists, because the hosted flow redirects there
+when the user finishes on a **different device** than the one that started the
+session. It forwards straight to the catalogue, which opens the same modal.
 
-To use Didit CAPTCHA, you'll need to create a liveness-only workflow in the Didit Business Console and set the `DIDIT_LIVENESS_WORKFLOW_ID` environment variable.
+## Site chrome
 
-## Workflow IDs
+The navbar, announcement bar and footer are **not written here**. They are
+vendored byte-for-byte from
+[fe-didit-website-v4](https://github.com/didit-protocol/fe-didit-website-v4) into
+[`vendor/didit-website`](vendor/didit-website), the same way
+[fe-didit-help-center](https://github.com/didit-protocol/fe-didit-help-center)
+does it, so didit.me, help.didit.me and demos.didit.me present identical chrome.
 
-You will need Workflow IDs to run the flows in your own environment.
+```sh
+npm run sync:website-chrome    # refresh from a sibling clone of the website
+npm run check:website-chrome   # byte-compare; fails on any drift
+```
 
-1. Go to the Didit Business Console: https://business.didit.me
-2. Create a free account (or sign in)
-3. Create a new workflow or open an existing one
-4. Copy the Workflow ID from the workflow details screen
+Never hand-edit anything under `vendor/`. Change it in the website repo and
+re-sync. The three demo-centre-owned adapter shims are listed in
+[`vendor/didit-website/README.md`](vendor/didit-website/README.md).
 
-Then update the demo’s config at `lib/workflows.ts` by replacing the placeholder IDs with your Workflow IDs.
+Tailwind compiles from the website's own preset, so `bg-canvas`, `text-ink`,
+`border-line` and the rest resolve to exactly the values they have on didit.me.
 
-## Technical Documentation
+## Run locally
 
-Docs: https://docs.didit.me
+1. Clone the repository and `cd` into it.
+2. Copy `.env.example` to `.env` and fill in `API_KEY` from your application in
+   the [Business Console](https://business.didit.me).
+3. Replace the workflow ids in `lib/demos.ts` with your own (see below).
+4. Install and start:
 
-## Run Locally
-
-1. Clone the repository and navigate to the project directory.
-2. Copy `.env.example` to `.env`.
-3. Fill in `API_KEY` with the credentials from your app in the console (business.didit.me).
-4. Create or use the predefined workflows in your application and replace the placeholder IDs in `lib/workflows.ts` with your own.
-5. Install dependencies and start the dev server:
-   ```sh
-   npm install
-   npm run dev
-   ```
+```sh
+npm install
+npm run dev
+```
 
 ### `.env.example`
 
@@ -62,15 +74,43 @@ NEXT_PUBLIC_IS_STAGING=false
 DIDIT_LIVENESS_WORKFLOW_ID=your-liveness-only-workflow-id
 ```
 
-**Note:** `DIDIT_LIVENESS_WORKFLOW_ID` is optional and only needed if you want to use the Didit CAPTCHA feature. Create a liveness-only workflow in the Didit Business Console and use its ID here.
+`API_KEY` is used only on server-side API routes and must never be exposed
+client-side.
 
-## Notes & Tips
+## Workflow IDs
 
-- Sessions: In this demo, session results are available for a limited time window. If you receive HTTP 410 (Gone), create a new session and try again.
-- Security: `API_KEY` is used only on server-side API routes and must never be exposed client-side.
-- Biometric Authentication: This workflow requires a `portrait_image` (Base64, max 1MB) to perform face match when enabled.
-- Didit CAPTCHA: Requires a liveness-only workflow. Create one in the Didit Business Console and set `DIDIT_LIVENESS_WORKFLOW_ID` in your `.env` file.
+Every hosted demo is just a `workflow_id` handed to `POST /v3/session/`.
 
-## Create a Free Account
+1. Open the [Business Console](https://business.didit.me).
+2. Create a workflow (or open an existing one).
+3. Copy the workflow ID from the workflow details screen.
+4. Paste it into the matching entry in `lib/demos.ts`.
 
-Get started in minutes at https://business.didit.me — create workflows, copy their IDs, and plug them into this demo.
+An entry with `workflowPlaceholder: true` has no published workflow on this
+environment yet; the detail modal disables **Start demo** and says so rather
+than failing on a 400.
+
+## Checks
+
+```sh
+npm run typecheck            # tsc --noEmit
+npm run lint                 # eslint (vendor/ is excluded - it is synced)
+npm run build                # next build
+npm run check:website-chrome # vendored chrome matches the website repo
+npm run check:docs-links     # every "Docs" button resolves on docs.didit.me
+```
+
+### Visual proof
+
+```sh
+npm run build && npm run start &
+PROOF_SESSION_ID=<a real session id> npm run shots
+```
+
+Writes the catalogue, both modal families and the 390px layouts to `proof/`.
+The site is light-only, exactly like didit.me and help.didit.me - the design
+system ships no dark token set, so there is no dark variant to capture.
+
+## Technical documentation
+
+<https://docs.didit.me>

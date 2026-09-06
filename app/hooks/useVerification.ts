@@ -3,7 +3,12 @@ import { useState } from "react";
 import {
   VerificationSession,
   VerificationDecision,
-} from "../types/verification"; // Adjusted path assuming types dir is sibling to hooks
+} from "../types/verification";
+
+/** What /api/verification returns: a session, or an error the UI can show. */
+export type CreateSessionResult = Partial<VerificationSession> & {
+  error?: string;
+};
 
 export function useVerification() {
   const [sessionData, setSessionData] = useState<VerificationSession | null>(
@@ -15,12 +20,17 @@ export function useVerification() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  /**
+   * Creates a real session through the demo app's own server route (which holds
+   * the API key). Failures are RETURNED rather than thrown: the caller renders
+   * the reason next to the button it came from.
+   */
   const createSession = async (
     workflow_id: string,
     vendor_data: string,
     callback: string,
     portrait_image?: string,
-  ) => {
+  ): Promise<CreateSessionResult> => {
     setIsLoading(true);
     setError(null);
 
@@ -41,20 +51,27 @@ export function useVerification() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(
-          data.message || "Failed to create verification session",
-        );
+        const message =
+          data?.error ||
+          data?.message ||
+          "Failed to create verification session";
+
+        setError(message);
+
+        return { error: message };
       }
 
       setSessionData(data);
 
-      return data;
+      return data as CreateSessionResult;
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "An error occurred";
 
       setError(errorMessage);
       console.error("Error creating verification session:", err);
+
+      return { error: errorMessage };
     } finally {
       setIsLoading(false);
     }
