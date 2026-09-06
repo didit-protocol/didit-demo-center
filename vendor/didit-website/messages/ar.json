@@ -1,0 +1,501 @@
+{
+  "translation_v1": {
+    "chrome": {
+      "header": {
+        "nav": {
+          "products": "المنتجات",
+          "pricing": "الأسعار",
+          "image": {
+            "alt": {
+              "didit": "Didit"
+            }
+          },
+          "solutions": {
+            "cards": {
+              "verifyBusiness": {
+                "iconLabel": "التحقق من الشركات (KYB)"
+              }
+            }
+          },
+          "developers": {
+            "primary": {
+              "terminal": {
+                "readyOpenDashboard": "← جاهز في 5 دقائق · افتح لوحة التحكم",
+                "integrateDidit": "> ادمج تحقق Didit",
+                "sessionScaffolded": "✓ /v3/session/ تم إعداده",
+                "readingMcp": "↻ قراءة mcp://didit.me",
+                "webhookReady": "✓ معالج الـ webhook جاهز",
+                "mcpConnected": "✓ خادم MCP متصل",
+                "claude": "$ claude"
+              },
+              "quickstartIconLabel": "البدء السريع"
+            }
+          },
+          "resources": {
+            "foundersCard": {
+              "imageAlt": "أليخاندرو روساس (يسار) وألبرتو روساس (يمين)، المؤسسان المشاركان لـ Didit",
+              "iconLabel": "عن Didit"
+            }
+          },
+          "labels": {
+            "solutions": "الحلول",
+            "developers": "للمطورين",
+            "resources": "الموارد",
+            "pricing": "الأسعار"
+          }
+        },
+        "developers": {
+          "primary": {
+            "mcpServer": "خادم MCP",
+            "quickstart": "دليل البدء السريع",
+            "docs": "الوثائق",
+            "apiReference": "مرجع الـ API"
+          },
+          "quickstartCard": {
+            "description": "ادمج Didit في 5 دقائق. احصل على مفتاح بيئة الاختبار، أرسل جلستك الأولى، وتحقق من الـ webhook, دليل شامل باستخدام curl.",
+            "cta": "اقرأ دليل البدء السريع",
+            "eyebrow": "الدمج في 5 دقائق"
+          },
+          "buildLinks": {
+            "heading": "البناء",
+            "sessionsApi": "Sessions API",
+            "webhooks": "Webhooks",
+            "sdks": "SDKs",
+            "openApi": "OpenAPI / Postman",
+            "agentSkills": "مهارات الوكيل",
+            "codingAgentIntegration": "دمج وكيل البرمجة"
+          },
+          "ship": {
+            "integrationPrompt": "موجه التكامل",
+            "heading": "إطلاق",
+            "sandbox": "بيئة الاختبار (Sandbox)",
+            "changelog": "سجل التغييرات",
+            "status": "حالة الخدمة"
+          },
+          "viewAll": "مركز المطورين"
+        },
+        "resources": {
+          "hero": {
+            "blog": "المدونة",
+            "successStories": "قصص النجاح",
+            "helpCenter": "مركز المساعدة",
+            "demoCenter": "مركز العروض التوضيحية",
+            "roiCalculator": "حاسبة العائد على الاستثمار",
+            "academy": "Academy"
+          },
+          "foundersCard": {
+            "title": "تعرف على المؤسسين",
+            "description": "أليخاندرو وألبرتو روساس, أخوان توأمان من برشلونة يبنيان البنية التحتية للهوية والاحتيال.",
+            "cta": "اقرأ عن Didit"
+          },
+          "read": {
+            "heading": "اقرأ واستكشف"
+          },
+          "company": {
+            "heading": "الشركة",
+            "about": "عنّا",
+            "careers": "الوظائف",
+            "securityCompliance": "الأمن والامتثال",
+            "contact": "اتصل بنا"
+          },
+          "viewAll": "جميع الموارد"
+        },
+        "ctas": {
+          "signIn": "تسجيل الدخول",
+          "signUp": "التسجيل",
+          "startFree": "ابدأ مجانًا",
+          "talkToUs": "تحدث إلينا",
+          "learnMore": "تعرّف على المزيد"
+        },
+        "localeSwitcherLabel": "اللغة",
+        "solutions": {
+          "cards": {
+            "monitoring": {
+              "title": "المراقبة",
+              "description": "مكافحة غسل الأموال المستمرة، قواعد المعاملات، KYT للمحفظة"
+            },
+            "amlCompliance": {
+              "title": "مكافحة غسل الأموال والامتثال",
+              "description": "العقوبات، PEP، وسائل الإعلام السلبية، المراقبة المستمرة"
+            },
+            "onboardCustomer": {
+              "title": "التحقق من المستخدم (KYC)",
+              "description": "KYC مجاني لما يصل إلى 500 عملية تحقق شهريًا، مدى الحياة. الهوية، الحيوية، ومطابقة الوجه في حزمة واحدة.",
+              "iconLabel": "التحقق من المستخدم (KYC)"
+            },
+            "verifyBusiness": {
+              "title": "التحقق من الشركات (KYB)",
+              "description": "السجل، الملاك المستفيدون، المسؤولون، ومكافحة غسل الأموال للكيانات. كل مالك مستفيد يحصل على جلسة KYC مرتبطة جاهزة للاستخدام."
+            },
+            "stopFraud": {
+              "title": "مراقبة المعاملات",
+              "description": "محرك قواعد في الوقت الفعلي للعملات الورقية والمشفرة. إدارة الحالات، سير عمل SAR، والمعالجة التلقائية لـ KYC مرتبط.",
+              "iconLabel": "منع الاحتيال"
+            },
+            "complyAml": {
+              "title": "الامتثال لمكافحة غسل الأموال (AML)",
+              "description": "الفحص ضد أكثر من 1300 قائمة عقوبات، PEP، ووسائل إعلام سلبية. مراقبة مستمرة يومية بسعر 0.07 دولار لكل مستخدم/سنة.",
+              "iconLabel": "الامتثال لمكافحة غسل الأموال (AML)"
+            },
+            "authentication": {
+              "title": "المصادقة",
+              "description": "الحيوية، المصادقة البيومترية، IP والجهاز"
+            },
+            "verification": {
+              "title": "التحقق",
+              "description": "KYC، KYB، المستندات، وفحوصات السجل"
+            }
+          },
+          "byUseCase": {
+            "heading": "حالات الاستخدام",
+            "fullKycOnboarding": "إعداد KYC كامل",
+            "ageVerification": "التحقق من العمر",
+            "cryptoOnramp": "KYC + KYT لتمويل العملات المشفرة",
+            "accountTakeover": "منع الاستيلاء على الحسابات",
+            "multiAccountAbuse": "منع إساءة استخدام الحسابات المتعددة",
+            "proofOfHuman": "إثبات الهوية البشرية",
+            "gigWorker": "تأهيل العاملين المستقلين",
+            "botDetection": "حظر الروبوتات",
+            "passwordRecovery": "استعادة كلمة المرور",
+            "seeAll": "جميع حالات الاستخدام"
+          },
+          "byIndustry": {
+            "heading": "حسب الصناعة",
+            "fintech": "التقنية المالية (Fintech)",
+            "crypto": "العملات المشفرة (Crypto)",
+            "marketplaces": "الأسواق الرقمية",
+            "mobility": "التنقل",
+            "seeAll": "عرض جميع الصناعات",
+            "fintechDesc": "البنوك الرقمية · المدفوعات · الإقراض · الوساطة المالية",
+            "cryptoDesc": "التبادلات · المحافظ · بوابات الإيداع/السحب · مزودو خدمات الأصول الافتراضية (VASPs)",
+            "marketplacesDesc": "العمل الحر · التوصيل · صناع المحتوى · التجارة الإلكترونية",
+            "mobilityDesc": "خدمات النقل التشاركي · الأساطيل · توصيل الميل الأخير",
+            "igaming": "الألعاب التفاعلية (iGaming)",
+            "igamingDesc": "المراهنات الرياضية · الكازينوهات · اليانصيب · الرياضات الخيالية"
+          },
+          "byModule": {
+            "heading": "حسب الوحدة",
+            "freeKyc": "KYC مجاني",
+            "governmentChecks": "التحققات الحكومية",
+            "biometricAuthentication": "المصادقة البيومترية",
+            "walletScreening": "فحص المحافظ (KYT)",
+            "ageEstimation": "تقدير العمر",
+            "ipAnalysis": "تحليل الجهاز وعنوان IP",
+            "idVerification": "التحقق من الهوية",
+            "whiteLabel": "حلول العلامة البيضاء (White Label)",
+            "liveness": "التحقق من الحيوية",
+            "faceMatch": "مطابقة الوجه",
+            "seeAll": "جميع الوحدات (25+)"
+          },
+          "viewAll": "تصفح الكتالوج الكامل"
+        },
+        "products": {
+          "cards": {
+            "userVerification": {
+              "title": "التحقق من المستخدمين",
+              "description": "حزمة KYC · $0.33"
+            },
+            "businessVerification": {
+              "title": "التحقق من الشركات",
+              "description": "KYB · ابتداءً من $2.00"
+            },
+            "transactionMonitoring": {
+              "title": "مراقبة المعاملات",
+              "description": "قواعد فورية · $0.02/معاملة"
+            },
+            "walletScreening": {
+              "title": "فحص المحافظ الرقمية (KYT)",
+              "description": "مخاطر المحافظ على السلسلة · $0.15"
+            }
+          },
+          "modules": {
+            "headingDocuments": "الوثائق وجهات الاتصال",
+            "headingBiometrics": "القياسات الحيوية والمخاطر",
+            "idVerification": "التحقق من الهوية",
+            "nfcVerification": "التحقق عبر NFC",
+            "proofOfAddress": "إثبات العنوان",
+            "databaseValidation": "التحقق من صحة قاعدة البيانات",
+            "questionnaires": "استبيانات مخصصة",
+            "emailVerification": "التحقق من البريد الإلكتروني",
+            "phoneVerification": "التحقق من الهاتف",
+            "liveness": "التحقق من الحيوية",
+            "faceMatch": "مطابقة الوجه 1:1",
+            "faceSearch": "البحث عن الوجه 1:N",
+            "biometricAuth": "المصادقة البيومترية",
+            "ageEstimation": "تقدير العمر",
+            "ipAnalysis": "تحليل الجهاز وعنوان IP",
+            "walletScreening": "فحص المحفظة (KYT)",
+            "seeAll": "اطلع على جميع الوحدات الـ 25+"
+          },
+          "viewAll": "تصفح جميع المنتجات"
+        }
+      },
+      "announcementBar": {
+        "slot1": {
+          "text": "Didit تجمع <amt>7.5 مليون دولار</amt> لبناء البنية التحتية للهوية والاحتيال",
+          "ctaLabel": "اقرأ الإعلان",
+          "href": "/blog/didit-7-5m-seed-infrastructure-identity-fraud-ar/"
+        },
+        "slot2": {
+          "text": "الجهة التنظيمية المالية في إسبانيا اعترفت بـ Didit كأكثر أمانًا من التحقق الشخصي.",
+          "ctaLabel": "اقرأ التقرير",
+          "href": "/security-compliance#regulator"
+        },
+        "slot3": {
+          "text": "فحص المحافظ الرقمية بسعر $0.15 لكل فحص, أو استخدم مزود الفحص الخاص بك.",
+          "ctaLabel": "اطلع على فحص المحافظ الرقمية",
+          "href": "/products/wallet-screening"
+        },
+        "slot4": {
+          "text": "أسعار KYB ومراقبة المعاملات متاحة الآن.",
+          "ctaLabel": "اطلع على الأسعار",
+          "href": "/pricing"
+        },
+        "slot5": {
+          "text": "$0.33 لكل KYC كامل. 500 مجانًا كل شهر.",
+          "ctaLabel": "ابدأ مجانًا",
+          "href": "https://business.didit.me"
+        }
+      },
+      "footer": {
+        "cols": {
+          "solutions": {
+            "seeAll": "جميع حالات الاستخدام",
+            "heading": "الحلول",
+            "fullKycOnboarding": "إعداد KYC كامل",
+            "ageVerification": "التحقق من العمر",
+            "cryptoOnramp": "KYC + KYT لخدمات العملات المشفرة",
+            "accountTakeover": "منع الاستيلاء على الحسابات",
+            "multiAccountAbuse": "منع إساءة استخدام الحسابات المتعددة",
+            "proofOfHuman": "إثبات الهوية البشرية",
+            "botDetection": "حظر الروبوتات",
+            "gigWorkerVerification": "التحقق من عمال الخدمات المؤقتة",
+            "igamingResponsibleGaming": "الألعاب المسؤولة في iGaming",
+            "micaCrypto": "التحقق من مستخدمي العملات المشفرة MiCA",
+            "cryptoTravelRule": "قاعدة السفر للعملات المشفرة",
+            "uboVerification": "التحقق من المالك المستفيد النهائي (6AMLD)",
+            "bnplUnderwriting": "اكتتاب الشراء الآن والدفع لاحقًا (BNPL)",
+            "psd3Sca": "PSD3 SCA",
+            "marketplaceSellerKyb": "KYB لبائعي المتاجر الإلكترونية",
+            "employeeOnboarding": "إعداد الموظفين",
+            "nfcEpassport": "إعداد جواز السفر الإلكتروني NFC",
+            "passwordRecovery": "استعادة كلمة المرور"
+          },
+          "industries": {
+            "heading": "الصناعات",
+            "fintech": "التقنية المالية (Fintech)",
+            "crypto": "العملات المشفرة / Web3",
+            "marketplaces": "الأسواق الإلكترونية",
+            "mobility": "التنقل",
+            "gambling": "iGaming / القمار",
+            "banking": "الخدمات المصرفية",
+            "insurance": "التأمين",
+            "ecommerce": "التجارة الإلكترونية",
+            "telecom": "الاتصالات",
+            "seeAll": "جميع الصناعات"
+          },
+          "developers": {
+            "heading": "للمطورين",
+            "documentation": "الوثائق",
+            "apiReference": "مرجع الـ API",
+            "quickstart": "دليل البدء السريع, 5 دقائق",
+            "integrationPrompt": "موجه التكامل",
+            "mcp": "خادم MCP",
+            "agentSkills": "مهارات الوكيل",
+            "sdks": "حزم تطوير البرامج (SDKs)",
+            "sandbox": "بيئة الاختبار (مجانية)",
+            "changelog": "سجل التغييرات",
+            "status": "حالة الخدمة",
+            "demoCenter": "مركز العروض التوضيحية"
+          },
+          "comparePricing": {
+            "heading": "الأسعار والمقارنات",
+            "pricing": "الأسعار",
+            "roiCalculator": "حاسبة العائد على الاستثمار",
+            "sumsub": "مقارنة بـ Sumsub",
+            "veriff": "مقارنة بـ Veriff",
+            "onfido": "مقارنة بـ Onfido",
+            "jumio": "مقارنة بـ Jumio",
+            "persona": "مقارنة بـ Persona",
+            "stripeIdentity": "مقارنة بـ Stripe Identity",
+            "allSwitch": "جميع مقارنات المنافسين",
+            "countries": "الدول المدعومة",
+            "supportedDocuments": "الوثائق المدعومة"
+          },
+          "resources": {
+            "heading": "الموارد",
+            "securityCompliance": "الأمن والامتثال",
+            "supportedDocuments": "الوثائق المدعومة",
+            "roiCalculator": "حاسبة العائد على الاستثمار",
+            "status": "حالة الخدمة",
+            "demoCenter": "مركز العروض التوضيحية"
+          },
+          "products": {
+            "heading": "المنتجات",
+            "userVerification": "التحقق من المستخدم (KYC)",
+            "businessVerification": "التحقق من الشركات (KYB)",
+            "transactionMonitoring": "مراقبة المعاملات",
+            "walletScreening": "فحص المحافظ (KYT)",
+            "amlScreening": "فحص مكافحة غسيل الأموال (AML)",
+            "idVerification": "التحقق من الهوية",
+            "liveness": "التحقق من الحيوية",
+            "faceMatch1to1": "مطابقة الوجه 1:1",
+            "faceSearch1toN": "البحث عن الوجه 1:N",
+            "biometricAuth": "المصادقة البيومترية",
+            "ageEstimation": "تقدير العمر",
+            "nfcReading": "قراءة NFC",
+            "databaseValidation": "التحقق من قاعدة البيانات",
+            "ipAnalysis": "تحليل الجهاز وIP",
+            "emailVerification": "التحقق من البريد الإلكتروني",
+            "phoneVerification": "التحقق من الهاتف",
+            "workflowOrchestrator": "منسق سير العمل",
+            "whiteLabel": "علامة بيضاء (White Label)",
+            "seeAllModules": "جميع المنتجات"
+          },
+          "company": {
+            "heading": "الشركة",
+            "about": "عنّا",
+            "blog": "المدونة",
+            "successStories": "قصص النجاح",
+            "securityCompliance": "الأمن والامتثال",
+            "contact": "اتصل بنا",
+            "getDemo": "احصل على عرض توضيحي",
+            "careers": "الوظائف",
+            "brand": "مجموعة العلامة التجارية",
+            "support": "الدعم",
+            "helpCenter": "مركز المساعدة"
+          },
+          "backedby": {
+            "investors": {
+              "name": {
+                "yCombinator": "Y Combinator"
+              }
+            }
+          }
+        },
+        "askAi": {
+          "eyebrow": "اطلب من الذكاء الاصطناعي تلخيص هذه الصفحة",
+          "openIn": "افتح هذه الصفحة في {provider}"
+        },
+        "tagline": "واجهة برمجة تطبيقات واحدة للهوية والاحتيال.",
+        "trustStrip": "SOC 2 · ISO 27001 · iBeta PAD L1 · GDPR · eIDAS 2.0 · MiCA · AMLD6 · DORA-aligned",
+        "regulatorMicroline": "معترف بها من قبل Tesoro الإسبانية، وبنك إسبانيا، وSEPBLAC كأكثر أمانًا من التحقق الشخصي.",
+        "regulatorReadReport": "قراءة التقرير",
+        "backedBy": "مدعومة من",
+        "hq": "سان فرانسيسكو، الولايات المتحدة الأمريكية · المقر الرئيسي",
+        "legal": {
+          "copyright": "© 2026 Didit",
+          "privacy": "الخصوصية",
+          "cookies": "ملفات تعريف الارتباط",
+          "businessTerms": "شروط الأعمال",
+          "subProcessors": "المعالجون الفرعيون",
+          "contact": "اتصل بنا"
+        },
+        "social": {
+          "labels": {
+            "linkedin": "LinkedIn",
+            "x": "X (تويتر)",
+            "github": "GitHub"
+          },
+          "ariaLabel": "Didit على {network}"
+        },
+        "g2Aria": "حصلت Didit على تقييم 4.9 من 5 على G2",
+        "g2Tagline": "بنية تحتية للهوية والاحتيال"
+      }
+    },
+    "localeswitcher": {
+      "language": "اللغة",
+      "ariaLabel": {
+        "language": "اللغة",
+        "languageColumn1": "اللغة (العمود 1)",
+        "languageColumn2": "اللغة (العمود 2)",
+        "changeLanguage": "تغيير اللغة. اللغة الحالية: {current}."
+      }
+    },
+    "ui": {
+      "navbar": {
+        "image": {
+          "sizes": {
+            "minWidth1024px480px": "(min-width: 1024px) 480px, 100vw"
+          },
+          "alt": {
+            "didit": "ديدت"
+          }
+        },
+        "dropdownPanel": {
+          "subtleDarkening": {
+            "description": "تعتيم خفيف من الأسفل فقط, يكفي لتثبيت النص دون\n                        تعتيم الجزء العلوي من الصورة. يبدأ h-[55%] جيدًا\n                        تحت وجوه المؤسسين."
+          },
+          "accentVariant": {
+            "description": "نسخة مميزة, ضع الرابط في شريط أزرق من Didit بحيث\n            // يُقرأ كدعوة عالية التحويل."
+          },
+          "heroStrip": {
+            "heading": "شريط البطل, بطاقات متدرجة في صف أفقي واحد."
+          },
+          "linkColumnsRow": {
+            "heading": "صف أعمدة الروابط, الوحدات النمطية · حالات الاستخدام · الصناعات."
+          },
+          "imageBackgroundVariant": {
+            "description": "نسخة بخلفية صورة, تُستخدم لبطاقة \"قابل المؤسسين\" في قائمة الموارد.\n                  // تملأ Next/Image البطاقة؛ وتوضع كتلة نصية مكدسة محاذية لليسار\n                  // (عنوان + وصف + دعوة لاتخاذ إجراء) في الزاوية السفلية اليسرى\n                  // بحيث تهيمن الصورة على حوالي 80% من البطاقة. لا يوجد تراكب\n                  // تدرج داكن, وضوح النص مدعوم بظل نصي محكم على النوع الأبيض\n                  // للوحة. وفقًا لألبرتو: \"أزل التعتيم أدناه واجعله كما كان\n                  // من قبل محاذيًا لليسار فقط تأكد من أنه يبدأ أكثر في الأسفل\n                  // كما كان من قبل.\""
+          },
+          "titleRow": {
+            "description": "صف العنوان, أيقونة مدمجة على يسار العنوان (بدون خلفية شريحة،\n                    بدون حلقة، بدون ظل). يستخدم نفس عائلة الأيقونات التي\n                    يستخدمها `/pricing` عبر ConsoleModuleIcon (الذي يعكس\n                    سجل ميزات سير العمل في fe-application-console)؛ يعود\n                    إلى قناع iconSrc عندما يكون `moduleKey` غائبًا."
+          },
+          "accentSideColumn": {
+            "description": "يعرض `accent` على رابط عمود جانبي باللون الأزرق الخاص بـ Didit\n                  // مع سهم متتبع, يُستخدم لـ \"شاهد جميع الوحدات النمطية البالغ عددها 25+\"،\n                  // \"جميع الصناعات الـ 15\"، \"تصفح جميع...\" بحيث تُقرأ كدعوات\n                  // لاتخاذ إجراء للاستكشاف بدلاً من روابط الوحدات النمطية العادية."
+          }
+        },
+        "searchDidit": "ابحث في Didit",
+        "closeSearch": "إغلاق البحث",
+        "openMenu": "فتح القائمة",
+        "closeMenu": "إغلاق القائمة"
+      },
+      "topBar": {
+        "announcementAriaLabel": "إعلان",
+        "dismissAnnouncementAriaLabel": "إغلاق الإعلان"
+      },
+      "navTerminalCard": {
+        "diditZsh": "~/didit · zsh",
+        "navTerminalCard": {
+          "live": "مباشر"
+        }
+      },
+      "logoContextMenu": {
+        "aria": "أصول العلامة التجارية لـ Didit",
+        "eyebrow": "حزمة العلامة",
+        "copyLogo": "نسخ الشعار بصيغة SVG",
+        "copied": "تم النسخ",
+        "downloadSvg": "تنزيل الشعار (SVG)",
+        "downloadPng": "تنزيل الشعار (PNG)",
+        "downloadMark": "تنزيل الرمز (SVG)",
+        "copyColor": "نسخ لون العلامة التجارية",
+        "guidelines": "إرشادات العلامة التجارية"
+      },
+      "footer": {
+        "legalTagline": "بنية تحتية للهوية للفرق التي تحتاج إلى الثقة."
+      },
+      "backedBy": {
+        "label": "مدعوم من"
+      }
+    },
+    "blog": {
+      "archive": {
+        "eyebrow": "أرشيف المدونة",
+        "title": "تصفّح كل <blue>مقالات Didit</blue>.",
+        "titleAccent": "مقالات Didit",
+        "description": "كل المقالات المنشورة حول الهوية والاحتيال، منظّمة في صفحات خفيفة لسهولة التصفّح.",
+        "browseAll": "تصفّح جميع المقالات",
+        "navigationAria": "صفحات أرشيف المدونة",
+        "pageOf": "الصفحة {page} من {total}",
+        "range": "المقالات {start}–{end}",
+        "articleCount": "{count} مقالات",
+        "metadata": {
+          "title": "أرشيف المدونة | Didit",
+          "pageTitle": "أرشيف المدونة، الصفحة {page} | Didit",
+          "description": "استعرض أرشيف مدونة Didit بالكامل للاطلاع على مقالات عملية عن التحقق من الهوية، مكافحة الاحتيال، الامتثال، تحديثات المنتجات وأخبار الشركة.",
+          "pageDescription": "تصفّح الصفحة {page} من أرشيف مدونة Didit للاطلاع على مقالات حول التحقق من الهوية، مكافحة الاحتيال، الامتثال، تحديثات المنتجات وأخبار الشركة."
+        }
+      }
+    }
+  }
+}

@@ -6,6 +6,9 @@ esm/*
 public/*
 tests/*
 scripts/*
+# Byte-synced from fe-didit-website-v4 - reformatting it would break parity
+# (scripts/check-website-chrome-parity.mjs).
+vendor/
 *.config.js
 .DS_Store
 node_modules

@@ -1,0 +1,501 @@
+{
+  "translation_v1": {
+    "chrome": {
+      "header": {
+        "developers": {
+          "primary": {
+            "mcpServer": "MCP सर्वर",
+            "quickstart": "क्विकस्टार्ट",
+            "docs": "डॉक्यूमेंटेशन",
+            "apiReference": "API रेफरेंस"
+          },
+          "quickstartCard": {
+            "description": "Didit को 5 मिनट में इंटीग्रेट करें। एक सैंडबॉक्स की लें, अपना पहला सेशन POST करें, वेबहुक वेरिफाई करें, एक कर्ल वॉकथ्रू।",
+            "cta": "क्विकस्टार्ट पढ़ें",
+            "eyebrow": "5 मिनट में इंटीग्रेट करें"
+          },
+          "buildLinks": {
+            "heading": "बिल्ड करें",
+            "sessionsApi": "सेशन API",
+            "webhooks": "वेबहुक",
+            "sdks": "SDKs",
+            "openApi": "OpenAPI / पोस्टमैन",
+            "agentSkills": "एजेंट स्किल्स",
+            "codingAgentIntegration": "कोडिंग एजेंट इंटीग्रेशन"
+          },
+          "ship": {
+            "integrationPrompt": "इंटीग्रेशन प्रॉम्प्ट",
+            "heading": "शिप करें",
+            "sandbox": "सैंडबॉक्स",
+            "changelog": "चेंजलॉग",
+            "status": "सर्विस स्टेटस"
+          },
+          "viewAll": "डेवलपर हब"
+        },
+        "resources": {
+          "hero": {
+            "blog": "ब्लॉग",
+            "successStories": "सक्सेस स्टोरीज",
+            "helpCenter": "हेल्प सेंटर",
+            "demoCenter": "डेमो सेंटर",
+            "roiCalculator": "ROI कैलकुलेटर",
+            "academy": "Academy"
+          },
+          "foundersCard": {
+            "title": "फाउंडर्स से मिलें",
+            "description": "एलेजांद्रो और अल्बर्टो रोसास, बार्सिलोना के जुड़वां भाई जो आइडेंटिटी और फ्रॉड के लिए इंफ्रास्ट्रक्चर बना रहे हैं।",
+            "cta": "Didit के बारे में पढ़ें"
+          },
+          "read": {
+            "heading": "पढ़ें और एक्सप्लोर करें"
+          },
+          "company": {
+            "heading": "कंपनी",
+            "about": "हमारे बारे में",
+            "careers": "करियर",
+            "securityCompliance": "सिक्योरिटी और कंप्लायंस",
+            "contact": "संपर्क करें"
+          },
+          "viewAll": "सभी रिसोर्स"
+        },
+        "ctas": {
+          "signIn": "साइन इन करें",
+          "signUp": "साइन अप करें",
+          "startFree": "मुफ्त में शुरू करें",
+          "talkToUs": "हमसे बात करें",
+          "learnMore": "और जानें"
+        },
+        "localeSwitcherLabel": "भाषा",
+        "nav": {
+          "products": "प्रोडक्ट्स",
+          "pricing": "कीमत",
+          "image": {
+            "alt": {
+              "didit": "Didit"
+            }
+          },
+          "solutions": {
+            "cards": {
+              "verifyBusiness": {
+                "iconLabel": "बिजनेस वेरिफिकेशन (KYB)"
+              }
+            }
+          },
+          "developers": {
+            "primary": {
+              "terminal": {
+                "readyOpenDashboard": "→ 5 मिनट में तैयार · डैशबोर्ड खोलें",
+                "integrateDidit": "> Didit वेरिफिकेशन इंटीग्रेट करें",
+                "sessionScaffolded": "✓ /v3/session/ स्केफोल्ड किया गया",
+                "readingMcp": "↻ mcp://didit.me पढ़ रहा है",
+                "webhookReady": "✓ वेबहुक हैंडलर तैयार",
+                "mcpConnected": "✓ MCP सर्वर कनेक्टेड",
+                "claude": "$ क्लाउड"
+              },
+              "quickstartIconLabel": "क्विकस्टार्ट"
+            }
+          },
+          "resources": {
+            "foundersCard": {
+              "imageAlt": "एलेजांद्रो रोसास (बाएं) और अल्बर्टो रोसास (दाएं), Didit के सह-संस्थापक",
+              "iconLabel": "Didit के बारे में"
+            }
+          },
+          "labels": {
+            "solutions": "समाधान",
+            "developers": "डेवलपर्स",
+            "resources": "संसाधन",
+            "pricing": "कीमत"
+          }
+        },
+        "solutions": {
+          "cards": {
+            "monitoring": {
+              "title": "मॉनिटरिंग",
+              "description": "चल रही AML, ट्रांज़ैक्शन रूल्स, वॉलेट KYT"
+            },
+            "amlCompliance": {
+              "title": "AML और कंप्लायंस",
+              "description": "प्रतिबंध, PEP, एडवर्स मीडिया, चल रही"
+            },
+            "onboardCustomer": {
+              "title": "यूज़र वेरिफिकेशन (KYC)",
+              "description": "हर महीने 500 वेरिफिकेशन तक के लिए मुफ़्त KYC. ID, लाइवनेस और फेस मैच एक ही बंडल में.",
+              "iconLabel": "यूज़र वेरिफिकेशन (KYC)"
+            },
+            "verifyBusiness": {
+              "title": "बिज़नेस वेरिफिकेशन (KYB)",
+              "description": "रजिस्ट्री, बेनिफिशियल ओनर्स, ऑफ़िसर्स और एंटिटी AML. हर UBO को आउट-ऑफ़-द-बॉक्स एक लिंक्ड KYC सेशन मिलता है."
+            },
+            "stopFraud": {
+              "title": "ट्रांज़ैक्शन मॉनिटरिंग",
+              "description": "फ़िएट और क्रिप्टो के लिए रियल-टाइम रूल इंजन. केस मैनेजमेंट, SAR वर्कफ़्लो और लिंक्ड KYC के लिए ऑटो-रेमेडिएशन.",
+              "iconLabel": "धोखाधड़ी रोकें"
+            },
+            "complyAml": {
+              "title": "AML का पालन करें",
+              "description": "1,300+ प्रतिबंधों, PEP और एडवर्स-मीडिया सूचियों के ख़िलाफ़ स्क्रीनिंग करें. प्रति यूज़र/साल $0.07 पर रोज़ाना की मॉनिटरिंग.",
+              "iconLabel": "AML का पालन करें"
+            },
+            "authentication": {
+              "title": "ऑथेंटिकेशन",
+              "description": "लाइवनेस, बायोमेट्रिक ऑथ, IP और डिवाइस"
+            },
+            "verification": {
+              "title": "वेरिफिकेशन",
+              "description": "KYC, KYB, डॉक्यूमेंट और रजिस्ट्री चेक"
+            }
+          },
+          "byUseCase": {
+            "heading": "यूज़ केस",
+            "fullKycOnboarding": "फुल KYC ऑनबोर्डिंग",
+            "ageVerification": "उम्र का वेरिफिकेशन",
+            "cryptoOnramp": "क्रिप्टो ऑन-रैंप KYC + KYT",
+            "accountTakeover": "अकाउंट टेकओवर रोकें",
+            "multiAccountAbuse": "मल्टी-अकाउंट अब्यूज़ ब्लॉक करें",
+            "proofOfHuman": "इंसान होने का सबूत",
+            "gigWorker": "गिग वर्कर्स को ऑनबोर्ड करें",
+            "botDetection": "बॉट्स को ब्लॉक करें",
+            "passwordRecovery": "पासवर्ड रिकवरी",
+            "seeAll": "सभी यूज़ केस"
+          },
+          "byIndustry": {
+            "heading": "इंडस्ट्री के हिसाब से",
+            "fintech": "फिनटेक",
+            "crypto": "क्रिप्टो",
+            "marketplaces": "मार्केटप्लेस",
+            "mobility": "मोबिलिटी",
+            "seeAll": "सभी इंडस्ट्री देखें",
+            "fintechDesc": "नियोबैंक · पेमेंट · लेंडिंग · ब्रोकरेज",
+            "cryptoDesc": "एक्सचेंज · वॉलेट · ऑन / ऑफ-रैंप · VASPs",
+            "marketplacesDesc": "गिग · डिलीवरी · क्रिएटर · ई-कॉमर्स",
+            "mobilityDesc": "राइड-हेल · फ्लीट · लास्ट-माइल डिलीवरी",
+            "igaming": "iGaming",
+            "igamingDesc": "स्पोर्ट्सबुक · कैसीनो · लॉटरी · फैंटेसी स्पोर्ट्स"
+          },
+          "byModule": {
+            "heading": "मॉड्यूल के हिसाब से",
+            "freeKyc": "फ्री KYC",
+            "governmentChecks": "सरकारी जाँच",
+            "biometricAuthentication": "बायोमेट्रिक ऑथेंटिकेशन",
+            "walletScreening": "वॉलेट स्क्रीनिंग (KYT)",
+            "ageEstimation": "उम्र का अनुमान",
+            "ipAnalysis": "डिवाइस और IP एनालिसिस",
+            "idVerification": "ID वेरिफिकेशन",
+            "whiteLabel": "व्हाइट लेबल",
+            "liveness": "लाइवनेस",
+            "faceMatch": "फेस मैच",
+            "seeAll": "सभी 25+ मॉड्यूल"
+          },
+          "viewAll": "पूरा कैटलॉग ब्राउज़ करें"
+        },
+        "products": {
+          "cards": {
+            "userVerification": {
+              "title": "यूजर वेरिफिकेशन",
+              "description": "KYC बंडल · $0.33"
+            },
+            "businessVerification": {
+              "title": "बिजनेस वेरिफिकेशन",
+              "description": "KYB · $2.00 से"
+            },
+            "transactionMonitoring": {
+              "title": "ट्रांजेक्शन मॉनिटरिंग",
+              "description": "रीयल-टाइम नियम · $0.02/tx"
+            },
+            "walletScreening": {
+              "title": "वॉलेट स्क्रीनिंग (KYT)",
+              "description": "ऑन-चेन वॉलेट जोखिम · $0.15"
+            }
+          },
+          "modules": {
+            "headingDocuments": "दस्तावेज और संपर्क",
+            "headingBiometrics": "बायोमेट्रिक्स और जोखिम",
+            "idVerification": "आईडी वेरिफिकेशन",
+            "nfcVerification": "NFC वेरिफिकेशन",
+            "proofOfAddress": "पते का प्रमाण",
+            "databaseValidation": "डेटाबेस वैलिडेशन",
+            "questionnaires": "कस्टम प्रश्नावली",
+            "emailVerification": "ईमेल वेरिफिकेशन",
+            "phoneVerification": "फ़ोन वेरिफिकेशन",
+            "liveness": "लाइवनेस",
+            "faceMatch": "फेस मैच 1:1",
+            "faceSearch": "फेस सर्च 1:N",
+            "biometricAuth": "बायोमेट्रिक ऑथेंटिकेशन",
+            "ageEstimation": "उम्र का अनुमान",
+            "ipAnalysis": "डिवाइस और IP एनालिसिस",
+            "walletScreening": "वॉलेट स्क्रीनिंग (KYT)",
+            "seeAll": "सभी 25+ मॉड्यूल देखें"
+          },
+          "viewAll": "सभी प्रोडक्ट ब्राउज़ करें"
+        }
+      },
+      "announcementBar": {
+        "slot1": {
+          "text": "Didit ने पहचान और धोखाधड़ी के लिए इंफ्रास्ट्रक्चर बनाने हेतु <amt>$7.5M</amt> जुटाए",
+          "ctaLabel": "घोषणा पढ़ें",
+          "href": "/blog/didit-7-5m-seed-infrastructure-identity-fraud-hi/"
+        },
+        "slot2": {
+          "text": "स्पेन के वित्तीय रेगुलेटर ने Didit को इन-पर्सन से ज़्यादा सुरक्षित के रूप में मान्यता दी।",
+          "ctaLabel": "रिपोर्ट पढ़ें",
+          "href": "/security-compliance#regulator"
+        },
+        "slot3": {
+          "text": "वॉलेट स्क्रीनिंग $0.15 प्रति चेक पर, या अपना खुद का स्क्रीनिंग प्रोवाइडर लाएँ।",
+          "ctaLabel": "वॉलेट स्क्रीनिंग देखें",
+          "href": "/products/wallet-screening"
+        },
+        "slot4": {
+          "text": "KYB और ट्रांजेक्शन मॉनिटरिंग की कीमत लाइव है।",
+          "ctaLabel": "कीमत देखें",
+          "href": "/pricing"
+        },
+        "slot5": {
+          "text": "पूरे KYC के लिए $0.33। हर महीने 500 मुफ्त।",
+          "ctaLabel": "मुफ्त में शुरू करें",
+          "href": "https://business.didit.me"
+        }
+      },
+      "footer": {
+        "tagline": "आइडेंटिटी और फ्रॉड के लिए एक API।",
+        "cols": {
+          "products": {
+            "heading": "प्रोडक्ट्स",
+            "userVerification": "यूज़र वेरिफिकेशन (KYC)",
+            "businessVerification": "बिज़नेस वेरिफिकेशन (KYB)",
+            "transactionMonitoring": "ट्रांज़ैक्शन मॉनिटरिंग",
+            "walletScreening": "वॉलेट स्क्रीनिंग (KYT)",
+            "amlScreening": "AML स्क्रीनिंग",
+            "idVerification": "ID वेरिफिकेशन",
+            "liveness": "लाइवनेस",
+            "faceMatch1to1": "फेस मैच 1:1",
+            "faceSearch1toN": "फेस सर्च 1:N",
+            "biometricAuth": "बायोमेट्रिक ऑथेंटिकेशन",
+            "ageEstimation": "उम्र का अनुमान",
+            "nfcReading": "NFC रीडिंग",
+            "databaseValidation": "डेटाबेस वैलिडेशन",
+            "ipAnalysis": "डिवाइस और IP एनालिसिस",
+            "emailVerification": "ईमेल वेरिफिकेशन",
+            "phoneVerification": "फ़ोन वेरिफिकेशन",
+            "workflowOrchestrator": "वर्कफ़्लो ऑर्केस्ट्रेटर",
+            "whiteLabel": "व्हाइट लेबल",
+            "seeAllModules": "सभी प्रोडक्ट"
+          },
+          "solutions": {
+            "heading": "सॉल्यूशंस",
+            "fullKycOnboarding": "फुल KYC ऑनबोर्डिंग",
+            "ageVerification": "उम्र का वेरिफिकेशन",
+            "cryptoOnramp": "क्रिप्टो ऑन-रैंप KYC + KYT",
+            "accountTakeover": "अकाउंट टेकओवर रोकें",
+            "multiAccountAbuse": "मल्टी-अकाउंट अब्यूज़ ब्लॉक करें",
+            "proofOfHuman": "प्रूफ ऑफ़ ह्यूमन",
+            "botDetection": "बॉट्स ब्लॉक करें",
+            "gigWorkerVerification": "गिग वर्कर वेरिफिकेशन",
+            "igamingResponsibleGaming": "iGaming रिस्पॉन्सिबल गेमिंग",
+            "micaCrypto": "MiCA क्रिप्टो यूज़र वेरिफिकेशन",
+            "cryptoTravelRule": "क्रिप्टो ट्रैवल रूल",
+            "uboVerification": "UBO वेरिफिकेशन (6AMLD)",
+            "bnplUnderwriting": "BNPL अंडरराइटिंग",
+            "psd3Sca": "PSD3 SCA",
+            "marketplaceSellerKyb": "मार्केटप्लेस सेलर KYB",
+            "employeeOnboarding": "कर्मचारी ऑनबोर्डिंग",
+            "nfcEpassport": "NFC ई-पासपोर्ट ऑनबोर्डिंग",
+            "passwordRecovery": "पासवर्ड रिकवरी",
+            "seeAll": "सभी यूज़ केस"
+          },
+          "industries": {
+            "heading": "इंडस्ट्रीज़",
+            "fintech": "फिनटेक",
+            "crypto": "क्रिप्टो / Web3",
+            "marketplaces": "मार्केटप्लेस",
+            "mobility": "मोबिलिटी",
+            "gambling": "iGaming / गैंबलिंग",
+            "banking": "बैंकिंग",
+            "insurance": "इंश्योरेंस",
+            "ecommerce": "ई-कॉमर्स",
+            "telecom": "टेलीकॉम",
+            "seeAll": "सभी इंडस्ट्रीज़"
+          },
+          "developers": {
+            "heading": "डेवलपर्स",
+            "documentation": "डॉक्यूमेंटेशन",
+            "apiReference": "API रेफरेंस",
+            "quickstart": "क्विकस्टार्ट, 5 मिनट",
+            "integrationPrompt": "इंटीग्रेशन प्रॉम्प्ट",
+            "mcp": "MCP सर्वर",
+            "agentSkills": "एजेंट स्किल्स",
+            "sdks": "SDKs",
+            "sandbox": "सैंडबॉक्स (फ़्री)",
+            "changelog": "चेंजलॉग",
+            "status": "सर्विस स्टेटस",
+            "demoCenter": "डेमो सेंटर"
+          },
+          "comparePricing": {
+            "heading": "प्राइसिंग और तुलना",
+            "pricing": "प्राइसिंग",
+            "roiCalculator": "ROI कैलकुलेटर",
+            "sumsub": "बनाम Sumsub",
+            "veriff": "बनाम Veriff",
+            "onfido": "बनाम Onfido",
+            "jumio": "बनाम Jumio",
+            "persona": "बनाम Persona",
+            "stripeIdentity": "बनाम Stripe Identity",
+            "allSwitch": "सभी प्रतिस्पर्धियों की तुलना",
+            "countries": "सपोर्टेड देश",
+            "supportedDocuments": "सपोर्टेड डॉक्यूमेंट्स"
+          },
+          "resources": {
+            "heading": "रिसोर्सेज़",
+            "securityCompliance": "सिक्योरिटी और कंप्लायंस",
+            "supportedDocuments": "सपोर्टेड डॉक्यूमेंट्स",
+            "roiCalculator": "ROI कैलकुलेटर",
+            "status": "सर्विस स्टेटस",
+            "demoCenter": "डेमो सेंटर"
+          },
+          "company": {
+            "heading": "कंपनी",
+            "about": "हमारे बारे में",
+            "blog": "ब्लॉग",
+            "successStories": "सक्सेस स्टोरीज़",
+            "securityCompliance": "सिक्योरिटी और कंप्लायंस",
+            "contact": "संपर्क करें",
+            "getDemo": "डेमो पाएं",
+            "careers": "करियर",
+            "brand": "ब्रांड किट",
+            "support": "सपोर्ट",
+            "helpCenter": "हेल्प सेंटर"
+          },
+          "backedby": {
+            "investors": {
+              "name": {
+                "yCombinator": "Y Combinator"
+              }
+            }
+          }
+        },
+        "askAi": {
+          "eyebrow": "इस पेज को समराइज़ करने के लिए AI से पूछें",
+          "openIn": "इस पेज को {provider} में खोलें"
+        },
+        "trustStrip": "SOC 2 · ISO 27001 · iBeta PAD L1 · GDPR · eIDAS 2.0 · MiCA · AMLD6 · DORA-aligned",
+        "regulatorMicroline": "स्पेन के टेसोरो, बैंको डी एस्पाना और एसईपीबीएलएसी द्वारा व्यक्तिगत सत्यापन से अधिक सुरक्षित के रूप में मान्यता प्राप्त।",
+        "regulatorReadReport": "रिपोर्ट पढ़ें",
+        "backedBy": "इनके सहयोग से",
+        "hq": "सैन फ्रांसिस्को, यूएसए · मुख्यालय",
+        "legal": {
+          "copyright": "© 2026 Didit",
+          "privacy": "गोपनीयता",
+          "cookies": "कुकीज़",
+          "businessTerms": "व्यवसाय के लिए शर्तें",
+          "subProcessors": "उप-प्रोसेसर",
+          "contact": "संपर्क करें"
+        },
+        "social": {
+          "labels": {
+            "linkedin": "लिंक्डइन",
+            "x": "X (ट्विटर)",
+            "github": "गिटहब"
+          },
+          "ariaLabel": "{network} पर Didit"
+        },
+        "g2Aria": "Didit को G2 पर 5 में से 4.9 रेटिंग मिली है",
+        "g2Tagline": "पहचान और धोखाधड़ी के लिए इंफ्रास्ट्रक्चर"
+      }
+    },
+    "localeswitcher": {
+      "language": "भाषा",
+      "ariaLabel": {
+        "language": "भाषा",
+        "languageColumn1": "भाषा (कॉलम 1)",
+        "languageColumn2": "भाषा (कॉलम 2)",
+        "changeLanguage": "भाषा बदलें। वर्तमान भाषा: {current}।"
+      }
+    },
+    "ui": {
+      "navbar": {
+        "image": {
+          "sizes": {
+            "minWidth1024px480px": "(min-width: 1024px) 480px, 100vw"
+          },
+          "alt": {
+            "didit": "Didit"
+          }
+        },
+        "dropdownPanel": {
+          "subtleDarkening": {
+            "description": "सूक्ष्म नीचे-केवल कालापन, टेक्स्ट को एंकर करने के लिए पर्याप्त है, बिना फोटो के ऊपरी हिस्से को मंद किए। h-[55%] फाउंडर्स के चेहरों से काफी नीचे शुरू होता है।"
+          },
+          "accentVariant": {
+            "description": "एक्सेंट वेरिएंट, लिंक को Didit ब्लू पिल में लपेटें ताकि यह एक हाई-कन्वर्जन कॉल-आउट के रूप में पढ़ा जाए।"
+          },
+          "heroStrip": {
+            "heading": "हीरो स्ट्रिप, एक ही क्षैतिज पंक्ति में ग्रेडिएंट कार्ड।"
+          },
+          "linkColumnsRow": {
+            "heading": "लिंक कॉलम पंक्ति, मॉड्यूल · उपयोग के मामले · उद्योग।"
+          },
+          "imageBackgroundVariant": {
+            "description": "इमेज-बैकग्राउंड वेरिएंट, रिसोर्स मेन्यू के \"मीट द फाउंडर्स\" कार्ड के लिए इस्तेमाल किया जाता है। Next/Image कार्ड को भरता है; एक बाईं ओर संरेखित स्टैक्ड टेक्स्ट ब्लॉक (शीर्षक + विवरण + CTA) निचले-बाएँ कोने में नीचे बैठता है ताकि फोटो कार्ड का ~80% हिस्सा कवर करे। कोई डार्क ग्रेडिएंट ओवरले नहीं, टेक्स्ट की पठनीयता कैनवास-सफेद टाइप पर एक टाइट टेक्स्ट-शैडो द्वारा सुनिश्चित की जाती है। अल्बर्टो के अनुसार: \"नीचे की अपारदर्शिता हटा दें और इसे पहले की तरह बाईं ओर संरेखित करें, बस यह सुनिश्चित करें कि यह पहले की तरह नीचे से शुरू हो।\""
+          },
+          "titleRow": {
+            "description": "शीर्षक पंक्ति, आइकन शीर्षक के बाईं ओर इनलाइन (कोई चिप बैकग्राउंड नहीं, कोई रिंग नहीं, कोई शैडो नहीं)। ConsoleModuleIcon के माध्यम से `/pricing` द्वारा उपयोग किए जाने वाले आइकन परिवार का उपयोग करता है (जो fe-application-console workflow-feature-icon रजिस्ट्री को दर्शाता है); जब `moduleKey` अनुपस्थित होता है तो iconSrc मास्क पर वापस आता है।"
+          },
+          "accentSideColumn": {
+            "description": "साइड-कॉलम लिंक पर `accent` इसे Didit ब्लू में एक ट्रेलिंग तीर के साथ प्रस्तुत करता है, \"सभी 25+ मॉड्यूल देखें\", \"सभी 15 उद्योग\", \"सभी ब्राउज़ करें…\" शैली की प्रविष्टियों के लिए उपयोग किया जाता है ताकि वे नियमित मॉड्यूल लिंक के बजाय अधिक एक्सप्लोर-मोर CTA के रूप में पढ़ें।"
+          }
+        },
+        "searchDidit": "Didit खोजें",
+        "closeSearch": "खोज बंद करें",
+        "openMenu": "मेन्यू खोलें",
+        "closeMenu": "मेन्यू बंद करें"
+      },
+      "topBar": {
+        "announcementAriaLabel": "घोषणा",
+        "dismissAnnouncementAriaLabel": "घोषणा को ख़ारिज करें"
+      },
+      "navTerminalCard": {
+        "diditZsh": "~/didit · zsh",
+        "navTerminalCard": {
+          "live": "लाइव"
+        }
+      },
+      "logoContextMenu": {
+        "aria": "Didit ब्रांड संसाधन",
+        "eyebrow": "ब्रांड किट",
+        "copyLogo": "लोगो को SVG के रूप में कॉपी करें",
+        "copied": "कॉपी किया गया",
+        "downloadSvg": "लोगो डाउनलोड करें (SVG)",
+        "downloadPng": "लोगो डाउनलोड करें (PNG)",
+        "downloadMark": "सिंबल डाउनलोड करें (SVG)",
+        "copyColor": "ब्रांड रंग कॉपी करें",
+        "guidelines": "ब्रांड दिशानिर्देश"
+      },
+      "footer": {
+        "legalTagline": "उन टीमों के लिए आइडेंटिटी इंफ़्रास्ट्रक्चर जिन्हें भरोसे की ज़रूरत है।"
+      },
+      "backedBy": {
+        "label": "इनके द्वारा समर्थित"
+      }
+    },
+    "blog": {
+      "archive": {
+        "eyebrow": "ब्लॉग आर्काइव",
+        "title": "सभी <blue>Didit लेख</blue> देखें।",
+        "titleAccent": "Didit लेख",
+        "description": "पहचान और धोखाधड़ी पर हर प्रकाशित लेख को तेज़ी से देखने के लिए हल्के पेजों में व्यवस्थित किया गया है।",
+        "browseAll": "सभी लेख देखें",
+        "navigationAria": "ब्लॉग आर्काइव के पेज",
+        "pageOf": "पेज {page}, कुल {total}",
+        "range": "लेख {start}–{end}",
+        "articleCount": "{count} लेख",
+        "metadata": {
+          "title": "ब्लॉग आर्काइव | Didit",
+          "pageTitle": "ब्लॉग आर्काइव, पेज {page} | Didit",
+          "description": "Didit ब्लॉग आर्काइव में पहचान सत्यापन, धोखाधड़ी रोकथाम, कंप्लायंस, प्रोडक्ट अपडेट और कंपनी समाचार पर सभी लेख ब्राउज़ करें।",
+          "pageDescription": "Didit के ब्लॉग आर्काइव में {page} पेज पर पहचान सत्यापन, फ्रॉड रोकथाम, कंप्लायंस, प्रोडक्ट अपडेट्स और कंपनी न्यूज़ से जुड़ी जानकारी पढ़ें।"
+        }
+      }
+    }
+  }
+}

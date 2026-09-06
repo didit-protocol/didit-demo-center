@@ -35,3 +35,7 @@ yarn-error.log*
 next-env.d.ts
 
 .env
+
+# screenshot output from `npm run shots` - only curated proof is committed,
+# under proof/<slug>/
+/proof/*.png

@@ -3,7 +3,25 @@ import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 
 import { VERIFICATION_BASE_URL } from "@/lib/auth-service";
-import { VerificationDecision } from "@/app/types/verification";
+
+/**
+ * The demo centre's own session route.
+ *
+ * It exists so the API key never reaches the browser: the catalogue POSTs here,
+ * this handler adds `x-api-key` and calls the real Didit API. Every hosted demo
+ * on the site runs through it, and so do /accs, /ibeta and the CAPTCHA widget.
+ *
+ * Both calls speak v3 - the version the API reference documents and the version
+ * every snippet in the catalogue hands a developer, so what they copy is what
+ * this app actually did.
+ */
+const V3 = `${VERIFICATION_BASE_URL}/v3`;
+
+/** Only the fields this route itself reads off the decision. */
+type DecisionEnvelope = {
+  created_at: string;
+  session_number?: number;
+};
 
 function isSessionExpired(createdAt: string): boolean {
   const sessionDate = new Date(createdAt);
@@ -35,22 +53,27 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const response = await fetch(
-      `${VERIFICATION_BASE_URL}/v2/session/${sessionId}/decision/`,
-      {
-        method: "GET",
-        headers: {
-          "X-Api-Key": process.env.API_KEY || "",
-          "Content-Type": "application/json",
-        },
+    const response = await fetch(`${V3}/session/${sessionId}/decision/`, {
+      method: "GET",
+      headers: {
+        "X-Api-Key": process.env.API_KEY || "",
+        "Content-Type": "application/json",
       },
-    );
+    });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch decision data");
+      return withNoStore(
+        {
+          error:
+            response.status === 404
+              ? "No decision found for this session id."
+              : "The decision could not be fetched from the verification API.",
+        },
+        { status: response.status === 404 ? 404 : 502 },
+      );
     }
 
-    const data: VerificationDecision = await response.json();
+    const data: DecisionEnvelope = await response.json();
 
     if (isSessionExpired(data.created_at)) {
       return withNoStore(
@@ -68,9 +91,7 @@ export async function GET(request: NextRequest) {
 
     return withNoStore(
       { error: "Failed to fetch verification data" },
-      {
-        status: 500,
-      },
+      { status: 500 },
     );
   }
 }
@@ -87,7 +108,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const response = await fetch(`${VERIFICATION_BASE_URL}/v2/session/`, {
+    const response = await fetch(`${V3}/session/`, {
       method: "POST",
       headers: {
         "X-Api-Key": process.env.API_KEY || "",
@@ -97,23 +118,34 @@ export async function POST(request: NextRequest) {
         workflow_id: body.workflow_id,
         vendor_data: body.vendor_data,
         callback: body.callback,
+        callback_method: "both",
         ...(body.portrait_image ? { portrait_image: body.portrait_image } : {}),
       }),
     });
 
-    if (!response.ok) {
-      throw new Error("Failed to create verification session");
-    }
+    const result = await response.json().catch(() => null);
 
-    const result = await response.json();
+    if (!response.ok) {
+      // Surface the API's own message so the catalogue can say WHY a session
+      // could not be created (unpublished workflow, no balance, bad portrait)
+      // instead of a generic failure.
+      const detail =
+        (result && (result.detail || result.error || result.message)) ||
+        "Failed to create verification session";
+
+      return withNoStore(
+        { error: String(detail) },
+        { status: response.status },
+      );
+    }
 
     return withNoStore(result);
   } catch (error) {
+    console.error("Error in POST /api/verification:", error);
+
     return withNoStore(
       { error: "Failed to create verification session" },
-      {
-        status: 500,
-      },
+      { status: 500 },
     );
   }
 }
