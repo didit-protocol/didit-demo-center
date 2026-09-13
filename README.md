@@ -93,6 +93,7 @@ than failing on a 400.
 ## Checks
 
 ```sh
+npm test                     # node --test (status-copy unit tests)
 npm run typecheck            # tsc --noEmit
 npm run lint                 # eslint (vendor/ is excluded - it is synced)
 npm run build                # next build
