@@ -2,9 +2,28 @@
 
 import { Suspense, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ArrowLeft, CheckCircle2, XCircle, CircleAlert } from "lucide-react";
+import {
+  ArrowLeft,
+  CheckCircle2,
+  XCircle,
+  CircleAlert,
+  CircleHelp,
+  Clock,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { AccsStatusKind, resolveAccsStatus } from "@/lib/accs-status";
+
+const STATUS_STYLES: Record<
+  AccsStatusKind,
+  { color: string; bg: string; Icon: typeof CircleAlert }
+> = {
+  approved: { color: "text-green-600", bg: "bg-green-50", Icon: CheckCircle2 },
+  declined: { color: "text-red-600", bg: "bg-red-50", Icon: XCircle },
+  review: { color: "text-amber-700", bg: "bg-amber-50", Icon: CircleAlert },
+  processing: { color: "text-amber-600", bg: "bg-amber-50", Icon: Clock },
+  unknown: { color: "text-gray-600", bg: "bg-gray-100", Icon: CircleHelp },
+};
 
 function AccsCallbackContent() {
   const router = useRouter();
@@ -22,34 +41,9 @@ function AccsCallbackContent() {
         : "Age Assurance";
 
   const statusMeta = useMemo(() => {
-    const s = status.toLowerCase();
+    const meta = resolveAccsStatus(status, componentLabel);
 
-    if (s === "approved" || s === "success" || s === "completed") {
-      return {
-        color: "text-green-600",
-        bg: "bg-green-50",
-        Icon: CheckCircle2,
-        label: "Approved",
-        description: `The ${componentLabel} check passed: the session was accepted.`,
-      };
-    }
-    if (s === "rejected" || s === "declined" || s === "failed") {
-      return {
-        color: "text-red-600",
-        bg: "bg-red-50",
-        Icon: XCircle,
-        label: "Declined",
-        description: `The ${componentLabel} check did not pass: the session was rejected.`,
-      };
-    }
-
-    return {
-      color: "text-amber-600",
-      bg: "bg-amber-50",
-      Icon: CircleAlert,
-      label: status || "Pending",
-      description: "The verification is still being processed.",
-    };
+    return { ...meta, ...STATUS_STYLES[meta.kind] };
   }, [status, componentLabel]);
 
   return (
