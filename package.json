@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
     "typecheck": "tsc --noEmit",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"tests/**/*.test.mjs\"",
     "sync:website-chrome": "node scripts/sync-website-chrome.mjs",
     "check:website-chrome": "node scripts/check-website-chrome-parity.mjs",
     "check:docs-links": "node scripts/check-docs-links.mjs",
