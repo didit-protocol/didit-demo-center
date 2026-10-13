@@ -38,12 +38,17 @@ export async function POST(request: NextRequest) {
   } catch {
     return noStore({ error: "A return URL is required." }, { status: 400 });
   }
+  // The hosted flow redirects here when it finishes on another device, so it
+  // must be this site's own /igaming page and nowhere else.
+  const origin = request.headers.get("origin");
+
   if (
     !["http:", "https:"].includes(callback.protocol) ||
-    !callback.pathname.startsWith("/igaming")
+    !callback.pathname.startsWith("/igaming") ||
+    (origin !== null && callback.origin !== origin)
   ) {
     return noStore(
-      { error: "The return URL must be /igaming." },
+      { error: "The return URL must be this site's /igaming page." },
       { status: 400 },
     );
   }

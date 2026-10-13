@@ -165,6 +165,16 @@ test("POST /age-check validates before calling Didit and passes Didit's reason o
   }
   assert.equal(calls.length, 0);
 
+  // A return URL on another origin than the page that asked is refused.
+  const elsewhere = request("/api/igaming/age-check", {
+    method: "POST",
+    body: { fullName: "Alex", email: "alex@example.com", returnUrl: "https://evil.example/igaming" },
+  });
+
+  elsewhere.headers.set("origin", "https://demos.didit.me");
+  assert.equal((await ageCheck.POST(elsewhere)).status, 400);
+  assert.equal(calls.length, 0);
+
   reset({
     "POST /v3/session/": {
       status: 400,
