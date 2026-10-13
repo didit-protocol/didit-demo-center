@@ -117,9 +117,14 @@ function GuideSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
     };
 
     document.addEventListener("keydown", onKey);
+    // Same page lock the demo centre's modal uses (see demo-center/modal.tsx).
+    document.documentElement.style.overflow = "hidden";
     panelRef.current?.focus();
 
-    return () => document.removeEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.documentElement.style.overflow = "";
+    };
   }, [open, onClose]);
 
   if (!open) return null;
