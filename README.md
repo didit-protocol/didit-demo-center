@@ -1,0 +1,160 @@
+# Didit Demo Center
+
+The catalogue behind [demos.didit.me](https://demos.didit.me): every Didit
+module, runnable. 18 pre-built workflows across KYC, KYB, monitoring and fraud,
+each with the request that created it.
+
+## Two kinds of demo
+
+The distinction runs through the whole app, so it is worth stating once:
+
+| Mode | What "Start demo" does | Billed |
+| --- | --- | --- |
+| **Hosted flow** | Creates a **real** session through `/api/verification` and opens the real hosted flow in the Didit web SDK modal on your device. | Yes - the workflow's modules run |
+| **API demo** | Opens a playground showing the real endpoint, headers and body, then replays a **fixture** response with a run trace. | No - nothing is sent |
+
+KYB, key people & UBO, transaction monitoring, wallet screening, standalone AML,
+face search and IP analysis are API demos: they are server-to-server surfaces
+with no hosted flow to open. Everything else is a hosted flow.
+
+The catalogue lives in [`lib/demos.ts`](lib/demos.ts) - one file, one source of
+truth for workflow ids, copy, modules, endpoints, sample decisions and docs
+links.
+
+## Results are a modal
+
+A finished session never navigates you away from the catalogue. The web SDK's
+`onComplete` opens the results modal in place, which fetches the real decision
+from `GET /v3/session/{id}/decision/` through this app's own server route.
+
+`/verification/callback` still exists, because the hosted flow redirects there
+when the user finishes on a **different device** than the one that started the
+session. It forwards straight to the catalogue, which opens the same modal.
+
+## Site chrome
+
+The navbar, announcement bar and footer are **not written here**. They are
+vendored byte-for-byte from
+[fe-didit-website-v4](https://github.com/didit-protocol/fe-didit-website-v4) into
+[`vendor/didit-website`](vendor/didit-website), the same way
+[fe-didit-help-center](https://github.com/didit-protocol/fe-didit-help-center)
+does it, so didit.me, help.didit.me and demos.didit.me present identical chrome.
+
+```sh
+npm run sync:website-chrome    # refresh from a sibling clone of the website
+npm run check:website-chrome   # byte-compare; fails on any drift
+```
+
+Never hand-edit anything under `vendor/`. Change it in the website repo and
+re-sync. The three demo-centre-owned adapter shims are listed in
+[`vendor/didit-website/README.md`](vendor/didit-website/README.md).
+
+Tailwind compiles from the website's own preset, so `bg-canvas`, `text-ink`,
+`border-line` and the rest resolve to exactly the values they have on didit.me.
+
+## Run locally
+
+1. Clone the repository and `cd` into it.
+2. Copy `.env.example` to `.env` and fill in `API_KEY` from your application in
+   the [Business Console](https://business.didit.me).
+3. Replace the workflow ids in `lib/demos.ts` with your own (see below).
+4. Install and start:
+
+```sh
+npm install
+npm run dev
+```
+
+### `.env.example`
+
+```ini
+API_KEY=same-as-didit-client-secret
+NEXT_PUBLIC_REDIRECT_URI=https://demos.didit.me/
+NEXT_PUBLIC_IS_STAGING=false
+DIDIT_LIVENESS_WORKFLOW_ID=your-liveness-only-workflow-id
+```
+
+`API_KEY` is used only on server-side API routes and must never be exposed
+client-side.
+
+## Workflow IDs
+
+Every hosted demo is just a `workflow_id` handed to `POST /v3/session/`.
+
+1. Open the [Business Console](https://business.didit.me).
+2. Create a workflow (or open an existing one).
+3. Copy the workflow ID from the workflow details screen.
+4. Paste it into the matching entry in `lib/demos.ts`.
+
+An entry with `workflowPlaceholder: true` has no published workflow on this
+environment yet; the detail modal disables **Start demo** and says so rather
+than failing on a 400.
+
+## Marketplace demo (`/marketplace`)
+
+An industry demo rather than a module demo: **Northmarket**, a resale
+marketplace running Didit end to end in five chapters, every control live
+against Didit staging and the demo organization.
+
+| Chapter | What runs |
+| --- | --- |
+| Seller onboarding | A `seller_signup` sent to transaction monitoring from the browser with the web SDK, then the shop's KYB in the hosted flow: registry (UBO tier), key people with their own ID check, documents, company AML |
+| Buyer checkout | Every order monitored; orders of EUR 1,000 or more held by a rule (`AWAITING_USER`) until the buyer passes the adaptive age check that rule opens |
+| Payouts | Locked until the KYB is Approved (the server refuses the token), then monitored |
+| Fraud | A second shop opened from the same browser is held: both sign-ups carry the same persistent device id |
+| Operator view | The held transaction's rules, score, tags, notes, device and network, KYB review, and Console v2 deep links |
+
+A "How this uses Didit" panel lists each chapter's modules and calls, linked
+to docs.didit.me (checked by `npm run check:docs-links`).
+
+**How it stays private.** The browser never sees the API key. The server
+mints short-lived transaction tokens (`POST /v3/transactions/sdk-token/`) for
+identities it created, keeps the visitor's shops, buyer and transaction ids in
+one signed httpOnly cookie, reads back only records whose ids are in that
+cookie, and returns trimmed summaries (no session tokens, documents or dates
+of birth). See `lib/marketplace/server.ts` and `lib/marketplace/summaries.ts`.
+
+**Setup on the application behind `API_KEY`** (staging only):
+
+```sh
+npm run marketplace:setup                # dry run: what exists
+npm run marketplace:setup -- --activate  # create what is missing, rules ACTIVE
+```
+
+It creates the seller KYB workflow and three rules from
+`lib/marketplace/setup.ts`, each matching only transactions carrying
+`custom_properties.demo_app = "marketplace"`. Paste the printed KYB workflow id
+into `STAGING_WORKFLOWS.kyb` in `lib/marketplace/config.ts`; until then the
+page says the KYB is not published and everything else runs.
+
+`DIDIT_CONSOLE_ORG_ID` and `DIDIT_CONSOLE_APP_ID` are optional. Without them the
+server reads the console organization and application from the API to build
+the Console v2 links.
+
+## Checks
+
+```sh
+npm test                     # node --test (unit and route-handler tests)
+npm run typecheck            # tsc --noEmit
+npm run lint                 # eslint (vendor/ is excluded - it is synced)
+npm run build                # next build
+npm run check:website-chrome # vendored chrome matches the website repo
+npm run check:docs-links     # every "Docs" button resolves on docs.didit.me
+MARKETPLACE_E2E_URL=http://localhost:3111 npm run test:e2e:marketplace
+                             # live marketplace flows in a real browser (staging)
+```
+
+### Visual proof
+
+```sh
+npm run build && npm run start &
+PROOF_SESSION_ID=<a real session id> npm run shots
+```
+
+Writes the catalogue, both modal families and the 390px layouts to `proof/`.
+The site is light-only, exactly like didit.me and help.didit.me - the design
+system ships no dark token set, so there is no dark variant to capture.
+
+## Technical documentation
+
+<https://docs.didit.me>
