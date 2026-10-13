@@ -206,26 +206,17 @@ export function useKestrel() {
   );
 
   const refreshAccount = React.useCallback(async () => {
-    const result = await api<KestrelAccount>("/account");
+    const result = await api<{ account: KestrelAccount | null }>("/account");
 
     if (result.ok) {
-      setAccount(result.data);
-      setAccountStatus("ready");
+      setAccount(result.data.account);
+      setAccountStatus(result.data.account ? "ready" : "none");
       setAccountError(null);
 
-      return result.data;
+      return result.data.account;
     }
-    if (
-      result.status === 401 ||
-      result.status === 404 ||
-      result.status === 403
-    ) {
-      setAccount(null);
-      setAccountStatus("none");
-    } else {
-      setAccountStatus((current) => (current === "ready" ? current : "error"));
-      setAccountError(result.error);
-    }
+    setAccountStatus((current) => (current === "ready" ? current : "error"));
+    setAccountError(result.error);
 
     return null;
   }, []);

@@ -10,6 +10,7 @@ import {
   failure,
   json,
   lookupAccount,
+  readAccountCookie,
   writeAccountCookie,
 } from "@/lib/crypto-exchange/server";
 
@@ -53,12 +54,30 @@ export async function POST(request: NextRequest) {
   return response;
 }
 
+/**
+ * `{ account: null }` - not an error status - when this browser has no usable
+ * account, so a first visit does not log a failed request in the console. A
+ * cookie whose session is gone or belongs to someone else is dropped.
+ */
 export async function GET(request: NextRequest) {
+  if (!readAccountCookie(request)) return json({ account: null });
+
   const lookup = await lookupAccount(request);
 
-  if (!lookup.ok) return lookup.response;
+  if (lookup.ok) {
+    return json({
+      account: { ...lookup.account, userId: lookup.cookie.vendorData },
+    });
+  }
+  if ([403, 404].includes(lookup.response.status)) {
+    const response = json({ account: null });
 
-  return json({ ...lookup.account, userId: lookup.cookie.vendorData });
+    clearAccountCookie(response);
+
+    return response;
+  }
+
+  return lookup.response;
 }
 
 export async function DELETE() {
