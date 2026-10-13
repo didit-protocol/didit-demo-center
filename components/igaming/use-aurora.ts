@@ -8,6 +8,7 @@ import { type ActivityItem, ledger, openItems } from "@/lib/igaming/ledger";
 import {
   type CashierKind,
   type ConsoleContext,
+  SELF_EXCLUSION_PAYOUT,
   WELCOME_BONUS,
   buildCashierPayload,
   isFinalSessionStatus,
@@ -56,7 +57,13 @@ export interface LogEntry {
   via: "server" | "browser" | "sdk";
   method: string;
   path: string;
+  /** The HTTP status, when this page read the response itself. */
   status: number | null;
+  /**
+   * What the web SDK reported instead: `submitTransaction` resolves with the
+   * transaction's status (or throws a typed error), never the HTTP one.
+   */
+  outcome?: string | null;
 }
 
 export interface OperatorState {
@@ -155,6 +162,7 @@ export function useAurora() {
       method: string,
       path: string,
       status: number | null,
+      outcome: string | null = null,
     ) => {
       logId.current += 1;
       const entry: LogEntry = {
@@ -164,6 +172,7 @@ export function useAurora() {
         method,
         path,
         status,
+        outcome,
       };
 
       setLog((current) => [entry, ...current].slice(0, MAX_LOG));
@@ -334,11 +343,17 @@ export function useAurora() {
 
       if (!force && current && current.expiresAt - Date.now() > 60_000)
         return current;
+      // The server mints only for a player whose age check Didit approved.
       const minted = await route<{
         token: string;
         expiresAt: string;
         baseUrl: string;
-      }>("/api/igaming/token", { method: "POST" });
+      }>("/api/igaming/token", {
+        method: "POST",
+        body: JSON.stringify({
+          ageSessionId: stateRef.current?.age?.sessionId ?? null,
+        }),
+      });
 
       tokenRef.current = {
         token: minted.token,
@@ -380,7 +395,8 @@ export function useAurora() {
     [update],
   );
 
-  const submit = React.useCallback(
+  /** One cashier action through the web SDK, with what Didit decided. */
+  const send = React.useCallback(
     async (
       kind: CashierKind,
       amount: number,
@@ -390,8 +406,6 @@ export function useAurora() {
       const sdk = sdkRef.current;
 
       if (!player || !sdk) return null;
-      setBusy(kind);
-      setNotice(null);
 
       const payload = buildCashierPayload(
         { kind, amount, playerName: player.name, detail: detail ?? undefined },
@@ -406,6 +420,7 @@ export function useAurora() {
         at: Date.now(),
         record: null,
         error: null,
+        httpStatus: null,
       };
 
       try {
@@ -433,7 +448,7 @@ export function useAurora() {
             baseUrl: token.baseUrl,
           });
         }
-        record("browser", "POST", "/v1/transactions/", 201);
+        record("browser", "POST", "/v1/transactions/", null, result.status);
         item.record =
           (await readTransaction(result.transactionId)) ??
           ({
@@ -469,18 +484,27 @@ export function useAurora() {
           } satisfies TransactionRecord);
       } catch (error) {
         const failure = error as {
+          type?: string;
           status?: number;
           fieldErrors?: Record<string, unknown>;
           message?: string;
         };
 
-        record("browser", "POST", "/v1/transactions/", failure.status ?? null);
+        // Only the SDK's typed errors mean the request reached Didit; a token
+        // the server refused never got that far.
+        if (failure.type)
+          record(
+            "browser",
+            "POST",
+            "/v1/transactions/",
+            failure.status ?? null,
+            failure.status ? null : failure.type,
+          );
+        item.httpStatus = failure.status ?? null;
         item.error =
           diditErrorMessage(failure.fieldErrors) ??
           failure.message ??
           "Didit did not accept the transaction.";
-      } finally {
-        setBusy(null);
       }
 
       const action = item.record?.action;
@@ -506,6 +530,19 @@ export function useAurora() {
       return item;
     },
     [ensureToken, readTransaction, record, update],
+  );
+
+  const submit = React.useCallback(
+    async (kind: CashierKind, amount: number, detail: string | null) => {
+      setBusy(kind);
+      setNotice(null);
+      try {
+        return await send(kind, amount, detail);
+      } finally {
+        setBusy(null);
+      }
+    },
+    [send],
   );
 
   /** Re-read every transaction whose status can still move. */
@@ -610,11 +647,7 @@ export function useAurora() {
         "/api/igaming/age-check",
         {
           method: "POST",
-          body: JSON.stringify({
-            fullName: player.name,
-            email: player.email,
-            returnUrl: `${window.location.origin}/igaming`,
-          }),
+          body: JSON.stringify({ fullName: player.name, email: player.email }),
         },
       );
 
@@ -708,17 +741,28 @@ export function useAurora() {
 
   /* ── Safer gambling ── */
 
+  /**
+   * Self-exclusion pays the balance back first, as a monitored withdrawal:
+   * once the player is BLOCKED, Didit refuses every transaction of theirs,
+   * payouts included. A refused payout never holds the exclusion up.
+   */
   const selfExclude = React.useCallback(async () => {
+    const current = stateRef.current;
+
+    if (!current) return;
     setBusy("exclude");
     setNotice(null);
     try {
+      const { balance } = ledger(current.activity, Date.now());
+
+      if (balance > 0) await send("withdrawal", balance, SELF_EXCLUSION_PAYOUT);
       const { player } = await route<{ player: PlayerProfile | null }>(
         "/api/igaming/self-exclusion",
         { method: "POST" },
       );
 
-      update((current) => ({ ...current, selfExcluded: true }));
-      setOperator((current) => ({ ...current, player }));
+      update((latest) => ({ ...latest, selfExcluded: true }));
+      setOperator((latest) => ({ ...latest, player }));
     } catch (error) {
       setNotice({
         tone: "error",
@@ -727,7 +771,7 @@ export function useAurora() {
     } finally {
       setBusy(null);
     }
-  }, [route, update]);
+  }, [route, send, update]);
 
   const setLimit = React.useCallback(
     async (limit: number) => {

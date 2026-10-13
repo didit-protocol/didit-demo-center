@@ -82,12 +82,13 @@ export const DIDIT_STEPS: DiditStep[] = [
     id: "cashier",
     title: "Deposits, bets and withdrawals",
     player:
-      "Every cashier action is submitted from the browser with a token the server minted. Didit adds the device fingerprint and IP and runs the rules.",
+      "Every cashier action is submitted from the browser with a token the server mints only after re-reading the approved age check. Didit adds the device fingerprint and IP and runs the rules.",
     modules: [
       { label: "Transaction Monitoring", icon: M("transactions") },
       { label: "Device Intelligence", icon: M("monitoring") },
     ],
     calls: [
+      "GET /v3/session/{age check id}/decision/ (18+ gate)",
       "POST /v3/transactions/sdk-token/",
       "DiditSdk.shared.submitTransaction(...)",
       "GET /v1/transactions/{id}/",
@@ -149,13 +150,14 @@ export const DIDIT_STEPS: DiditStep[] = [
     id: "safer",
     title: "Safer gambling and self-exclusion",
     player:
-      "Deposit limits are recorded as limit-change transactions. Self-exclusion blocks the player on Didit, so their next deposit is refused by the API itself.",
+      "Deposit limits are recorded as limit-change transactions. Self-exclusion pays the balance back as a monitored withdrawal, then blocks the player on Didit, so their next deposit is refused by the API itself.",
     modules: [
       { label: "Transaction Monitoring", icon: M("transactions") },
       { label: "User Blocklist", icon: M("reusable-kyc") },
     ],
     calls: [
       "submitTransaction({ category: 'gamblingLimitChange' })",
+      "submitTransaction({ actionType: 'withdrawal' }) (payout)",
       "PATCH /v3/users/{vendor_data}/update-status/",
     ],
     docs: [

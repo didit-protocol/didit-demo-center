@@ -129,7 +129,7 @@ test("POST /age-check creates the adaptive age session for this player", async (
   const response = await ageCheck.POST(
     request("/api/igaming/age-check", {
       method: "POST",
-      body: { fullName: "Alex Demo", email: "alex@example.com", returnUrl: "https://demos.didit.me/igaming" },
+      body: { fullName: "Alex Demo", email: "alex@example.com" },
     }),
   );
   const data = await response.json();
@@ -142,7 +142,7 @@ test("POST /age-check creates the adaptive age session for this player", async (
   assert.deepEqual(calls[0].body, {
     workflow_id: policy.AGE_WORKFLOW_ID,
     vendor_data: PLAYER,
-    callback: "https://demos.didit.me/igaming",
+    callback: "https://demos.staging.didit.me/igaming",
     callback_method: "both",
     contact_details: { email: "alex@example.com", send_notification_emails: false },
     metadata: { operator: "Aurora Play", step: "registration", full_name: "Alex Demo" },
@@ -152,10 +152,8 @@ test("POST /age-check creates the adaptive age session for this player", async (
 test("POST /age-check validates before calling Didit and passes Didit's reason on", async () => {
   reset();
   const bad = [
-    { fullName: "A", email: "alex@example.com", returnUrl: "https://demos.didit.me/igaming" },
-    { fullName: "Alex", email: "not-an-email", returnUrl: "https://demos.didit.me/igaming" },
-    { fullName: "Alex", email: "alex@example.com", returnUrl: "https://evil.example/elsewhere" },
-    { fullName: "Alex", email: "alex@example.com", returnUrl: "javascript:alert(1)" },
+    { fullName: "A", email: "alex@example.com" },
+    { fullName: "Alex", email: "not-an-email" },
   ];
 
   for (const body of bad) {
@@ -163,16 +161,6 @@ test("POST /age-check validates before calling Didit and passes Didit's reason o
 
     assert.equal(response.status, 400, JSON.stringify(body));
   }
-  assert.equal(calls.length, 0);
-
-  // A return URL on another origin than the page that asked is refused.
-  const elsewhere = request("/api/igaming/age-check", {
-    method: "POST",
-    body: { fullName: "Alex", email: "alex@example.com", returnUrl: "https://evil.example/igaming" },
-  });
-
-  elsewhere.headers.set("origin", "https://demos.didit.me");
-  assert.equal((await ageCheck.POST(elsewhere)).status, 400);
   assert.equal(calls.length, 0);
 
   reset({
@@ -184,12 +172,42 @@ test("POST /age-check validates before calling Didit and passes Didit's reason o
   const blocked = await ageCheck.POST(
     request("/api/igaming/age-check", {
       method: "POST",
-      body: { fullName: "Alex", email: "alex@example.com", returnUrl: "http://localhost:3000/igaming" },
+      body: { fullName: "Alex", email: "alex@example.com" },
     }),
   );
 
   assert.equal(blocked.status, 400);
   assert.match((await blocked.json()).error, /has been blocked/);
+});
+
+test("POST /age-check never lets the caller choose where the hosted flow returns", async () => {
+  // A script with a valid player cookie and no browser: no Origin header, or
+  // one it forged to match its own return URL. Either way the session Didit
+  // creates sends the player back to this site and nowhere else.
+  const attempts = [
+    { origin: null, returnUrl: "https://evil.example/igaming" },
+    { origin: "https://evil.example", returnUrl: "https://evil.example/igaming" },
+    { origin: null, returnUrl: "javascript:alert(1)" },
+  ];
+
+  for (const { origin, returnUrl } of attempts) {
+    reset({
+      "POST /v3/session/": {
+        status: 201,
+        body: { session_id: SESSION, url: "https://verify.staging.didit.me/session/tok", status: "Not Started" },
+      },
+    });
+    const attempt = request("/api/igaming/age-check", {
+      method: "POST",
+      body: { fullName: "Alex", email: "alex@example.com", returnUrl, callback: returnUrl },
+    });
+
+    if (origin) attempt.headers.set("origin", origin);
+    const response = await ageCheck.POST(attempt);
+
+    assert.equal(response.status, 200);
+    assert.equal(calls[0].body.callback, "https://demos.staging.didit.me/igaming", returnUrl);
+  }
 });
 
 test("GET /sessions/{id} returns the projection only to the session's player", async () => {
@@ -281,22 +299,75 @@ test("POST /verified lists the player only after an approved ID verification", a
   assert.equal(calls.length, 0);
 });
 
-test("POST /token mints a transaction token bound to this player", async () => {
-  reset({
-    "POST /v3/transactions/sdk-token/": {
-      status: 201,
-      body: { sdk_token: "sdk-tok", expires_at: "2026-10-13T22:00:00Z" },
-    },
-  });
-  const response = await token.POST(request("/api/igaming/token", { method: "POST" }));
+test("POST /token mints a transaction token bound to this player once Didit approved the age check", async () => {
+  const decisionPath = `GET /v3/session/${SESSION}/decision/`;
+  const minted = {
+    status: 201,
+    body: { sdk_token: "sdk-tok", expires_at: "2026-10-13T22:00:00Z" },
+  };
+
+  reset({ [decisionPath]: { body: decision() }, "POST /v3/transactions/sdk-token/": minted });
+  const response = await token.POST(
+    request("/api/igaming/token", { method: "POST", body: { ageSessionId: SESSION } }),
+  );
   const data = await response.json();
 
   assert.equal(response.status, 200);
-  assert.deepEqual(calls[0].body, { vendor_data: PLAYER, ttl_seconds: 900, max_uses: 30 });
-  assert.equal(calls[0].apiKey, "test-api-key");
+  assert.deepEqual(calls.map((call) => call.key), [decisionPath, "POST /v3/transactions/sdk-token/"]);
+  assert.deepEqual(calls[1].body, { vendor_data: PLAYER, ttl_seconds: 900, max_uses: 30 });
+  assert.equal(calls[1].apiKey, "test-api-key");
   assert.equal(data.token, "sdk-tok");
   assert.equal(data.baseUrl, BASE);
+  assert.deepEqual(
+    data.didit.map((call) => `${call.method} ${call.path}`),
+    [`GET /v3/session/${SESSION}/decision/`, "POST /v3/transactions/sdk-token/"],
+  );
   assert.doesNotMatch(JSON.stringify(data), /test-api-key/);
+});
+
+test("POST /token mints nothing until the player's own age check is Approved", async () => {
+  const decisionPath = `GET /v3/session/${SESSION}/decision/`;
+  const mint = (body) => token.POST(request("/api/igaming/token", { method: "POST", body }));
+
+  // No age check, or something that is not a session id: Didit is not asked.
+  for (const body of [undefined, {}, { ageSessionId: "../users" }]) {
+    reset();
+    const response = await mint(body);
+
+    assert.equal(response.status, 403, JSON.stringify(body));
+    assert.match((await response.json()).error, /age check/);
+    assert.equal(calls.length, 0);
+  }
+
+  // A decision Didit has not approved, another player's, or another
+  // workflow's: read once, nothing minted.
+  const refused = [
+    decision({ status: "Not Started", liveness_checks: [] }),
+    decision({ status: "In Review" }),
+    decision({ status: "Declined" }),
+    decision({ vendor_data: "aurora-play-ffffffffffffffffffffffff" }),
+    decision({ workflow_id: policy.KYC_WORKFLOW_ID }),
+  ];
+
+  for (const body of refused) {
+    reset({ [decisionPath]: { body } });
+    const response = await mint({ ageSessionId: SESSION });
+
+    assert.equal(response.status, 403, JSON.stringify(body));
+    assert.deepEqual(calls.map((call) => call.key), [decisionPath]);
+    assert.deepEqual(
+      (await response.json()).didit.map((call) => call.status),
+      [200],
+      "the decision read shows in the API log",
+    );
+  }
+
+  // An unknown session and an unreachable Didit.
+  reset({ [decisionPath]: { status: 404, body: { detail: "Not found." } } });
+  assert.equal((await mint({ ageSessionId: SESSION })).status, 403);
+  reset({ [decisionPath]: { status: 503, body: { detail: "Unavailable" } } });
+  assert.equal((await mint({ ageSessionId: SESSION })).status, 502);
+  assert.ok(!calls.some((call) => call.key === "POST /v3/transactions/sdk-token/"));
 });
 
 test("POST /self-exclusion blocks the player on Didit", async () => {
