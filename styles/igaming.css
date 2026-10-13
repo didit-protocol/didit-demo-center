@@ -71,56 +71,60 @@
   filter: invert(0.92);
 }
 
-/* ── Controls ── */
+/* ── Controls ──
+ * This sheet loads after the Tailwind build, so these selectors are kept at
+ * element weight (`button:where(.ig-btn)`): above preflight's `button` reset,
+ * below any utility on the same element (`h-9`, `lg:hidden`), which must win.
+ */
 
-.ig-btn {
+button:where(.ig-btn) {
   @apply inline-flex h-10 flex-none items-center justify-center gap-2 rounded-pill px-4 text-sm font-medium transition-colors duration-fast focus-visible:shadow-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50;
 }
 
-.ig-btn-primary {
+button:where(.ig-btn-primary) {
   @apply bg-blue hover:bg-blue-deep;
   color: rgb(var(--ig-on-accent));
 }
 
-.ig-btn-dark {
+button:where(.ig-btn-dark) {
   @apply bg-ink text-canvas hover:opacity-90;
 }
 
-.ig-btn-quiet {
+button:where(.ig-btn-quiet) {
   @apply border border-line bg-canvas text-ink hover:bg-surface;
 }
 
-.ig-btn-danger {
+button:where(.ig-btn-danger) {
   @apply bg-danger-bg text-danger hover:opacity-90;
 }
 
-.ig-chip {
+button:where(.ig-chip) {
   @apply inline-flex h-9 items-center justify-center rounded-pill border border-line bg-canvas px-3.5 text-[13px] font-medium text-ink transition-colors duration-fast hover:bg-surface focus-visible:shadow-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50;
 }
 
-.ig-chip[aria-pressed="true"] {
+button:where(.ig-chip[aria-pressed="true"]) {
   @apply border-ink bg-ink text-canvas;
 }
 
-.ig-input {
+input:where(.ig-input) {
   @apply h-11 w-full rounded-xs border border-line bg-canvas px-3.5 text-sm text-ink transition-shadow duration-fast placeholder:text-table-head focus:border-blue focus:shadow-ring focus:outline-none;
 }
 
-.ig-card {
+:where(.ig-card) {
   @apply rounded-sm border border-line bg-canvas;
 }
 
-.ig-label {
+:where(.ig-label) {
   @apply m-0 font-mono text-[10px] font-medium uppercase leading-none tracking-[0.16em] text-muted;
 }
 
 /* The fictional operator's own surfaces: Didit's atmospheric gradients. */
-.ig-promo {
+:where(.ig-promo) {
   background: var(--api-gradient-ink);
   color: #fff;
 }
 
-.ig-mark {
+:where(.ig-mark) {
   background: var(--api-gradient-cool);
 }
 
