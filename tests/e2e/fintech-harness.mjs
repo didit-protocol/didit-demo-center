@@ -162,7 +162,12 @@ export function stagingKey() {
     const env = fs.readFileSync(new URL("../../.env", import.meta.url), "utf8");
     const line = env.split("\n").find((l) => l.startsWith("API_KEY="));
 
-    return line ? line.slice("API_KEY=".length).trim() : "";
+    return line
+      ? line
+          .slice("API_KEY=".length)
+          .trim()
+          .replace(/^(["'])(.*)\1$/, "$2")
+      : "";
   } catch {
     return "";
   }
