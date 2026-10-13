@@ -1,0 +1,7 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e160]:
+    - generic [ref=e177]:
+      - heading "Wallet ownership verified" [level=4] [ref=e178]
+      - paragraph [ref=e179]: Thank you. Your wallet ownership has been confirmed. You can close this window.
+    - generic [ref=e180]: Secured by
+  - alert [ref=e9]
