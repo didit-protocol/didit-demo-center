@@ -14,7 +14,7 @@
     "check:website-chrome": "node scripts/check-website-chrome-parity.mjs",
     "check:docs-links": "node scripts/check-docs-links.mjs",
     "shots": "node scripts/capture-screenshots.mjs",
-    "crypto-exchange:setup": "node scripts/crypto-exchange-setup.mjs"
+    "crypto-exchange:setup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/crypto-exchange-setup.mjs"
   },
   "dependencies": {
     "@didit-protocol/sdk-web": "^0.4.0",
