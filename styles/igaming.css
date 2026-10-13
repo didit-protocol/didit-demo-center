@@ -1,0 +1,134 @@
+/* The /igaming demo app's theme.
+ *
+ * didit.me ships light tokens only (vendor/didit-website/styles/tokens.css),
+ * and the vendored navbar and footer stay light. The industry demos have to
+ * show light AND dark, so this sheet re-points the same token names inside
+ * `.igaming-theme.dark` only, using the Business Console v2 dark palette
+ * (console-v2-design, tokens v2 `[data-theme="dark"]`). Every `bg-canvas`,
+ * `text-ink`, `border-line` inside the demo follows the theme with no
+ * per-component dark classes. Translucent console colours (accent-soft,
+ * status backgrounds) are flattened onto the dark surface, because the tokens
+ * here are RGB triples that Tailwind composes with its own alpha.
+ */
+
+.igaming-theme {
+  --ig-page: 246 246 246; /* console --c-bg #F6F6F6 */
+  --ig-on-accent: 255 255 255;
+  background: rgb(var(--ig-page));
+  color: rgb(var(--ink));
+}
+
+.igaming-theme.dark {
+  color-scheme: dark;
+  --ig-page: 14 14 16; /* #0E0E10 */
+  --canvas: 21 21 23; /* #151517 - cards, panels */
+  --cream: 28 28 31;
+  --surface: 28 28 31; /* #1C1C1F - quiet wells */
+  --elevated: 35 35 39; /* #232327 */
+  --line: 42 42 46; /* #2A2A2E */
+  --muted: 154 154 162; /* #9A9AA2 */
+  --table-head: 107 107 115; /* #6B6B73 */
+  --ink: 245 245 247; /* #F5F5F7 */
+  --accent-black: 232 232 234;
+  --subtle-gray: 74 74 82;
+  --input-pale: 28 28 31;
+  --dark-overlay: 35 35 39;
+  --blue: 77 139 255; /* #4D8BFF */
+  --blue-deep: 106 157 255; /* #6A9DFF */
+  --blue-soft: 29 38 56; /* rgba(77,139,255,.14) on #151517 */
+  --blue-tint: 24 27 36;
+  --success-bg: 27 48 38;
+  --success-fg: 91 214 143; /* #5BD68F */
+  --warning-bg: 48 42 30;
+  --warning-fg: 245 196 81; /* #F5C451 */
+  --danger-bg: 54 27 29;
+  --danger-fg: 255 122 112; /* #FF7A70 */
+
+  /* The shadcn aliases resolve at :root, so they are re-declared here. */
+  --background: var(--canvas);
+  --foreground: var(--ink);
+  --card: var(--canvas);
+  --card-foreground: var(--ink);
+  --popover: var(--canvas);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--canvas);
+  --secondary: var(--surface);
+  --secondary-foreground: var(--ink);
+  --accent: var(--blue);
+  --muted-foreground: var(--muted);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--blue);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+/* Module glyphs are drawn in #1A1A1A; flip them on the dark surface. */
+.igaming-theme.dark .ig-glyph {
+  filter: invert(0.92);
+}
+
+/* ── Controls ──
+ * This sheet loads after the Tailwind build, so these selectors are kept at
+ * element weight (`button:where(.ig-btn)`): above preflight's `button` reset,
+ * below any utility on the same element (`h-9`, `lg:hidden`), which must win.
+ */
+
+button:where(.ig-btn) {
+  @apply inline-flex h-10 flex-none items-center justify-center gap-2 rounded-pill px-4 text-sm font-medium transition-colors duration-fast focus-visible:shadow-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+button:where(.ig-btn-primary) {
+  @apply bg-blue hover:bg-blue-deep;
+  color: rgb(var(--ig-on-accent));
+}
+
+button:where(.ig-btn-dark) {
+  @apply bg-ink text-canvas hover:opacity-90;
+}
+
+button:where(.ig-btn-quiet) {
+  @apply border border-line bg-canvas text-ink hover:bg-surface;
+}
+
+button:where(.ig-btn-danger) {
+  @apply bg-danger-bg text-danger hover:opacity-90;
+}
+
+button:where(.ig-chip) {
+  @apply inline-flex h-9 items-center justify-center rounded-pill border border-line bg-canvas px-3.5 text-[13px] font-medium text-ink transition-colors duration-fast hover:bg-surface focus-visible:shadow-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+button:where(.ig-chip[aria-pressed="true"]) {
+  @apply border-ink bg-ink text-canvas;
+}
+
+input:where(.ig-input) {
+  @apply h-11 w-full rounded-xs border border-line bg-canvas px-3.5 text-sm text-ink transition-shadow duration-fast placeholder:text-table-head focus:border-blue focus:shadow-ring focus:outline-none;
+}
+
+:where(.ig-card) {
+  @apply rounded-sm border border-line bg-canvas;
+}
+
+:where(.ig-label) {
+  @apply m-0 font-mono text-[10px] font-medium uppercase leading-none tracking-[0.16em] text-muted;
+}
+
+/* The fictional operator's own surfaces: Didit's atmospheric gradients. */
+:where(.ig-promo) {
+  background: var(--api-gradient-ink);
+  color: #fff;
+}
+
+:where(.ig-mark) {
+  background: var(--api-gradient-cool);
+}
+
+/* The shared modal scrim is `bg-ink/60`; ink turns light in dark mode. */
+.igaming-theme.dark .modal-scrim {
+  background-color: rgb(0 0 0 / 0.6);
+}
