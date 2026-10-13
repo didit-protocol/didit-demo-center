@@ -68,7 +68,7 @@ async function signUp(page) {
 }
 
 const currentStep = (page) =>
-  page.locator("li[data-current] button").first().innerText();
+  page.locator("li[data-current]").first().getAttribute("data-step");
 
 async function pay(page, kind, amount, recipient) {
   await page
@@ -104,16 +104,14 @@ test("sign-up validates every field, then opens the account", async () => {
 
   assert.match(jar.account.id, /^fintech-demo-/);
   assert.equal(jar.account.country, "DEU");
-  assert.equal(await currentStep(page), "2\nIdentity verification");
+  assert.equal(await currentStep(page), "verify");
   await context.close();
 });
 
 test("finishing the hosted flow checks the decision and opens the account", async () => {
   const { context, page } = await open();
-  const jar = await installFintechApi(
-    page,
-    recordedDidit({ decisions: ["In Progress", "Approved"] }),
-  );
+  const didit = recordedDidit({ status: "In Progress" });
+  const jar = await installFintechApi(page, didit);
 
   await stubHostedFlow(page, { outcome: "completed" });
   await page.goto(`${BASE_URL}/fintech`);
@@ -123,8 +121,9 @@ test("finishing the hosted flow checks the decision and opens the account", asyn
   // The SDK modal opens the session's hosted flow, then reports completion.
   await page.getByRole("heading", { name: "Checking your details" }).waitFor();
   assert.equal(jar.account.sid, NOT_STARTED.session_id);
-  assert.equal(await currentStep(page), "3\nDecision");
+  assert.equal(await currentStep(page), "decision");
 
+  didit.decision.status = "Approved";
   await page.getByRole("heading", { name: "Your account is open" }).waitFor();
   await page.getByText("Welcome to Kestrel, Lena.").waitFor();
 
@@ -154,10 +153,8 @@ test("closing the hosted flow keeps the session and offers to continue", async (
 
 test("a review never tells the customer why, and ends on its own", async () => {
   const { context, page } = await open();
-  const jar = await installFintechApi(
-    page,
-    recordedDidit({ decisions: ["In Review", "In Review", "Approved"] }),
-  );
+  const didit = recordedDidit({ status: "In Review" });
+  const jar = await installFintechApi(page, didit);
 
   jar.account = { ...approvedAccount() };
   await page.goto(`${BASE_URL}/fintech`);
@@ -173,6 +170,7 @@ test("a review never tells the customer why, and ends on its own", async () => {
     .waitFor();
 
   // An analyst approves in the console; the next read opens the account.
+  didit.decision.status = "Approved";
   await page
     .getByRole("heading", { name: "Your account is open" })
     .waitFor({ timeout: 30000 });
@@ -183,7 +181,7 @@ test("a declined application can only start over", async () => {
   const { context, page } = await open();
   const jar = await installFintechApi(
     page,
-    recordedDidit({ decisions: ["Declined"] }),
+    recordedDidit({ status: "Declined" }),
   );
 
   jar.account = approvedAccount();
@@ -197,7 +195,7 @@ test("a declined application can only start over", async () => {
 
 test("money moves through transaction monitoring; a big transfer is held", async () => {
   const { context, page } = await open();
-  const didit = recordedDidit({ decisions: ["Approved"] });
+  const didit = recordedDidit({ status: "Approved" });
   const jar = await installFintechApi(page, didit);
 
   jar.account = approvedAccount();
@@ -219,7 +217,7 @@ test("money moves through transaction monitoring; a big transfer is held", async
   await page.getByText("This transfer will be checked before it leaves.").waitFor();
   await page.locator('form button[type="submit"]').click();
   await page.getByRole("heading", { name: "Your payment is on hold" }).waitFor();
-  assert.equal(await currentStep(page), "5\nReview");
+  assert.equal(await currentStep(page), "review");
 
   const held = page.getByTestId("fx-operator-transaction").first();
 
@@ -247,7 +245,7 @@ test("ongoing monitoring is previewed with Didit's estimate", async () => {
   const { context, page } = await open();
   const jar = await installFintechApi(
     page,
-    recordedDidit({ decisions: ["Approved"] }),
+    recordedDidit({ status: "Approved" }),
   );
 
   jar.account = approvedAccount();
@@ -262,7 +260,7 @@ test("ongoing monitoring is previewed with Didit's estimate", async () => {
   await estimate
     .getByText("Estimate only: nothing was switched on, screened or billed.")
     .waitFor();
-  assert.equal(await currentStep(page), "6\nOngoing AML monitoring");
+  assert.equal(await currentStep(page), "monitoring");
   await context.close();
 });
 

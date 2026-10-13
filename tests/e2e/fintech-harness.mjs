@@ -76,13 +76,13 @@ export function decisionWith(status, sessionId) {
 }
 
 /**
- * Offline Didit from recordings. `decisions` is the sequence of session
- * statuses successive decision reads return (the last one sticks).
+ * Offline Didit from recordings. `decision.status` is the session status the
+ * next decision read returns; a test changes it to play the analyst.
  */
-export function recordedDidit({ decisions = ["Not Started"] } = {}) {
+export function recordedDidit({ status = "Not Started" } = {}) {
   const transactions = new Map();
+  const decision = { status };
   let number = 4120;
-  let reads = 0;
 
   const fetch = async (url, init = {}) => {
     const path = url.replace(API, "");
@@ -98,11 +98,7 @@ export function recordedDidit({ decisions = ["Not Started"] } = {}) {
       );
     }
     if (method === "GET" && /\/v3\/session\/[^/]+\/decision\/$/.test(path)) {
-      const status = decisions[Math.min(reads, decisions.length - 1)];
-
-      reads += 1;
-
-      return json(decisionWith(status));
+      return json(decisionWith(decision.status));
     }
     if (method === "POST" && path === "/v3/transactions/") {
       const details = body.transaction_details;
@@ -149,6 +145,7 @@ export function recordedDidit({ decisions = ["Not Started"] } = {}) {
 
   return {
     fetch,
+    decision,
     /** What an analyst's decision in the console does to a held payment. */
     decide(status) {
       for (const record of transactions.values()) {

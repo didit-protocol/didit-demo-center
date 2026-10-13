@@ -257,6 +257,7 @@ export function DiditSteps({ current }: { current: StepKey }) {
               isCurrent ? "border-blue/50 bg-blue-tint" : "border-line bg-canvas",
             )}
             data-current={isCurrent || undefined}
+            data-step={step.key}
           >
             <button
               aria-controls={`fx-step-${step.key}`}
