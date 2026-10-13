@@ -307,7 +307,7 @@ test("the Didit panel follows the user and links every call to the docs", async 
   );
 
   await panel
-    .getByRole("button", { name: /Withdrawals: Travel Rule and step-up/ })
+    .getByRole("button", { name: /Withdrawals: Travel Rule and selfie/ })
     .click();
   await expect(
     panel.getByRole("link", { name: /DiditSdk\.shared\.submitTransaction/ }),

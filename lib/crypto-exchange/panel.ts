@@ -97,7 +97,7 @@ export const PANEL_STEPS: PanelStep[] = [
   },
   {
     id: "withdrawal",
-    title: "Withdrawals: Travel Rule and step-up",
+    title: "Withdrawals: Travel Rule and selfie",
     summary:
       "The user requests a withdrawal on their device. Didit screens the destination, runs the Travel Rule exchange and asks for a selfie matched against the onboarding face.",
     modules: [
