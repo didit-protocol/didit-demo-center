@@ -1,6 +1,6 @@
 "use client";
 
-import type { Aurora } from "./use-aurora";
+import type { Aurora, LogEntry } from "./use-aurora";
 import type { ActivityItem } from "@/lib/igaming/ledger";
 
 import * as React from "react";
@@ -114,11 +114,7 @@ function HowItWorks({ active }: { active: StepId }) {
                     {step.calls.map((call) => (
                       <li
                         key={call}
-                        className="break-words font-mono text-[11px] leading-4 text-muted"
-                        style={{
-                          fontFamily:
-                            'ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace',
-                        }}
+                        className="ig-code break-words text-[11px] leading-4 text-muted"
                       >
                         {call}
                       </li>
@@ -325,7 +321,9 @@ function OperatorView({ aurora }: { aurora: Aurora }) {
               {record ? (
                 <StatusPill tone={view!.tone}>{record.status}</StatusPill>
               ) : (
-                <StatusPill tone="declined">HTTP 400</StatusPill>
+                <StatusPill tone="declined">
+                  {item.httpStatus ? `HTTP ${item.httpStatus}` : "Refused"}
+                </StatusPill>
               )}
             </div>
             {record ? (
@@ -386,6 +384,36 @@ function OperatorView({ aurora }: { aurora: Aurora }) {
   );
 }
 
+const VIA_STYLE: Record<LogEntry["via"], string> = {
+  server: "bg-surface text-muted",
+  browser: "bg-blue-soft text-blue-deep",
+  sdk: "bg-success-bg text-success",
+};
+
+/**
+ * The right-hand column: the HTTP status when the page read the response
+ * itself, otherwise what the web SDK reported (a transaction status, or the
+ * type of its error), otherwise the hosted flow is still open.
+ */
+function logResult(entry: LogEntry): { text: string; className: string } {
+  if (entry.status !== null)
+    return {
+      text: String(entry.status),
+      className: entry.status < 400 ? "text-success" : "text-danger",
+    };
+  if (entry.outcome)
+    return {
+      text: entry.outcome,
+      className: SDK_FAILURES.includes(entry.outcome)
+        ? "text-danger"
+        : "text-success",
+    };
+
+  return { text: "open", className: "text-muted" };
+}
+
+const SDK_FAILURES = ["invalid_token", "expired_token", "validation", "network"];
+
 function ApiLog({ aurora }: { aurora: Aurora }) {
   if (aurora.log.length === 0) {
     return (
@@ -400,7 +428,7 @@ function ApiLog({ aurora }: { aurora: Aurora }) {
   return (
     <ul className="m-0 list-none p-0">
       {aurora.log.map((entry) => {
-        const ok = entry.status !== null && entry.status < 400;
+        const result = logResult(entry);
 
         return (
           <li
@@ -409,36 +437,22 @@ function ApiLog({ aurora }: { aurora: Aurora }) {
           >
             <span
               className={cn(
-                "mt-0.5 inline-flex h-5 w-[52px] flex-none items-center justify-center rounded-pill text-[9px] font-semibold uppercase tracking-[0.08em]",
-                entry.via === "server"
-                  ? "bg-surface text-muted"
-                  : entry.via === "browser"
-                    ? "bg-blue-soft text-blue-deep"
-                    : "bg-success-bg text-success",
+                "inline-flex h-[18px] w-[52px] flex-none items-center justify-center rounded-pill text-[9px] font-semibold uppercase leading-none tracking-[0.08em]",
+                VIA_STYLE[entry.via],
               )}
             >
               {entry.via}
             </span>
-            <span
-              className="min-w-0 flex-1 break-all text-[11px] leading-[18px] text-ink"
-              style={{
-                fontFamily:
-                  'ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace',
-              }}
-            >
+            <span className="ig-code min-w-0 flex-1 break-all text-[11px] leading-[18px] text-ink">
               <span className="font-semibold">{entry.method}</span> {entry.path}
             </span>
             <span
               className={cn(
-                "tnum flex-none text-[11px] font-semibold",
-                entry.status === null
-                  ? "text-muted"
-                  : ok
-                    ? "text-success"
-                    : "text-danger",
+                "tnum flex-none text-[11px] font-semibold leading-[18px]",
+                result.className,
               )}
             >
-              {entry.status ?? "open"}
+              {result.text}
             </span>
           </li>
         );
