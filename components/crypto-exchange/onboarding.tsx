@@ -107,7 +107,7 @@ export function SignUpScreen({ kestrel }: { kestrel: Kestrel }) {
         </ol>
         <button
           className="btn-base h-12 w-full bg-blue pl-5 pr-3 text-white hover:bg-blue-deep disabled:opacity-60"
-          disabled={kestrel.signingUp || !kestrel.hydrated}
+          disabled={kestrel.signingUp || !kestrel.hydrated || !kestrel.sdkReady}
           type="button"
           onClick={kestrel.signUp}
         >

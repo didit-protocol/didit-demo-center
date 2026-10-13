@@ -174,6 +174,7 @@ export function useKestrel() {
   const [signingUp, setSigningUp] = React.useState(false);
   const [busyItem, setBusyItem] = React.useState<string | null>(null);
   const [sdkError, setSdkError] = React.useState<string | null>(null);
+  const [sdkReady, setSdkReady] = React.useState(false);
 
   const stateRef = React.useRef(state);
 
@@ -290,6 +291,7 @@ export function useKestrel() {
     import("@didit-protocol/sdk-web").then(({ DiditSdk }) => {
       if (disposed) return;
       sdkRef.current = DiditSdk;
+      setSdkReady(true);
       DiditSdk.shared.onComplete = (result) => {
         const flow = flowRef.current;
 
@@ -508,6 +510,7 @@ export function useKestrel() {
 
   return {
     hydrated: state !== null,
+    sdkReady,
     wallets: state?.wallets ?? null,
     activity: state?.activity ?? [],
     hasSessionUrl: Boolean(state?.sessionUrl),

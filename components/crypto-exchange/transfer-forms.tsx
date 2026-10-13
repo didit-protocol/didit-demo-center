@@ -394,7 +394,7 @@ export function WithdrawForm({
       {error && <Notice tone="declined">{error}</Notice>}
       <button
         className="btn-base h-12 bg-ink px-5 text-canvas hover:bg-accent-black disabled:opacity-60"
-        disabled={busy}
+        disabled={busy || !kestrel.sdkReady}
         type="submit"
       >
         {busy ? (
