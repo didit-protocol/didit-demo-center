@@ -582,8 +582,8 @@ export function FintechDemo({
           </div>
         </div>
 
-        <div className="mt-8 grid items-start gap-8 lg:grid-cols-[minmax(0,440px)_minmax(0,1fr)] xl:gap-12">
-          <div className="mx-auto w-full max-w-[520px] lg:max-w-none">
+        <div className="mt-8 grid grid-cols-[minmax(0,1fr)] items-start gap-8 lg:grid-cols-[minmax(0,440px)_minmax(0,1fr)] xl:gap-12">
+          <div className="mx-auto w-full min-w-0 max-w-[520px] lg:max-w-none">
             <BankFrame holder={account?.name ?? null}>
               {renderScreen()}
             </BankFrame>
