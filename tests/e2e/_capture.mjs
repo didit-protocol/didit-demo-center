@@ -73,9 +73,8 @@ for (const [name, st] of Object.entries(STATES)) {
     await st.run(page, didit);
     await page.waitForTimeout(300);
     const file = `${OUT}/${name}--${size}--${theme}.png`;
-    if (size === "phone") {
-      if (name !== "phone-sheet") await page.locator('[role="region"][aria-label="Kestrel"]').scrollIntoViewIfNeeded();
-      await page.screenshot({ path: file, fullPage: name !== "phone-sheet" });
+    if (name === "phone-sheet") {
+      await page.screenshot({ path: file });
     } else {
       await page.getByTestId("fx-demo").screenshot({ path: file });
     }
