@@ -155,7 +155,7 @@ export function IgamingDemo() {
                   <LogOut aria-hidden className="size-4" />
                 </button>
               </>
-            ) : stage === "lobby" ? (
+            ) : hydrated && stage === "lobby" ? (
               <button
                 className="ig-btn ig-btn-primary h-9"
                 type="button"

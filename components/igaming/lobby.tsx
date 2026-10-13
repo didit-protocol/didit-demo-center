@@ -60,7 +60,7 @@ export function Lobby({ onJoin }: { onJoin: () => void }) {
             <li key={game.name}>
               <button
                 aria-label={`${game.name}: join to play`}
-                className="group relative flex aspect-[4/3] w-full flex-col justify-end overflow-hidden rounded-sm border border-line p-3 text-left focus-visible:shadow-ring focus-visible:outline-none"
+                className="group relative flex aspect-[16/10] w-full flex-col justify-end overflow-hidden rounded-sm border border-line p-3 text-left focus-visible:shadow-ring focus-visible:outline-none"
                 type="button"
                 onClick={onJoin}
               >

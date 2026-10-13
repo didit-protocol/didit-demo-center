@@ -51,8 +51,20 @@ export function activeStep(aurora: Aurora): StepId {
 function HowItWorks({ active }: { active: StepId }) {
   const activeRef = React.useRef<HTMLLIElement | null>(null);
 
+  // Scroll the panel, never the page: the panel is its own scroll container.
   React.useEffect(() => {
-    activeRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    const item = activeRef.current;
+    const scroller = item?.closest<HTMLElement>("[data-panel-scroll]");
+
+    if (!item || !scroller) return;
+    // The scroller is `relative`, so offsetTop is measured from it.
+    const top = Math.max(0, item.offsetTop - 16);
+
+    if (
+      top < scroller.scrollTop ||
+      top + item.offsetHeight > scroller.scrollTop + scroller.clientHeight
+    )
+      scroller.scrollTo({ top, behavior: "smooth" });
   }, [active]);
 
   return (
@@ -475,7 +487,12 @@ export function DiditPanel({
           ))}
         </div>
       </div>
-      <div className="min-h-0 flex-1 overflow-y-auto p-4" role="tabpanel">
+      <div
+        key={tab}
+        data-panel-scroll
+        className="relative min-h-0 flex-1 overflow-y-auto p-4"
+        role="tabpanel"
+      >
         {tab === "how" ? <HowItWorks active={activeStep(aurora)} /> : null}
         {tab === "operator" ? <OperatorView aurora={aurora} /> : null}
         {tab === "log" ? <ApiLog aurora={aurora} /> : null}

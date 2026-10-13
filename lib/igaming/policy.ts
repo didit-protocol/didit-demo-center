@@ -333,8 +333,8 @@ export function consoleLinks(context: ConsoleContext) {
   return {
     session: (sessionId: string) => `${root}/kyc/verifications/${sessionId}`,
     transaction: (uuid: string) => `${root}/transactions/detail/${uuid}`,
-    user: (vendorData: string) =>
-      `${root}/users?vendor-data=${encodeURIComponent(vendorData)}`,
+    /** The user detail page takes Didit's internal id, not `vendor_data`. */
+    user: (diditInternalId: string) => `${root}/users/${diditInternalId}`,
     rules: () => `${root}/transactions/rules`,
     lists: () => `${root}/lists`,
     blocklist: () => `${root}/lists?kind=blocklist`,
