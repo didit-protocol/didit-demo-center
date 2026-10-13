@@ -534,15 +534,22 @@ export async function handleTransaction(
   return { status: 200, body: summarizeTransaction(raw) };
 }
 
-function safeOrigin(origin: string | null, fallback: string): string {
+/**
+ * The hosted flow's redirect target. Only this site's own hosts (and a local
+ * dev server) are trusted from the Origin header; anything else gets the
+ * configured site URL.
+ */
+export function safeOrigin(origin: string | null, fallback: string): string {
   try {
     const url = new URL(origin ?? "");
+    const local = url.hostname === "localhost" || url.hostname === "127.0.0.1";
+    const didit =
+      url.protocol === "https:" &&
+      (url.hostname === "didit.me" || url.hostname.endsWith(".didit.me"));
 
-    return url.protocol === "https:" || url.hostname === "localhost"
-      ? url.origin
-      : fallback;
+    return local || didit ? url.origin : new URL(fallback).origin;
   } catch {
-    return fallback;
+    return new URL(fallback).origin;
   }
 }
 

@@ -16,6 +16,7 @@ import {
   handleState,
   handleToken,
   handleTransaction,
+  safeOrigin,
 } from "../lib/marketplace/server.ts";
 
 import {
@@ -262,7 +263,7 @@ test("starting a KYB creates a business session with the shop's details", async 
   const env = makeEnv({ fetch: api.fetch });
   const state = stateWith({ sellers: [seller(RECORDED.firstShop)] });
   const reply = await handleStartKyb(env, state, RECORDED.firstShop, {
-    origin: "https://evil.example.com:443",
+    origin: "https://demos.staging.didit.me",
     fallbackOrigin: "https://demos.staging.didit.me",
     language: "es",
   });
@@ -272,7 +273,7 @@ test("starting a KYB creates a business session with the shop's details", async 
   assert.deepEqual(api.calls[0].body, {
     workflow_id: env.workflows.kyb,
     vendor_data: RECORDED.firstShop,
-    callback: "https://evil.example.com/marketplace?chapter=seller",
+    callback: "https://demos.staging.didit.me/marketplace?chapter=seller",
     callback_method: "both",
     language: "es",
     metadata: { demo_app: "marketplace", shop: "Atelier Nord" },
@@ -283,7 +284,13 @@ test("starting a KYB creates a business session with the shop's details", async 
   });
 });
 
-test("an http origin falls back to the site's own callback", async () => {
+test("a foreign or plain-http origin falls back to the site's own callback", async () => {
+  for (const origin of ["https://evil.example.com", "http://demos.didit.me", "https://didit.me.evil.example"]) {
+    assert.equal(safeOrigin(origin, "https://demos.staging.didit.me"), "https://demos.staging.didit.me");
+  }
+  assert.equal(safeOrigin("http://localhost:3111", "https://demos.didit.me"), "http://localhost:3111");
+  assert.equal(safeOrigin("https://demos.didit.me", "https://demos.staging.didit.me"), "https://demos.didit.me");
+
   const api = fakeApi({
     "POST /v3/session/": [201, { session_id: KYB_SID, url: "https://verify.staging.didit.me/session/x" }],
   });
