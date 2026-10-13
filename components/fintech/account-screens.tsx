@@ -8,7 +8,6 @@ import {
   ArrowDownLeft,
   ArrowLeft,
   ArrowUpRight,
-  BadgeCheck,
   CircleCheck,
   CircleX,
   Plus,
@@ -165,10 +164,7 @@ export function HomeScreen({
         <h2 className="m-0 text-[22px] font-display tracking-display text-ink">
           {t("home.greeting", { name: firstName })}
         </h2>
-        <Chip tone="approved">
-          <BadgeCheck aria-hidden className="-ml-1 size-3.5" />
-          {t("home.verified")}
-        </Chip>
+        <Chip tone="approved">{t("home.verified")}</Chip>
       </div>
 
       <section className="rounded-md border border-line bg-surface p-5">

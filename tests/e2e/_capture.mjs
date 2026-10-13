@@ -40,7 +40,7 @@ const STATES = {
   verify: { run: async (p) => { await signUp(p); } },
   "verify-cancelled": { flow: "cancelled", run: async (p) => { await signUp(p); await p.getByRole("button", { name: "Verify my identity" }).click(); await p.getByText("You closed the verification").waitFor(); } },
   checking: { status: "In Progress", flow: "completed", run: async (p) => { await signUp(p); await p.getByRole("button", { name: "Verify my identity" }).click(); await p.getByRole("heading", { name: "Checking your details" }).waitFor(); await p.waitForTimeout(3500); } },
-  "outcome-approved": { status: "Approved", account: acct(), seenHome: false, run: async (p) => {} },
+  "outcome-approved": { status: "In Progress", flow: "completed", run: async (p, d) => { await signUp(p); await p.getByRole("button", { name: "Verify my identity" }).click(); await p.getByRole("heading", { name: "Checking your details" }).waitFor(); d.decision.status = "Approved"; await p.getByRole("heading", { name: "Your account is open" }).waitFor(); } },
   "outcome-review": { status: "In Review", account: acct(), run: async (p) => { await p.getByRole("heading", { name: "We are reviewing your application" }).waitFor(); } },
   "outcome-declined": { status: "Declined", account: acct(), run: async (p) => { await p.getByRole("heading", { name: "We could not open your account" }).waitFor(); } },
   "outcome-expired": { status: "Expired", account: acct(), run: async (p) => { await p.getByRole("heading", { name: "Your verification expired" }).waitFor(); } },

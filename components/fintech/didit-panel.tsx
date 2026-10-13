@@ -42,6 +42,14 @@ const CHECK_TONE: Record<CheckStatus, Tone> = {
   failed: "declined",
 };
 
+const DOT: Record<Tone, string> = {
+  neutral: "bg-table-head",
+  approved: "bg-success",
+  review: "bg-warning",
+  declined: "bg-danger",
+  info: "bg-blue",
+};
+
 function ConsoleLink({
   href,
   home,
@@ -143,28 +151,22 @@ export function OperatorView({
             <p className="m-0 mt-1 break-all font-mono text-[11px] text-table-head">
               {verification.sessionId}
             </p>
-            <ul className="m-0 mt-2.5 grid list-none grid-cols-2 gap-1.5 p-0">
+            <ul className="m-0 mt-2.5 grid list-none grid-cols-2 gap-x-3 gap-y-1.5 p-0">
               {verification.checks.map((check) => (
                 <li
                   key={check.key}
-                  className="flex items-center justify-between gap-1.5 text-[12px] text-muted"
+                  className="flex min-w-0 items-center gap-1.5 text-[12px] text-muted"
                 >
-                  <span className="truncate">
-                    {t(`checking.checks.${check.key}`)}
-                  </span>
                   <span
                     className={cn(
                       "size-2 flex-none rounded-pill",
-                      {
-                        neutral: "bg-table-head",
-                        approved: "bg-success",
-                        review: "bg-warning",
-                        declined: "bg-danger",
-                        info: "bg-blue",
-                      }[CHECK_TONE[check.status]],
+                      DOT[CHECK_TONE[check.status]],
                     )}
                     title={t(`checking.status.${check.status}`)}
                   />
+                  <span className="truncate">
+                    {t(`checking.checks.${check.key}`)}
+                  </span>
                 </li>
               ))}
             </ul>
