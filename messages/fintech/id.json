@@ -1,0 +1,268 @@
+{
+  "page": {
+    "eyebrow": "Demo industri · Fintech",
+    "title": "Kestrel, neobank yang dibangun di atas Didit",
+    "lede": "Buka rekening, verifikasi identitas Anda, dan pindahkan uang. Setiap langkah memakai API Didit yang sebenarnya: KYC dan AML saat mendaftar, pemantauan transaksi di setiap pembayaran, lalu penyaringan AML berkelanjutan.",
+    "allDemos": "Semua demo",
+    "staging": "Aktif di staging Didit",
+    "reset": "Mulai ulang",
+    "theme": {
+      "label": "Tema warna",
+      "light": "Terang",
+      "dark": "Gelap"
+    },
+    "unavailable": {
+      "title": "Demo ini berjalan di staging Didit",
+      "body": "Membuka rekening di sini menjalankan verifikasi identitas dan penyaringan AML sungguhan untuk organisasi demo Didit, karena itu demo ini disajikan dari lingkungan staging.",
+      "cta": "Buka demo di staging"
+    }
+  },
+  "bank": {
+    "name": "Kestrel",
+    "fictional": "Bank fiktif untuk keperluan demo"
+  },
+  "common": {
+    "back": "Kembali",
+    "retry": "Coba lagi",
+    "loading": "Memuat…",
+    "error": "Terjadi kesalahan saat menghubungi Didit. Coba lagi sebentar lagi.",
+    "diditError": "Jawaban Didit: {detail}",
+    "unavailable": "Demo ini tidak tersedia di deployment ini."
+  },
+  "welcome": {
+    "title": "Rekening giro yang terbuka dalam hitungan menit",
+    "body": "IBAN atas nama Anda, transfer instan ke seluruh Eropa, dan tanpa biaya bulanan.",
+    "points": {
+      "verify": "Verifikasi dengan kartu identitas dan swafoto",
+      "send": "Kirim dan terima uang langsung",
+      "safe": "Setiap pembayaran diperiksa dari penipuan"
+    },
+    "cta": "Buka rekening",
+    "note": "Gunakan kartu identitas Anda sendiri: data hanya dikirim ke lingkungan staging Didit, tidak pernah ke bank sungguhan."
+  },
+  "signup": {
+    "progress": "Langkah {current} dari {total}",
+    "title": "Ceritakan tentang Anda",
+    "body": "Kami memakai data ini untuk membuka rekening Anda. Anda mengonfirmasinya dengan kartu identitas di langkah berikutnya.",
+    "name": "Nama lengkap",
+    "namePlaceholder": "Sesuai kartu identitas Anda",
+    "email": "Email",
+    "emailPlaceholder": "anda@contoh.com",
+    "country": "Negara tempat tinggal",
+    "countryPlaceholder": "Pilih negara",
+    "consent": "Dengan melanjutkan, Anda setuju Kestrel membagikan data Anda kepada Didit untuk memverifikasi identitas Anda.",
+    "submit": "Lanjutkan",
+    "submitting": "Membuka rekening Anda…",
+    "errors": {
+      "name": "Masukkan nama lengkap Anda.",
+      "email": "Masukkan alamat email yang valid.",
+      "country": "Pilih negara tempat Anda tinggal."
+    }
+  },
+  "verify": {
+    "progress": "Langkah {current} dari {total}",
+    "title": "Verifikasi identitas Anda",
+    "body": "Kami wajib memastikan siapa Anda sebelum membuka rekening. Prosesnya sekitar dua menit.",
+    "steps": {
+      "id": "Pindai kartu identitas resmi",
+      "liveness": "Rekam video swafoto singkat",
+      "face": "Kami mencocokkan swafoto dengan kartu identitas Anda",
+      "aml": "Kami memeriksa nama Anda di daftar sanksi dan PEP"
+    },
+    "cta": "Verifikasi identitas saya",
+    "resume": "Lanjutkan verifikasi",
+    "starting": "Membuka verifikasi…",
+    "phone": "Tidak ada kamera di sini? Verifikasi menampilkan kode QR untuk diselesaikan di ponsel Anda.",
+    "cancelled": "Anda menutup verifikasi sebelum selesai. Kemajuan Anda tersimpan, jadi Anda bisa melanjutkan dari bagian terakhir.",
+    "failed": "Verifikasi tidak dapat dimulai. {reason}"
+  },
+  "checking": {
+    "title": "Memeriksa data Anda",
+    "body": "Biasanya kurang dari satu menit. Biarkan halaman ini tetap terbuka.",
+    "slow": "Ini memakan waktu lebih lama dari biasanya. Kami terus memeriksa di latar belakang.",
+    "checks": {
+      "id": "Dokumen identitas",
+      "liveness": "Deteksi keaktifan",
+      "face": "Pencocokan wajah",
+      "aml": "Penyaringan sanksi dan PEP"
+    },
+    "status": {
+      "pending": "Menunggu",
+      "passed": "Lolos",
+      "review": "Sedang ditinjau",
+      "failed": "Tidak lolos"
+    }
+  },
+  "outcome": {
+    "approved": {
+      "title": "Rekening Anda sudah dibuka",
+      "body": "Selamat datang di Kestrel, {name}. Rekening Anda siap: tambahkan uang dan mulai gunakan.",
+      "cta": "Ke rekening saya"
+    },
+    "review": {
+      "title": "Kami sedang meninjau pengajuan Anda",
+      "body": "Kami butuh sedikit waktu lagi untuk memastikan beberapa data. Sebagian besar peninjauan selesai dalam satu hari kerja, dan kami akan mengirim email ke {email} segera setelah selesai.",
+      "live": "Halaman ini diperbarui sendiri saat peninjauan selesai."
+    },
+    "declined": {
+      "title": "Kami tidak dapat membuka rekening Anda",
+      "body": "Kami tidak dapat memverifikasi identitas Anda, sehingga saat ini kami tidak bisa membukakan rekening untuk Anda.",
+      "cta": "Mulai ulang"
+    },
+    "expired": {
+      "title": "Verifikasi Anda kedaluwarsa",
+      "body": "Tautan verifikasi sudah tidak berlaku. Mulai lagi untuk membuka rekening Anda.",
+      "cta": "Mulai lagi"
+    }
+  },
+  "home": {
+    "greeting": "Halo, {name}",
+    "balance": "Saldo tersedia",
+    "held": "{amount} ditahan",
+    "add": "Tambah uang",
+    "send": "Kirim uang",
+    "activity": "Aktivitas",
+    "refresh": "Muat ulang",
+    "emptyTitle": "Belum ada pembayaran",
+    "emptyBody": "Tambahkan uang terlebih dahulu, lalu kirim sebagian. Transfer sebesar {threshold} atau lebih diperiksa sebelum keluar dari rekening Anda.",
+    "limit": "Anda mencapai batas demo {limit} pembayaran. Mulai ulang untuk membuka rekening baru.",
+    "verified": "Identitas terverifikasi"
+  },
+  "payment": {
+    "fromSelf": "Isi saldo dari bank Anda yang lain",
+    "to": "Ke {name}",
+    "status": {
+      "received": "Diterima",
+      "sent": "Terkirim",
+      "held": "Ditahan",
+      "declined": "Ditolak",
+      "action": "Perlu tindakan"
+    }
+  },
+  "pay": {
+    "depositTitle": "Tambah uang",
+    "depositBody": "Dari rekening Anda di bank lain, atas nama Anda sendiri.",
+    "transferTitle": "Kirim uang",
+    "transferBody": "Ke siapa pun yang punya rekening bank di Eropa.",
+    "amount": "Jumlah",
+    "otherAmount": "Jumlah lain",
+    "recipient": "Penerima",
+    "recipientPlaceholder": "Nama lengkap penerima",
+    "available": "Tersedia: {amount}",
+    "reviewHint": "Transfer sebesar {threshold} atau lebih ditahan untuk pemeriksaan singkat sebelum dikirim.",
+    "willReview": "Transfer ini akan diperiksa sebelum dikirim.",
+    "submitDeposit": "Tambah {amount}",
+    "submitTransfer": "Kirim {amount}",
+    "submitting": "Mengirim…",
+    "errors": {
+      "amount": "Masukkan jumlah antara {min} dan {max}.",
+      "counterparty": "Masukkan nama lengkap penerima.",
+      "insufficient": "Saldo tersedia Anda hanya {available}.",
+      "limit": "Anda mencapai batas pembayaran demo untuk rekening ini."
+    }
+  },
+  "result": {
+    "received": {
+      "title": "{amount} ditambahkan",
+      "body": "Uang sudah ada di rekening Anda dan siap dipakai."
+    },
+    "sent": {
+      "title": "{amount} dikirim ke {name}",
+      "body": "Seharusnya tiba dalam beberapa detik."
+    },
+    "held": {
+      "title": "Pembayaran Anda ditahan",
+      "body": "Kami sedang memeriksa pembayaran ini sebentar sebelum keluar dari rekening Anda. Uang disisihkan sampai saat itu, dan layar ini langsung diperbarui begitu pemeriksaan selesai."
+    },
+    "declined": {
+      "title": "Pembayaran ditolak",
+      "body": "Pembayaran ini tidak berhasil dan tidak ada uang yang keluar dari rekening Anda."
+    },
+    "action": {
+      "title": "Kami membutuhkan sesuatu dari Anda",
+      "body": "Konfirmasikan identitas Anda untuk melepaskan pembayaran ini."
+    },
+    "done": "Selesai"
+  },
+  "monitoring": {
+    "title": "Pemantauan AML berkelanjutan",
+    "body": "Setelah Anda bergabung, profil Anda disaring ulang setiap hari terhadap daftar sanksi, PEP, dan berita negatif. Pencantuman baru langsung sampai ke tim kepatuhan kami tanpa meminta Anda verifikasi lagi.",
+    "cta": "Pratinjau pemantauan untuk rekening ini",
+    "loading": "Menanyakan Didit…",
+    "rows": {
+      "profiles": "Profil yang cocok",
+      "alreadyMonitored": "Sudah dipantau",
+      "withScreening": "Penyaringan pendaftaran untuk dipantau",
+      "needsScreening": "Akan disaring terlebih dahulu",
+      "missingIdentity": "Data identitas kurang",
+      "annualCost": "Biaya pemantauan per tahun"
+    },
+    "note": "Hanya perkiraan: tidak ada yang diaktifkan, disaring, atau ditagih."
+  },
+  "panel": {
+    "title": "Cara demo ini memakai Didit",
+    "subtitle": "Modul dan panggilan API di balik setiap langkah, aktif di staging.",
+    "open": "Cara demo ini memakai Didit",
+    "close": "Tutup",
+    "current": "Anda di sini",
+    "modules": "Modul",
+    "calls": "Panggilan API",
+    "docs": "Dokumentasi",
+    "steps": {
+      "signup": {
+        "title": "Pendaftaran",
+        "body": "Formulir milik bank sendiri. ID pelanggan yang dibuatnya dikirim ke Didit sebagai vendor_data, kunci yang menghubungkan setiap sesi, pembayaran, dan penyaringan dengan orang ini."
+      },
+      "verify": {
+        "title": "Verifikasi identitas",
+        "body": "Satu sesi yang di-hosting menjalankan alur bank: verifikasi dokumen, deteksi keaktifan aktif, pencocokan wajah 1:1, penyaringan AML, dan analisis IP."
+      },
+      "decision": {
+        "title": "Keputusan",
+        "body": "Status sesi menentukan rekening: Approved membukanya, In Review menunggu analis, Declined membuatnya tetap tertutup. Pelanggan tidak pernah melihat alasannya."
+      },
+      "payments": {
+        "title": "Pemantauan transaksi",
+        "body": "Setiap pembayaran dikirim dengan vendor_data yang sama. Aturan dijalankan secara sinkron dan hasilnya kembali dalam respons."
+      },
+      "review": {
+        "title": "Peninjauan",
+        "body": "Transfer sebesar {threshold} atau lebih cocok dengan aturan \"{rule}\" dan menunggu analis di konsol. Aplikasi membaca ulang pembayaran dan diperbarui saat mereka memutuskan."
+      },
+      "monitoring": {
+        "title": "Pemantauan AML berkelanjutan",
+        "body": "Mengaktifkan penyaringan harian untuk pelanggan terverifikasi. Demo hanya meminta perkiraan, yang tidak menulis apa pun."
+      }
+    },
+    "moduleNames": {
+      "idVerification": "Verifikasi dokumen",
+      "liveness": "Deteksi keaktifan aktif",
+      "faceMatch": "Pencocokan wajah 1:1",
+      "aml": "Penyaringan AML",
+      "ipAnalysis": "Analisis IP",
+      "transactions": "Pemantauan transaksi",
+      "rules": "Mesin aturan",
+      "webhooks": "Webhooks",
+      "manualReview": "Peninjauan manual",
+      "ongoing": "Pemantauan berkelanjutan"
+    }
+  },
+  "operator": {
+    "title": "Tampilan operator",
+    "body": "Yang dilihat tim kepatuhan bank tentang pelanggan ini di konsol Didit.",
+    "empty": "Belum ada. Catatan muncul di sini seiring Anda memakai aplikasi.",
+    "session": "Sesi verifikasi",
+    "sessionNumber": "Sesi #{number}",
+    "transaction": "Transaksi #{number}",
+    "score": "Skor risiko",
+    "rule": "Aturan yang cocok",
+    "noRule": "Tidak ada aturan yang cocok",
+    "open": "Buka di konsol",
+    "openConsole": "Buka konsol",
+    "find": "Cari {record} di konsol.",
+    "login": "Perlu login konsol untuk organisasi demo Didit."
+  },
+  "amount": {
+    "presets": "Pilih jumlah"
+  }
+}
