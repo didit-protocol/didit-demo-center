@@ -296,8 +296,7 @@ const isOpen = (status: string | null) =>
 function personName(row: Json): string {
   return (
     str(row.name) ??
-    [str(row.first_name), str(row.last_name)].filter(Boolean).join(" ") ??
-    ""
+    [str(row.first_name), str(row.last_name)].filter(Boolean).join(" ")
   );
 }
 
