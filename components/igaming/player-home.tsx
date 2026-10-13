@@ -27,6 +27,7 @@ import {
   formatMoney,
   licensedMarket,
   limitHeadroom,
+  payoutView,
   sessionView,
   transactionView,
 } from "@/lib/igaming/policy";
@@ -224,8 +225,8 @@ function Cashier({ aurora }: { aurora: Aurora }) {
 }
 
 /**
- * Self-excluded: deposits and bets are closed, and the balance was paid back
- * before Didit blocked the player. "Try a deposit anyway" shows Didit itself
+ * Self-excluded: deposits and bets are closed, and the balance payout went to
+ * Didit before it blocked the player. "Try a deposit anyway" shows Didit itself
  * refusing them.
  */
 function ClosedCashier({ aurora }: { aurora: Aurora }) {
@@ -235,8 +236,8 @@ function ClosedCashier({ aurora }: { aurora: Aurora }) {
     (item) =>
       item.kind === "withdrawal" && item.detail === SELF_EXCLUSION_PAYOUT,
   );
-  const view = payout?.record
-    ? transactionView("withdrawal", payout.record.status)
+  const view = payout
+    ? payoutView(payout.record?.status ?? null, payout.error)
     : null;
 
   return (
@@ -258,22 +259,20 @@ function ClosedCashier({ aurora }: { aurora: Aurora }) {
         Self-excluded until {EXCLUDED_UNTIL()}. Deposits, bets and offers are
         closed.
       </Notice>
-      {payout ? (
+      {payout && view ? (
         <div className="flex items-start justify-between gap-3 rounded-xs bg-surface p-3.5">
           <div className="min-w-0">
             <p className="m-0 text-[13px] text-ink">
               <span className="tnum font-semibold">
                 {formatMoney(payout.amount)}
               </span>{" "}
-              paid back to your card
+              {view.headline}
             </p>
             <p className="mb-0 mt-1 text-xs leading-5 text-muted">
-              {view?.message ?? `Refused by Didit: ${payout.error}`}
+              {view.message}
             </p>
           </div>
-          <StatusPill tone={view?.tone ?? "declined"}>
-            {view?.label ?? "Refused"}
-          </StatusPill>
+          <StatusPill tone={view.tone}>{view.label}</StatusPill>
         </div>
       ) : null}
     </>
@@ -786,7 +785,7 @@ export function PlayerHome({ aurora }: { aurora: Aurora }) {
               You won&apos;t be able to deposit, bet or claim offers until then,
               and this can&apos;t be undone early.{" "}
               {aurora.totals.balance > 0
-                ? `Your ${formatMoney(aurora.totals.balance)} balance is paid back to your card first. `
+                ? `We first send your ${formatMoney(aurora.totals.balance)} balance back to your card, as a withdrawal Didit checks. `
                 : ""}
               Aurora Play then blocks you on Didit, so Didit refuses every
               transaction on this account.

@@ -569,7 +569,49 @@ export const SELF_EXCLUSION_REASON =
  * the transaction's props so the operator sees why it was made. It has to go
  * before the block: Didit refuses every transaction of a BLOCKED user.
  */
-export const SELF_EXCLUSION_PAYOUT = "Balance paid back on self-exclusion";
+export const SELF_EXCLUSION_PAYOUT = "Balance payout on self-exclusion";
+
+export interface PayoutView extends StatusView {
+  /** What happened to the money, after the amount: "payout in review". */
+  headline: string;
+}
+
+const PAYOUT_KEPT =
+  "The money stays in your account: contact support to have it paid back.";
+
+/**
+ * That payout, in the player's words. Only an approved withdrawal is paid
+ * back: a declined or refused one leaves the money in an account whose cashier
+ * is closed, so the player is sent to support.
+ */
+export function payoutView(
+  status: string | null,
+  error: string | null,
+): PayoutView {
+  if (!status)
+    return {
+      headline: "payout refused",
+      label: "Refused",
+      tone: "declined",
+      message: `Refused by Didit: ${(error ?? "no answer").trim().replace(/\.?$/, ".")} ${PAYOUT_KEPT}`,
+    };
+  const view = transactionView("withdrawal", status);
+
+  switch (status.trim().toUpperCase()) {
+    case "APPROVED":
+      return { ...view, headline: "paid back to your card" };
+    case "IN_REVIEW":
+      return { ...view, headline: "payout in review" };
+    case "DECLINED":
+      return {
+        ...view,
+        headline: "payout declined",
+        message: `${view.message} ${PAYOUT_KEPT}`,
+      };
+    default:
+      return { ...view, headline: "payout pending" };
+  }
+}
 
 const formatter = (digits: number) =>
   new Intl.NumberFormat("en-IE", {

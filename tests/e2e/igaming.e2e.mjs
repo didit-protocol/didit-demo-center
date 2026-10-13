@@ -117,8 +117,7 @@ const HELD = {
 };
 
 /** Didit's device lane, as the rules on the demo application answer it. */
-function deviceLane(page, { blocked = () => false, onSubmit = () => {} } = {}) {
-  const records = new Map();
+function deviceLane(page, { blocked = () => false, onSubmit = () => {}, records = new Map() } = {}) {
   let count = 0;
 
   return page.route("**/__e2e/didit/v1/transactions/**", (route) => {
@@ -244,9 +243,12 @@ test("cashier: step-up, bonus review, operator view and self-exclusion", async (
     },
   });
 
+  const records = new Map();
+
   await deviceLane(page, {
     blocked: () => excluded,
     onSubmit: (body) => sequence.push(`${body.info.type} ${body.info.amount}`),
+    records,
   });
   await page.goto(`${BASE_URL}/igaming`);
   await page.getByRole("heading", { name: "Hi, Alex" }).waitFor();
@@ -299,21 +301,23 @@ test("cashier: step-up, bonus review, operator view and self-exclusion", async (
     assert.ok(Math.abs(badge.y + badge.height / 2 - (text.y + 9)) <= 0.5, "badge centred on the first line");
   }
 
-  // Self-exclusion pays the approved €250 back before Didit blocks the player.
+  // Self-exclusion sends the approved €250 back before Didit blocks the player.
   await page.getByRole("button", { name: "Second account on this device" }).waitFor();
   await page.getByRole("button", { name: "Verify now" }).waitFor();
   await page.getByRole("button", { name: "Self-exclude for 6 months" }).click();
   const dialog = page.getByRole("dialog", { name: "Self-exclude" });
 
-  await dialog.getByText("Your €250 balance is paid back to your card first.", { exact: false }).waitFor();
+  await dialog.getByText("We first send your €250 balance back to your card, as a withdrawal Didit checks.", { exact: false }).waitFor();
   assert.doesNotMatch(await dialog.innerText(), /new account/);
   await dialog.getByRole("button", { name: "Self-exclude" }).click();
   await dialog.waitFor({ state: "hidden" });
   await page.getByText(/^Self-excluded until .*Deposits, bets and offers are closed\.$/).waitFor();
-  await page.getByText("paid back to your card").waitFor();
+  // Held for review, the payout is not called paid back.
+  await page.getByText("payout in review").waitFor();
+  assert.equal(await page.getByText("paid back to your card").count(), 0);
   assert.deepEqual(sequence.slice(-2), ["withdrawal 250.00", "block"]);
   await page.getByText("Withdrawal held for a quick review by our team.").first().waitFor();
-  await page.getByText("Withdrawal · Balance paid back on self-exclusion").waitFor();
+  await page.getByText("Withdrawal · Balance payout on self-exclusion").waitFor();
 
   // Nothing left on screen contradicts the exclusion.
   assert.equal(await page.getByRole("button", { name: "Verify now" }).count(), 0);
@@ -327,6 +331,15 @@ test("cashier: step-up, bonus review, operator view and self-exclusion", async (
   await page.getByText(/Refused by Didit: The individual/).waitFor();
   await page.getByRole("tab", { name: "Operator view" }).click();
   await page.getByText("HTTP 400").waitFor();
+
+  // The operator declines the held payout in Console: the money stays in the
+  // closed account and the player is sent to support.
+  for (const record of records.values())
+    if (record.action_type === "withdrawal") record.status = "DECLINED";
+  await page.getByRole("button", { name: "Refresh operator view" }).click();
+  await page.getByText("payout declined").waitFor();
+  await page.getByText(/^Withdrawal declined\. The money stays in your account: contact support/).waitFor();
+  assert.equal(await page.getByText("paid back to your card").count(), 0);
   await context.close();
 });
 
