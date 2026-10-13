@@ -100,13 +100,13 @@ export function TransactionCard({
 
       {tx.verification && tx.status === "AWAITING_USER" ? (
         <div className="mt-3.5 flex flex-wrap items-center gap-3 border-t border-line pt-3.5">
-          <p className="m-0 min-w-0 flex-1 text-[13px] text-muted">
+          <p className="m-0 min-w-0 basis-full text-[13px] text-muted sm:basis-0 sm:flex-1">
             The order waits for a quick age check: a selfie, and an ID only if
             the estimate is close to the limit.
           </p>
           <ActionButton
             busy={waiting}
-            className="h-9 px-3.5 text-[13px]"
+            className="h-9 w-full px-3.5 text-[13px] sm:w-auto"
             onClick={() => market.verifyOrder(tx)}
           >
             <ScanEye className="size-4" />

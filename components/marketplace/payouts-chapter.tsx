@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ArrowRight, Banknote, Lock } from "lucide-react";
+import { ArrowRight, Banknote } from "lucide-react";
 
 import { useMarket } from "./market-context";
 import { TransactionCard } from "./transaction-card";
@@ -124,7 +124,6 @@ export function PayoutsChapter() {
             }
             title="Payouts are locked"
           >
-            <Lock className="mr-1 inline size-3.5" />
             {kybMeta.description}
           </Notice>
         )}

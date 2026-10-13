@@ -12,7 +12,6 @@ import {
   LockOpen,
   RotateCcw,
   ScanEye,
-  ShieldAlert,
   Store,
   UserRoundCheck,
 } from "lucide-react";
@@ -445,7 +444,6 @@ export function SellerChapter() {
           }
           tone="review"
         >
-          <ShieldAlert className="mr-1 inline size-4" />
           This browser also opened{" "}
           {market.view.sellers
             .slice(1)
