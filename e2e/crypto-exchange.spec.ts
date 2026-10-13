@@ -122,7 +122,7 @@ test("a deposit from the user's wallet is screened and credited", async ({
   const compliance = page.getByTestId("kestrel-compliance-view");
 
   await expect(compliance).toContainText("0/100");
-  await expect(compliance).toContainText("merklescience");
+  await expect(compliance).toContainText("Merkle Science");
 
   await backToWallet(page);
   await expect(page.getByTestId("kestrel-balance")).toHaveText("1.25 ETH");
