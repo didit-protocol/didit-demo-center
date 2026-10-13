@@ -5,7 +5,7 @@ import type { StepKey } from "@/lib/fintech/steps";
 import * as React from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { ArrowLeft, ArrowUpRight, FlaskConical, RotateCcw } from "lucide-react";
 import { Container } from "@website/components/ui/container";
 
@@ -119,6 +119,7 @@ export function FintechDemo({
   stagingUrl: string;
 }) {
   const t = useTranslations("Fintech");
+  const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [theme, setTheme] = useDemoTheme();
@@ -239,20 +240,23 @@ export function FintechDemo({
     setStarting(false);
 
     if (!result.ok) {
-      if (result.error.error === "already_verified" && result.error.verification) {
+      if (
+        result.error.error === "already_verified" &&
+        result.error.verification
+      ) {
         setVerification(result.error.verification);
         setScreen(screenFor(result.error.verification));
 
         return;
       }
-      setVerifyFailure(
-        result.error.detail ?? t("common.error"),
-      );
+      setVerifyFailure(result.error.detail ?? t("common.error"));
 
       return;
     }
 
-    setAccount((current) => (current ? { ...current, hasSession: true } : current));
+    setAccount((current) =>
+      current ? { ...current, hasSession: true } : current,
+    );
     if (!sdkRef.current) {
       // The SDK is still loading: the hosted flow works as a plain page too.
       window.location.assign(result.data.url);
@@ -306,7 +310,11 @@ export function FintechDemo({
   );
 
   // ── Actions ───────────────────────────────────────────────────────
-  const signUp = async (input: { name: string; email: string; country: string }) => {
+  const signUp = async (input: {
+    name: string;
+    email: string;
+    country: string;
+  }) => {
     const result = await api.signUp(input);
 
     if (!result.ok) return result.error;
@@ -440,10 +448,7 @@ export function FintechDemo({
         return <WelcomeScreen onStart={() => setScreen("signup")} />;
       case "signup":
         return (
-          <SignUpScreen
-            onBack={() => setScreen("welcome")}
-            onSubmit={signUp}
-          />
+          <SignUpScreen onBack={() => setScreen("welcome")} onSubmit={signUp} />
         );
       case "verify":
         return (
@@ -460,7 +465,8 @@ export function FintechDemo({
       case "outcome": {
         const kind = verification ? outcomeKind(verification.status) : null;
 
-        if (!kind) return <CheckingScreen slow={slow} verification={verification} />;
+        if (!kind)
+          return <CheckingScreen slow={slow} verification={verification} />;
 
         return (
           <OutcomeScreen
@@ -532,8 +538,9 @@ export function FintechDemo({
   return (
     <section
       className="fintech-theme border-b border-line bg-canvas text-ink"
-      data-theme={theme}
       data-testid="fx-demo"
+      data-theme={theme}
+      dir={locale === "ar" ? "rtl" : undefined}
     >
       <Container className="pb-24 pt-6 sm:pb-16 lg:pt-8" size="xl">
         <Link
@@ -577,9 +584,13 @@ export function FintechDemo({
 
         <div className="mt-8 grid items-start gap-8 lg:grid-cols-[minmax(0,440px)_minmax(0,1fr)] xl:gap-12">
           <div className="mx-auto w-full max-w-[520px] lg:max-w-none">
-            <BankFrame holder={account?.name ?? null}>{renderScreen()}</BankFrame>
+            <BankFrame holder={account?.name ?? null}>
+              {renderScreen()}
+            </BankFrame>
           </div>
-          <div className="hidden sm:block lg:sticky lg:top-[104px]">{panel}</div>
+          <div className="hidden sm:block lg:sticky lg:top-[104px]">
+            {panel}
+          </div>
         </div>
       </Container>
       <PanelSheet>{panel}</PanelSheet>

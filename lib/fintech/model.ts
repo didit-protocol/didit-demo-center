@@ -102,8 +102,7 @@ export interface SignUpInput {
 export type SignUpField = "name" | "email" | "country";
 
 export type Parsed<T, E extends string> =
-  | { ok: true; value: T }
-  | { ok: false; errors: E[] };
+  { ok: true; value: T } | { ok: false; errors: E[] };
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -159,7 +158,10 @@ export interface OnboardingView {
 
 function normalize(status: unknown): string {
   return typeof status === "string"
-    ? status.trim().toLowerCase().replace(/[\s_-]+/g, " ")
+    ? status
+        .trim()
+        .toLowerCase()
+        .replace(/[\s_-]+/g, " ")
     : "";
 }
 
@@ -306,7 +308,9 @@ function toAmount(value: unknown): number | null {
   return n;
 }
 
-export function parsePayment(body: unknown): Parsed<PaymentInput, PaymentField> {
+export function parsePayment(
+  body: unknown,
+): Parsed<PaymentInput, PaymentField> {
   const input = (body ?? {}) as Record<string, unknown>;
   const errors: PaymentField[] = [];
   const kind = input.kind;

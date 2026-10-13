@@ -68,7 +68,10 @@ export function WelcomeScreen({ onStart }: { onStart: () => void }) {
 
       <ul className="m-0 flex list-none flex-col gap-3 p-0">
         {points.map(({ key, icon: Icon }) => (
-          <li key={key} className="flex items-center gap-3 text-[14px] text-ink">
+          <li
+            key={key}
+            className="flex items-center gap-3 text-[14px] text-ink"
+          >
             <span className="flex size-8 flex-none items-center justify-center rounded-pill bg-blue-soft text-blue-deep">
               <Icon aria-hidden className="size-4" />
             </span>
@@ -131,9 +134,7 @@ export function SignUpScreen({
 
   const update =
     (field: SignUpField) =>
-    (
-      event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    ): void => {
+    (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
       setForm((current) => ({ ...current, [field]: event.target.value }));
       setErrors((current) => current.filter((f) => f !== field));
     };
@@ -310,7 +311,9 @@ export function VerifyScreen({
       </ol>
 
       <div className="mt-4 flex flex-col gap-3">
-        {cancelled ? <Notice tone="info">{t("verify.cancelled")}</Notice> : null}
+        {cancelled ? (
+          <Notice tone="info">{t("verify.cancelled")}</Notice>
+        ) : null}
         {failure ? (
           <Notice tone="declined">
             {t("verify.failed", { reason: failure })}
@@ -325,7 +328,11 @@ export function VerifyScreen({
           type="button"
           onClick={onStart}
         >
-          {starting ? <Spinner /> : <BadgeCheck aria-hidden className="size-5" />}
+          {starting ? (
+            <Spinner />
+          ) : (
+            <BadgeCheck aria-hidden className="size-5" />
+          )}
           {starting
             ? t("verify.starting")
             : resume

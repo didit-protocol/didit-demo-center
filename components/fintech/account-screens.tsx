@@ -203,7 +203,9 @@ export function HomeScreen({
         </div>
       </section>
 
-      {atLimit ? <Notice tone="info">{t("home.limit", { limit })}</Notice> : null}
+      {atLimit ? (
+        <Notice tone="info">{t("home.limit", { limit })}</Notice>
+      ) : null}
 
       <section aria-labelledby="fx-activity">
         <div className="mb-1 flex items-center justify-between">
@@ -286,8 +288,7 @@ export function PayScreen({
 
   const parsed = parsePayment({ kind, amount, counterparty });
   const value = Number(amount);
-  const reviewed =
-    parsed.ok && triggersReview(parsed.value as PaymentInput);
+  const reviewed = parsed.ok && triggersReview(parsed.value as PaymentInput);
   const transfer = kind === "transfer";
 
   const submit = async (event: React.FormEvent) => {
@@ -523,7 +524,11 @@ export function PaymentResultScreen({
       ) : null}
 
       <div className="mt-auto pt-8">
-        <button className="btn-muted h-12 w-full" type="button" onClick={onDone}>
+        <button
+          className="btn-muted h-12 w-full"
+          type="button"
+          onClick={onDone}
+        >
           {t("result.done")}
         </button>
       </div>
@@ -625,7 +630,9 @@ export function MonitoringCard({ onActivate }: { onActivate: () => void }) {
           onClick={preview}
         >
           {state.kind === "loading" ? <Spinner /> : null}
-          {state.kind === "loading" ? t("monitoring.loading") : t("monitoring.cta")}
+          {state.kind === "loading"
+            ? t("monitoring.loading")
+            : t("monitoring.cta")}
         </button>
       ) : null}
     </section>

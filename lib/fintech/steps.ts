@@ -9,12 +9,7 @@
  */
 
 export type StepKey =
-  | "signup"
-  | "verify"
-  | "decision"
-  | "payments"
-  | "review"
-  | "monitoring";
+  "signup" | "verify" | "decision" | "payments" | "review" | "monitoring";
 
 export type ModuleKey =
   | "idVerification"
@@ -145,6 +140,7 @@ export const MODULE_DOCS: Record<ModuleKey, { docsPath: string }> = {
   webhooks: { docsPath: "transaction-monitoring/webhooks" },
   manualReview: { docsPath: "console/manual-review" },
   ongoing: {
-    docsPath: "core-technology/aml-screening/continuous-monitoring-aml-screening",
+    docsPath:
+      "core-technology/aml-screening/continuous-monitoring-aml-screening",
   },
 };

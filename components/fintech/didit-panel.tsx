@@ -10,7 +10,11 @@ import { ArrowUpRight, ChevronDown, Layers, X } from "lucide-react";
 import { Chip, useMoney, type Tone } from "./ui";
 
 import { docs } from "@/lib/docs";
-import { REVIEW_RULE, REVIEW_THRESHOLD, type CheckStatus } from "@/lib/fintech/model";
+import {
+  REVIEW_RULE,
+  REVIEW_THRESHOLD,
+  type CheckStatus,
+} from "@/lib/fintech/model";
 import { MODULE_DOCS, STEPS, type StepKey } from "@/lib/fintech/steps";
 import { cn } from "@/lib/utils";
 
@@ -256,7 +260,9 @@ export function DiditSteps({ current }: { current: StepKey }) {
             key={step.key}
             className={cn(
               "rounded-md border transition-colors duration-fast",
-              isCurrent ? "border-blue/50 bg-blue-tint" : "border-line bg-canvas",
+              isCurrent
+                ? "border-blue/50 bg-blue-tint"
+                : "border-line bg-canvas",
             )}
             data-current={isCurrent || undefined}
             data-step={step.key}
@@ -393,7 +399,9 @@ export function DiditPanel({
         >
           {t("panel.title")}
         </h2>
-        <p className="m-0 mt-1.5 text-[13px] text-muted">{t("panel.subtitle")}</p>
+        <p className="m-0 mt-1.5 text-[13px] text-muted">
+          {t("panel.subtitle")}
+        </p>
       </div>
       <DiditSteps current={current} />
       {operator}
