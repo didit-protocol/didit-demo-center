@@ -11,7 +11,13 @@ import { DiditPanel, DiditPanelButton } from "./didit-panel";
 import { AccountScreen, SignUpScreen } from "./onboarding";
 import { TransferDetail } from "./transfer-detail";
 import { DepositForm, WithdrawForm } from "./transfer-forms";
-import { KestrelMark, Notice, Spinner, StatusChip } from "./ui";
+import {
+  KestrelMark,
+  Notice,
+  Spinner,
+  StatusChip,
+  onRadioGroupKeyDown,
+} from "./ui";
 import { useKestrel, type Kestrel } from "./use-kestrel";
 import { WalletHome } from "./wallet";
 
@@ -52,6 +58,11 @@ function useDemoTheme() {
   return [theme, choose] as const;
 }
 
+const THEME_OPTIONS = [
+  { value: "light", label: "Light", icon: Sun },
+  { value: "dark", label: "Dark", icon: Moon },
+] as const;
+
 function ThemeToggle({
   theme,
   onChange,
@@ -65,12 +76,7 @@ function ThemeToggle({
       className="inline-flex h-9 items-center rounded-pill border border-line bg-canvas p-0.5"
       role="radiogroup"
     >
-      {(
-        [
-          { value: "light", label: "Light", icon: Sun },
-          { value: "dark", label: "Dark", icon: Moon },
-        ] as const
-      ).map((option) => (
+      {THEME_OPTIONS.map((option) => (
         <button
           key={option.value}
           aria-checked={theme === option.value}
@@ -81,8 +87,17 @@ function ThemeToggle({
               : "text-muted hover:text-ink",
           )}
           role="radio"
+          tabIndex={theme === option.value ? 0 : -1}
           type="button"
           onClick={() => onChange(option.value)}
+          onKeyDown={(event) =>
+            onRadioGroupKeyDown(
+              event,
+              THEME_OPTIONS.map((item) => item.value),
+              theme,
+              onChange,
+            )
+          }
         >
           <option.icon className="size-3.5" />
           {option.label}

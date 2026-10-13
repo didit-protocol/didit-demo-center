@@ -189,3 +189,35 @@ export function Notice({
     </div>
   );
 }
+
+const RADIO_STEP: Record<string, number> = {
+  ArrowRight: 1,
+  ArrowDown: 1,
+  ArrowLeft: -1,
+  ArrowUp: -1,
+};
+
+/**
+ * Keyboard behaviour of a `role="radiogroup"` made of `role="radio"` buttons:
+ * set it as each radio's onKeyDown. The arrow keys move both the selection and
+ * the focus, wrapping at either end. Pair it with `tabIndex={checked ? 0 : -1}`
+ * on each radio so the group is one Tab stop.
+ */
+export function onRadioGroupKeyDown<T>(
+  event: React.KeyboardEvent<HTMLElement>,
+  values: readonly T[],
+  value: T,
+  onChange: (value: T) => void,
+) {
+  const step = RADIO_STEP[event.key];
+
+  if (!step) return;
+  event.preventDefault();
+  const next = (values.indexOf(value) + step + values.length) % values.length;
+
+  onChange(values[next]);
+  event.currentTarget
+    .closest('[role="radiogroup"]')
+    ?.querySelectorAll<HTMLElement>('[role="radio"]')
+    [next]?.focus();
+}
