@@ -4,8 +4,9 @@ import type { PanelStep, PanelStepId } from "@/lib/crypto-exchange/panel";
 
 import * as React from "react";
 import Image from "next/image";
-import { BookOpen, ChevronDown, ExternalLink, X } from "lucide-react";
+import { BookOpen, ChevronDown, ExternalLink } from "lucide-react";
 
+import { Modal, ModalCloseButton } from "@/components/demo-center/modal";
 import { docs } from "@/lib/docs";
 import { PANEL_STEPS } from "@/lib/crypto-exchange/panel";
 import { cn } from "@/lib/utils";
@@ -137,7 +138,7 @@ function PanelHeader() {
   );
 }
 
-/** Opens the panel's bottom sheet on screens too narrow for the side column. */
+/** Opens the panel as a dialog on screens too narrow for the side column. */
 export function DiditPanelButton({ onOpen }: { onOpen: () => void }) {
   return (
     <button
@@ -152,7 +153,8 @@ export function DiditPanelButton({ onOpen }: { onOpen: () => void }) {
 }
 
 /**
- * The side panel on desktop. Below `lg` it is a bottom sheet, opened from
+ * The side panel on desktop. Below `lg` it opens in the demo centre's Modal
+ * (focus trap, scroll lock, Escape, focus restored to the button), from
  * DiditPanelButton in the demo's intro band, so nothing floats over the app.
  */
 export function DiditPanel({
@@ -164,15 +166,18 @@ export function DiditPanel({
   sheetOpen: boolean;
   onSheetClose: () => void;
 }) {
+  // The side column replaces the dialog once the screen is wide enough.
   React.useEffect(() => {
     if (!sheetOpen) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onSheetClose();
+    const wide = window.matchMedia("(min-width: 1024px)");
+    const onChange = () => {
+      if (wide.matches) onSheetClose();
     };
 
-    document.addEventListener("keydown", onKey);
+    onChange();
+    wide.addEventListener("change", onChange);
 
-    return () => document.removeEventListener("keydown", onKey);
+    return () => wide.removeEventListener("change", onChange);
   }, [sheetOpen, onSheetClose]);
 
   return (
@@ -185,38 +190,23 @@ export function DiditPanel({
         <StepList active={active} />
       </aside>
 
-      {sheetOpen && (
-        <div className="fixed inset-0 z-[70] flex items-end lg:hidden">
-          <button
-            aria-label="Close"
-            className="absolute inset-0 cursor-default bg-black/50"
-            tabIndex={-1}
-            type="button"
-            onClick={onSheetClose}
-          />
-          <div
-            aria-label="How this uses Didit"
-            aria-modal="true"
-            className="relative flex max-h-[85vh] w-full flex-col gap-4 overflow-y-auto rounded-t-lg border-t border-line bg-canvas p-5 pb-8 text-ink"
-            role="dialog"
-          >
-            <div className="flex items-start gap-3">
-              <div className="min-w-0 flex-1">
-                <PanelHeader />
-              </div>
-              <button
-                aria-label="Close"
-                className="flex size-9 flex-none items-center justify-center rounded-pill bg-elevated text-muted"
-                type="button"
-                onClick={onSheetClose}
-              >
-                <X className="size-4" />
-              </button>
-            </div>
-            <StepList active={active} />
+      <Modal
+        label="How this uses Didit"
+        open={sheetOpen}
+        width="max-w-[560px]"
+        z="z-[80]"
+        onClose={onSheetClose}
+      >
+        <div className="flex items-start gap-3 border-b border-line px-5 py-4">
+          <div className="min-w-0 flex-1">
+            <PanelHeader />
           </div>
+          <ModalCloseButton size="sm" onClose={onSheetClose} />
         </div>
-      )}
+        <div className="flex-1 overflow-y-auto p-5">
+          <StepList active={active} />
+        </div>
+      </Modal>
     </>
   );
 }

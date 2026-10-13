@@ -32,6 +32,7 @@ import {
 } from "@/lib/crypto-exchange/console";
 import {
   depositOutcome,
+  providerName,
   riskBand,
   shortAddress,
   statusLabel,
@@ -284,7 +285,7 @@ export function ComplianceView({ view }: { view: TransactionView }) {
                   </StatusChip>
                 </span>
               </Row>
-              <Row label="Provider">{screening.provider}</Row>
+              <Row label="Provider">{providerName(screening.provider)}</Row>
               {screening.summary && (
                 <Row label="Summary">
                   <span className="text-[13px] leading-5">

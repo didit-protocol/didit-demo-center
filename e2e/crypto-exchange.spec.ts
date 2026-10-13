@@ -122,7 +122,7 @@ test("a deposit from the user's wallet is screened and credited", async ({
   const compliance = page.getByTestId("kestrel-compliance-view");
 
   await expect(compliance).toContainText("0/100");
-  await expect(compliance).toContainText("merklescience");
+  await expect(compliance).toContainText("Merkle Science");
 
   await backToWallet(page);
   await expect(page.getByTestId("kestrel-balance")).toHaveText("1.25 ETH");
@@ -315,6 +315,45 @@ test("the Didit panel follows the user and links every call to the docs", async 
     "href",
     "https://docs.didit.me/transaction-monitoring/sdk-transaction-submission",
   );
+});
+
+test("on a phone the Didit panel dialog keeps the keyboard inside it", async ({
+  page,
+}) => {
+  test.skip(!isPhone(page), "The dialog only exists below the lg breakpoint");
+  await mockKestrel(page);
+  await open(page);
+
+  const button = page.getByRole("button", { name: "How this uses Didit" });
+  const dialog = page.getByRole("dialog", { name: "How this uses Didit" });
+  const focusInside = () =>
+    dialog.evaluate((element) => element.contains(document.activeElement));
+
+  await button.click();
+  await expect(dialog).toBeFocused();
+  expect(
+    await page.evaluate(() => document.documentElement.style.overflow),
+  ).toBe("hidden");
+
+  // Shift+Tab straight from the panel, then more presses than the dialog has
+  // controls, so Tab has to wrap both ways.
+  await page.keyboard.press("Shift+Tab");
+  expect(await focusInside()).toBe(true);
+  for (let press = 0; press < 20; press += 1) {
+    await page.keyboard.press("Tab");
+    expect(await focusInside()).toBe(true);
+  }
+  for (let press = 0; press < 20; press += 1) {
+    await page.keyboard.press("Shift+Tab");
+    expect(await focusInside()).toBe(true);
+  }
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(button).toBeFocused();
+  expect(
+    await page.evaluate(() => document.documentElement.style.overflow),
+  ).toBe("");
 });
 
 test("the theme switch darkens the demo area and is remembered", async ({
