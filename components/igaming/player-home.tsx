@@ -414,7 +414,7 @@ function BonusCard({ aurora }: { aurora: Aurora }) {
             the bonus again.
           </p>
           <button
-            className="ig-btn ig-btn-quiet mt-3"
+            className="ig-btn ig-btn-quiet mt-3 w-full text-[13px]"
             type="button"
             onClick={aurora.openSecondAccount}
           >
