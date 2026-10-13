@@ -240,15 +240,33 @@ export function SellerCard({ seller }: { seller: SellerView }) {
             signup ? (
               <StatusPill meta={transactionStatus(signup.status)} />
             ) : (
-              <StatusPill meta={transactionStatus(null)} />
+              <ActionButton
+                busy={market.busy === `signup:${seller.id}`}
+                className="h-9 px-3.5 text-[13px]"
+                variant="muted"
+                onClick={() => market.retrySignup(seller)}
+              >
+                Report sign-up
+              </ActionButton>
             )
           }
           icon={Store}
           title="Sign-up reported to monitoring"
         >
-          The web SDK sent a <code className="mkt-code">seller_signup</code>{" "}
-          event from this device
-          {signup ? ` (score ${signup.score})` : ""}.
+          {signup ? (
+            <>
+              The web SDK sent a{" "}
+              <code className="mkt-code">seller_signup</code> event from this
+              device (score {signup.score}).
+            </>
+          ) : (
+            "The sign-up has not reached monitoring yet."
+          )}
+          {market.error?.scope === `signup:${seller.id}` ? (
+            <span className="mt-1 block text-danger">
+              {market.error.message}
+            </span>
+          ) : null}
         </Step>
 
         <Step

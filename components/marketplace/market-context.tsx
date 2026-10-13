@@ -53,6 +53,7 @@ interface MarketContextValue {
   operatorLoading: boolean;
   refresh: () => Promise<void>;
   openShop: (form: ShopForm) => Promise<SellerView | null>;
+  retrySignup: (seller: SellerView) => Promise<void>;
   startKyb: (seller: SellerView) => Promise<void>;
   continuePersonCheck: (seller: SellerView, url: string) => Promise<void>;
   refreshKyb: (seller: SellerView) => Promise<void>;
@@ -233,6 +234,22 @@ export function MarketProvider({
     [refresh, run],
   );
 
+  const retrySignup = React.useCallback(
+    async (seller: SellerView) => {
+      await run(`signup:${seller.id}`, `signup:${seller.id}`, async () => {
+        const signup = await submitMonitored(
+          "signup",
+          (grant, random) => signupTransaction(grant, seller.shop, random),
+          seller.id,
+        );
+
+        await refresh();
+        if (!signup.ok) throw new Error(signup.error);
+      });
+    },
+    [refresh, run],
+  );
+
   const refreshKyb = React.useCallback(
     async (seller: SellerView) => {
       const result = await api<{ kyb: KybSummary | null }>(
@@ -399,6 +416,7 @@ export function MarketProvider({
     operatorLoading,
     refresh,
     openShop,
+    retrySignup,
     startKyb,
     continuePersonCheck,
     refreshKyb,
