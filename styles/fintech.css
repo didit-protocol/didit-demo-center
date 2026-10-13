@@ -1,0 +1,65 @@
+/* ── Fintech demo theme ───────────────────────────────────────────────
+ * The site is light-only, like didit.me. The fintech demo is a product a
+ * prospect will judge in their own app's theme, so it carries a dark variant
+ * of the SAME token set: inside `.fintech-theme[data-theme="dark"]` the token
+ * variables point at dark values, and every `bg-canvas`, `text-ink`,
+ * `border-line`, `bg-success-bg`... class in the demo follows. The site
+ * header and footer sit outside the scope and stay light.
+ */
+.fintech-theme {
+  color-scheme: light;
+}
+
+.fintech-theme[data-theme="dark"] {
+  color-scheme: dark;
+
+  --canvas: 15 16 18; /* #0F1012 */
+  --cream: 22 23 26;
+  --surface: 23 24 27; /* #17181B */
+  --elevated: 35 37 41; /* #232529 */
+  --line: 44 46 51; /* #2C2E33 */
+  --border: 44 46 51;
+  --input: 44 46 51;
+  --muted: 163 167 174; /* #A3A7AE */
+  --table-head: 122 127 135;
+  --ink: 240 241 243; /* #F0F1F3 */
+  --accent-black: 214 216 220;
+  --subtle-gray: 139 149 165;
+  --input-pale: 29 30 34;
+  --dark-overlay: 8 8 9;
+
+  --blue: 92 141 255; /* #5C8DFF - Didit blue lifted for contrast on dark */
+  --blue-deep: 133 170 255;
+  --blue-soft: 26 39 74;
+  --blue-tint: 19 25 42;
+
+  --success-bg: 17 48 31;
+  --success-fg: 96 211 138;
+  --warning-bg: 54 42 12;
+  --warning-fg: 240 196 92;
+  --danger-bg: 60 25 22;
+  --danger-fg: 255 134 120;
+
+  --background: 15 16 18;
+  --foreground: 240 241 243;
+  --card: 15 16 18;
+  --ring: 92 141 255;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.5);
+}
+
+/* `btn-primary` writes its label in `text-canvas`, which is near-black in the
+   dark scope. White keeps the blue pill legible in both themes. */
+.fintech-theme[data-theme="dark"] .btn-primary {
+  color: #fff;
+}
+
+/* The bank's payment card art: brand gradient, no data on it. */
+.fintech-card-art {
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgb(var(--blue) / 0.95) 0%, rgb(var(--blue) / 0) 60%),
+    radial-gradient(120% 120% at 100% 100%, rgba(140, 104, 255, 0.85) 0%, rgba(140, 104, 255, 0) 60%),
+    linear-gradient(135deg, #10131c 0%, #1b2236 100%);
+}
