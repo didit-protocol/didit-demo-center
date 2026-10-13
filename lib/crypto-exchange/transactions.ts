@@ -511,6 +511,19 @@ export function riskBand(score: number | null): { label: string; tone: Tone } {
   return { label: "Low risk", tone: "approved" };
 }
 
+/** The wallet screening providers Didit can route to, by their API id. */
+const PROVIDER_NAME: Record<string, string> = {
+  merklescience: "Merkle Science",
+  chainalysis: "Chainalysis",
+  elliptic: "Elliptic",
+  crystal: "Crystal",
+  trmlabs: "TRM Labs",
+};
+
+export function providerName(provider: string): string {
+  return PROVIDER_NAME[provider] ?? provider;
+}
+
 export const TRAVEL_RULE_LABEL: Record<string, string> = {
   AWAITING_COUNTERPARTY: "Waiting for the other exchange",
   UNCONFIRMED_OWNERSHIP: "Wallet ownership not proven yet",

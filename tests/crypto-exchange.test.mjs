@@ -15,6 +15,7 @@ import {
   depositOutcome,
   isEvmAddress,
   parseAmount,
+  providerName,
   randomEvmAddress,
   riskBand,
   toTransactionView,
@@ -143,6 +144,8 @@ test("a clean deposit is credited and the sanctioned one is frozen", () => {
   assert.equal(depositOutcome(risky), "frozen");
   assert.equal(risky.wallet, SANCTIONED_WALLET);
   assert.equal(risky.screening.provider, "merklescience");
+  assert.equal(providerName(risky.screening.provider), "Merkle Science");
+  assert.equal(providerName("someone-new"), "someone-new");
   assert.equal(risky.screening.riskScore, 95);
   assert.equal(risky.screening.severity, "CRITICAL");
   assert.equal(risky.screening.walletSanctioned, true);
