@@ -74,15 +74,14 @@ export function FraudChapter() {
             Open your first shop in chapter 1 first: the second one is caught
             because the first one already signed up from this device.
           </Notice>
-        ) : others.length < 2 ? (
+        ) : others.length === 0 ? (
           <ShopForm
-            key={others.length}
             busy={Boolean(market.busy?.startsWith("shop:"))}
             disabled={!market.view?.availability.transactions}
             idPrefix="second-shop"
             initial={{
-              shop: others.length ? "Lumen Resale" : "Kestrel Goods",
-              company: others.length ? "Lumen Trading" : "Kestrel Commerce",
+              shop: "Kestrel Goods",
+              company: "Kestrel Commerce",
               country: "GB",
             }}
             submitLabel="Open a second shop on this device"
