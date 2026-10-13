@@ -114,11 +114,6 @@ input:where(.ig-input) {
   @apply rounded-sm border border-line bg-canvas;
 }
 
-/* Endpoints and SDK calls. The preset's `font-mono` is Inter, not monospace. */
-:where(.ig-code) {
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
-}
-
 :where(.ig-label) {
   @apply m-0 font-mono text-[10px] font-medium uppercase leading-none tracking-[0.16em] text-muted;
 }

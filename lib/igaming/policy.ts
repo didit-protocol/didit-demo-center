@@ -214,22 +214,8 @@ const KIND_NOUN: Record<CashierKind, string> = {
   deposit_limit: "Deposit limit",
 };
 
-const APPROVED_MESSAGE: Partial<Record<CashierKind, string>> = {
-  bet: "Bet placed. It settles when the match ends.",
-  bonus_claim: "Bonus credited to your balance.",
-  deposit_limit: "Your new limit applies from now.",
-};
-
-/**
- * A transaction status from `/v1/transactions/`, in the player's words. A
- * self-excluded player is never asked to verify a held deposit: it simply
- * stays uncredited.
- */
-export function transactionView(
-  kind: CashierKind,
-  status: string,
-  selfExcluded = false,
-): StatusView {
+/** A transaction status from `/v1/transactions/`, in the player's words. */
+export function transactionView(kind: CashierKind, status: string): StatusView {
   const noun = KIND_NOUN[kind];
 
   switch (status.trim().toUpperCase()) {
@@ -237,16 +223,16 @@ export function transactionView(
       return {
         label: "Approved",
         tone: "approved",
-        message: APPROVED_MESSAGE[kind] ?? `${noun} approved.`,
+        message:
+          kind === "bet"
+            ? "Bet placed. It settles when the match ends."
+            : kind === "bonus_claim"
+              ? "Bonus credited to your balance."
+              : kind === "deposit_limit"
+                ? "Your new limit applies from now."
+                : `${noun} approved.`,
       };
     case "AWAITING_USER":
-      if (selfExcluded)
-        return {
-          label: "On hold",
-          tone: "neutral",
-          message: `${noun} on hold and never credited while you are self-excluded.`,
-        };
-
       return {
         label: "Verify your ID",
         tone: "info",
@@ -563,13 +549,6 @@ export function ruleDefinitions(context: RuleContext): RuleDefinition[] {
 /** Self-exclusion as the operator records it on the Didit user. */
 export const SELF_EXCLUSION_REASON =
   "Self-excluded for 6 months at the player's request (Aurora Play demo).";
-
-/**
- * The withdrawal that pays a self-excluding player's balance back, stored on
- * the transaction's props so the operator sees why it was made. It has to go
- * before the block: Didit refuses every transaction of a BLOCKED user.
- */
-export const SELF_EXCLUSION_PAYOUT = "Balance paid back on self-exclusion";
 
 const formatter = (digits: number) =>
   new Intl.NumberFormat("en-IE", {

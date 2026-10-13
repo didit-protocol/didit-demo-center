@@ -20,8 +20,6 @@ export interface ActivityItem {
   record: TransactionRecord | null;
   /** Didit's own words when it refused the transaction. */
   error: string | null;
-  /** The HTTP status of that refusal, when Didit answered at all. */
-  httpStatus?: number | null;
 }
 
 export interface Ledger {

@@ -12,7 +12,7 @@ import { Lobby } from "./lobby";
 import { PlayerHome } from "./player-home";
 import { ThemeToggle, useDemoTheme } from "./theme";
 import { Spinner } from "./ui";
-import { type Aurora, useAurora } from "./use-aurora";
+import { useAurora } from "./use-aurora";
 
 import { Modal } from "@/components/demo-center/modal";
 import { OPERATOR_NAME, formatMoney } from "@/lib/igaming/policy";
@@ -29,43 +29,6 @@ function AuroraMark() {
       </span>
     </span>
   );
-}
-
-type Stage = "lobby" | "join" | "age" | "home";
-
-/** Which screen of the operator's app the visitor is on. */
-function stageOf(aurora: Aurora, joining: boolean): Stage {
-  const { state } = aurora;
-
-  if (!state) return joining || aurora.secondPending ? "join" : "lobby";
-  if (!state.age) return "join";
-
-  return state.age.summary?.status === "Approved" && state.ageSeen
-    ? "home"
-    : "age";
-}
-
-function Screen({
-  stage,
-  aurora,
-  onJoin,
-  onCancel,
-}: {
-  stage: Stage;
-  aurora: Aurora;
-  onJoin: () => void;
-  onCancel: () => void;
-}) {
-  switch (stage) {
-    case "lobby":
-      return <Lobby onJoin={onJoin} />;
-    case "join":
-      return <JoinCard aurora={aurora} onCancel={onCancel} />;
-    case "age":
-      return <AgeResult aurora={aurora} />;
-    default:
-      return <PlayerHome aurora={aurora} />;
-  }
 }
 
 /**
@@ -95,7 +58,15 @@ export function IgamingDemo() {
     router.replace("/igaming", { scroll: false });
   }, [hydrated, searchParams]);
 
-  const stage = stageOf(aurora, joining);
+  const stage = !state
+    ? joining || aurora.secondPending
+      ? "join"
+      : "lobby"
+    : !state.age
+      ? "join"
+      : state.age.summary?.status === "Approved" && state.ageSeen
+        ? "home"
+        : "age";
 
   const panel = (className?: string) => (
     <DiditPanel
@@ -184,8 +155,7 @@ export function IgamingDemo() {
                   <LogOut aria-hidden className="size-4" />
                 </button>
               </>
-            ) : null}
-            {hydrated && stage === "lobby" ? (
+            ) : hydrated && stage === "lobby" ? (
               <button
                 className="ig-btn ig-btn-primary h-9"
                 type="button"
@@ -197,20 +167,24 @@ export function IgamingDemo() {
           </header>
 
           <div className="min-h-[560px] bg-[rgb(var(--ig-page))] p-4 sm:p-5">
-            {hydrated ? (
-              <Screen
+            {!hydrated ? (
+              <div className="flex min-h-[520px] items-center justify-center text-muted">
+                <Spinner className="size-6" />
+              </div>
+            ) : stage === "lobby" ? (
+              <Lobby onJoin={() => setJoining(true)} />
+            ) : stage === "join" ? (
+              <JoinCard
                 aurora={aurora}
-                stage={stage}
                 onCancel={() => {
                   setJoining(false);
                   if (aurora.secondPending) aurora.reset();
                 }}
-                onJoin={() => setJoining(true)}
               />
+            ) : stage === "age" ? (
+              <AgeResult aurora={aurora} />
             ) : (
-              <div className="flex min-h-[520px] items-center justify-center text-muted">
-                <Spinner className="size-6" />
-              </div>
+              <PlayerHome aurora={aurora} />
             )}
           </div>
 
@@ -224,7 +198,10 @@ export function IgamingDemo() {
           </footer>
         </div>
 
-        <aside className="sticky top-[calc(var(--site-header-bottom,104px)+16px)] hidden lg:block">
+        <aside
+          className="sticky hidden lg:block"
+          style={{ top: "calc(var(--site-header-bottom, 104px) + 16px)" }}
+        >
           {panel("max-h-[calc(100vh-var(--site-header-bottom,104px)-32px)]")}
         </aside>
       </Container>

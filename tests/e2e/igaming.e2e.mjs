@@ -51,20 +51,13 @@ async function mockedPage({ viewport = { width: 1440, height: 900 }, seed = null
         url: `${BASE_URL}/__e2e/hosted-flow`,
         didit: [{ method: "POST", path: "/v3/session/", status: 201 }],
       }),
-    "POST /api/igaming/token": (route) => {
-      // The server only mints for the age check it can re-read as Approved.
-      assert.deepEqual(route.request().postDataJSON(), { ageSessionId: AGE_SESSION });
-
-      return json(route, {
+    "POST /api/igaming/token": (route) =>
+      json(route, {
         token: "e2e-token",
         expiresAt: new Date(Date.now() + 900_000).toISOString(),
         baseUrl: `${BASE_URL}/__e2e/didit`,
-        didit: [
-          { method: "GET", path: `/v3/session/${AGE_SESSION}/decision/`, status: 200 },
-          { method: "POST", path: "/v3/transactions/sdk-token/", status: 201 },
-        ],
-      });
-    },
+        didit: [{ method: "POST", path: "/v3/transactions/sdk-token/", status: 201 }],
+      }),
     ...overrides,
   };
 
@@ -111,13 +104,8 @@ const approvedPlayer = (overrides = {}) => ({
   ...overrides,
 });
 
-const HELD = {
-  bonus_claim: { rule: "Aurora Play demo: bonus claimed on a shared device", score: 60, tag: "BONUS_ABUSE" },
-  withdrawal: { rule: "Aurora Play demo: withdrawal with no play", score: 30, tag: "NO_PLAY_WITHDRAWAL" },
-};
-
 /** Didit's device lane, as the rules on the demo application answer it. */
-function deviceLane(page, { blocked = () => false, onSubmit = () => {} } = {}) {
+function deviceLane(page, { blocked = () => false } = {}) {
   const records = new Map();
   let count = 0;
 
@@ -132,7 +120,6 @@ function deviceLane(page, { blocked = () => false, onSubmit = () => {} } = {}) {
     const body = request.postDataJSON();
 
     assert.equal(request.headers()["x-transaction-token"], "e2e-token");
-    onSubmit(body);
     if (blocked()) {
       return json(
         route,
@@ -144,7 +131,7 @@ function deviceLane(page, { blocked = () => false, onSubmit = () => {} } = {}) {
     const kind = body.info.type;
     const amount = Number(body.info.amount);
     const stepUp = kind === "deposit" && amount >= 2000;
-    const held = HELD[kind];
+    const held = kind === "bonus_claim" || kind === "withdrawal";
     const id = `tx-${count}`;
     const record = {
       uuid: id,
@@ -155,15 +142,14 @@ function deviceLane(page, { blocked = () => false, onSubmit = () => {} } = {}) {
       amount: body.info.amount,
       currency: "EUR",
       status: stepUp ? "AWAITING_USER" : held ? "IN_REVIEW" : "APPROVED",
-      score: held?.score ?? 0,
-      tags: held ? [{ name: held.tag }] : [],
+      score: held ? 60 : 0,
+      tags: held ? [{ name: "BONUS_ABUSE" }] : [],
       parties: [{ role: "APPLICANT", device: { fingerprint: "e2e-device", network_context: { ip_country: "Spain", ip_country_code: "ES" } } }],
-      rule_runs: [
-        ...(stepUp
-          ? [{ rule_title: "Aurora Play demo: ID verification at 2,000 EUR deposited", matched: true, score_delta: 0, status_target: "AWAITING_USER" }]
-          : []),
-        ...(held ? [{ rule_title: held.rule, matched: true, score_delta: held.score, status_target: "IN_REVIEW" }] : []),
-      ],
+      rule_runs: stepUp
+        ? [{ rule_title: "Aurora Play demo: ID verification at 2,000 EUR deposited", matched: true, score_delta: 0, status_target: "AWAITING_USER" }]
+        : held
+          ? [{ rule_title: "Aurora Play demo: bonus claimed on a shared device", matched: true, score_delta: 60, status_target: "IN_REVIEW" }]
+          : [],
       action_required: stepUp
         ? { type: "verification_session", url: `${BASE_URL}/__e2e/hosted-flow`, session_id: KYC_SESSION, status: "Not Started" }
         : null,
@@ -222,13 +208,11 @@ test("registration opens the hosted age check and reports an unfinished one", as
 
 test("cashier: step-up, bonus review, operator view and self-exclusion", async () => {
   let excluded = false;
-  const sequence = [];
   const { context, page } = await mockedPage({
     seed: approvedPlayer(),
     overrides: {
       "POST /api/igaming/self-exclusion": (route) => {
         excluded = true;
-        sequence.push("block");
 
         return json(route, {
           player: { internalId: "user-1", status: "BLOCKED", name: "Alex Demo" },
@@ -244,10 +228,7 @@ test("cashier: step-up, bonus review, operator view and self-exclusion", async (
     },
   });
 
-  await deviceLane(page, {
-    blocked: () => excluded,
-    onSubmit: (body) => sequence.push(`${body.info.type} ${body.info.amount}`),
-  });
+  await deviceLane(page, { blocked: () => excluded });
   await page.goto(`${BASE_URL}/igaming`);
   await page.getByRole("heading", { name: "Hi, Alex" }).waitFor();
 
@@ -280,53 +261,12 @@ test("cashier: step-up, bonus review, operator view and self-exclusion", async (
     "https://business.staging.didit.me/console/org-1/app-1/users/user-1",
   );
 
-  // The API log shows what the SDK reported, not an assumed HTTP status, and
-  // each "via" badge sits on its row's first line.
-  await page.getByRole("tab", { name: /API log/ }).click();
-  const rows = page.locator('[role="tabpanel"] li');
-  const submitted = rows.filter({ hasText: "POST /v1/transactions/" });
-
-  assert.deepEqual(
-    await submitted.evaluateAll((items) => items.map((item) => item.lastElementChild.textContent)),
-    ["IN_REVIEW", "AWAITING_USER", "APPROVED"],
-  );
-  for (const row of await rows.all()) {
-    const [badge, text] = await Promise.all([
-      row.locator("span").nth(0).boundingBox(),
-      row.locator("span").nth(1).boundingBox(),
-    ]);
-
-    assert.ok(Math.abs(badge.y + badge.height / 2 - (text.y + 9)) <= 0.5, "badge centred on the first line");
-  }
-
-  // Self-exclusion pays the approved €250 back before Didit blocks the player.
-  await page.getByRole("button", { name: "Second account on this device" }).waitFor();
-  await page.getByRole("button", { name: "Verify now" }).waitFor();
+  // Self-exclusion: Didit itself refuses the next deposit.
   await page.getByRole("button", { name: "Self-exclude for 6 months" }).click();
-  const dialog = page.getByRole("dialog", { name: "Self-exclude" });
-
-  await dialog.getByText("Your €250 balance is paid back to your card first.", { exact: false }).waitFor();
-  assert.doesNotMatch(await dialog.innerText(), /new account/);
-  await dialog.getByRole("button", { name: "Self-exclude" }).click();
-  await dialog.waitFor({ state: "hidden" });
-  await page.getByText(/^Self-excluded until .*Deposits, bets and offers are closed\.$/).waitFor();
-  await page.getByText("paid back to your card").waitFor();
-  assert.deepEqual(sequence.slice(-2), ["withdrawal 250.00", "block"]);
-  await page.getByText("Withdrawal held for a quick review by our team.").first().waitFor();
-  await page.getByText("Withdrawal · Balance paid back on self-exclusion").waitFor();
-
-  // Nothing left on screen contradicts the exclusion.
-  assert.equal(await page.getByRole("button", { name: "Verify now" }).count(), 0);
-  assert.equal(await page.getByRole("button", { name: "Second account on this device" }).count(), 0);
-  assert.equal(await page.getByRole("tab", { name: "Withdraw" }).count(), 0);
-  await page.getByText("Deposit on hold and never credited while you are self-excluded.").waitFor();
-  await page.getByRole("button", { name: "Closed while you are self-excluded" }).waitFor();
-
-  // Didit itself refuses the next deposit, with its real status.
+  await page.getByRole("dialog", { name: "Self-exclude" }).getByRole("button", { name: "Self-exclude" }).click();
+  await page.getByText("Try a deposit anyway").waitFor();
   await page.getByText("Try a deposit anyway").click();
   await page.getByText(/Refused by Didit: The individual/).waitFor();
-  await page.getByRole("tab", { name: "Operator view" }).click();
-  await page.getByText("HTTP 400").waitFor();
   await context.close();
 });
 

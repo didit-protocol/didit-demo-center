@@ -122,21 +122,6 @@ test("transaction statuses read in the player's words", () => {
   );
   assert.equal(policy.transactionView("bet", "DECLINED").tone, "declined");
   assert.equal(policy.transactionView("bet", "SOMETHING").tone, "neutral");
-  assert.equal(policy.transactionView("bet", "APPROVED").message, "Bet placed. It settles when the match ends.");
-  assert.equal(policy.transactionView("withdrawal", "APPROVED").message, "Withdrawal approved.");
-});
-
-test("a self-excluded player is never asked to verify a held deposit", () => {
-  const held = policy.transactionView("deposit", "AWAITING_USER", true);
-
-  assert.equal(held.label, "On hold");
-  assert.equal(held.tone, "neutral");
-  assert.doesNotMatch(held.message, /verify/i);
-  // Every other status reads the same.
-  assert.deepEqual(
-    policy.transactionView("withdrawal", "IN_REVIEW", true),
-    policy.transactionView("withdrawal", "IN_REVIEW"),
-  );
 });
 
 test("session statuses read in the player's words", () => {

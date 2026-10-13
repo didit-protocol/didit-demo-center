@@ -41,19 +41,15 @@ on the page is a fixture.
 | --- | --- |
 | Registration | Adaptive age workflow: `POST /v3/session/`, the web SDK's `startVerification`, `GET /v3/session/{id}/decision/` |
 | Licensed markets | The session's IP analysis, a country list and a transaction rule |
-| Deposits, bets, withdrawals, bonus, limits | `POST /v3/transactions/sdk-token/` on the server, only after `GET /v3/session/{id}/decision/` shows the player's approved age check; `submitTransaction` and `GET /v1/transactions/{id}/` in the browser |
+| Deposits, bets, withdrawals, bonus, limits | `POST /v3/transactions/sdk-token/` on the server, `submitTransaction` and `GET /v1/transactions/{id}/` in the browser |
 | ID check at 2,000 EUR | A rule moves the deposit to `AWAITING_USER`; the page opens the returned verification session |
 | Bonus abuse | A rule counting players per device fingerprint |
-| Self-exclusion | The balance is paid back as a monitored withdrawal, then `PATCH /v3/users/{vendor_data}/update-status/` to `BLOCKED`: Didit then refuses the player's transactions |
+| Self-exclusion | `PATCH /v3/users/{vendor_data}/update-status/` to `BLOCKED`: Didit then refuses the player's transactions |
 | Operator side | Console deep links for the session, each transaction and the player |
 
 The player is a random `vendor_data` (`aurora-play-…`) in a signed, httpOnly
 cookie. The server routes under `app/api/igaming` only ever return records
-that belong to that player, cut down to what the page shows. The 18+ gate is
-the server's, not the page's: the token route mints nothing until Didit's own
-decision for the player's age check is `Approved`. The hosted flow's return
-URL is always this site's `/igaming` (`siteConfig.url`), never one the
-request supplies.
+that belong to that player, cut down to what the page shows.
 
 **One-time setup per environment.** The rules and lists live on the Didit
 application, not in this repo. Install them (idempotent, matched by name):
