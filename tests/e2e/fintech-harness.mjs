@@ -174,23 +174,36 @@ export function stagingKey() {
 }
 
 /**
- * The real staging API, except the onboarding decision: `decision.status`
- * is what the next decision read returns, for the real session id.
+ * The real staging API, except the onboarding decision's outcome: the real
+ * decision is read for the real session, and only its status (and the
+ * per-check statuses that go with it) is replaced by `decision.status`.
  */
 export function stagingDidit(decision = { status: "Not Started" }) {
   const key = stagingKey();
+  const call = (url, init = {}) =>
+    globalThis.fetch(url, {
+      ...init,
+      headers: { ...init.headers, "x-api-key": key },
+    });
   const fetch = async (url, init = {}) => {
     const path = url.replace(API, "");
     const match = path.match(/^\/v3\/session\/([^/]+)\/decision\/$/);
 
     if ((init.method ?? "GET") === "GET" && match && decision.status !== null) {
-      return json(decisionWith(decision.status, match[1]));
+      const real = await (await call(url, init)).json();
+      const set = decisionWith(decision.status, match[1]);
+
+      return json({
+        ...real,
+        status: set.status,
+        id_verifications: set.id_verifications,
+        liveness_checks: set.liveness_checks,
+        face_matches: set.face_matches,
+        aml_screenings: set.aml_screenings,
+      });
     }
 
-    return globalThis.fetch(url, {
-      ...init,
-      headers: { ...init.headers, "x-api-key": key },
-    });
+    return call(url, init);
   };
 
   return { fetch, decision, hasKey: Boolean(key) };
