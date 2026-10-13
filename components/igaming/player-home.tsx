@@ -21,6 +21,7 @@ import { Notice, SectionHead, Spinner, StatusPill } from "./ui";
 import { Modal } from "@/components/demo-center/modal";
 import {
   KYC_THRESHOLD,
+  SELF_EXCLUSION_PAYOUT,
   WELCOME_BONUS,
   depositProgress,
   formatMoney,
@@ -57,7 +58,27 @@ const EXCLUDED_UNTIL = () =>
 
 /* ── Wallet and cashier ── */
 
-function Wallet({ aurora }: { aurora: Aurora }) {
+function Balance({
+  amount,
+  children,
+}: {
+  amount: number;
+  children?: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-3">
+      <div>
+        <p className="ig-label mb-2">Balance</p>
+        <p className="tnum m-0 text-[32px] font-display leading-none tracking-display text-ink">
+          {formatMoney(amount)}
+        </p>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function Cashier({ aurora }: { aurora: Aurora }) {
   const state = aurora.state!;
   const { totals } = aurora;
   const [mode, setMode] = React.useState<"deposit" | "withdrawal">("deposit");
@@ -66,21 +87,15 @@ function Wallet({ aurora }: { aurora: Aurora }) {
   const headroom = limitHeadroom(state.depositLimit, totals.depositedToday);
   const verified = Boolean(state.kyc?.listed);
   const busy = aurora.busy === mode;
-  const blocked = state.selfExcluded;
   const overLimit =
-    !blocked && mode === "deposit" && headroom !== null && amount > headroom;
-  const overBalance =
-    !blocked && mode === "withdrawal" && amount > totals.balance;
+    mode === "deposit" && headroom !== null && amount > headroom;
+  const overBalance = mode === "withdrawal" && amount > totals.balance;
+  const verb = mode === "deposit" ? "Deposit" : "Withdraw";
+  const Icon = mode === "deposit" ? ArrowDownLeft : ArrowUpRight;
 
   return (
-    <section className="ig-card flex flex-col gap-4 p-5">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="ig-label mb-2">Balance</p>
-          <p className="tnum m-0 text-[32px] font-display leading-none tracking-display text-ink">
-            {formatMoney(totals.balance)}
-          </p>
-        </div>
+    <>
+      <Balance amount={totals.balance}>
         <div
           className="inline-flex rounded-pill border border-line bg-surface p-1"
           role="tablist"
@@ -104,7 +119,7 @@ function Wallet({ aurora }: { aurora: Aurora }) {
             </button>
           ))}
         </div>
-      </div>
+      </Balance>
 
       <div className="flex flex-wrap gap-2">
         {(mode === "deposit" ? DEPOSITS : WITHDRAWALS).map((value) => (
@@ -136,47 +151,19 @@ function Wallet({ aurora }: { aurora: Aurora }) {
         </label>
       </div>
 
-      {blocked ? (
-        <Notice
-          action={
-            mode === "deposit" ? (
-              <button
-                className="text-xs font-semibold underline underline-offset-2"
-                disabled={busy}
-                type="button"
-                onClick={() => void aurora.deposit(10)}
-              >
-                {busy ? "Sending…" : "Try a deposit anyway"}
-              </button>
-            ) : null
-          }
-          tone="declined"
-        >
-          Self-excluded until {EXCLUDED_UNTIL()}. Cashier closed.
-        </Notice>
-      ) : (
-        <button
-          className="ig-btn ig-btn-primary h-11 w-full"
-          disabled={busy || amount <= 0 || overLimit || overBalance}
-          type="button"
-          onClick={() =>
-            void (mode === "deposit"
-              ? aurora.deposit(amount)
-              : aurora.withdraw(amount))
-          }
-        >
-          {busy ? (
-            <Spinner />
-          ) : mode === "deposit" ? (
-            <ArrowDownLeft aria-hidden className="size-4" />
-          ) : (
-            <ArrowUpRight aria-hidden className="size-4" />
-          )}
-          {busy
-            ? CHECKING
-            : `${mode === "deposit" ? "Deposit" : "Withdraw"} ${formatMoney(amount)}`}
-        </button>
-      )}
+      <button
+        className="ig-btn ig-btn-primary h-11 w-full"
+        disabled={busy || amount <= 0 || overLimit || overBalance}
+        type="button"
+        onClick={() =>
+          void (mode === "deposit"
+            ? aurora.deposit(amount)
+            : aurora.withdraw(amount))
+        }
+      >
+        {busy ? <Spinner /> : <Icon aria-hidden className="size-4" />}
+        {busy ? CHECKING : `${verb} ${formatMoney(amount)}`}
+      </button>
       {overLimit ? (
         <p className="m-0 text-xs text-danger">
           Over your daily limit: {formatMoney(headroom ?? 0)} left today.
@@ -232,6 +219,75 @@ function Wallet({ aurora }: { aurora: Aurora }) {
           </p>
         ) : null}
       </div>
+    </>
+  );
+}
+
+/**
+ * Self-excluded: deposits and bets are closed, and the balance was paid back
+ * before Didit blocked the player. "Try a deposit anyway" shows Didit itself
+ * refusing them.
+ */
+function ClosedCashier({ aurora }: { aurora: Aurora }) {
+  const state = aurora.state!;
+  const busy = aurora.busy === "deposit";
+  const payout = state.activity.find(
+    (item) =>
+      item.kind === "withdrawal" && item.detail === SELF_EXCLUSION_PAYOUT,
+  );
+  const view = payout?.record
+    ? transactionView("withdrawal", payout.record.status)
+    : null;
+
+  return (
+    <>
+      <Balance amount={aurora.totals.balance} />
+      <Notice
+        action={
+          <button
+            className="text-xs font-semibold underline underline-offset-2"
+            disabled={busy}
+            type="button"
+            onClick={() => void aurora.deposit(10)}
+          >
+            {busy ? "Sending…" : "Try a deposit anyway"}
+          </button>
+        }
+        tone="declined"
+      >
+        Self-excluded until {EXCLUDED_UNTIL()}. Deposits, bets and offers are
+        closed.
+      </Notice>
+      {payout ? (
+        <div className="flex items-start justify-between gap-3 rounded-xs bg-surface p-3.5">
+          <div className="min-w-0">
+            <p className="m-0 text-[13px] text-ink">
+              <span className="tnum font-semibold">
+                {formatMoney(payout.amount)}
+              </span>{" "}
+              paid back to your card
+            </p>
+            <p className="mb-0 mt-1 text-xs leading-5 text-muted">
+              {view?.message ?? `Refused by Didit: ${payout.error}`}
+            </p>
+          </div>
+          <StatusPill tone={view?.tone ?? "declined"}>
+            {view?.label ?? "Refused"}
+          </StatusPill>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+function Wallet({ aurora }: { aurora: Aurora }) {
+  return (
+    <section className="ig-card flex flex-col gap-4 p-5">
+      {aurora.state!.selfExcluded ? (
+        <ClosedCashier aurora={aurora} />
+      ) : (
+        <Cashier aurora={aurora} />
+      )}
     </section>
   );
 }
@@ -244,7 +300,12 @@ function KycBanner({ aurora }: { aurora: Aurora }) {
     (item) => item.record?.id === kyc?.transactionId,
   );
 
-  if (!kyc || kyc.listed || held?.record?.status !== "AWAITING_USER")
+  if (
+    !kyc ||
+    kyc.listed ||
+    aurora.state?.selfExcluded ||
+    held?.record?.status !== "AWAITING_USER"
+  )
     return null;
   const view = kyc.summary ? sessionView("kyc", kyc.summary.status) : null;
   const verifying = aurora.busy === "verify";
@@ -294,6 +355,11 @@ function BetSlip({ aurora }: { aurora: Aurora }) {
   const busy = aurora.busy === "bet";
   const short = stake > aurora.totals.balance;
   const blocked = Boolean(aurora.state?.selfExcluded);
+  let label = `Bet ${formatMoney(stake)} · returns ${formatMoney(stake * selection.odds)}`;
+
+  if (short) label = "Deposit to place a bet";
+  if (blocked) label = "Betting closed";
+  if (busy) label = CHECKING;
 
   return (
     <section className="ig-card flex flex-col gap-4 p-5">
@@ -348,11 +414,7 @@ function BetSlip({ aurora }: { aurora: Aurora }) {
         }
       >
         {busy ? <Spinner /> : null}
-        {busy
-          ? CHECKING
-          : short
-            ? "Deposit to place a bet"
-            : `Bet ${formatMoney(stake)} · returns ${formatMoney(stake * selection.odds)}`}
+        {label}
       </button>
     </section>
   );
@@ -407,7 +469,7 @@ function BonusCard({ aurora }: { aurora: Aurora }) {
           {busy ? CHECKING : "Claim free bet"}
         </button>
       )}
-      {claim && !state.secondAccount ? (
+      {claim && !state.secondAccount && !state.selfExcluded ? (
         <div className="border-t border-line pt-4">
           <p className="m-0 text-[13px] leading-5 text-muted">
             Try the abuse case: open a second account on this browser and claim
@@ -506,8 +568,9 @@ function SaferGambling({
         ) : (
           <>
             <p className="m-0 text-[13px] leading-5 text-muted">
-              Need a longer break? Self-exclusion closes your account for 6
-              months and Didit blocks you everywhere this operator checks.
+              Need a longer break? Self-exclusion pays your balance back and
+              closes your account for 6 months. Didit then refuses every
+              transaction on it.
             </p>
             <button
               className="ig-btn ig-btn-danger mt-3"
@@ -534,8 +597,19 @@ const KIND_TITLE: Record<ActivityItem["kind"], string> = {
   deposit_limit: "Deposit limit",
 };
 
+function signedAmount(item: ActivityItem): string {
+  const amount = formatMoney(item.amount);
+
+  if (!item.record || item.kind === "deposit_limit") return amount;
+
+  return item.kind === "withdrawal" || item.kind === "bet"
+    ? `-${amount}`
+    : `+${amount}`;
+}
+
 function ActivityList({ aurora }: { aurora: Aurora }) {
   const activity = aurora.state?.activity ?? [];
+  const excluded = Boolean(aurora.state?.selfExcluded);
 
   return (
     <section className="ig-card p-5">
@@ -549,9 +623,12 @@ function ActivityList({ aurora }: { aurora: Aurora }) {
         <ul className="m-0 mt-3 list-none p-0">
           {activity.map((item) => {
             const view = item.record
-              ? transactionView(item.kind, item.record.status)
+              ? transactionView(item.kind, item.record.status, excluded)
               : null;
-            const out = item.kind === "withdrawal" || item.kind === "bet";
+            const detail =
+              item.kind === "bet" || item.kind === "withdrawal"
+                ? item.detail
+                : null;
 
             return (
               <li
@@ -561,10 +638,10 @@ function ActivityList({ aurora }: { aurora: Aurora }) {
                 <div className="min-w-0 flex-1">
                   <p className="m-0 text-sm font-medium text-ink">
                     {KIND_TITLE[item.kind]}
-                    {item.detail && item.kind === "bet" ? (
+                    {detail ? (
                       <span className="font-normal text-muted">
                         {" "}
-                        · {item.detail}
+                        · {detail}
                       </span>
                     ) : null}
                   </p>
@@ -574,9 +651,7 @@ function ActivityList({ aurora }: { aurora: Aurora }) {
                 </div>
                 <div className="flex flex-none flex-col items-end gap-1.5">
                   <span className="tnum text-sm font-semibold text-ink">
-                    {item.kind === "deposit_limit" || !item.record
-                      ? formatMoney(item.amount)
-                      : `${out ? "-" : "+"}${formatMoney(item.amount)}`}
+                    {signedAmount(item)}
                   </span>
                   {view ? (
                     <StatusPill tone={view.tone}>{view.label}</StatusPill>
@@ -653,7 +728,7 @@ export function PlayerHome({ aurora }: { aurora: Aurora }) {
 
       <Modal
         label="Verify your identity"
-        open={aurora.kycPrompt && Boolean(held)}
+        open={aurora.kycPrompt && Boolean(held) && !state.selfExcluded}
         width="max-w-[480px]"
         onClose={() => aurora.setKycPrompt(false)}
       >
@@ -708,9 +783,13 @@ export function PlayerHome({ aurora }: { aurora: Aurora }) {
               Self-exclude until {EXCLUDED_UNTIL()}?
             </h2>
             <p className="mb-0 mt-2 text-sm leading-6 text-muted">
-              You won&apos;t be able to deposit, bet or open a new account until
-              then, and this can&apos;t be undone early. Aurora Play blocks you
-              on Didit, so the exclusion holds across every check.
+              You won&apos;t be able to deposit, bet or claim offers until then,
+              and this can&apos;t be undone early.{" "}
+              {aurora.totals.balance > 0
+                ? `Your ${formatMoney(aurora.totals.balance)} balance is paid back to your card first. `
+                : ""}
+              Aurora Play then blocks you on Didit, so Didit refuses every
+              transaction on this account.
             </p>
           </div>
           <div className="flex flex-wrap justify-end gap-2.5">
@@ -723,7 +802,7 @@ export function PlayerHome({ aurora }: { aurora: Aurora }) {
             </button>
             <button
               className="ig-btn ig-btn-danger"
-              disabled={aurora.busy === "exclude"}
+              disabled={aurora.busy === "exclude" || !aurora.sdkReady}
               type="button"
               onClick={async () => {
                 await aurora.selfExclude();
