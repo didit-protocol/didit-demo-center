@@ -370,17 +370,13 @@ export function OperatorChapter() {
   }, [market.inspecting, transactions]);
 
   return (
-    <div className="grid gap-5 2xl:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
-      <div className="flex flex-col gap-5">
-        <Queue />
-        <KybQueue />
-      </div>
-      <div className="flex min-w-0 flex-col gap-5">
-        {market.error?.scope === "operator" ? (
-          <Notice tone="declined">{market.error.message}</Notice>
-        ) : null}
-        <Inspection />
-      </div>
+    <div className="flex flex-col gap-5">
+      <Queue />
+      <KybQueue />
+      {market.error?.scope === "operator" ? (
+        <Notice tone="declined">{market.error.message}</Notice>
+      ) : null}
+      <Inspection />
     </div>
   );
 }
