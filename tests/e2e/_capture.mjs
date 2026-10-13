@@ -69,7 +69,7 @@ for (const [name, st] of Object.entries(STATES)) {
     if (st.account) jar.account = { ...st.account };
     if (st.flow) await stubHostedFlow(page, { outcome: st.flow });
     await page.goto(`${BASE}/fintech`, { waitUntil: "networkidle" });
-    await page.addStyleTag({ content: "*,*::before,*::after{animation-duration:0s!important;transition-duration:0s!important} .animate-spin{animation:none!important}" });
+    await page.addStyleTag({ content: "*,*::before,*::after{animation-duration:0s!important;transition-duration:0s!important} .animate-spin{animation:none!important}" + (name === "phone-sheet" ? "" : ' [data-testid="fx-demo"] > button.fixed{display:none!important}') });
     await st.run(page, didit);
     await page.waitForTimeout(300);
     const file = `${OUT}/${name}--${size}--${theme}.png`;
