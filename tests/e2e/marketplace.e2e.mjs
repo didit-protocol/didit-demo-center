@@ -46,7 +46,7 @@ test("marketplace: sellers, buyers, fraud and the operator view, live", { skip, 
 
   await t.test("payouts stay locked while the business is not verified", async () => {
     await page.getByRole("button", { name: /Payouts/ }).first().click();
-    await page.getByText("Payouts are locked").waitFor();
+    await page.getByText("Payouts are locked", { exact: true }).waitFor();
     assert.equal(await page.getByRole("button", { name: /Pay out/ }).count(), 0);
   });
 
@@ -81,7 +81,9 @@ test("marketplace: sellers, buyers, fraud and the operator view, live", { skip, 
 
     const held = page.locator(".mkt-inset", { hasText: "Seller sign-up: Kestrel Goods" });
 
-    await held.getByText("Held for review").waitFor({ timeout: LIVE_TIMEOUT });
+    await held
+      .getByText("Held for review", { exact: true })
+      .waitFor({ timeout: LIVE_TIMEOUT });
     assert.match(await held.innerText(), /second shop on one device/);
     assert.match(await held.innerText(), /SHARED DEVICE/);
   });

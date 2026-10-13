@@ -13,7 +13,8 @@
     "check:website-chrome": "node scripts/check-website-chrome-parity.mjs",
     "check:docs-links": "node scripts/check-docs-links.mjs",
     "shots": "node scripts/capture-screenshots.mjs",
-    "marketplace:setup": "node --env-file-if-exists=.env scripts/marketplace-setup.mjs"
+    "marketplace:setup": "node --env-file-if-exists=.env scripts/marketplace-setup.mjs",
+    "test:e2e:marketplace": "node --test tests/e2e/marketplace.e2e.mjs"
   },
   "dependencies": {
     "@didit-protocol/sdk-web": "^0.4.0",
