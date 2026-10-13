@@ -188,6 +188,8 @@ export interface SellerView {
   kyb: KybSummary | null;
   /** Set when the decision could not be read right now. */
   kybError: string | null;
+  /** The KYB in Console v2, once there is one. */
+  kybLink: ConsoleLink | null;
 }
 
 export interface StateView {
@@ -218,6 +220,7 @@ async function readDecision(
 async function sellerView(
   env: MarketEnv,
   seller: SellerRecord,
+  target: ConsoleTarget | null,
 ): Promise<SellerView> {
   const decision = seller.sid
     ? await readDecision(env, seller.sid)
@@ -231,6 +234,20 @@ async function sellerView(
     signup: seller.signup,
     kyb: decision.kyb,
     kybError: decision.error,
+    kybLink:
+      seller.sid && target
+        ? consoleLink(target, { kind: "kyb", id: seller.sid })
+        : null,
+  };
+}
+
+async function consoleTarget(env: MarketEnv): Promise<ConsoleTarget> {
+  const ids = await resolveConsoleIds(env);
+
+  return {
+    origin: env.console.origin,
+    orgId: ids?.orgId ?? null,
+    appId: ids?.appId ?? null,
   };
 }
 
@@ -252,9 +269,15 @@ export async function handleState(
 ): Promise<Reply> {
   const live = availability(env);
   const current = state ?? emptyState(env.now());
+  const target =
+    live.transactions && current.sellers.some((seller) => seller.sid)
+      ? await consoleTarget(env)
+      : null;
   const [sellers, transactions] = await Promise.all([
     live.transactions
-      ? Promise.all(current.sellers.map((seller) => sellerView(env, seller)))
+      ? Promise.all(
+          current.sellers.map((seller) => sellerView(env, seller, target)),
+        )
       : Promise.resolve([]),
     live.transactions
       ? Promise.all(current.tx.map((uuid) => readTransaction(env, uuid)))
@@ -331,7 +354,7 @@ export async function handleOpenShop(
 
   return {
     status: 201,
-    body: { seller: await sellerView(env, seller) },
+    body: { seller: await sellerView(env, seller, null) },
     state: next,
   };
 }
@@ -744,11 +767,7 @@ export async function handleOperator(
   if (!raw) return upstream(result, "The transaction could not be read.");
 
   const ids = await resolveConsoleIds(env);
-  const target: ConsoleTarget = {
-    origin: env.console.origin,
-    orgId: ids?.orgId ?? null,
-    appId: ids?.appId ?? null,
-  };
+  const target = await consoleTarget(env);
   const party = subjectParty(raw);
   const subject = subjectVendor(raw);
   const fingerprint = deviceFingerprint(raw);
