@@ -43,7 +43,8 @@ export const PANEL_STEPS: PanelStep[] = [
       {
         side: "server",
         label: "POST /v3/session/",
-        detail: "KYC + AML workflow, vendor_data = the user's id at the exchange.",
+        detail:
+          "KYC + AML workflow, vendor_data = the user's id at the exchange.",
         docsPath: "sessions-api/create-session",
       },
       {
@@ -55,7 +56,8 @@ export const PANEL_STEPS: PanelStep[] = [
       {
         side: "server",
         label: "GET /v3/session/{id}/decision/",
-        detail: "Opens, holds or rejects the account. Production listens to the status webhook instead of polling.",
+        detail:
+          "Opens, holds or rejects the account. Production listens to the status webhook instead of polling.",
         docsPath: "sessions-api/retrieve-session",
       },
     ],
@@ -73,19 +75,22 @@ export const PANEL_STEPS: PanelStep[] = [
       {
         side: "server",
         label: "POST /v3/transactions/",
-        detail: "finance, direction in, includeCryptoScreening: true, the sending wallet as the counterparty.",
+        detail:
+          "finance, direction in, includeCryptoScreening: true, the sending wallet as the counterparty.",
         docsPath: "management-api/transactions/create",
       },
       {
         side: "didit",
         label: "Wallet screening",
-        detail: "Risk score, severity and exposure from the blockchain analytics provider, written to the transaction.",
+        detail:
+          "Risk score, severity and exposure from the blockchain analytics provider, written to the transaction.",
         docsPath: "transaction-monitoring/wallet-screening",
       },
       {
         side: "didit",
         label: "Rules: custom_values.wallet_sanctioned, wallet_risk_score",
-        detail: "Sanctioned wallets are declined, high-risk ones held for review.",
+        detail:
+          "Sanctioned wallets are declined, high-risk ones held for review.",
         docsPath: "transaction-monitoring/rules",
       },
     ],
@@ -99,25 +104,31 @@ export const PANEL_STEPS: PanelStep[] = [
       { label: "Transaction Monitoring", icon: M("transactions") },
       { label: "Wallet Screening", icon: M("wallet-screening") },
       { label: "Travel Rule", icon: M("counterparties") },
-      { label: "Biometric Authentication", icon: M("biometric-authentication") },
+      {
+        label: "Biometric Authentication",
+        icon: M("biometric-authentication"),
+      },
     ],
     calls: [
       {
         side: "server",
         label: "POST /v3/transactions/sdk-token/",
-        detail: "A short-lived token bound to this user. The API key never reaches the browser.",
+        detail:
+          "A short-lived token bound to this user. The API key never reaches the browser.",
         docsPath: "management-api/transactions/sdk-token",
       },
       {
         side: "browser",
         label: "DiditSdk.shared.submitTransaction(...)",
-        detail: "POST /v1/transactions/ with device intelligence attached. autoLaunchAction: false, so a blocked transfer never asks for wallet proof.",
+        detail:
+          "POST /v1/transactions/ with device intelligence attached. autoLaunchAction: false, so a blocked transfer never asks for wallet proof.",
         docsPath: "transaction-monitoring/sdk-transaction-submission",
       },
       {
         side: "didit",
         label: "Travel Rule exchange",
-        detail: "Routes the originator and beneficiary data to the receiving exchange, or asks for proof of a self-hosted wallet.",
+        detail:
+          "Routes the originator and beneficiary data to the receiving exchange, or asks for proof of a self-hosted wallet.",
         docsPath: "transaction-monitoring/travel-rule",
       },
       {
@@ -129,7 +140,8 @@ export const PANEL_STEPS: PanelStep[] = [
       {
         side: "browser",
         label: "action_required: verification_session",
-        detail: "A rule set the transfer to AWAITING_USER with the biometric workflow; the selfie session opens with startVerification.",
+        detail:
+          "A rule set the transfer to AWAITING_USER with the biometric workflow; the selfie session opens with startVerification.",
         docsPath: "core-technology/biometric-auth/overview",
       },
     ],
@@ -144,19 +156,22 @@ export const PANEL_STEPS: PanelStep[] = [
       {
         side: "server",
         label: "GET /v3/transactions/{id}/",
-        detail: "The full record, read with the API key. The demo shows a trimmed copy.",
+        detail:
+          "The full record, read with the API key. The demo shows a trimmed copy.",
         docsPath: "management-api/transactions/get",
       },
       {
         side: "didit",
         label: "Webhooks: transaction.created, transaction.status.updated",
-        detail: "How production learns that a reviewed transfer was approved or declined.",
+        detail:
+          "How production learns that a reviewed transfer was approved or declined.",
         docsPath: "transaction-monitoring/webhooks",
       },
       {
         side: "didit",
         label: "Console: Transactions",
-        detail: "The same session and transaction, side by side, for the analyst.",
+        detail:
+          "The same session and transaction, side by side, for the analyst.",
         docsPath: "console/transaction-monitoring",
       },
     ],

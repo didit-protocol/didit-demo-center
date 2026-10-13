@@ -35,7 +35,10 @@ export async function POST(request: NextRequest) {
   const ownWallet = String(body?.ownWallet ?? "");
 
   if (!SOURCES.includes(source) || !amount || !isEvmAddress(ownWallet)) {
-    return failure("Pick a deposit source and an amount between 0.01 and 5 ETH.", 400);
+    return failure(
+      "Pick a deposit source and an amount between 0.01 and 5 ETH.",
+      400,
+    );
   }
 
   const lookup = await lookupAccount(request, { requireApproved: true });

@@ -132,7 +132,9 @@ export function buildDepositPayload(input: {
       currencyType: "crypto",
       type: "deposit",
       cryptoParams: { crypto_chain: CX_CHAIN },
-      paymentDetails: own ? "Deposit from own wallet" : "Deposit from unknown sender",
+      paymentDetails: own
+        ? "Deposit from own wallet"
+        : "Deposit from unknown sender",
     },
     subject: {
       type: "individual",
@@ -194,7 +196,10 @@ export function buildWithdrawalPayload(input: {
       type: "individual",
       fullName: beneficiary,
       paymentMethod: {
-        type: input.destination === "own-wallet" ? "unhosted_wallet" : "crypto_wallet",
+        type:
+          input.destination === "own-wallet"
+            ? "unhosted_wallet"
+            : "crypto_wallet",
         accountId: address,
       },
     },
@@ -275,7 +280,9 @@ export interface TransactionView {
 type Raw = Record<string, unknown>;
 
 const record = (value: unknown): Raw =>
-  value && typeof value === "object" && !Array.isArray(value) ? (value as Raw) : {};
+  value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Raw)
+    : {};
 const list = (value: unknown): Raw[] =>
   Array.isArray(value) ? value.map(record) : [];
 const text = (value: unknown): string | null =>
@@ -409,7 +416,9 @@ const TRAVEL_RULE_CLEARED = ["COMPLETED", "FINISHED", "NOT_APPLICABLE"];
 
 export type DepositOutcome = "credited" | "frozen" | "review" | "pending";
 
-export function depositOutcome(view: Pick<TransactionView, "status">): DepositOutcome {
+export function depositOutcome(
+  view: Pick<TransactionView, "status">,
+): DepositOutcome {
   switch (view.status) {
     case "APPROVED":
       return "credited";
@@ -487,7 +496,10 @@ export const STATUS_LABEL: Record<string, string> = {
 };
 
 export function statusLabel(status: string): string {
-  return STATUS_LABEL[status] ?? (status ? status.replace(/_/g, " ").toLowerCase() : "Unknown");
+  return (
+    STATUS_LABEL[status] ??
+    (status ? status.replace(/_/g, " ").toLowerCase() : "Unknown")
+  );
 }
 
 /** Merkle Science-style 0-100 score into the band the UI colours. */
@@ -520,5 +532,7 @@ export function travelRuleLabel(status: string): string {
 }
 
 export function shortAddress(address: string): string {
-  return address.length > 14 ? `${address.slice(0, 6)}…${address.slice(-4)}` : address;
+  return address.length > 14
+    ? `${address.slice(0, 6)}…${address.slice(-4)}`
+    : address;
 }

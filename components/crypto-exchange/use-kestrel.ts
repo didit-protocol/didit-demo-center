@@ -55,9 +55,12 @@ function freshWallets(): CxWallets {
 
 function loadState(): StoredState {
   try {
-    const parsed = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "null");
+    const parsed = JSON.parse(
+      window.localStorage.getItem(STORAGE_KEY) ?? "null",
+    );
 
-    if (parsed?.wallets?.ownWallet && Array.isArray(parsed.activity)) return parsed;
+    if (parsed?.wallets?.ownWallet && Array.isArray(parsed.activity))
+      return parsed;
   } catch {
     // Unreadable storage: start a fresh demo.
   }
@@ -68,7 +71,9 @@ function loadState(): StoredState {
 async function api<T>(
   path: string,
   init?: RequestInit,
-): Promise<{ ok: true; data: T } | { ok: false; status: number; error: string }> {
+): Promise<
+  { ok: true; data: T } | { ok: false; status: number; error: string }
+> {
   try {
     const response = await fetch(`/api/crypto-exchange${path}`, {
       ...init,
@@ -81,13 +86,18 @@ async function api<T>(
       return {
         ok: false,
         status: response.status,
-        error: data?.error ?? "Something went wrong talking to Kestrel's server.",
+        error:
+          data?.error ?? "Something went wrong talking to Kestrel's server.",
       };
     }
 
     return { ok: true, data: data as T };
   } catch {
-    return { ok: false, status: 0, error: "Kestrel's server could not be reached." };
+    return {
+      ok: false,
+      status: 0,
+      error: "Kestrel's server could not be reached.",
+    };
   }
 }
 
@@ -105,10 +115,14 @@ export function balancesOf(activity: ActivityItem[]) {
     withdrawalHoldsFunds(withdrawalStage(item.view)),
   );
   const sent = sum(
-    holding.filter((item) => withdrawalStage(item.view) === "ready").map(amount),
+    holding
+      .filter((item) => withdrawalStage(item.view) === "ready")
+      .map(amount),
   );
   const held = sum(
-    holding.filter((item) => withdrawalStage(item.view) !== "ready").map(amount),
+    holding
+      .filter((item) => withdrawalStage(item.view) !== "ready")
+      .map(amount),
   );
 
   return {
@@ -118,7 +132,9 @@ export function balancesOf(activity: ActivityItem[]) {
     inReview: sum(
       deposits.filter((item) => item.view.status === "IN_REVIEW").map(amount),
     ),
-    frozen: sum(deposits.filter((item) => item.view.status === "DECLINED").map(amount)),
+    frozen: sum(
+      deposits.filter((item) => item.view.status === "DECLINED").map(amount),
+    ),
   };
 }
 
@@ -135,7 +151,8 @@ export const WITHDRAWAL_LABEL: Record<WithdrawalDestination, string> = {
 
 /** A transfer is final once Didit and the Travel Rule have nothing left to say. */
 function isSettled(item: ActivityItem): boolean {
-  if (item.kind === "deposit") return ["APPROVED", "DECLINED"].includes(item.view.status);
+  if (item.kind === "deposit")
+    return ["APPROVED", "DECLINED"].includes(item.view.status);
 
   return ["ready", "blocked"].includes(withdrawalStage(item.view));
 }
@@ -151,7 +168,8 @@ export function useKestrel() {
   const flowRef = React.useRef<Flow | null>(null);
   const [state, setState] = React.useState<StoredState | null>(null);
   const [account, setAccount] = React.useState<KestrelAccount | null>(null);
-  const [accountStatus, setAccountStatus] = React.useState<AccountStatus>("loading");
+  const [accountStatus, setAccountStatus] =
+    React.useState<AccountStatus>("loading");
   const [accountError, setAccountError] = React.useState<string | null>(null);
   const [signingUp, setSigningUp] = React.useState(false);
   const [busyItem, setBusyItem] = React.useState<string | null>(null);
@@ -161,24 +179,28 @@ export function useKestrel() {
 
   stateRef.current = state;
 
-  const update = React.useCallback((next: (current: StoredState) => StoredState) => {
-    setState((current) => {
-      if (!current) return current;
-      const value = next(current);
+  const update = React.useCallback(
+    (next: (current: StoredState) => StoredState) => {
+      setState((current) => {
+        if (!current) return current;
+        const value = next(current);
 
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
 
-      return value;
-    });
-  }, []);
+        return value;
+      });
+    },
+    [],
+  );
 
   const upsertItem = React.useCallback(
     (item: ActivityItem) =>
       update((current) => ({
         ...current,
-        activity: [item, ...current.activity.filter((entry) => entry.id !== item.id)].sort(
-          (a, b) => b.createdAt.localeCompare(a.createdAt),
-        ),
+        activity: [
+          item,
+          ...current.activity.filter((entry) => entry.id !== item.id),
+        ].sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
       })),
     [update],
   );
@@ -193,7 +215,11 @@ export function useKestrel() {
 
       return result.data;
     }
-    if (result.status === 401 || result.status === 404 || result.status === 403) {
+    if (
+      result.status === 401 ||
+      result.status === 404 ||
+      result.status === 403
+    ) {
       setAccount(null);
       setAccountStatus("none");
     } else {
@@ -207,7 +233,9 @@ export function useKestrel() {
   const refreshItem = React.useCallback(
     async (id: string) => {
       const result = await api<TransactionView>(`/transactions/${id}`);
-      const existing = stateRef.current?.activity.find((item) => item.id === id);
+      const existing = stateRef.current?.activity.find(
+        (item) => item.id === id,
+      );
 
       if (!result.ok || !existing) return existing ?? null;
       const item = { ...existing, view: result.data };
@@ -221,16 +249,22 @@ export function useKestrel() {
 
   /** Polls one transfer until Didit moves it on, or the attempts run out. */
   const pollItem = React.useCallback(
-    async (id: string, from: { status: string; action: string | null }, attempts: number) => {
+    async (
+      id: string,
+      from: { status: string; action: string | null },
+      attempts: number,
+    ) => {
       setBusyItem(id);
       try {
         for (let attempt = 0; attempt < attempts; attempt++) {
-          if (attempt > 0) await new Promise((resolve) => setTimeout(resolve, 2000));
+          if (attempt > 0)
+            await new Promise((resolve) => setTimeout(resolve, 2000));
           const item = await refreshItem(id);
 
           if (
             item &&
-            (item.view.status !== from.status || (item.view.action?.type ?? null) !== from.action)
+            (item.view.status !== from.status ||
+              (item.view.action?.type ?? null) !== from.action)
           ) {
             return;
           }
@@ -270,7 +304,9 @@ export function useKestrel() {
 
         flowRef.current = null;
         if (result.type === "failed") {
-          setSdkError(result.error?.message ?? "The Didit flow could not start.");
+          setSdkError(
+            result.error?.message ?? "The Didit flow could not start.",
+          );
         }
         if (!flow) return;
         if (flow.kind === "onboarding") {
@@ -394,7 +430,8 @@ export function useKestrel() {
       const sdk = sdkRef.current;
       const fullName = account?.fullName;
 
-      if (!sdk || !fullName) return { error: "The Didit web SDK is still loading." };
+      if (!sdk || !fullName)
+        return { error: "The Didit web SDK is still loading." };
 
       const token = await api<{ token: string; baseUrl: string }>("/token", {
         method: "POST",
@@ -432,7 +469,9 @@ export function useKestrel() {
         };
       }
 
-      const detail = await api<TransactionView>(`/transactions/${transactionId}`);
+      const detail = await api<TransactionView>(
+        `/transactions/${transactionId}`,
+      );
 
       if (!detail.ok) return { error: detail.error };
       const item: ActivityItem = {
@@ -468,7 +507,11 @@ export function useKestrel() {
 
   const checkAgain = React.useCallback(
     (item: ActivityItem) =>
-      pollItem(item.id, { status: item.view.status, action: item.view.action?.type ?? null }, 1),
+      pollItem(
+        item.id,
+        { status: item.view.status, action: item.view.action?.type ?? null },
+        1,
+      ),
     [pollItem],
   );
 

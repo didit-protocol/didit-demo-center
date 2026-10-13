@@ -26,7 +26,10 @@ import {
   formatUsd,
 } from "./ui";
 
-import { CONSOLE_DEEP_LINKS, consoleLinks } from "@/lib/crypto-exchange/console";
+import {
+  CONSOLE_DEEP_LINKS,
+  consoleLinks,
+} from "@/lib/crypto-exchange/console";
 import {
   depositOutcome,
   riskBand,
@@ -167,7 +170,13 @@ function describeActions(actions: string | null): string[] {
   });
 }
 
-function Row({ label, children }: { label: string; children: React.ReactNode }) {
+function Row({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex flex-col gap-1 border-b border-line px-4 py-3 last:border-b-0 sm:flex-row sm:items-center sm:gap-4">
       <dt className="w-40 flex-none text-[13px] text-muted">{label}</dt>
@@ -210,7 +219,9 @@ export function ComplianceView({ view }: { view: TransactionView }) {
           <p className="m-0 font-mono text-[10px] font-medium uppercase tracking-[0.16em] opacity-70">
             Operator side
           </p>
-          <h3 className="m-0 text-base font-semibold tracking-tight">Compliance view</h3>
+          <h3 className="m-0 text-base font-semibold tracking-tight">
+            Compliance view
+          </h3>
         </div>
         <a
           className="btn-base h-9 bg-canvas px-3.5 text-[13px] text-ink hover:bg-surface"
@@ -227,7 +238,9 @@ export function ComplianceView({ view }: { view: TransactionView }) {
         <Section title="Decision">
           <dl className="m-0">
             <Row label="Status">
-              <StatusChip tone={statusTone(view.status)}>{statusLabel(view.status)}</StatusChip>
+              <StatusChip tone={statusTone(view.status)}>
+                {statusLabel(view.status)}
+              </StatusChip>
             </Row>
             <Row label="Risk score">
               <span className="tnum">{view.score}</span>
@@ -248,24 +261,34 @@ export function ComplianceView({ view }: { view: TransactionView }) {
         <Section title="Wallet screening">
           {screening ? (
             <dl className="m-0">
-              <Row label={view.kind === "deposit" ? "Sending wallet" : "Destination"}>
+              <Row
+                label={
+                  view.kind === "deposit" ? "Sending wallet" : "Destination"
+                }
+              >
                 <code className="break-all text-[12px]">{view.wallet}</code>
               </Row>
               <Row label="Risk">
                 <span className="flex flex-wrap items-center gap-3">
                   <RiskMeter score={screening.riskScore} tone={band.tone} />
-                  <span className={cn("tnum font-medium", TONE[band.tone].text)}>
+                  <span
+                    className={cn("tnum font-medium", TONE[band.tone].text)}
+                  >
                     {screening.riskScore ?? "-"}/100
                   </span>
                   {screening.severity && (
-                    <StatusChip tone={band.tone}>{screening.severity}</StatusChip>
+                    <StatusChip tone={band.tone}>
+                      {screening.severity}
+                    </StatusChip>
                   )}
                 </span>
               </Row>
               <Row label="Provider">{screening.provider}</Row>
               {screening.summary && (
                 <Row label="Summary">
-                  <span className="text-[13px] leading-5">{screening.summary}</span>
+                  <span className="text-[13px] leading-5">
+                    {screening.summary}
+                  </span>
                 </Row>
               )}
               {factors.length > 0 && (
@@ -291,7 +314,9 @@ export function ComplianceView({ view }: { view: TransactionView }) {
               </Row>
             </dl>
           ) : (
-            <p className="m-0 px-4 py-3 text-sm text-muted">No screening on this transfer.</p>
+            <p className="m-0 px-4 py-3 text-sm text-muted">
+              No screening on this transfer.
+            </p>
           )}
         </Section>
 
@@ -336,9 +361,13 @@ export function ComplianceView({ view }: { view: TransactionView }) {
             <dl className="m-0">
               <Row label="Exchange">
                 {travelRuleLabel(view.travelRule.status)}{" "}
-                <code className="text-[12px] text-muted">{view.travelRule.status}</code>
+                <code className="text-[12px] text-muted">
+                  {view.travelRule.status}
+                </code>
               </Row>
-              <Row label="Required">{view.travelRule.required ? "Yes" : "No"}</Row>
+              <Row label="Required">
+                {view.travelRule.required ? "Yes" : "No"}
+              </Row>
             </dl>
           </Section>
         )}
@@ -364,8 +393,8 @@ export function ComplianceView({ view }: { view: TransactionView }) {
 
         {!CONSOLE_DEEP_LINKS && (
           <p className="m-0 px-1 text-[12px] leading-[18px] text-muted">
-            The Console opens on its home page here; search for the transaction id above
-            to land on this record.
+            The Console opens on its home page here; search for the transaction
+            id above to land on this record.
           </p>
         )}
       </div>
@@ -383,7 +412,8 @@ export function TransferDetail({
   onBack: () => void;
 }) {
   const { view } = item;
-  const copy = item.kind === "deposit" ? depositCopy(view) : withdrawalCopy(view);
+  const copy =
+    item.kind === "deposit" ? depositCopy(view) : withdrawalCopy(view);
   const chip = activityChip(item);
   const busy = kestrel.busyItem === item.id;
   const Icon = copy.icon;
@@ -405,26 +435,38 @@ export function TransferDetail({
             {item.kind === "deposit" ? "Deposit" : "Withdrawal"} · {item.label}
           </p>
           <p className="m-0 tnum text-[32px] font-display leading-none tracking-display text-ink">
-            {formatEth(item.kind === "deposit" ? view.amount : `-${view.amount}`, {
-              sign: true,
-            })}
+            {formatEth(
+              item.kind === "deposit" ? view.amount : `-${view.amount}`,
+              {
+                sign: true,
+              },
+            )}
           </p>
           <p className="m-0 text-xs text-muted">
-            {view.wallet ? shortAddress(view.wallet) : ""} · {formatTime(item.createdAt)}
+            {view.wallet ? shortAddress(view.wallet) : ""} ·{" "}
+            {formatTime(item.createdAt)}
           </p>
         </div>
         <StatusChip tone={chip.tone}>{chip.label}</StatusChip>
       </div>
 
       <div
-        className={cn("flex flex-col gap-4 rounded-md border p-5 sm:flex-row sm:items-center", TONE[copy.tone].surface)}
+        className={cn(
+          "flex flex-col gap-4 rounded-md border p-5 sm:flex-row sm:items-center",
+          TONE[copy.tone].surface,
+        )}
         data-testid="kestrel-stage"
       >
         <span className="flex size-11 flex-none items-center justify-center rounded-sm bg-canvas/70">
           <Icon className={cn("size-6", TONE[copy.tone].text)} />
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className={cn("m-0 text-base font-semibold tracking-tight", TONE[copy.tone].text)}>
+          <h3
+            className={cn(
+              "m-0 text-base font-semibold tracking-tight",
+              TONE[copy.tone].text,
+            )}
+          >
             {copy.title}
           </h3>
           <p className="mt-1 text-[13px] leading-5 text-muted">{copy.body}</p>
@@ -447,17 +489,19 @@ export function TransferDetail({
                 )}
               </button>
             )}
-            {!copy.action && withdrawalStage(view) !== "ready" && withdrawalStage(view) !== "blocked" && (
-              <button
-                className="btn-base h-10 border border-line bg-canvas px-4 text-ink hover:bg-surface disabled:opacity-60"
-                disabled={busy}
-                type="button"
-                onClick={() => kestrel.checkAgain(item)}
-              >
-                {busy ? <Spinner /> : <RotateCcw className="size-4" />}
-                Check again
-              </button>
-            )}
+            {!copy.action &&
+              withdrawalStage(view) !== "ready" &&
+              withdrawalStage(view) !== "blocked" && (
+                <button
+                  className="btn-base h-10 border border-line bg-canvas px-4 text-ink hover:bg-surface disabled:opacity-60"
+                  disabled={busy}
+                  type="button"
+                  onClick={() => kestrel.checkAgain(item)}
+                >
+                  {busy ? <Spinner /> : <RotateCcw className="size-4" />}
+                  Check again
+                </button>
+              )}
           </div>
         )}
       </div>

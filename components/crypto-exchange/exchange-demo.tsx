@@ -40,7 +40,8 @@ function useDemoTheme() {
     const stored = window.localStorage.getItem(THEME_KEY);
 
     if (stored === "light" || stored === "dark") setTheme(stored);
-    else if (window.matchMedia("(prefers-color-scheme: dark)").matches) setTheme("dark");
+    else if (window.matchMedia("(prefers-color-scheme: dark)").matches)
+      setTheme("dark");
   }, []);
 
   const choose = (next: Theme) => {
@@ -51,7 +52,13 @@ function useDemoTheme() {
   return [theme, choose] as const;
 }
 
-function ThemeToggle({ theme, onChange }: { theme: Theme; onChange: (theme: Theme) => void }) {
+function ThemeToggle({
+  theme,
+  onChange,
+}: {
+  theme: Theme;
+  onChange: (theme: Theme) => void;
+}) {
   return (
     <div
       aria-label="Theme"
@@ -69,7 +76,9 @@ function ThemeToggle({ theme, onChange }: { theme: Theme; onChange: (theme: Them
           aria-checked={theme === option.value}
           className={cn(
             "inline-flex h-8 items-center gap-1.5 rounded-pill px-3 text-[13px] font-medium transition-colors duration-fast",
-            theme === option.value ? "bg-ink text-canvas" : "text-muted hover:text-ink",
+            theme === option.value
+              ? "bg-ink text-canvas"
+              : "text-muted hover:text-ink",
           )}
           role="radio"
           type="button"
@@ -95,7 +104,9 @@ function AppHeader({ kestrel }: { kestrel: Kestrel }) {
   return (
     <header className="flex h-16 items-center gap-3 border-b border-line px-4 sm:px-6">
       <KestrelMark className="size-8" />
-      <span className="text-[17px] font-semibold tracking-tight text-ink">Kestrel</span>
+      <span className="text-[17px] font-semibold tracking-tight text-ink">
+        Kestrel
+      </span>
       <span className="hidden rounded-pill bg-elevated px-2 py-0.5 text-[11px] font-medium text-muted sm:inline">
         Demo exchange
       </span>
@@ -103,8 +114,12 @@ function AppHeader({ kestrel }: { kestrel: Kestrel }) {
       {account && account.stage === "approved" && (
         <span className="flex items-center gap-2">
           <span className="hidden text-right sm:block">
-            <span className="block text-[13px] font-medium text-ink">{account.fullName}</span>
-            <span className="block text-[11px] text-muted">{account.userId}</span>
+            <span className="block text-[13px] font-medium text-ink">
+              {account.fullName}
+            </span>
+            <span className="block text-[11px] text-muted">
+              {account.userId}
+            </span>
           </span>
           <span className="flex size-9 items-center justify-center rounded-pill bg-blue-soft text-[13px] font-semibold text-blue-deep">
             {initials || "K"}
@@ -136,8 +151,8 @@ function AppBody({
           Kestrel is not set up on this environment
         </h2>
         <p className="m-0 text-sm leading-6 text-muted">
-          The demo needs its onboarding and step-up workflows, published on the Didit
-          application this site uses. They are configured for staging, at
+          The demo needs its onboarding and step-up workflows, published on the
+          Didit application this site uses. They are configured for staging, at
           demos.staging.didit.me.
         </p>
       </div>
@@ -197,7 +212,11 @@ function AppBody({
 
     if (item) {
       return (
-        <TransferDetail item={item} kestrel={kestrel} onBack={() => go({ name: "home" })} />
+        <TransferDetail
+          item={item}
+          kestrel={kestrel}
+          onBack={() => go({ name: "home" })}
+        />
       );
     }
   }
@@ -214,7 +233,8 @@ function AppBody({
 }
 
 function activeStep(kestrel: Kestrel, screen: Screen): PanelStepId {
-  if (!kestrel.account || kestrel.account.stage !== "approved") return "onboarding";
+  if (!kestrel.account || kestrel.account.stage !== "approved")
+    return "onboarding";
   if (screen.name === "deposit") return "deposit";
   if (screen.name === "withdraw") return "withdrawal";
   if (screen.name === "transfer") {
@@ -244,7 +264,10 @@ export function ExchangeDemo() {
   return (
     <div className="kestrel bg-canvas text-ink" data-theme={theme}>
       <section className="border-b border-line bg-surface">
-        <Container className="flex flex-col gap-5 pb-8 pt-8 lg:flex-row lg:items-end lg:pt-10" size="xl">
+        <Container
+          className="flex flex-col gap-5 pb-8 pt-8 lg:flex-row lg:items-end lg:pt-10"
+          size="xl"
+        >
           <div className="min-w-0 flex-1">
             <Link
               className="mb-4 inline-flex items-center gap-1.5 text-[13px] font-medium text-muted hover:text-ink"
@@ -253,15 +276,17 @@ export function ExchangeDemo() {
               <ArrowLeft className="size-4" />
               Demo Center
             </Link>
-            <p className="eyebrow eyebrow-accent mb-3">Industry app · Crypto exchange</p>
+            <p className="eyebrow eyebrow-accent mb-3">
+              Industry app · Crypto exchange
+            </p>
             <h1 className="m-0 text-balance text-[32px] font-display leading-[1.05] tracking-tighter text-ink sm:text-[40px]">
               Kestrel, a crypto exchange running on Didit
             </h1>
             <p className="mt-3 max-w-[720px] text-[15px] leading-6 text-muted">
-              Open an account with KYC and AML, deposit and withdraw ETH with wallet
-              screening, the Travel Rule and a selfie step-up. Every decision on this page
-              comes from Didit&apos;s API, and each one opens in the operator&apos;s
-              compliance view.
+              Open an account with KYC and AML, deposit and withdraw ETH with
+              wallet screening, the Travel Rule and a selfie step-up. Every
+              decision on this page comes from Didit&apos;s API, and each one
+              opens in the operator&apos;s compliance view.
             </p>
           </div>
           <div className="flex flex-none flex-wrap items-center gap-2.5">

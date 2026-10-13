@@ -48,7 +48,9 @@ export interface RuleDefinition {
  * custom rules in title order and the last explicit status wins, so these
  * run after any generic rule already on a shared application.
  */
-export function cryptoExchangeRules(stepUpWorkflowId: string): RuleDefinition[] {
+export function cryptoExchangeRules(
+  stepUpWorkflowId: string,
+): RuleDefinition[] {
   return [
     {
       title: "Wallet risk: high-risk exposure (crypto exchange demo)",
@@ -60,7 +62,11 @@ export function cryptoExchangeRules(stepUpWorkflowId: string): RuleDefinition[] 
       scope: {},
       conditions: [
         DEMO_SCOPE,
-        { field: "custom_values.wallet_risk_score", operator: "gte", value: 75 },
+        {
+          field: "custom_values.wallet_risk_score",
+          operator: "gte",
+          value: 75,
+        },
       ],
       actions: [
         { type: "add_score", value: 60 },
@@ -77,7 +83,11 @@ export function cryptoExchangeRules(stepUpWorkflowId: string): RuleDefinition[] 
       scope: {},
       conditions: [
         DEMO_SCOPE,
-        { field: "custom_values.wallet_sanctioned", operator: "eq", value: true },
+        {
+          field: "custom_values.wallet_sanctioned",
+          operator: "eq",
+          value: true,
+        },
       ],
       actions: [
         { type: "add_score", value: 90 },
@@ -85,7 +95,8 @@ export function cryptoExchangeRules(stepUpWorkflowId: string): RuleDefinition[] 
       ],
     },
     {
-      title: "Withdrawal step-up: selfie re-authentication (crypto exchange demo)",
+      title:
+        "Withdrawal step-up: selfie re-authentication (crypto exchange demo)",
       description:
         "Every low-risk Kestrel withdrawal waits for the user to pass a selfie check matched against their onboarding face before it can be broadcast.",
       category: "fraud_prevention",
@@ -95,7 +106,11 @@ export function cryptoExchangeRules(stepUpWorkflowId: string): RuleDefinition[] 
       conditions: [
         DEMO_SCOPE,
         { field: "custom_values.wallet_risk_score", operator: "lt", value: 75 },
-        { field: "custom_values.wallet_sanctioned", operator: "ne", value: true },
+        {
+          field: "custom_values.wallet_sanctioned",
+          operator: "ne",
+          value: true,
+        },
       ],
       actions: [
         {

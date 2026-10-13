@@ -72,7 +72,9 @@ function ChoiceList<T extends string>({
           <span
             className={cn(
               "flex size-9 flex-none items-center justify-center rounded-pill",
-              value === choice.value ? "bg-blue text-white" : "bg-elevated text-muted",
+              value === choice.value
+                ? "bg-blue text-white"
+                : "bg-elevated text-muted",
             )}
           >
             <choice.icon className="size-[18px]" />
@@ -92,7 +94,9 @@ function ChoiceList<T extends string>({
             aria-hidden
             className={cn(
               "size-4 flex-none rounded-pill border-2",
-              value === choice.value ? "border-blue bg-blue shadow-[inset_0_0_0_2px_rgb(var(--canvas))]" : "border-line",
+              value === choice.value
+                ? "border-blue bg-blue shadow-[inset_0_0_0_2px_rgb(var(--canvas))]"
+                : "border-line",
             )}
           />
         </label>
@@ -199,21 +203,36 @@ export function DepositForm({
   };
 
   return (
-    <form className="mx-auto flex w-full max-w-[560px] flex-col gap-6" onSubmit={submit}>
+    <form
+      className="mx-auto flex w-full max-w-[560px] flex-col gap-6"
+      onSubmit={submit}
+    >
       <BackLink onBack={onBack} />
       <div>
-        <h2 className="m-0 text-[22px] font-display tracking-display text-ink">Deposit ETH</h2>
+        <h2 className="m-0 text-[22px] font-display tracking-display text-ink">
+          Deposit ETH
+        </h2>
         <p className="mt-1.5 text-[13px] leading-5 text-muted">
-          Your Kestrel deposit address receives the transfer. Before the funds are
-          credited, Didit screens the wallet they came from.
+          Your Kestrel deposit address receives the transfer. Before the funds
+          are credited, Didit screens the wallet they came from.
         </p>
       </div>
-      <ChoiceList choices={choices} name="deposit-source" value={source} onChange={setSource} />
-      <AmountField presets={["0.5", "1.25", "2"]} value={amount} onChange={setAmount} />
+      <ChoiceList
+        choices={choices}
+        name="deposit-source"
+        value={source}
+        onChange={setSource}
+      />
+      <AmountField
+        presets={["0.5", "1.25", "2"]}
+        value={amount}
+        onChange={setAmount}
+      />
       <Notice tone="neutral">
-        There is no blockchain behind Kestrel, so this button stands in for the node
-        that detects the transfer. Kestrel&apos;s backend then reports it to Didit with{" "}
-        <code className="text-ink">POST /v3/transactions/</code>, exactly as it would live.
+        There is no blockchain behind Kestrel, so this button stands in for the
+        node that detects the transfer. Kestrel&apos;s backend then reports it
+        to Didit with <code className="text-ink">POST /v3/transactions/</code>,
+        exactly as it would live.
       </Notice>
       {error && <Notice tone="declined">{error}</Notice>}
       <button
@@ -243,7 +262,8 @@ export function WithdrawForm({
   onDone: (item: ActivityItem) => void;
 }) {
   const fullName = kestrel.account?.fullName ?? "";
-  const [destination, setDestination] = React.useState<WithdrawalDestination>("own-wallet");
+  const [destination, setDestination] =
+    React.useState<WithdrawalDestination>("own-wallet");
   const [amount, setAmount] = React.useState("0.4");
   const [address, setAddress] = React.useState("");
   const [recipient, setRecipient] = React.useState("");
@@ -295,7 +315,9 @@ export function WithdrawForm({
       return;
     }
     if (!isEvmAddress(target)) {
-      setError("Enter a valid Ethereum address (0x followed by 40 hex characters).");
+      setError(
+        "Enter a valid Ethereum address (0x followed by 40 hex characters).",
+      );
 
       return;
     }
@@ -314,13 +336,18 @@ export function WithdrawForm({
   };
 
   return (
-    <form className="mx-auto flex w-full max-w-[560px] flex-col gap-6" onSubmit={submit}>
+    <form
+      className="mx-auto flex w-full max-w-[560px] flex-col gap-6"
+      onSubmit={submit}
+    >
       <BackLink onBack={onBack} />
       <div>
-        <h2 className="m-0 text-[22px] font-display tracking-display text-ink">Withdraw ETH</h2>
+        <h2 className="m-0 text-[22px] font-display tracking-display text-ink">
+          Withdraw ETH
+        </h2>
         <p className="mt-1.5 text-[13px] leading-5 text-muted">
-          Didit screens the destination, runs the Travel Rule exchange and asks you
-          for a selfie before Kestrel releases the funds.
+          Didit screens the destination, runs the Travel Rule exchange and asks
+          you for a selfie before Kestrel releases the funds.
         </p>
       </div>
       <ChoiceList

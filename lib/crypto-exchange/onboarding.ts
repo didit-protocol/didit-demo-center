@@ -9,7 +9,8 @@
  * https://docs.didit.me/sessions-api/retrieve-session
  */
 
-export type AccountStage = "approved" | "review" | "declined" | "processing" | "unknown";
+export type AccountStage =
+  "approved" | "review" | "declined" | "processing" | "unknown";
 
 export interface AccountView {
   sessionId: string;
@@ -31,7 +32,13 @@ const first = (value: unknown): Raw =>
 const text = (value: unknown): string | null =>
   typeof value === "string" && value.trim() ? value.trim() : null;
 
-const PROCESSING = ["not started", "in progress", "pending", "processing", "resubmitted"];
+const PROCESSING = [
+  "not started",
+  "in progress",
+  "pending",
+  "processing",
+  "resubmitted",
+];
 
 export function accountStage(status: string): AccountStage {
   const normalized = status.trim().toLowerCase().replace(/[_-]+/g, " ");
@@ -53,7 +60,9 @@ export function toAccountView(decision: Raw): AccountView {
   const lastName = text(id.last_name);
   const fullName =
     text(id.full_name) ??
-    (firstName || lastName ? [firstName, lastName].filter(Boolean).join(" ") : null);
+    (firstName || lastName
+      ? [firstName, lastName].filter(Boolean).join(" ")
+      : null);
 
   return {
     sessionId: String(decision.session_id ?? ""),
@@ -62,8 +71,14 @@ export function toAccountView(decision: Raw): AccountView {
     fullName,
     checks: [
       { label: "ID document", status: text(id.status) },
-      { label: "Liveness", status: text(first(decision.liveness_checks).status) },
-      { label: "Face match", status: text(first(decision.face_matches).status) },
+      {
+        label: "Liveness",
+        status: text(first(decision.liveness_checks).status),
+      },
+      {
+        label: "Face match",
+        status: text(first(decision.face_matches).status),
+      },
       { label: "AML screening", status: text(aml.status) },
     ],
     amlHits: typeof aml.total_hits === "number" ? aml.total_hits : null,
@@ -76,7 +91,9 @@ export interface AccountCopy {
 }
 
 /** What the exchange tells the user about their account. */
-export function accountCopy(view: Pick<AccountView, "stage" | "status" | "amlHits">): AccountCopy {
+export function accountCopy(
+  view: Pick<AccountView, "stage" | "status" | "amlHits">,
+): AccountCopy {
   switch (view.stage) {
     case "approved":
       return {

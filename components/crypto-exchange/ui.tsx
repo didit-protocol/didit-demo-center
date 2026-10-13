@@ -12,7 +12,10 @@ import { cn } from "@/lib/utils";
  * styles/crypto-exchange.css), so nothing here needs a `dark:` variant.
  */
 
-export const TONE: Record<Tone, { chip: string; dot: string; text: string; surface: string }> = {
+export const TONE: Record<
+  Tone,
+  { chip: string; dot: string; text: string; surface: string }
+> = {
   approved: {
     chip: "bg-success-bg text-success",
     dot: "bg-success",
@@ -75,7 +78,13 @@ export function Spinner({ className }: { className?: string }) {
 }
 
 /** 0-100 risk score on a five-step scale, coloured by band. */
-export function RiskMeter({ score, tone }: { score: number | null; tone: Tone }) {
+export function RiskMeter({
+  score,
+  tone,
+}: {
+  score: number | null;
+  tone: Tone;
+}) {
   const filled = score === null ? 0 : Math.max(1, Math.ceil(score / 20));
 
   return (

@@ -54,12 +54,15 @@ export function readAccountCookie(request: NextRequest): KestrelCookie | null {
   return null;
 }
 
-export function writeAccountCookie(response: NextResponse, value: KestrelCookie) {
+export function writeAccountCookie(
+  response: NextResponse,
+  value: KestrelCookie,
+) {
   response.cookies.set(
     COOKIE,
-    Buffer.from(JSON.stringify({ v: value.vendorData, s: value.sessionId })).toString(
-      "base64url",
-    ),
+    Buffer.from(
+      JSON.stringify({ v: value.vendorData, s: value.sessionId }),
+    ).toString("base64url"),
     {
       httpOnly: true,
       sameSite: "lax",
@@ -151,7 +154,10 @@ export async function lookupAccount(
   const cookie = readAccountCookie(request);
 
   if (!cookie) {
-    return { ok: false, response: failure("No Kestrel account in this browser.", 401) };
+    return {
+      ok: false,
+      response: failure("No Kestrel account in this browser.", 401),
+    };
   }
 
   const result = await didit("GET", `/session/${cookie.sessionId}/decision/`);
@@ -175,14 +181,20 @@ export async function lookupAccount(
   if (requireApproved && account.stage !== "approved") {
     return {
       ok: false,
-      response: failure("Your account must be approved before you can move funds.", 403),
+      response: failure(
+        "Your account must be approved before you can move funds.",
+        403,
+      ),
     };
   }
 
   if (requireApproved && !account.fullName) {
     return {
       ok: false,
-      response: failure("The verified name is missing from the onboarding session.", 409),
+      response: failure(
+        "The verified name is missing from the onboarding session.",
+        409,
+      ),
     };
   }
 

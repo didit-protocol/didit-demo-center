@@ -18,7 +18,10 @@ import {
 
 import { Notice, Spinner, StatusChip, TONE } from "./ui";
 
-import { accountCopy, type AccountStage } from "@/lib/crypto-exchange/onboarding";
+import {
+  accountCopy,
+  type AccountStage,
+} from "@/lib/crypto-exchange/onboarding";
 import { consoleLinks } from "@/lib/crypto-exchange/console";
 import { cn } from "@/lib/utils";
 
@@ -67,8 +70,12 @@ export function SignUpScreen({ kestrel }: { kestrel: Kestrel }) {
                 <promise.icon className="size-[18px]" />
               </span>
               <span className="flex flex-col gap-0.5">
-                <span className="text-sm font-medium text-ink">{promise.title}</span>
-                <span className="text-[13px] leading-5 text-muted">{promise.body}</span>
+                <span className="text-sm font-medium text-ink">
+                  {promise.title}
+                </span>
+                <span className="text-[13px] leading-5 text-muted">
+                  {promise.body}
+                </span>
               </span>
             </li>
           ))}
@@ -115,11 +122,13 @@ export function SignUpScreen({ kestrel }: { kestrel: Kestrel }) {
             </>
           )}
         </button>
-        {kestrel.accountError && <Notice tone="declined">{kestrel.accountError}</Notice>}
+        {kestrel.accountError && (
+          <Notice tone="declined">{kestrel.accountError}</Notice>
+        )}
         <p className="m-0 text-[12px] leading-[18px] text-muted">
-          A real exchange creates your login first. Didit&apos;s Authentication SDK is
-          not public yet, so this demo starts at verification. Didit only receives
-          the user id Kestrel assigns you.
+          A real exchange creates your login first. Didit&apos;s Authentication
+          SDK is not public yet, so this demo starts at verification. Didit only
+          receives the user id Kestrel assigns you.
         </p>
       </div>
     </div>
@@ -166,12 +175,22 @@ export function AccountScreen({
 
   return (
     <div className="mx-auto flex w-full max-w-[560px] flex-col gap-5">
-      <div className={cn("flex items-start gap-4 rounded-md border p-5", TONE[tone].surface)}>
+      <div
+        className={cn(
+          "flex items-start gap-4 rounded-md border p-5",
+          TONE[tone].surface,
+        )}
+      >
         <span className="flex size-11 flex-none items-center justify-center rounded-sm bg-canvas/70">
           <Icon className={cn("size-6", TONE[tone].text)} />
         </span>
         <div className="min-w-0 flex-1">
-          <h2 className={cn("m-0 text-lg font-semibold tracking-tight", TONE[tone].text)}>
+          <h2
+            className={cn(
+              "m-0 text-lg font-semibold tracking-tight",
+              TONE[tone].text,
+            )}
+          >
             {copy.title}
           </h2>
           <p className="mt-1 text-[13px] leading-5 text-muted">{copy.body}</p>
@@ -197,7 +216,9 @@ export function AccountScreen({
         </ul>
       </div>
 
-      {kestrel.accountError && <Notice tone="declined">{kestrel.accountError}</Notice>}
+      {kestrel.accountError && (
+        <Notice tone="declined">{kestrel.accountError}</Notice>
+      )}
 
       <div className="flex flex-wrap gap-2.5">
         {account.stage === "processing" && kestrel.hasSessionUrl && (

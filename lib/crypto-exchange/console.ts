@@ -8,7 +8,8 @@ import { siteConfig } from "@/config/site";
  * to. Set both ids (they are not secrets) to deep-link each record; without
  * them the links open the Console and the screen shows the id to search for.
  */
-const ORGANIZATION = process.env.NEXT_PUBLIC_DIDIT_CONSOLE_ORGANIZATION_ID || "";
+const ORGANIZATION =
+  process.env.NEXT_PUBLIC_DIDIT_CONSOLE_ORGANIZATION_ID || "";
 const APPLICATION = process.env.NEXT_PUBLIC_DIDIT_CONSOLE_APPLICATION_ID || "";
 
 export const CONSOLE_DEEP_LINKS = Boolean(ORGANIZATION && APPLICATION);
@@ -20,8 +21,10 @@ function consoleUrl(path: string): string {
 }
 
 export const consoleLinks = {
-  transaction: (id: string) => consoleUrl(`transactions/detail/${encodeURIComponent(id)}`),
-  session: (id: string) => consoleUrl(`kyc/verifications/${encodeURIComponent(id)}`),
+  transaction: (id: string) =>
+    consoleUrl(`transactions/detail/${encodeURIComponent(id)}`),
+  session: (id: string) =>
+    consoleUrl(`kyc/verifications/${encodeURIComponent(id)}`),
   travelRule: () => consoleUrl("transactions/travel-rule"),
   cryptoMonitoring: () => consoleUrl("transactions/crypto"),
 };

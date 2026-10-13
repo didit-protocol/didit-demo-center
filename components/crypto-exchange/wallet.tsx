@@ -2,7 +2,12 @@
 
 import type { ActivityItem, Kestrel, KestrelAccount } from "./use-kestrel";
 
-import { ArrowDownLeft, ArrowUpRight, ChevronRight, ShieldCheck } from "lucide-react";
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  ChevronRight,
+  ShieldCheck,
+} from "lucide-react";
 
 import { OperatorLink } from "./onboarding";
 import { Notice, StatusChip, formatEth, formatTime } from "./ui";
@@ -23,7 +28,10 @@ const DEPOSIT_CHIP = {
   pending: { tone: "neutral", label: "Pending" },
 } as const;
 
-export const WITHDRAWAL_CHIP: Record<WithdrawalStage, { tone: Tone; label: string }> = {
+export const WITHDRAWAL_CHIP: Record<
+  WithdrawalStage,
+  { tone: Tone; label: string }
+> = {
   blocked: { tone: "declined", label: "Blocked" },
   review: { tone: "review", label: "In review" },
   "prove-ownership": { tone: "review", label: "Action needed" },
@@ -34,13 +42,22 @@ export const WITHDRAWAL_CHIP: Record<WithdrawalStage, { tone: Tone; label: strin
   ready: { tone: "approved", label: "Approved" },
 };
 
-export function activityChip(item: ActivityItem): { tone: Tone; label: string } {
+export function activityChip(item: ActivityItem): {
+  tone: Tone;
+  label: string;
+} {
   return item.kind === "deposit"
     ? DEPOSIT_CHIP[depositOutcome(item.view)]
     : WITHDRAWAL_CHIP[withdrawalStage(item.view)];
 }
 
-function ActivityRow({ item, onOpen }: { item: ActivityItem; onOpen: () => void }) {
+function ActivityRow({
+  item,
+  onOpen,
+}: {
+  item: ActivityItem;
+  onOpen: () => void;
+}) {
   const chip = activityChip(item);
   const incoming = item.kind === "deposit";
   const Icon = incoming ? ArrowDownLeft : ArrowUpRight;
@@ -63,7 +80,9 @@ function ActivityRow({ item, onOpen }: { item: ActivityItem; onOpen: () => void 
         <span className="flex min-w-0 flex-1 flex-col gap-0.5">
           <span className="truncate text-sm font-medium text-ink">
             {incoming ? "Deposit" : "Withdrawal"}{" "}
-            <span className="font-normal text-muted">{item.label.toLowerCase()}</span>
+            <span className="font-normal text-muted">
+              {item.label.toLowerCase()}
+            </span>
           </span>
           <span className="truncate text-xs text-muted">
             {item.view.wallet ? shortAddress(item.view.wallet) : "-"} ·{" "}
@@ -72,7 +91,9 @@ function ActivityRow({ item, onOpen }: { item: ActivityItem; onOpen: () => void 
         </span>
         <span className="flex flex-none flex-col items-end gap-1">
           <span className="tnum text-sm font-medium text-ink">
-            {formatEth(incoming ? item.view.amount : `-${item.view.amount}`, { sign: true })}
+            {formatEth(incoming ? item.view.amount : `-${item.view.amount}`, {
+              sign: true,
+            })}
           </span>
           <StatusChip tone={chip.tone}>{chip.label}</StatusChip>
         </span>
@@ -127,17 +148,25 @@ export function WalletHome({
           </p>
           <p className="m-0 flex flex-wrap gap-x-4 gap-y-1 text-[13px] text-muted">
             <span>
-              Available <span className="tnum text-ink">{formatEth(balances.available)}</span>
+              Available{" "}
+              <span className="tnum text-ink">
+                {formatEth(balances.available)}
+              </span>
             </span>
             {balances.held > 0 && (
               <span>
-                On hold <span className="tnum text-ink">{formatEth(balances.held)}</span>
+                On hold{" "}
+                <span className="tnum text-ink">
+                  {formatEth(balances.held)}
+                </span>
               </span>
             )}
             {balances.inReview > 0 && (
               <span>
                 Deposits in review{" "}
-                <span className="tnum text-ink">{formatEth(balances.inReview)}</span>
+                <span className="tnum text-ink">
+                  {formatEth(balances.inReview)}
+                </span>
               </span>
             )}
           </p>
@@ -154,7 +183,11 @@ export function WalletHome({
           <button
             className="btn-base h-11 flex-1 bg-ink px-5 text-canvas hover:bg-accent-black disabled:opacity-50 sm:flex-none"
             disabled={balances.available <= 0}
-            title={balances.available <= 0 ? "Deposit first: there is nothing to withdraw" : undefined}
+            title={
+              balances.available <= 0
+                ? "Deposit first: there is nothing to withdraw"
+                : undefined
+            }
             type="button"
             onClick={onWithdraw}
           >
@@ -166,8 +199,8 @@ export function WalletHome({
 
       {frozenDeposit && (
         <Notice tone="declined">
-          {formatEth(balances.frozen)} frozen: a deposit came from a wallet linked to
-          sanctioned activity, so Kestrel did not credit it.{" "}
+          {formatEth(balances.frozen)} frozen: a deposit came from a wallet
+          linked to sanctioned activity, so Kestrel did not credit it.{" "}
           <button
             className="font-medium underline underline-offset-2"
             type="button"
@@ -178,8 +211,13 @@ export function WalletHome({
         </Notice>
       )}
 
-      <section aria-label="Activity" className="overflow-hidden rounded-md border border-line">
-        <p className="eyebrow eyebrow-muted border-b border-line px-4 py-3">Activity</p>
+      <section
+        aria-label="Activity"
+        className="overflow-hidden rounded-md border border-line"
+      >
+        <p className="eyebrow eyebrow-muted border-b border-line px-4 py-3">
+          Activity
+        </p>
         {kestrel.activity.length === 0 ? (
           <p className="m-0 px-4 py-8 text-center text-sm text-muted">
             No activity yet. Make a deposit to get started.
@@ -187,7 +225,11 @@ export function WalletHome({
         ) : (
           <ul className="m-0 list-none divide-y divide-line p-0">
             {kestrel.activity.map((item) => (
-              <ActivityRow key={item.id} item={item} onOpen={() => onOpen(item)} />
+              <ActivityRow
+                key={item.id}
+                item={item}
+                onOpen={() => onOpen(item)}
+              />
             ))}
           </ul>
         )}

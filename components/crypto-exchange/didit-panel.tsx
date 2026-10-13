@@ -10,7 +10,11 @@ import { docs } from "@/lib/docs";
 import { PANEL_STEPS } from "@/lib/crypto-exchange/panel";
 import { cn } from "@/lib/utils";
 
-const SIDE_LABEL = { server: "Backend", browser: "Browser", didit: "Didit" } as const;
+const SIDE_LABEL = {
+  server: "Backend",
+  browser: "Browser",
+  didit: "Didit",
+} as const;
 
 function StepBody({ step }: { step: PanelStep }) {
   return (
@@ -51,7 +55,9 @@ function StepBody({ step }: { step: PanelStep }) {
                 </code>
                 <ExternalLink className="size-3.5 flex-none text-muted transition-colors group-hover:text-blue" />
               </span>
-              <span className="text-[12px] leading-[18px] text-muted">{call.detail}</span>
+              <span className="text-[12px] leading-[18px] text-muted">
+                {call.detail}
+              </span>
             </a>
           </li>
         ))}
@@ -89,7 +95,9 @@ function StepList({ active }: { active: PanelStepId }) {
               <span
                 className={cn(
                   "flex size-6 flex-none items-center justify-center rounded-pill text-xs font-semibold tnum",
-                  step.id === active ? "bg-blue text-white" : "bg-elevated text-muted",
+                  step.id === active
+                    ? "bg-blue text-white"
+                    : "bg-elevated text-muted",
                 )}
               >
                 {index + 1}
