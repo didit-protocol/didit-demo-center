@@ -221,7 +221,7 @@ test("money moves through transaction monitoring; a big transfer is held", async
 
   const held = page.getByTestId("fx-operator-transaction").first();
 
-  await held.getByText("IN_REVIEW").waitFor();
+  await held.getByText("IN_REVIEW", { exact: true }).waitFor();
   await held.getByText("High-value outbound transfer (fintech demo)").waitFor();
   await held.getByText("score +40; change_status:IN_REVIEW").waitFor();
 
@@ -362,7 +362,7 @@ test(
 
     const held = page.getByTestId("fx-operator-transaction").first();
 
-    await held.getByText("IN_REVIEW").waitFor();
+    await held.getByText("IN_REVIEW", { exact: true }).waitFor();
     await held.getByText("High-value outbound transfer (fintech demo)").waitFor();
     assert.equal(jar.account.tx.length, 2);
 
