@@ -5,7 +5,7 @@ import type { ActivityItem, Kestrel } from "./use-kestrel";
 import * as React from "react";
 import { ArrowLeft, Building2, Globe, Wallet } from "lucide-react";
 
-import { Notice, Spinner, formatEth } from "./ui";
+import { Notice, Spinner, formatEth, onRadioGroupKeyDown } from "./ui";
 
 import {
   SANCTIONED_WALLET,
@@ -50,7 +50,19 @@ function ChoiceList<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <div aria-label={name} className="flex flex-col gap-2" role="radiogroup">
+    <div
+      aria-label={name}
+      className="flex flex-col gap-2"
+      role="radiogroup"
+      onKeyDown={(event) =>
+        onRadioGroupKeyDown(
+          event,
+          choices.map((choice) => choice.value),
+          value,
+          onChange,
+        )
+      }
+    >
       {choices.map((choice) => (
         <button
           key={choice.value}
@@ -62,6 +74,7 @@ function ChoiceList<T extends string>({
               : "border-line bg-canvas hover:border-subtle-gray/50",
           )}
           role="radio"
+          tabIndex={value === choice.value ? 0 : -1}
           type="button"
           onClick={() => onChange(choice.value)}
         >
@@ -84,7 +97,7 @@ function ChoiceList<T extends string>({
                 </span>
               )}
             </span>
-            <span className="truncate text-xs text-muted">{choice.detail}</span>
+            <span className="text-xs text-muted">{choice.detail}</span>
           </span>
           <span
             aria-hidden
