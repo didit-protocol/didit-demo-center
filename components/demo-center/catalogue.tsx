@@ -15,7 +15,6 @@ import { ResultsModal, type ResultsState } from "./results-modal";
 
 // Industry demos - the marketplace (DID-7138).
 import { MarketplaceCatalogueCard } from "@/components/marketplace/catalogue-card";
-
 import { useVerification } from "@/app/hooks/useVerification";
 import {
   type Demo,
