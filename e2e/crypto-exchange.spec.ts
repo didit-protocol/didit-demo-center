@@ -335,7 +335,10 @@ test("on a phone the Didit panel dialog keeps the keyboard inside it", async ({
     await page.evaluate(() => document.documentElement.style.overflow),
   ).toBe("hidden");
 
-  // More presses than the dialog has controls, so Tab has to wrap.
+  // Shift+Tab straight from the panel, then more presses than the dialog has
+  // controls, so Tab has to wrap both ways.
+  await page.keyboard.press("Shift+Tab");
+  expect(await focusInside()).toBe(true);
   for (let press = 0; press < 20; press += 1) {
     await page.keyboard.press("Tab");
     expect(await focusInside()).toBe(true);
