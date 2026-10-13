@@ -106,8 +106,8 @@ export function MarketProvider({
   const [inspecting, setInspecting] = React.useState<string | null>(null);
   const [operator, setOperator] = React.useState<OperatorView | null>(null);
   const [operatorLoading, setOperatorLoading] = React.useState(false);
-  /** What to do when the hosted flow on screen closes. */
-  const afterFlow = React.useRef<(() => void) | null>(null);
+  /** What to do when the hosted flow on screen closes, and how it closed. */
+  const afterFlow = React.useRef<((completed: boolean) => void) | null>(null);
 
   const setChapter = React.useCallback(
     (next: ChapterId) => {
@@ -150,7 +150,7 @@ export function MarketProvider({
               result.error?.message ?? "The verification flow could not run.",
           });
         }
-        next?.();
+        next?.(result.type === "completed");
       };
     });
 
@@ -339,10 +339,14 @@ export function MarketProvider({
   const verifyOrder = React.useCallback(
     async (order: TransactionSummary) => {
       if (!order.verification) return;
-      afterFlow.current = () => {
+      afterFlow.current = (completed) => {
         setBusy(`order:${order.uuid}`);
-        // The order follows the check's decision a few seconds after it.
-        waitForTransaction(order.uuid, { attempts: 10, intervalMs: 3000 })
+        // The order follows the check's decision a few seconds after it; a
+        // closed flow is read once, since nothing was decided.
+        waitForTransaction(order.uuid, {
+          attempts: completed ? 10 : 1,
+          intervalMs: 3000,
+        })
           .then((result) => {
             if (result.ok) upsertTransaction(result.data);
           })
