@@ -260,6 +260,15 @@ test("POST /verified lists the player only after an approved ID verification", a
 
   assert.equal(again.status, 200);
   assert.ok(!calls.some((call) => call.key === listsPath));
+
+  // Anything that is not a session id never reaches Didit.
+  reset();
+  const malformed = await verified.POST(
+    request("/api/igaming/verified", { method: "POST", body: { sessionId: "../users" } }),
+  );
+
+  assert.equal(malformed.status, 404);
+  assert.equal(calls.length, 0);
 });
 
 test("POST /token mints a transaction token bound to this player", async () => {

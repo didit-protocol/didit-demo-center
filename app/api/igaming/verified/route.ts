@@ -34,10 +34,11 @@ export async function POST(request: NextRequest) {
   const sessionId = String(body?.sessionId ?? "");
   const calls: DiditCall[] = [];
 
-  const decision = await didit(
-    "GET",
-    `/v3/session/${encodeURIComponent(sessionId)}/decision/`,
-  );
+  if (!UUID.test(sessionId)) {
+    return noStore({ error: "Unknown session." }, { status: 404 });
+  }
+
+  const decision = await didit("GET", `/v3/session/${sessionId}/decision/`);
 
   calls.push(decision.call);
   const session = decision.ok ? projectSession(decision.data, playerId) : null;
