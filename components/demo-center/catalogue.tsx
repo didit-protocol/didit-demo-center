@@ -11,6 +11,7 @@ import { DemoDetailModal } from "./demo-detail-modal";
 import { DemoGrid } from "./demo-grid";
 import { FilterBar } from "./filter-bar";
 import { Hero } from "./hero";
+import { IndustryApps } from "./industry-apps";
 import { ResultsModal, type ResultsState } from "./results-modal";
 
 import { useVerification } from "@/app/hooks/useVerification";
@@ -236,6 +237,8 @@ export function Catalogue() {
       <Container className="pb-16 pt-8" size="xl">
         <DemoGrid demos={demos} query={query} onOpen={setOpenDemo} />
       </Container>
+
+      <IndustryApps />
 
       <ComposeSection />
 
