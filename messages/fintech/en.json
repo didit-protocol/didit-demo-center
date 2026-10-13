@@ -258,7 +258,7 @@
     "transaction": "Transaction #{number}",
     "status": "Status",
     "score": "Risk score",
-    "rule": "Rule that held it",
+    "rule": "Matched rule",
     "noRule": "No rule matched",
     "open": "Open in Console",
     "openConsole": "Open the Console",
