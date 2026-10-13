@@ -1,0 +1,271 @@
+{
+  "page": {
+    "eyebrow": "Industry demo · Fintech",
+    "title": "Kestrel, a neobank built on Didit",
+    "lede": "Open an account, verify your identity and move money. Every step runs on Didit's real API: KYC and AML at sign-up, transaction monitoring on every payment, ongoing AML screening after that.",
+    "allDemos": "All demos",
+    "staging": "Live on Didit staging",
+    "reset": "Start over",
+    "theme": {
+      "label": "Colour theme",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "unavailable": {
+      "title": "This demo runs on Didit staging",
+      "body": "Opening an account here runs real identity verification and AML screening for the Didit demo organization, so the demo is served from the staging environment.",
+      "cta": "Open the demo on staging"
+    }
+  },
+  "bank": {
+    "name": "Kestrel",
+    "tagline": "Banking, verified",
+    "fictional": "Fictional bank for demo purposes"
+  },
+  "common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "retry": "Try again",
+    "loading": "Loading…",
+    "error": "Something went wrong talking to Didit. Try again in a moment.",
+    "diditError": "Didit answered: {detail}",
+    "unavailable": "This demo is not available on this deployment."
+  },
+  "welcome": {
+    "title": "A current account that opens in minutes",
+    "body": "An IBAN in your name, instant transfers across Europe and no monthly fee.",
+    "points": {
+      "verify": "Verify with your ID and a selfie",
+      "send": "Send and receive money straight away",
+      "safe": "Every payment checked for fraud"
+    },
+    "cta": "Open an account",
+    "note": "Use your own ID: the data goes to Didit's staging environment only, never to a real bank."
+  },
+  "signup": {
+    "progress": "Step {current} of {total}",
+    "title": "Tell us about you",
+    "body": "We use this to open your account. You confirm it with your ID in the next step.",
+    "name": "Full name",
+    "namePlaceholder": "As it appears on your ID",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "country": "Country of residence",
+    "countryPlaceholder": "Choose a country",
+    "consent": "By continuing you agree that Kestrel shares your details with Didit to verify your identity.",
+    "submit": "Continue",
+    "submitting": "Opening your account…",
+    "errors": {
+      "name": "Enter your full name.",
+      "email": "Enter a valid email address.",
+      "country": "Choose the country you live in."
+    }
+  },
+  "verify": {
+    "progress": "Step {current} of {total}",
+    "title": "Verify your identity",
+    "body": "We are required to confirm who you are before we open your account. It takes about two minutes.",
+    "steps": {
+      "id": "Scan a government-issued ID",
+      "liveness": "Record a short selfie video",
+      "face": "We match your selfie to your ID",
+      "aml": "We screen your name against sanctions and PEP lists"
+    },
+    "cta": "Verify my identity",
+    "resume": "Continue verification",
+    "starting": "Opening the verification…",
+    "phone": "No camera here? The verification shows a QR code to finish on your phone.",
+    "cancelled": "You closed the verification before finishing. Your progress is saved, so you can continue where you left off.",
+    "failed": "The verification could not start. {reason}"
+  },
+  "checking": {
+    "title": "Checking your details",
+    "body": "This usually takes less than a minute. Keep this page open.",
+    "slow": "This is taking longer than usual. We keep checking in the background.",
+    "checks": {
+      "id": "Identity document",
+      "liveness": "Liveness",
+      "face": "Face match",
+      "aml": "Sanctions and PEP screening"
+    },
+    "status": {
+      "pending": "Waiting",
+      "passed": "Passed",
+      "review": "Under review",
+      "failed": "Not passed"
+    }
+  },
+  "outcome": {
+    "approved": {
+      "title": "Your account is open",
+      "body": "Welcome to Kestrel, {name}. Your account is ready: add money and start using it.",
+      "cta": "Go to my account"
+    },
+    "review": {
+      "title": "We are reviewing your application",
+      "body": "We need a little more time to confirm some details. Most reviews finish within one working day, and we will email {email} as soon as we are done.",
+      "live": "This page updates by itself when the review ends."
+    },
+    "declined": {
+      "title": "We could not open your account",
+      "body": "We were not able to verify your identity, so we cannot open an account for you right now.",
+      "cta": "Start over"
+    },
+    "expired": {
+      "title": "Your verification expired",
+      "body": "The verification link is no longer valid. Start again to open your account.",
+      "cta": "Start again"
+    }
+  },
+  "home": {
+    "greeting": "Hi, {name}",
+    "balance": "Available balance",
+    "held": "{amount} on hold",
+    "add": "Add money",
+    "send": "Send money",
+    "activity": "Activity",
+    "refresh": "Refresh",
+    "emptyTitle": "No payments yet",
+    "emptyBody": "Add money first, then send some. Transfers of {threshold} or more are checked before they leave your account.",
+    "limit": "You reached the demo limit of {limit} payments. Start over to open a new account.",
+    "verified": "Identity verified"
+  },
+  "payment": {
+    "fromSelf": "Top-up from your other bank",
+    "to": "To {name}",
+    "status": {
+      "received": "Received",
+      "sent": "Sent",
+      "held": "On hold",
+      "declined": "Declined",
+      "action": "Action needed"
+    }
+  },
+  "pay": {
+    "depositTitle": "Add money",
+    "depositBody": "From your account at another bank, in your own name.",
+    "transferTitle": "Send money",
+    "transferBody": "To anyone with a bank account in Europe.",
+    "amount": "Amount",
+    "otherAmount": "Other amount",
+    "recipient": "Recipient",
+    "recipientPlaceholder": "Recipient's full name",
+    "available": "Available: {amount}",
+    "reviewHint": "Transfers of {threshold} or more are held for a quick check before they leave.",
+    "willReview": "This transfer will be checked before it leaves.",
+    "submitDeposit": "Add {amount}",
+    "submitTransfer": "Send {amount}",
+    "submitting": "Sending…",
+    "errors": {
+      "amount": "Enter an amount between {min} and {max}.",
+      "counterparty": "Enter the recipient's full name.",
+      "insufficient": "You only have {available} available.",
+      "limit": "You reached the demo limit of payments for this account."
+    }
+  },
+  "result": {
+    "received": {
+      "title": "{amount} added",
+      "body": "The money is in your account and ready to use."
+    },
+    "sent": {
+      "title": "{amount} sent to {name}",
+      "body": "It should arrive within seconds."
+    },
+    "held": {
+      "title": "Your payment is on hold",
+      "body": "We are running a quick check on this payment before it leaves your account. The money is set aside until then, and this screen updates as soon as the check ends."
+    },
+    "declined": {
+      "title": "Payment declined",
+      "body": "This payment did not go through and no money left your account."
+    },
+    "action": {
+      "title": "We need something from you",
+      "body": "Confirm your identity to release this payment."
+    },
+    "done": "Done"
+  },
+  "monitoring": {
+    "title": "Ongoing AML monitoring",
+    "body": "After you join, your profile is rescreened every day against sanctions, PEP and adverse-media lists. A new listing reaches our compliance team without asking you to verify again.",
+    "cta": "Preview monitoring for this account",
+    "loading": "Asking Didit…",
+    "rows": {
+      "profiles": "Profiles matched",
+      "alreadyMonitored": "Already monitored",
+      "withScreening": "Onboarding screening to monitor",
+      "needsScreening": "Would be screened first",
+      "missingIdentity": "Missing identity data",
+      "annualCost": "Monitoring cost per year"
+    },
+    "note": "Estimate only: nothing was switched on, screened or billed."
+  },
+  "panel": {
+    "title": "How this uses Didit",
+    "subtitle": "The modules and API calls behind each step, live on staging.",
+    "open": "How this uses Didit",
+    "close": "Close",
+    "current": "You are here",
+    "modules": "Modules",
+    "calls": "API calls",
+    "docs": "Docs",
+    "steps": {
+      "signup": {
+        "title": "Sign up",
+        "body": "The bank's own form. The customer id it creates is sent to Didit as vendor_data, the key that ties every session, payment and screening to this person."
+      },
+      "verify": {
+        "title": "Identity verification",
+        "body": "One hosted session runs the bank's workflow: ID verification, active liveness, face match 1:1, AML screening and IP analysis."
+      },
+      "decision": {
+        "title": "Decision",
+        "body": "The session status decides the account: Approved opens it, In Review waits for an analyst, Declined keeps it closed. The customer never sees why."
+      },
+      "payments": {
+        "title": "Transaction monitoring",
+        "body": "Every payment is posted with the same vendor_data. The rules run synchronously and the verdict comes back in the response."
+      },
+      "review": {
+        "title": "Review",
+        "body": "Transfers of {threshold} or more match the rule \"{rule}\" and wait for an analyst in the console. The app re-reads the payment and updates when they decide."
+      },
+      "monitoring": {
+        "title": "Ongoing AML monitoring",
+        "body": "Switches on daily rescreening for verified customers. The demo asks only for the estimate, which writes nothing."
+      }
+    },
+    "moduleNames": {
+      "idVerification": "ID verification",
+      "liveness": "Active liveness",
+      "faceMatch": "Face match 1:1",
+      "aml": "AML screening",
+      "ipAnalysis": "IP analysis",
+      "transactions": "Transaction monitoring",
+      "rules": "Rules engine",
+      "webhooks": "Webhooks",
+      "manualReview": "Manual review",
+      "ongoing": "Ongoing monitoring"
+    }
+  },
+  "operator": {
+    "title": "Operator view",
+    "body": "What the bank's compliance team sees for this customer in the Didit console.",
+    "empty": "Nothing yet. Records appear here as you go through the app.",
+    "session": "Verification session",
+    "sessionNumber": "Session #{number}",
+    "transaction": "Transaction #{number}",
+    "status": "Status",
+    "score": "Risk score",
+    "rule": "Rule that held it",
+    "noRule": "No rule matched",
+    "open": "Open in Console",
+    "openConsole": "Open the Console",
+    "find": "Search for {record} in the console.",
+    "login": "Needs a console login for the Didit demo organization."
+  },
+  "amount": {
+    "presets": "Choose an amount"
+  }
+}
