@@ -315,7 +315,7 @@ export function DiditSteps({ current }: { current: StepKey }) {
                         >
                           <Image
                             alt=""
-                            className="size-4 dark-invert"
+                            className="fx-glyph size-4"
                             height={16}
                             src={m.icon}
                             width={16}
