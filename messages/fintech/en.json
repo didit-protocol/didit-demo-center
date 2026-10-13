@@ -19,12 +19,10 @@
   },
   "bank": {
     "name": "Kestrel",
-    "tagline": "Banking, verified",
     "fictional": "Fictional bank for demo purposes"
   },
   "common": {
     "back": "Back",
-    "cancel": "Cancel",
     "retry": "Try again",
     "loading": "Loading…",
     "error": "Something went wrong talking to Didit. Try again in a moment.",
@@ -256,7 +254,6 @@
     "session": "Verification session",
     "sessionNumber": "Session #{number}",
     "transaction": "Transaction #{number}",
-    "status": "Status",
     "score": "Risk score",
     "rule": "Matched rule",
     "noRule": "No rule matched",
