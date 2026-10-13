@@ -77,16 +77,22 @@ function ActivityRow({
         >
           <Icon className="size-[18px]" />
         </span>
+        {/* Wraps instead of truncating: on a phone the chip column leaves
+            too little room for the destination and the time on one line. */}
         <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="truncate text-sm font-medium text-ink">
+          <span className="text-sm font-medium text-ink">
             {incoming ? "Deposit" : "Withdrawal"}{" "}
             <span className="font-normal text-muted">
               {item.label.toLowerCase()}
             </span>
           </span>
-          <span className="truncate text-xs text-muted">
-            {item.view.wallet ? shortAddress(item.view.wallet) : "-"} ·{" "}
-            {formatTime(item.createdAt)}
+          <span className="flex flex-wrap gap-x-1 text-xs text-muted">
+            <span>
+              {item.view.wallet ? shortAddress(item.view.wallet) : "-"} ·
+            </span>
+            <span className="whitespace-nowrap">
+              {formatTime(item.createdAt)}
+            </span>
           </span>
         </span>
         <span className="flex flex-none flex-col items-end gap-1">

@@ -289,12 +289,12 @@ export function WithdrawForm({
     },
   ];
 
-  const target =
-    destination === "own-wallet"
-      ? (wallets?.ownWallet ?? "")
-      : destination === "exchange"
-        ? (wallets?.exchangeDeposit ?? "")
-        : address.trim();
+  const addressFor: Record<WithdrawalDestination, string> = {
+    "own-wallet": wallets?.ownWallet ?? "",
+    exchange: wallets?.exchangeDeposit ?? "",
+    address: address.trim(),
+  };
+  const target = addressFor[destination];
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
