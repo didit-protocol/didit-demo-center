@@ -3,10 +3,19 @@ import { NextRequest } from "next/server";
 import { AGE_WORKFLOW_ID, OPERATOR_NAME } from "@/lib/igaming/policy";
 import { diditErrorMessage } from "@/lib/igaming/records";
 import { didit, noPlayer, noStore, readPlayer } from "@/lib/igaming/server";
+import { siteConfig } from "@/config/site";
 
 export const dynamic = "force-dynamic";
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * Where the hosted flow sends the player when they finish on another device.
+ * Built from this site's own address, never from the request: a return URL
+ * the caller chose would let anyone mint a genuine Didit link that lands on
+ * their own site afterwards.
+ */
+const CALLBACK = new URL("/igaming", siteConfig.url).toString();
 
 /**
  * Registration: create the adaptive age-check session for this player.
@@ -22,7 +31,6 @@ export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
   const fullName = String(body?.fullName ?? "").trim();
   const email = String(body?.email ?? "").trim();
-  const returnUrl = String(body?.returnUrl ?? "");
 
   if (fullName.length < 2 || fullName.length > 80) {
     return noStore({ error: "Enter your full name." }, { status: 400 });
@@ -31,32 +39,10 @@ export async function POST(request: NextRequest) {
     return noStore({ error: "Enter a valid email address." }, { status: 400 });
   }
 
-  let callback: URL;
-
-  try {
-    callback = new URL(returnUrl);
-  } catch {
-    return noStore({ error: "A return URL is required." }, { status: 400 });
-  }
-  // The hosted flow redirects here when it finishes on another device, so it
-  // must be this site's own /igaming page and nowhere else.
-  const origin = request.headers.get("origin");
-
-  if (
-    !["http:", "https:"].includes(callback.protocol) ||
-    !callback.pathname.startsWith("/igaming") ||
-    (origin !== null && callback.origin !== origin)
-  ) {
-    return noStore(
-      { error: "The return URL must be this site's /igaming page." },
-      { status: 400 },
-    );
-  }
-
   const result = await didit("POST", "/v3/session/", {
     workflow_id: AGE_WORKFLOW_ID,
     vendor_data: playerId,
-    callback: callback.toString(),
+    callback: CALLBACK,
     callback_method: "both",
     contact_details: { email, send_notification_emails: false },
     metadata: {
