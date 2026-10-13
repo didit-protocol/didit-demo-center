@@ -96,14 +96,19 @@ function fail(status: number, error: ErrorCode, extra = {}): Reply {
   return { status, body: { error, ...extra } };
 }
 
-/** A Didit call that failed: the reason the API gave, never a stack. */
-class DiditError extends Error {
+/** A Didit call that failed: the status and reason the API gave, never a stack. */
+interface DiditFailure {
   upstream: number;
+  detail: string;
+}
 
-  constructor(upstream: number, message: string) {
-    super(message);
-    this.upstream = upstream;
-  }
+function isDiditFailure(error: unknown): error is DiditFailure {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    typeof (error as DiditFailure).upstream === "number" &&
+    typeof (error as DiditFailure).detail === "string"
+  );
 }
 
 async function didit(
@@ -122,7 +127,12 @@ async function didit(
       cache: "no-store",
     });
   } catch {
-    throw new DiditError(0, "Didit could not be reached.");
+    const failure: DiditFailure = {
+      upstream: 0,
+      detail: "Didit could not be reached.",
+    };
+
+    throw failure;
   }
 
   const data = (await response.json().catch(() => null)) as Record<
@@ -133,20 +143,22 @@ async function didit(
   if (!response.ok) {
     const detail = data && (data.detail ?? data.error ?? data.message);
 
-    throw new DiditError(
-      response.status,
-      typeof detail === "string" ? detail : `HTTP ${response.status}`,
-    );
+    const failure: DiditFailure = {
+      upstream: response.status,
+      detail: typeof detail === "string" ? detail : `HTTP ${response.status}`,
+    };
+
+    throw failure;
   }
 
   return data ?? {};
 }
 
 function diditFailure(error: unknown): Reply {
-  if (error instanceof DiditError) {
+  if (isDiditFailure(error)) {
     return fail(502, "didit", {
       upstream: error.upstream,
-      detail: error.message,
+      detail: error.detail,
     });
   }
 
