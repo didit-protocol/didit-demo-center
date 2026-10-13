@@ -25,14 +25,11 @@ export function ShopForm({
   onSubmit: (form: ShopFormValue) => void;
 }) {
   const [form, setForm] = React.useState<ShopFormValue>(initial);
-  const ready =
-    form.shop.trim().length >= 2 && form.company.trim().length >= 2;
+  const ready = form.shop.trim().length >= 2 && form.company.trim().length >= 2;
 
   const field =
     (key: keyof ShopFormValue) =>
-    (
-      event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-    ) =>
+    (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
       setForm((current) => ({ ...current, [key]: event.target.value }));
 
   return (

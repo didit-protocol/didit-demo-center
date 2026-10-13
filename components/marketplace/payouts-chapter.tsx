@@ -64,7 +64,9 @@ export function PayoutsChapter() {
             </p>
           </div>
           <div className="mkt-inset p-4">
-            <p className="eyebrow eyebrow-muted mb-1.5">Business verification</p>
+            <p className="eyebrow eyebrow-muted mb-1.5">
+              Business verification
+            </p>
             <p className="m-0 text-2xl font-medium tracking-tight text-ink">
               {kybMeta.label}
             </p>

@@ -116,7 +116,11 @@ export function ruleDefinitions(ageWorkflowId: string) {
       scope: { action_types: [ACTIONS.signup] },
       conditions: [
         demoOnly,
-        { field: "subject_device_fingerprint", operator: "exists", value: true },
+        {
+          field: "subject_device_fingerprint",
+          operator: "exists",
+          value: true,
+        },
       ],
       aggregation: [
         {
@@ -150,7 +154,11 @@ export function ruleDefinitions(ageWorkflowId: string) {
       scope: { directions: ["OUTBOUND"], action_types: [ACTIONS.payout] },
       conditions: [
         demoOnly,
-        { field: "subject_device_fingerprint", operator: "exists", value: true },
+        {
+          field: "subject_device_fingerprint",
+          operator: "exists",
+          value: true,
+        },
       ],
       aggregation: [
         {

@@ -66,7 +66,10 @@ function ChapterTabs() {
   const market = useMarket();
 
   return (
-    <nav aria-label="Chapters" className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+    <nav
+      aria-label="Chapters"
+      className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0"
+    >
       <ol className="m-0 flex min-w-max list-none gap-1.5 p-0">
         {GUIDE.map((chapter) => {
           const active = chapter.id === market.chapter;
@@ -103,13 +106,7 @@ function ChapterTabs() {
   );
 }
 
-function GuideSheet({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
+function GuideSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const market = useMarket();
   const panelRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -186,7 +183,7 @@ function Shell({
       )}
       data-theme={theme}
     >
-      <div className="border-b border-line bg-surface">
+      <div className="border-b border-line bg-surface" id="mkt-top">
         <Container className="pb-6 pt-8 sm:pt-10" size="xl">
           <div className="flex flex-wrap items-start gap-4">
             <div className="min-w-0 flex-1">
@@ -241,16 +238,10 @@ function Shell({
       <Container className="pt-6 sm:pt-8" size="xl">
         {view && !view.availability.transactions ? (
           <div className="mb-5">
-            <Notice
-              title="This demo runs on staging"
-              tone="review"
-            >
+            <Notice title="This demo runs on staging" tone="review">
               It verifies real businesses and people against the demo
               organization on Didit staging. Open it at{" "}
-              <a
-                className="font-medium underline"
-                href={view.stagingUrl}
-              >
+              <a className="font-medium underline" href={view.stagingUrl}>
                 {view.stagingUrl.replace(/^https:\/\//, "")}
               </a>
               .
@@ -278,12 +269,15 @@ function Shell({
         ) : null}
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_380px]">
-          <main className="min-w-0" id="mkt-chapter">
+          <section aria-labelledby="mkt-chapter-title" className="min-w-0">
             <div className="mb-5">
               <p className="eyebrow eyebrow-muted mb-1.5">
                 Chapter {guide.number} of {GUIDE.length}
               </p>
-              <h2 className="m-0 text-2xl font-medium tracking-tight text-ink">
+              <h2
+                className="m-0 text-2xl font-medium tracking-tight text-ink"
+                id="mkt-chapter-title"
+              >
                 {guide.title}
               </h2>
             </div>
@@ -312,18 +306,18 @@ function Shell({
                 />
               </button>
               {guideExpanded ? (
-                <div className="border-t border-line px-5 pb-5 pt-4" id="mkt-guide-inline">
+                <div
+                  className="border-t border-line px-5 pb-5 pt-4"
+                  id="mkt-guide-inline"
+                >
                   <DiditPanel chapter={guide} />
                 </div>
               ) : null}
             </div>
-          </main>
+          </section>
 
           {/* Desktop: the guide sits beside the chapter. */}
-          <aside
-            aria-labelledby="mkt-guide-title"
-            className="hidden lg:block"
-          >
+          <aside aria-labelledby="mkt-guide-title" className="hidden lg:block">
             <div className="mkt-card sticky top-24 p-5">
               <DiditPanel chapter={guide} headingId="mkt-guide-title" />
             </div>
@@ -361,7 +355,13 @@ export function MarketplaceDemo() {
   const onChapterChange = React.useCallback(
     (chapter: ChapterId) => {
       router.replace(`${pathname}?chapter=${chapter}`, { scroll: false });
-      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      // Bring the chapter tabs back into view only when they scrolled away.
+      const top = document.getElementById("mkt-top");
+
+      if (top && top.getBoundingClientRect().top < 0) {
+        window.scrollTo({ top: top.offsetTop - 64, behavior: "smooth" });
+      }
     },
     [pathname, router],
   );

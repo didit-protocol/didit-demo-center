@@ -76,9 +76,7 @@ function kindOf(actionType: string | null): TransactionKind {
 
 /** The APPLICANT party - the transaction's subject. */
 export function subjectParty(raw: Json): Json | null {
-  return (
-    list(raw.parties).find((party) => party.role === "APPLICANT") ?? null
-  );
+  return list(raw.parties).find((party) => party.role === "APPLICANT") ?? null;
 }
 
 export function subjectVendor(raw: Json): string | null {
@@ -302,7 +300,8 @@ function personName(row: Json): string {
 
 export function summarizeKyb(raw: Json): KybSummary {
   const registry = list(raw.registry_checks)[0] ?? null;
-  const company = registry && isRecord(registry.company) ? registry.company : null;
+  const company =
+    registry && isRecord(registry.company) ? registry.company : null;
   const people = list(raw.key_people_checks)[0] ?? null;
   const submitted =
     people && isRecord(people.submitted) ? list(people.submitted.parties) : [];
@@ -312,8 +311,10 @@ export function summarizeKyb(raw: Json): KybSummary {
 
   const steps: KybSummary["steps"] = [];
 
-  if (registry) steps.push({ key: "registry", status: String(registry.status ?? "") });
-  if (people) steps.push({ key: "people", status: String(people.status ?? "") });
+  if (registry)
+    steps.push({ key: "registry", status: String(registry.status ?? "") });
+  if (people)
+    steps.push({ key: "people", status: String(people.status ?? "") });
   if (documents[0])
     steps.push({ key: "documents", status: String(documents[0].status ?? "") });
   if (aml[0]) steps.push({ key: "aml", status: String(aml[0].status ?? "") });

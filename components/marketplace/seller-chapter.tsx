@@ -255,9 +255,8 @@ export function SellerCard({ seller }: { seller: SellerView }) {
         >
           {signup ? (
             <>
-              The web SDK sent a{" "}
-              <code className="mkt-code">seller_signup</code> event from this
-              device (score {signup.score}).
+              The web SDK sent a <code className="mkt-code">seller_signup</code>{" "}
+              event from this device (score {signup.score}).
             </>
           ) : (
             "The sign-up has not reached monitoring yet."
@@ -463,10 +462,7 @@ export function SellerChapter() {
       ) : null}
 
       <div className={cn(seller ? "" : "hidden")}>
-        <ActionButton
-          variant="ink"
-          onClick={() => market.setChapter("buyer")}
-        >
+        <ActionButton variant="ink" onClick={() => market.setChapter("buyer")}>
           Next: a buyer checks out
           <ArrowRight className="size-4" />
         </ActionButton>

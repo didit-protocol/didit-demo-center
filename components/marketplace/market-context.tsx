@@ -57,10 +57,16 @@ interface MarketContextValue {
   startKyb: (seller: SellerView) => Promise<void>;
   continuePersonCheck: (seller: SellerView, url: string) => Promise<void>;
   refreshKyb: (seller: SellerView) => Promise<void>;
-  decideKyb: (seller: SellerView, status: "Approved" | "Declined") => Promise<void>;
+  decideKyb: (
+    seller: SellerView,
+    status: "Approved" | "Declined",
+  ) => Promise<void>;
   buy: (listing: Listing) => Promise<TransactionSummary | null>;
   verifyOrder: (order: TransactionSummary) => Promise<void>;
-  payout: (seller: SellerView, amount: number) => Promise<TransactionSummary | null>;
+  payout: (
+    seller: SellerView,
+    amount: number,
+  ) => Promise<TransactionSummary | null>;
   reset: () => Promise<void>;
   clearError: () => void;
 }

@@ -230,7 +230,10 @@ function Inspection() {
           </p>
           <Rows
             rows={[
-              { label: "Device id", value: view.device.deviceId ?? "None sent" },
+              {
+                label: "Device id",
+                value: view.device.deviceId ?? "None sent",
+              },
               {
                 label: "Browser",
                 value:
@@ -344,10 +347,7 @@ function Inspection() {
 
       <div className="mt-5 flex flex-wrap items-center gap-2.5 border-t border-line pt-4">
         <span className="text-xs text-muted">Console v2:</span>
-        <ConsoleLink
-          label="Transactions"
-          link={view.links.transactions}
-        />
+        <ConsoleLink label="Transactions" link={view.links.transactions} />
         {view.links.kyb ? (
           <ConsoleLink label="This shop's KYB" link={view.links.kyb} />
         ) : null}

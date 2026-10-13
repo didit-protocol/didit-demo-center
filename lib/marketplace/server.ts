@@ -257,7 +257,10 @@ async function readTransaction(
 ): Promise<{ raw: Json | null; result: ApiResult }> {
   const result = await didit(env, "GET", `/v3/transactions/${uuid}/`);
 
-  return { raw: result.ok && isRecord(result.data) ? result.data : null, result };
+  return {
+    raw: result.ok && isRecord(result.data) ? result.data : null,
+    result,
+  };
 }
 
 /* ── Handlers ────────────────────────────────────────────────────── */
@@ -443,7 +446,9 @@ export async function handleToken(
   const grant: TokenGrant = {
     token: String(minted.data.sdk_token),
     expiresAt:
-      typeof minted.data.expires_at === "string" ? minted.data.expires_at : null,
+      typeof minted.data.expires_at === "string"
+        ? minted.data.expires_at
+        : null,
     baseUrl: env.apiBase,
     subject,
   };
@@ -570,7 +575,12 @@ export async function handleStartKyb(
         body: { sessionId: seller.sid, url: decision.kyb.url, resumed: true },
       };
     }
-    if (decision.kyb && !["declined", "expired", "abandoned", "kyc expired"].includes(decision.kyb.status.toLowerCase())) {
+    if (
+      decision.kyb &&
+      !["declined", "expired", "abandoned", "kyc expired"].includes(
+        decision.kyb.status.toLowerCase(),
+      )
+    ) {
       return fail(
         409,
         "This business verification is already submitted. Follow it in the status card.",

@@ -197,7 +197,8 @@ export const GUIDE: ChapterGuide[] = [
       {
         side: "server",
         call: "GET .../transactions/{uuid}/parties/{party}/networks/",
-        detail: "Which fraud networks the party belongs to, and through which signals.",
+        detail:
+          "Which fraud networks the party belongs to, and through which signals.",
         docsPath: "management-api/networks/membership-lookup",
       },
       {
@@ -215,6 +216,8 @@ export function getChapter(id: string | null | undefined): ChapterGuide {
   return GUIDE.find((chapter) => chapter.id === id) ?? GUIDE[0];
 }
 
-export function isChapterId(value: string | null | undefined): value is ChapterId {
+export function isChapterId(
+  value: string | null | undefined,
+): value is ChapterId {
   return GUIDE.some((chapter) => chapter.id === value);
 }
