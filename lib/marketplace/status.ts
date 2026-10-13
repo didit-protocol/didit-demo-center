@@ -180,11 +180,13 @@ export function payoutsUnlocked(kybRaw: string | null): boolean {
   return normalize(kybRaw ?? "") === "approved";
 }
 
-/** A KYB a reviewer can still decide from the operator view. */
+/**
+ * A KYB an analyst can decide from the operator view. The status endpoint
+ * only moves a session that is already decided or In Review; one still
+ * waiting on its key people has to wait for them.
+ */
 export function kybDecidable(kybRaw: string | null): boolean {
-  return ["in review", "awaiting user", "resubmitted"].includes(
-    normalize(kybRaw ?? ""),
-  );
+  return normalize(kybRaw ?? "") === "in review";
 }
 
 /** Transactions whose status can still move on its own. */

@@ -60,7 +60,7 @@ export function kybWorkflowDefinition(
       },
       {
         feature: "KYB_DOCUMENTS",
-        config: { kyb_required_document_groups: ["legal_presence"] },
+        config: { kyb_required_document_groups: ["LEGAL_PRESENCE"] },
       },
       { feature: "AML" },
     ],
