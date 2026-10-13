@@ -50,25 +50,21 @@ function ChoiceList<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <div className="flex flex-col gap-2" role="radiogroup">
+    <div aria-label={name} className="flex flex-col gap-2" role="radiogroup">
       {choices.map((choice) => (
-        <label
+        <button
           key={choice.value}
+          aria-checked={value === choice.value}
           className={cn(
-            "flex cursor-pointer items-center gap-3 rounded-sm border px-4 py-3 transition-colors duration-fast",
+            "flex w-full items-center gap-3 rounded-sm border px-4 py-3 text-left transition-colors duration-fast",
             value === choice.value
               ? "border-blue bg-blue-tint"
               : "border-line bg-canvas hover:border-subtle-gray/50",
           )}
+          role="radio"
+          type="button"
+          onClick={() => onChange(choice.value)}
         >
-          <input
-            checked={value === choice.value}
-            className="sr-only"
-            name={name}
-            type="radio"
-            value={choice.value}
-            onChange={() => onChange(choice.value)}
-          />
           <span
             className={cn(
               "flex size-9 flex-none items-center justify-center rounded-pill",
@@ -99,7 +95,7 @@ function ChoiceList<T extends string>({
                 : "border-line",
             )}
           />
-        </label>
+        </button>
       ))}
     </div>
   );
@@ -219,7 +215,7 @@ export function DepositForm({
       </div>
       <ChoiceList
         choices={choices}
-        name="deposit-source"
+        name="Deposit source"
         value={source}
         onChange={setSource}
       />
@@ -352,7 +348,7 @@ export function WithdrawForm({
       </div>
       <ChoiceList
         choices={choices}
-        name="withdraw-destination"
+        name="Withdrawal destination"
         value={destination}
         onChange={setDestination}
       />
