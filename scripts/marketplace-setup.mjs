@@ -101,18 +101,32 @@ async function ensureWorkflow() {
     return null;
   }
 
-  const created = await didit(
-    "POST",
-    "/v3/workflows/",
-    kybWorkflowDefinition(
-      SELLER_COUNTRIES.map((country) => country.code),
-      STAGING_WORKFLOWS.person,
-    ),
-  );
+  try {
+    const created = await didit(
+      "POST",
+      "/v3/workflows/",
+      kybWorkflowDefinition(
+        SELLER_COUNTRIES.map((country) => country.code),
+        STAGING_WORKFLOWS.person,
+      ),
+    );
 
-  console.log(`KYB workflow: created ${created.workflow_id}`);
+    console.log(`KYB workflow: created ${created.workflow_id}`);
 
-  return created.workflow_id;
+    return created.workflow_id;
+  } catch (error) {
+    // An application holds at most 50 workflows, archived ones included, and
+    // only deleting one frees a slot. That is the application owner's call,
+    // so the script reports it and carries on with the rules.
+    if (String(error?.message).includes("Maximum of")) {
+      console.log(
+        `KYB workflow: NOT created - this application already holds ${workflows.length} workflow versions and is at its workflow limit. Free a slot in the console, then re-run.`,
+      );
+
+      return null;
+    }
+    throw error;
+  }
 }
 
 async function ensureRules() {
