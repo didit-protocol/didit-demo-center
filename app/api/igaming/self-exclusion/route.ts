@@ -27,7 +27,8 @@ export async function POST(request: NextRequest) {
     return noStore(
       {
         error:
-          diditErrorMessage(result.data) ?? "Self-exclusion could not be saved.",
+          diditErrorMessage(result.data) ??
+          "Self-exclusion could not be saved.",
         didit: [result.call],
       },
       { status: result.status === 404 ? 404 : 502 },

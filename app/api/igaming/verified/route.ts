@@ -32,13 +32,19 @@ export async function POST(request: NextRequest) {
   const sessionId = String(body?.sessionId ?? "");
   const calls: DiditCall[] = [];
 
-  const decision = await didit("GET", `/v3/session/${encodeURIComponent(sessionId)}/decision/`);
+  const decision = await didit(
+    "GET",
+    `/v3/session/${encodeURIComponent(sessionId)}/decision/`,
+  );
 
   calls.push(decision.call);
   const session = decision.ok ? projectSession(decision.data, playerId) : null;
 
   if (!session) {
-    return noStore({ error: "Unknown session.", didit: calls }, { status: 404 });
+    return noStore(
+      { error: "Unknown session.", didit: calls },
+      { status: 404 },
+    );
   }
   if (session.workflowId !== KYC_WORKFLOW_ID || session.status !== "Approved") {
     return noStore(
@@ -73,7 +79,8 @@ export async function POST(request: NextRequest) {
   if (!entry.ok && !duplicate) {
     return noStore(
       {
-        error: diditErrorMessage(entry.data) ?? "The player could not be listed.",
+        error:
+          diditErrorMessage(entry.data) ?? "The player could not be listed.",
         didit: calls,
       },
       { status: 502 },

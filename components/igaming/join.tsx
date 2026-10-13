@@ -71,7 +71,9 @@ export function JoinCard({
   const [adult, setAdult] = React.useState(false);
   const busy = aurora.busy === "join";
   const ready =
-    name.trim().length >= 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && adult;
+    name.trim().length >= 2 &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) &&
+    adult;
 
   return (
     <form
@@ -208,6 +210,11 @@ export function AgeResult({ aurora }: { aurora: Aurora }) {
               : "The age check opens in a secure Didit window. Take the selfie there, then come back here."}
           </p>
         </div>
+        {aurora.notice ? (
+          <Notice tone={aurora.notice.tone === "error" ? "declined" : "info"}>
+            {aurora.notice.text}
+          </Notice>
+        ) : null}
         <div className="flex flex-wrap gap-2.5">
           <button
             className="ig-btn ig-btn-primary"
@@ -234,7 +241,11 @@ export function AgeResult({ aurora }: { aurora: Aurora }) {
   const view = sessionView("age", summary.status);
   const approved = view.tone === "approved";
   const market = licensedMarket(summary.ip?.countryCode);
-  const Icon = approved ? CircleCheck : view.tone === "declined" ? CircleX : Timer;
+  const Icon = approved
+    ? CircleCheck
+    : view.tone === "declined"
+      ? CircleX
+      : Timer;
   const firstName = state.name.split(" ")[0];
 
   return (
@@ -295,14 +306,12 @@ export function AgeResult({ aurora }: { aurora: Aurora }) {
         {summary.ip?.isVpnOrTor || summary.ip?.isDataCenter ? (
           <Row
             label="Network"
-            value={
-              [
-                summary.ip.isVpnOrTor ? "VPN or Tor" : null,
-                summary.ip.isDataCenter ? "Data-centre IP" : null,
-              ]
-                .filter(Boolean)
-                .join(" · ")
-            }
+            value={[
+              summary.ip.isVpnOrTor ? "VPN or Tor" : null,
+              summary.ip.isDataCenter ? "Data-centre IP" : null,
+            ]
+              .filter(Boolean)
+              .join(" · ")}
           >
             <StatusPill tone="review">Flagged</StatusPill>
           </Row>
@@ -311,10 +320,16 @@ export function AgeResult({ aurora }: { aurora: Aurora }) {
 
       {approved && summary.ip && !market ? (
         <Notice tone="review">
-          {OPERATOR_NAME} is not licensed in {summary.ip.country ?? "this country"}
-          . A live operator stops real-money play here; the demo carries on so
-          you can see the rest, and Didit scores every cashier action from this
-          IP.
+          {OPERATOR_NAME} is not licensed in{" "}
+          {summary.ip.country ?? "this country"}. A live operator stops
+          real-money play here; the demo carries on so you can see the rest, and
+          Didit scores every cashier action from this IP.
+        </Notice>
+      ) : null}
+
+      {aurora.notice ? (
+        <Notice tone={aurora.notice.tone === "error" ? "declined" : "info"}>
+          {aurora.notice.text}
         </Notice>
       ) : null}
 

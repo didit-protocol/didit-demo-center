@@ -136,7 +136,13 @@ function HowItWorks({ active }: { active: StepId }) {
   );
 }
 
-function ConsoleLink({ href, children }: { href: string | null; children: string }) {
+function ConsoleLink({
+  href,
+  children,
+}: {
+  href: string | null;
+  children: string;
+}) {
   if (!href) return null;
 
   return (
@@ -172,8 +178,8 @@ function OperatorView({ aurora }: { aurora: Aurora }) {
   if (!state) {
     return (
       <p className="m-0 text-[13px] leading-5 text-muted">
-        Create an account in the app to see what Aurora Play&apos;s team sees
-        in the Didit Business Console.
+        Create an account in the app to see what Aurora Play&apos;s team sees in
+        the Didit Business Console.
       </p>
     );
   }
@@ -218,7 +224,9 @@ function OperatorView({ aurora }: { aurora: Aurora }) {
           </div>
           {operator.player ? (
             <StatusPill
-              tone={operator.player.status === "BLOCKED" ? "declined" : "approved"}
+              tone={
+                operator.player.status === "BLOCKED" ? "declined" : "approved"
+              }
             >
               {operator.player.status}
             </StatusPill>
@@ -262,9 +270,7 @@ function OperatorView({ aurora }: { aurora: Aurora }) {
                   summary.estimatedAge !== null
                     ? `Estimated age ${summary.estimatedAge}`
                     : null,
-                  summary.ip?.country
-                    ? `IP ${summary.ip.country}`
-                    : null,
+                  summary.ip?.country ? `IP ${summary.ip.country}` : null,
                   summary.ip?.isVpnOrTor ? "VPN or Tor" : null,
                   summary.ip?.isDataCenter ? "data-centre IP" : null,
                 ]
@@ -349,7 +355,9 @@ function OperatorView({ aurora }: { aurora: Aurora }) {
                     .join(" · ")}
                 </p>
                 <div className="mt-2.5">
-                  <ConsoleLink href={links ? links.transaction(record.id) : null}>
+                  <ConsoleLink
+                    href={links ? links.transaction(record.id) : null}
+                  >
                     Transaction in Console
                   </ConsoleLink>
                 </div>
@@ -459,7 +467,9 @@ export function DiditPanel({
             >
               {item.label}
               {item.id === "log" && aurora.log.length > 0 ? (
-                <span className="tnum ml-1 text-muted">{aurora.log.length}</span>
+                <span className="tnum ml-1 text-muted">
+                  {aurora.log.length}
+                </span>
               ) : null}
             </button>
           ))}

@@ -71,7 +71,10 @@ export const DIDIT_STEPS: DiditStep[] = [
       `Rule "${RULE_TITLES.unlicensedMarket}"`,
     ],
     docs: [
-      { label: "IP analysis", docsPath: "core-technology/ip-analysis/overview" },
+      {
+        label: "IP analysis",
+        docsPath: "core-technology/ip-analysis/overview",
+      },
       { label: "Lists API", docsPath: "management-api/lists/overview" },
     ],
   },

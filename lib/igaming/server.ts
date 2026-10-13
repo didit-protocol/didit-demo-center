@@ -1,7 +1,8 @@
+import type { ConsoleContext } from "./policy";
+
 import { NextRequest, NextResponse } from "next/server";
 
 import { PLAYER_COOKIE, verifyPlayer } from "./player";
-import type { ConsoleContext } from "./policy";
 
 import { VERIFICATION_BASE_URL } from "@/lib/auth-service";
 import { siteConfig } from "@/config/site";

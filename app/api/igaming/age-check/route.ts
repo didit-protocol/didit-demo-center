@@ -42,7 +42,10 @@ export async function POST(request: NextRequest) {
     !["http:", "https:"].includes(callback.protocol) ||
     !callback.pathname.startsWith("/igaming")
   ) {
-    return noStore({ error: "The return URL must be /igaming." }, { status: 400 });
+    return noStore(
+      { error: "The return URL must be /igaming." },
+      { status: 400 },
+    );
   }
 
   const result = await didit("POST", "/v3/session/", {
@@ -51,7 +54,11 @@ export async function POST(request: NextRequest) {
     callback: callback.toString(),
     callback_method: "both",
     contact_details: { email, send_notification_emails: false },
-    metadata: { operator: OPERATOR_NAME, step: "registration", full_name: fullName },
+    metadata: {
+      operator: OPERATOR_NAME,
+      step: "registration",
+      full_name: fullName,
+    },
   });
 
   if (!result.ok) {

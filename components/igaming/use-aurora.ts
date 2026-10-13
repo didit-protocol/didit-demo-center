@@ -150,7 +150,12 @@ export function useAurora() {
   );
 
   const record = React.useCallback(
-    (via: LogEntry["via"], method: string, path: string, status: number | null) => {
+    (
+      via: LogEntry["via"],
+      method: string,
+      path: string,
+      status: number | null,
+    ) => {
       logId.current += 1;
       const entry: LogEntry = {
         id: Date.now() * 100 + (logId.current % 100),
@@ -180,11 +185,13 @@ export function useAurora() {
     async <T>(path: string, init?: RequestInit) => {
       const response = await fetch(path, {
         ...init,
-        headers: { "Content-Type": "application/json", ...(init?.headers || {}) },
+        headers: {
+          "Content-Type": "application/json",
+          ...(init?.headers || {}),
+        },
       });
       const data = (await readJson(response)) as
-        | (T & { error?: string; didit?: DiditCall[] })
-        | null;
+        (T & { error?: string; didit?: DiditCall[] }) | null;
 
       recordCalls(data?.didit);
       if (!response.ok) {
@@ -414,7 +421,10 @@ export function useAurora() {
         } catch (error) {
           const failure = error as { type?: string };
 
-          if (failure.type !== "expired_token" && failure.type !== "invalid_token")
+          if (
+            failure.type !== "expired_token" &&
+            failure.type !== "invalid_token"
+          )
             throw error;
           token = await ensureToken(true);
           result = await sdk.shared.submitTransaction({
@@ -667,6 +677,24 @@ export function useAurora() {
     [route, startAgeCheck],
   );
 
+  const retryAge = React.useCallback(async () => {
+    const player = stateRef.current;
+
+    if (!player) return;
+    setBusy("age");
+    setNotice(null);
+    try {
+      await startAgeCheck(player);
+    } catch (error) {
+      setNotice({
+        tone: "error",
+        text: error instanceof Error ? error.message : String(error),
+      });
+    } finally {
+      setBusy(null);
+    }
+  }, [startAgeCheck]);
+
   /** The hosted flow redirected back here (finished on another device). */
   const resumeFromRedirect = React.useCallback(
     (sessionId: string) => {
@@ -726,7 +754,11 @@ export function useAurora() {
         player: PlayerProfile | null;
       }>("/api/igaming/operator");
 
-      setOperator({ console: data.console, player: data.player, loading: false });
+      setOperator({
+        console: data.console,
+        player: data.player,
+        loading: false,
+      });
       await refreshActivity();
     } catch {
       setOperator((current) => ({ ...current, loading: false }));
@@ -775,7 +807,7 @@ export function useAurora() {
     setNotice,
     setKycPrompt,
     join,
-    retryAge: () => state && startAgeCheck(state),
+    retryAge,
     resumeAge: () => state?.age && openHosted("age", state.age.url),
     checkAge: () => state?.age && finishAge(state.age.sessionId),
     enterLobby: () => update((current) => ({ ...current, ageSeen: true })),
@@ -786,9 +818,9 @@ export function useAurora() {
     checkKyc: () => state?.kyc && finishKyc(state.kyc.sessionId),
     deposit: (amount: number) => submit("deposit", amount, null),
     withdraw: (amount: number) => submit("withdrawal", amount, null),
-    bet: (amount: number, selection: string) => submit("bet", amount, selection),
-    claimBonus: () =>
-      submit("bonus_claim", WELCOME_BONUS, "Welcome free bet"),
+    bet: (amount: number, selection: string) =>
+      submit("bet", amount, selection),
+    claimBonus: () => submit("bonus_claim", WELCOME_BONUS, "Welcome free bet"),
     setLimit,
     selfExclude,
     refreshOperator,

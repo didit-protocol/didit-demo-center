@@ -15,7 +15,11 @@ export const TONE_STYLE: Record<
   Tone,
   { surface: string; text: string; dot: string }
 > = {
-  approved: { surface: "bg-success-bg", text: "text-success", dot: "bg-success" },
+  approved: {
+    surface: "bg-success-bg",
+    text: "text-success",
+    dot: "bg-success",
+  },
   review: { surface: "bg-warning-bg", text: "text-warning", dot: "bg-warning" },
   declined: { surface: "bg-danger-bg", text: "text-danger", dot: "bg-danger" },
   info: { surface: "bg-blue-soft", text: "text-blue-deep", dot: "bg-blue" },

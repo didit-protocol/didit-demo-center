@@ -123,3 +123,8 @@
 .ig-mark {
   background: var(--api-gradient-cool);
 }
+
+/* The shared modal scrim is `bg-ink/60`; ink turns light in dark mode. */
+.igaming-theme.dark .modal-scrim {
+  background-color: rgb(0 0 0 / 0.6);
+}

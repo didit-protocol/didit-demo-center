@@ -83,11 +83,7 @@ export function isPlayerId(value: unknown): value is string {
 }
 
 export type CashierKind =
-  | "deposit"
-  | "withdrawal"
-  | "bet"
-  | "bonus_claim"
-  | "deposit_limit";
+  "deposit" | "withdrawal" | "bet" | "bonus_claim" | "deposit_limit";
 
 /** Unique per application, readable in the console's transaction list. */
 export function newTxnId(playerId: string, kind: CashierKind, now: number) {
@@ -219,10 +215,7 @@ const KIND_NOUN: Record<CashierKind, string> = {
 };
 
 /** A transaction status from `/v1/transactions/`, in the player's words. */
-export function transactionView(
-  kind: CashierKind,
-  status: string,
-): StatusView {
+export function transactionView(kind: CashierKind, status: string): StatusView {
   const noun = KIND_NOUN[kind];
 
   switch (status.trim().toUpperCase()) {
@@ -479,7 +472,11 @@ export function ruleDefinitions(context: RuleContext): RuleDefinition[] {
       conditions: [
         demoPlayersOnly,
         { field: "action_type", operator: "eq", value: "bonus_claim" },
-        { field: "subject_device_fingerprint", operator: "exists", value: true },
+        {
+          field: "subject_device_fingerprint",
+          operator: "exists",
+          value: true,
+        },
       ],
       aggregation: [
         {

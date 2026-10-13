@@ -139,8 +139,7 @@ export function projectTransaction(raw: unknown): TransactionRecord | null {
   if (!record || !id) return null;
 
   const applicant =
-    asArray(record.parties).find((party) => party.role === "APPLICANT") ??
-    null;
+    asArray(record.parties).find((party) => party.role === "APPLICANT") ?? null;
   const device = asRecord(applicant?.device) ?? {};
   const network = asRecord(device.network_context) ?? {};
   const action = asRecord(record.action_required);
@@ -230,7 +229,7 @@ export function diditErrorMessage(body: unknown): string | null {
   for (const value of Object.values(record)) {
     const text = Array.isArray(value)
       ? asString(value[0])
-      : asString(value) ?? diditErrorMessage(value);
+      : (asString(value) ?? diditErrorMessage(value));
 
     if (text) return text;
   }

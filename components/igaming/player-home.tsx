@@ -134,7 +134,6 @@ function Wallet({ aurora }: { aurora: Aurora }) {
 
       {blocked ? (
         <Notice
-          tone="declined"
           action={
             mode === "deposit" ? (
               <button
@@ -147,6 +146,7 @@ function Wallet({ aurora }: { aurora: Aurora }) {
               </button>
             ) : null
           }
+          tone="declined"
         >
           Self-excluded until {EXCLUDED_UNTIL()}. Cashier closed.
         </Notice>
@@ -700,9 +700,9 @@ export function PlayerHome({ aurora }: { aurora: Aurora }) {
               Self-exclude until {EXCLUDED_UNTIL()}?
             </h2>
             <p className="mb-0 mt-2 text-sm leading-6 text-muted">
-              You won&apos;t be able to deposit, bet or open a new account
-              until then, and this can&apos;t be undone early. Aurora Play
-              blocks you on Didit, so the exclusion holds across every check.
+              You won&apos;t be able to deposit, bet or open a new account until
+              then, and this can&apos;t be undone early. Aurora Play blocks you
+              on Didit, so the exclusion holds across every check.
             </p>
           </div>
           <div className="flex flex-wrap justify-end gap-2.5">

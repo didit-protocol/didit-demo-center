@@ -87,9 +87,8 @@ export function Lobby({ onJoin }: { onJoin: () => void }) {
       <section className="ig-card flex flex-wrap items-center gap-3 px-4 py-3.5">
         <ShieldCheck aria-hidden className="size-5 flex-none text-blue" />
         <p className="m-0 min-w-0 flex-1 text-[13px] leading-5 text-muted">
-          Licensed in{" "}
-          {LICENSED_MARKETS.map((market) => market.name).join(", ")}. Real-money
-          play is only offered from these countries.
+          Licensed in {LICENSED_MARKETS.map((market) => market.name).join(", ")}
+          . Real-money play is only offered from these countries.
         </p>
       </section>
     </div>
