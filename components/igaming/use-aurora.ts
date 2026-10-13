@@ -647,11 +647,7 @@ export function useAurora() {
         "/api/igaming/age-check",
         {
           method: "POST",
-          body: JSON.stringify({
-            fullName: player.name,
-            email: player.email,
-            returnUrl: `${window.location.origin}/igaming`,
-          }),
+          body: JSON.stringify({ fullName: player.name, email: player.email }),
         },
       );
 
