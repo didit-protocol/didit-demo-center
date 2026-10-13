@@ -186,7 +186,7 @@ function Shell({
       <div className="border-b border-line bg-surface" id="mkt-top">
         <Container className="pb-6 pt-8 sm:pt-10" size="xl">
           <div className="flex flex-wrap items-start gap-4">
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0 basis-full sm:basis-0 sm:flex-1">
               <p className="eyebrow eyebrow-accent mb-3 inline-flex items-center gap-1.5">
                 <ShieldCheck className="size-3.5" />
                 Didit demo · Marketplace
@@ -200,7 +200,7 @@ function Shell({
                 payout and sign-up is monitored - live, against Didit staging.
               </p>
             </div>
-            <div className="flex flex-none items-center gap-2">
+            <div className="order-first ml-auto flex flex-none items-center gap-2 sm:order-none sm:ml-0">
               <button
                 aria-label={
                   theme === "dark" ? "Switch to light" : "Switch to dark"
