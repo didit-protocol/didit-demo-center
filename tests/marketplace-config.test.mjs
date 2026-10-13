@@ -262,6 +262,6 @@ test("no copy uses an em dash", async () => {
   ];
 
   for (const file of files) {
-    assert.ok(!fs.readFileSync(new URL(`../${file}`, import.meta.url), "utf8").includes("—"), file);
+    assert.ok(!fs.readFileSync(new URL(`../${file}`, import.meta.url), "utf8").includes("\u2014"), file);
   }
 });
