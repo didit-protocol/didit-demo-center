@@ -13,6 +13,8 @@ import {
 
 export const dynamic = "force-dynamic";
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 /**
  * Records a passed ID step-up: the player goes on the "ID-verified players"
  * list, which the step-up rule skips, so the next deposit is not held again.

@@ -550,13 +550,17 @@ export function ruleDefinitions(context: RuleContext): RuleDefinition[] {
 export const SELF_EXCLUSION_REASON =
   "Self-excluded for 6 months at the player's request (Aurora Play demo).";
 
-const EUR = new Intl.NumberFormat("en-IE", {
-  style: "currency",
-  currency: CURRENCY,
-  maximumFractionDigits: 2,
-  minimumFractionDigits: 0,
-});
+const formatter = (digits: number) =>
+  new Intl.NumberFormat("en-IE", {
+    style: "currency",
+    currency: CURRENCY,
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  });
+const WHOLE = formatter(0);
+const CENTS = formatter(2);
 
+/** "€2,000" for whole amounts, "€12.50" otherwise. */
 export function formatMoney(amount: number): string {
-  return EUR.format(amount);
+  return (Number.isInteger(amount) ? WHOLE : CENTS).format(amount);
 }
