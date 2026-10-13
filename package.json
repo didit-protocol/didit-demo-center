@@ -9,13 +9,15 @@
     "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
     "typecheck": "tsc --noEmit",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"tests/**/*.test.mjs\"",
+    "test:e2e": "playwright test",
     "sync:website-chrome": "node scripts/sync-website-chrome.mjs",
     "check:website-chrome": "node scripts/check-website-chrome-parity.mjs",
     "check:docs-links": "node scripts/check-docs-links.mjs",
-    "shots": "node scripts/capture-screenshots.mjs"
+    "shots": "node scripts/capture-screenshots.mjs",
+    "crypto-exchange:setup": "node scripts/crypto-exchange-setup.mjs"
   },
   "dependencies": {
-    "@didit-protocol/sdk-web": "^0.1.9",
+    "@didit-protocol/sdk-web": "^0.4.0",
     "@radix-ui/react-checkbox": "^1.1.3",
     "@radix-ui/react-dialog": "^1.1.5",
     "@radix-ui/react-label": "^2.1.1",
@@ -37,6 +39,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@playwright/test": "1.60.0",
     "@types/node": "20.5.7",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
