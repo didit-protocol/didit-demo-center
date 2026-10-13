@@ -219,7 +219,7 @@ export async function mockKestrel(
       }
       // Opening an action moves the recorded transaction on to what Didit
       // returned after that action finished.
-      for (const [id, name] of mock.transactions) {
+      for (const [id, name] of Array.from(mock.transactions)) {
         const view = toTransactionView(raw(name));
 
         if (view.action && url.startsWith(view.action.url.split("?")[0])) {
