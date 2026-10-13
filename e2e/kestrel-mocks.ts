@@ -4,7 +4,10 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { toAccountView } from "../lib/crypto-exchange/onboarding";
-import { SANCTIONED_WALLET, toTransactionView } from "../lib/crypto-exchange/transactions";
+import {
+  SANCTIONED_WALLET,
+  toTransactionView,
+} from "../lib/crypto-exchange/transactions";
 
 /**
  * The Didit side of the /crypto-exchange demo, for the E2E suite.
@@ -17,12 +20,20 @@ import { SANCTIONED_WALLET, toTransactionView } from "../lib/crypto-exchange/tra
  * a `didit:completed` postMessage.
  */
 
-const FIXTURES = path.join(__dirname, "..", "tests", "fixtures", "crypto-exchange");
+const FIXTURES = path.join(
+  __dirname,
+  "..",
+  "tests",
+  "fixtures",
+  "crypto-exchange",
+);
 const VERIFY = "https://verify.staging.didit.me";
 const API = "https://verification.staging.didit.me";
 
 export function raw(name: string): Record<string, unknown> {
-  return JSON.parse(fs.readFileSync(path.join(FIXTURES, `${name}.json`), "utf8"));
+  return JSON.parse(
+    fs.readFileSync(path.join(FIXTURES, `${name}.json`), "utf8"),
+  );
 }
 
 const subject = raw("withdrawal-own-wallet");
@@ -45,10 +56,17 @@ export const WALLETS = {
 const decided = (status: string, checks: string, amlHits: number) => ({
   session_id: raw("decision-not-started").session_id,
   status,
-  id_verifications: [{ status: checks, first_name: "Avery", last_name: "Quinn" }],
+  id_verifications: [
+    { status: checks, first_name: "Avery", last_name: "Quinn" },
+  ],
   liveness_checks: [{ status: checks }],
   face_matches: [{ status: checks }],
-  aml_screenings: [{ status: status === "In Review" ? "In Review" : checks, total_hits: amlHits }],
+  aml_screenings: [
+    {
+      status: status === "In Review" ? "In Review" : checks,
+      total_hits: amlHits,
+    },
+  ],
 });
 
 export const ACCOUNTS = {
@@ -142,7 +160,10 @@ export async function mockKestrel(
 
       return json(
         route,
-        { sessionId: ACCOUNTS.processing.sessionId, url: `${VERIFY}/session/e2e-onboarding` },
+        {
+          sessionId: ACCOUNTS.processing.sessionId,
+          url: `${VERIFY}/session/e2e-onboarding`,
+        },
         201,
       );
     }
@@ -160,7 +181,10 @@ export async function mockKestrel(
   await page.route("**/api/crypto-exchange/deposits", async (route) => {
     record(route);
     const body = route.request().postDataJSON();
-    const name = body.source === "own-wallet" ? "deposit-own-wallet" : "deposit-unknown-sender";
+    const name =
+      body.source === "own-wallet"
+        ? "deposit-own-wallet"
+        : "deposit-unknown-sender";
     const view = toTransactionView(raw(name));
 
     mock.transactions.set(view.id, name);
@@ -171,7 +195,11 @@ export async function mockKestrel(
   await page.route("**/api/crypto-exchange/token", async (route) => {
     record(route);
 
-    return json(route, { token: "e2e-transaction-token", expiresAt: null, baseUrl: API });
+    return json(route, {
+      token: "e2e-transaction-token",
+      expiresAt: null,
+      baseUrl: API,
+    });
   });
 
   await page.route("**/api/crypto-exchange/transactions/*", async (route) => {
@@ -197,7 +225,8 @@ export async function mockKestrel(
           ? "withdrawal-sanctioned"
           : "";
     }
-    if (!name) return json(route, { detail: "No recording for this destination." }, 400);
+    if (!name)
+      return json(route, { detail: "No recording for this destination." }, 400);
     const response = raw(name);
 
     mock.transactions.set(String(response.uuid), name);
@@ -224,7 +253,10 @@ export async function mockKestrel(
 
         if (view.action && url.startsWith(view.action.url.split("?")[0])) {
           if (AFTER_ACTION[name]) mock.transactions.set(id, AFTER_ACTION[name]);
-          title = view.action.type === "wallet_ownership" ? "Verify wallet ownership" : "Selfie check";
+          title =
+            view.action.type === "wallet_ownership"
+              ? "Verify wallet ownership"
+              : "Selfie check";
         }
       }
 

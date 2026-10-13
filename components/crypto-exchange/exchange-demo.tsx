@@ -7,7 +7,7 @@ import Link from "next/link";
 import { ArrowLeft, Moon, Sun } from "lucide-react";
 import { Container } from "@website/components/ui/container";
 
-import { DiditPanel } from "./didit-panel";
+import { DiditPanel, DiditPanelButton } from "./didit-panel";
 import { AccountScreen, SignUpScreen } from "./onboarding";
 import { TransferDetail } from "./transfer-detail";
 import { DepositForm, WithdrawForm } from "./transfer-forms";
@@ -251,6 +251,8 @@ export function ExchangeDemo() {
   const kestrel = useKestrel();
   const [theme, setTheme] = useDemoTheme();
   const [screen, setScreen] = React.useState<Screen>({ name: "home" });
+  const [panelOpen, setPanelOpen] = React.useState(false);
+  const closePanel = React.useCallback(() => setPanelOpen(false), []);
   const frameRef = React.useRef<HTMLDivElement | null>(null);
 
   const go = React.useCallback((next: Screen) => {
@@ -291,6 +293,7 @@ export function ExchangeDemo() {
           </div>
           <div className="flex flex-none flex-wrap items-center gap-2.5">
             <ThemeToggle theme={theme} onChange={setTheme} />
+            <DiditPanelButton onOpen={() => setPanelOpen(true)} />
             {kestrel.account && (
               <button
                 className="btn-base h-9 border border-line bg-canvas px-3.5 text-[13px] text-muted hover:text-ink"
@@ -308,7 +311,7 @@ export function ExchangeDemo() {
       </section>
 
       <Container
-        className="grid gap-6 pb-24 pt-6 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-8 lg:pb-16 lg:pt-8"
+        className="grid gap-6 pb-12 pt-6 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-8 lg:pb-16 lg:pt-8"
         size="xl"
       >
         <div
@@ -321,7 +324,11 @@ export function ExchangeDemo() {
             <AppBody go={go} kestrel={kestrel} screen={screen} />
           </div>
         </div>
-        <DiditPanel active={activeStep(kestrel, screen)} />
+        <DiditPanel
+          active={activeStep(kestrel, screen)}
+          sheetOpen={panelOpen}
+          onSheetClose={closePanel}
+        />
       </Container>
     </div>
   );

@@ -214,7 +214,7 @@ export function ComplianceView({ view }: { view: TransactionView }) {
       className="overflow-hidden rounded-md border border-line bg-surface"
       data-testid="kestrel-compliance-view"
     >
-      <header className="flex flex-wrap items-center gap-3 bg-ink px-4 py-3 text-canvas sm:px-5">
+      <header className="flex flex-col items-start gap-3 bg-ink px-4 py-3 text-canvas sm:flex-row sm:items-center sm:px-5">
         <div className="min-w-0 flex-1">
           <p className="m-0 font-mono text-[10px] font-medium uppercase tracking-[0.16em] opacity-70">
             Operator side
@@ -276,11 +276,12 @@ export function ComplianceView({ view }: { view: TransactionView }) {
                   >
                     {screening.riskScore ?? "-"}/100
                   </span>
-                  {screening.severity && (
-                    <StatusChip tone={band.tone}>
-                      {screening.severity}
-                    </StatusChip>
-                  )}
+                  {/* A clean wallet comes back as severity UNKNOWN: say what it means. */}
+                  <StatusChip tone={band.tone}>
+                    {screening.severity && screening.severity !== "UNKNOWN"
+                      ? screening.severity
+                      : band.label}
+                  </StatusChip>
                 </span>
               </Row>
               <Row label="Provider">{screening.provider}</Row>

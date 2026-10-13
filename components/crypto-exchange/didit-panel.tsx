@@ -4,7 +4,7 @@ import type { PanelStep, PanelStepId } from "@/lib/crypto-exchange/panel";
 
 import * as React from "react";
 import Image from "next/image";
-import { ChevronDown, ExternalLink, X } from "lucide-react";
+import { BookOpen, ChevronDown, ExternalLink, X } from "lucide-react";
 
 import { docs } from "@/lib/docs";
 import { PANEL_STEPS } from "@/lib/crypto-exchange/panel";
@@ -137,20 +137,43 @@ function PanelHeader() {
   );
 }
 
-/** The side panel on desktop, a bottom sheet behind a button on smaller screens. */
-export function DiditPanel({ active }: { active: PanelStepId }) {
-  const [sheetOpen, setSheetOpen] = React.useState(false);
+/** Opens the panel's bottom sheet on screens too narrow for the side column. */
+export function DiditPanelButton({ onOpen }: { onOpen: () => void }) {
+  return (
+    <button
+      className="btn-base h-9 border border-blue/40 bg-blue-soft px-3.5 text-[13px] text-blue-deep lg:hidden"
+      type="button"
+      onClick={onOpen}
+    >
+      <BookOpen className="size-3.5" />
+      How this uses Didit
+    </button>
+  );
+}
 
+/**
+ * The side panel on desktop. Below `lg` it is a bottom sheet, opened from
+ * DiditPanelButton in the demo's intro band, so nothing floats over the app.
+ */
+export function DiditPanel({
+  active,
+  sheetOpen,
+  onSheetClose,
+}: {
+  active: PanelStepId;
+  sheetOpen: boolean;
+  onSheetClose: () => void;
+}) {
   React.useEffect(() => {
     if (!sheetOpen) return;
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setSheetOpen(false);
+      if (event.key === "Escape") onSheetClose();
     };
 
     document.addEventListener("keydown", onKey);
 
     return () => document.removeEventListener("keydown", onKey);
-  }, [sheetOpen]);
+  }, [sheetOpen, onSheetClose]);
 
   return (
     <>
@@ -162,14 +185,6 @@ export function DiditPanel({ active }: { active: PanelStepId }) {
         <StepList active={active} />
       </aside>
 
-      <button
-        className="fixed bottom-4 left-1/2 z-[60] inline-flex h-11 -translate-x-1/2 items-center gap-2 rounded-pill bg-ink px-5 text-sm font-medium text-canvas shadow-lg lg:hidden"
-        type="button"
-        onClick={() => setSheetOpen(true)}
-      >
-        How this uses Didit
-      </button>
-
       {sheetOpen && (
         <div className="fixed inset-0 z-[70] flex items-end lg:hidden">
           <button
@@ -177,7 +192,7 @@ export function DiditPanel({ active }: { active: PanelStepId }) {
             className="absolute inset-0 cursor-default bg-black/50"
             tabIndex={-1}
             type="button"
-            onClick={() => setSheetOpen(false)}
+            onClick={onSheetClose}
           />
           <div
             aria-label="How this uses Didit"
@@ -193,7 +208,7 @@ export function DiditPanel({ active }: { active: PanelStepId }) {
                 aria-label="Close"
                 className="flex size-9 flex-none items-center justify-center rounded-pill bg-elevated text-muted"
                 type="button"
-                onClick={() => setSheetOpen(false)}
+                onClick={onSheetClose}
               >
                 <X className="size-4" />
               </button>
