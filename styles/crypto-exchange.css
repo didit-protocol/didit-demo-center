@@ -1,0 +1,57 @@
+/* ── Kestrel, the /crypto-exchange demo ──────────────────────────────────
+ * The site is light-only (didit.me ships no dark token set), but an exchange
+ * demo has to show both themes. So the dark theme is scoped to the demo area:
+ * `.kestrel[data-theme="dark"]` re-declares the same design tokens the Tailwind
+ * classes read (`bg-canvas`, `text-ink`, `border-line`...), and every component
+ * inside follows without a single `dark:` variant. The vendored chrome above
+ * and below keeps its light tokens.
+ */
+
+.kestrel {
+  color-scheme: light;
+}
+
+.kestrel[data-theme="dark"] {
+  color-scheme: dark;
+
+  --canvas: 14 14 16;
+  --cream: 22 22 26;
+  --surface: 21 21 25;
+  --elevated: 36 36 42;
+  --line: 44 44 51;
+  --muted: 163 163 173;
+  --table-head: 122 122 133;
+  --ink: 244 244 246;
+  --accent-black: 255 255 255;
+  --subtle-gray: 148 163 184;
+  --input-pale: 30 30 35;
+  --dark-overlay: 8 8 10;
+
+  --blue: 84 138 255;
+  --blue-deep: 132 170 255;
+  --blue-soft: 26 38 70;
+  --blue-tint: 18 24 42;
+
+  --success-bg: 15 44 29;
+  --success-fg: 86 214 132;
+  --warning-bg: 52 40 10;
+  --warning-fg: 238 190 72;
+  --danger-bg: 60 22 20;
+  --danger-fg: 255 128 114;
+
+  /* Aliases resolve where they are declared, so they are re-declared here. */
+  --background: var(--canvas);
+  --foreground: var(--ink);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--blue);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.5);
+}
+
+/* The website's module glyphs are drawn in near-black strokes. */
+.kestrel[data-theme="dark"] .kestrel-icon {
+  filter: invert(1) hue-rotate(180deg) brightness(1.15);
+}

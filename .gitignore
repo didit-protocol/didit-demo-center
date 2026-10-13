@@ -39,3 +39,7 @@ next-env.d.ts
 # screenshot output from `npm run shots` - only curated proof is committed,
 # under proof/<slug>/
 /proof/*.png
+
+# playwright output
+/test-results/
+/playwright-report/

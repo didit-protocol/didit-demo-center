@@ -1,0 +1,313 @@
+{
+  "uuid": "da2c8936-cfb0-482b-9bd6-2d46675e682f",
+  "environment": "live",
+  "transaction_number": 25,
+  "txn_id": "kestrel-wd-91866672-1e45-4ccf-9169-bbd396168054",
+  "txn_date": "2026-10-13T21:39:31.399310Z",
+  "zone_id": null,
+  "transaction_type": "travelRule",
+  "action_type": "withdrawal",
+  "direction": "OUTBOUND",
+  "status": "AWAITING_USER",
+  "source": "LIVE",
+  "amount": "0.3",
+  "currency": "ETH",
+  "currency_type": "crypto",
+  "amount_in_default_currency": null,
+  "default_currency_code": null,
+  "preferred_currency_amount": "752.51760680000949",
+  "preferred_currency_code": "USD",
+  "payment_details": null,
+  "payment_txn_id": null,
+  "score": 0,
+  "severity": null,
+  "decision_reason_code": null,
+  "decision_reason_label": null,
+  "vendor_data": "kestrel-proof-62dc5aea-52b4-48bd-a2e6-973a26fdf7e7",
+  "metadata": {
+    "subject": {
+      "full_name": "Avery Quinn",
+      "entity_type": "individual",
+      "vendor_data": "kestrel-proof-62dc5aea-52b4-48bd-a2e6-973a26fdf7e7"
+    },
+    "counterparty": {
+      "full_name": "Avery Quinn",
+      "entity_type": "individual",
+      "payment_method": {
+        "account_id": "0xdff15f178f47790b736b8dcdb3374950fa5ba95c",
+        "method_type": "crypto_wallet"
+      }
+    }
+  },
+  "props": {
+    "demo_app": "crypto-exchange",
+    "wallet_risk": null,
+    "sanctions_hit": false,
+    "is_data_center": true,
+    "aml_risk_factors": [],
+    "pep_counterparty": null,
+    "travel_rule_rail": "",
+    "wallet_risk_score": 0,
+    "wallet_sanctioned": false,
+    "aml_screening_type": "WALLET_SCREENING",
+    "travel_rule_regime": "eu",
+    "travel_rule_status": "COUNTERPARTY_VASP_NOT_FOUND",
+    "aml_screening_status": "COMPLETED",
+    "aml_counterparty_count": 0,
+    "withdrawal_destination": "exchange",
+    "aml_high_risk_exposure_pct": 0,
+    "aml_sanctions_exposure_pct": 0
+  },
+  "tags": [],
+  "parties": [
+    {
+      "uuid": "de915a64-19c6-43f0-a074-351f28e45da4",
+      "role": "COUNTERPARTY",
+      "entity_type": "individual",
+      "kind": "EXTERNAL",
+      "vendor_data": null,
+      "full_name": "Avery Quinn",
+      "first_name": null,
+      "last_name": null,
+      "country_code": null,
+      "dob": null,
+      "address": {},
+      "institution_info": {},
+      "device": {},
+      "external_party_snapshot": {
+        "address": {},
+        "country": null,
+        "full_name": "Avery Quinn",
+        "last_name": null,
+        "first_name": null,
+        "entity_type": "individual",
+        "vendor_data": null,
+        "date_of_birth": null,
+        "device_context": {},
+        "institution_details": {}
+      }
+    },
+    {
+      "uuid": "b05a5731-4785-440b-8867-c415cb178634",
+      "role": "APPLICANT",
+      "entity_type": "individual",
+      "kind": "USER",
+      "vendor_data": "kestrel-proof-62dc5aea-52b4-48bd-a2e6-973a26fdf7e7",
+      "full_name": "Avery Quinn",
+      "first_name": null,
+      "last_name": null,
+      "country_code": null,
+      "dob": null,
+      "address": {},
+      "institution_info": {},
+      "device": {},
+      "external_party_snapshot": null
+    }
+  ],
+  "payment_methods": [
+    {
+      "uuid": "dd0b41ca-ea67-4f1e-885e-fff46fa48fce",
+      "payment_method_type": "crypto_wallet",
+      "label": null,
+      "fingerprint": "46c50923ba2e5429fe6b09cf385e1d35f6f58e0f22e92b0cfbcc2329b4ea18b1",
+      "account_id": "0xdff15f178f47790b736b8dcdb3374950fa5ba95c",
+      "issuing_country": null,
+      "owner_kind": "EXTERNAL",
+      "vendor_data": null,
+      "owner_name": "Avery Quinn",
+      "institution_info": {},
+      "details": {
+        "account_id": "0xdff15f178f47790b736b8dcdb3374950fa5ba95c",
+        "method_type": "crypto_wallet"
+      },
+      "external_owner_snapshot": {
+        "country": null,
+        "full_name": "Avery Quinn",
+        "entity_type": "individual",
+        "vendor_data": null
+      },
+      "role": "DESTINATION"
+    }
+  ],
+  "documents": [],
+  "activities": [
+    {
+      "uuid": "13de1d01-e500-4713-9be6-2c804627ac7f",
+      "activity_type": "TRANSACTION_CREATED",
+      "source": "TRANSACTION",
+      "status": "AWAITING_USER",
+      "title": "withdrawal",
+      "description": null,
+      "metadata": {
+        "amount": "0.300000000000000000",
+        "currency": "ETH",
+        "direction": "OUTBOUND",
+        "action_type": "withdrawal"
+      },
+      "occurred_at": "2026-10-13T21:39:31.404307Z"
+    }
+  ],
+  "alerts": [],
+  "rule_runs": [
+    {
+      "uuid": "7694d121-4e19-48e8-a4fe-1ac58d13881f",
+      "rule": "1dc67bf0-c815-4ce8-acad-5c74508246f4",
+      "rule_title": "Sender != Receiver (verify)",
+      "rule_description": "",
+      "rule_category": "velocity",
+      "matched": true,
+      "is_test": true,
+      "mode": "TEST",
+      "severity": null,
+      "score_delta": 0,
+      "status_target": null,
+      "action_summary": null,
+      "metadata": {
+        "conditions": [
+          {
+            "field": "subject_payment_method_account_id",
+            "matched": true,
+            "operator": "ne",
+            "group_index": 0,
+            "group_logic": "OR",
+            "field_source": null,
+            "current_value": null,
+            "expected_value": "counterparty_payment_method_account_id",
+            "_groups_overall": true
+          }
+        ],
+        "scope_match": true,
+        "aggregations": []
+      },
+      "created_at": "2026-10-13T21:39:32.065527Z"
+    },
+    {
+      "uuid": "e0c2dd93-19b8-4efe-b9f3-b2fbc2ec0406",
+      "rule": "e2ce7ceb-3912-43e0-953b-26b7070b3378",
+      "rule_title": "Withdrawal step-up: selfie re-authentication (crypto exchange demo)",
+      "rule_description": "Every low-risk Kestrel withdrawal waits for the user to pass a selfie check matched against their onboarding face before it can be broadcast.",
+      "rule_category": "fraud_prevention",
+      "matched": true,
+      "is_test": false,
+      "mode": "ACTIVE",
+      "severity": null,
+      "score_delta": 0,
+      "status_target": "AWAITING_USER",
+      "action_summary": "change_status:AWAITING_USER",
+      "metadata": {
+        "conditions": [
+          {
+            "field": "custom_values.demo_app",
+            "matched": true,
+            "operator": "eq",
+            "group_index": null,
+            "group_logic": "AND",
+            "field_source": null,
+            "current_value": "crypto-exchange",
+            "expected_value": "crypto-exchange"
+          },
+          {
+            "field": "custom_values.wallet_risk_score",
+            "matched": true,
+            "operator": "lt",
+            "group_index": null,
+            "group_logic": "AND",
+            "field_source": null,
+            "current_value": 0,
+            "expected_value": 75
+          },
+          {
+            "field": "custom_values.wallet_sanctioned",
+            "matched": true,
+            "operator": "ne",
+            "group_index": null,
+            "group_logic": "AND",
+            "field_source": null,
+            "current_value": false,
+            "expected_value": true
+          }
+        ],
+        "scope_match": true,
+        "aggregations": []
+      },
+      "created_at": "2026-10-13T21:39:31.940820Z"
+    }
+  ],
+  "provider_results": [
+    {
+      "uuid": "bc2a5027-a462-4ca3-9a18-ccad69c09fe8",
+      "provider": "merklescience",
+      "result_type": "WALLET_SCREENING",
+      "status": "SCREENED",
+      "severity": "UNKNOWN",
+      "score": 0,
+      "summary": "Merkle Science risk: No Risk Detected (0/5)",
+      "payload": {
+        "note": "provider payload removed from the fixture; the demo never reads it"
+      },
+      "created_at": "2026-10-13T21:39:31.800107Z"
+    }
+  ],
+  "travel_rule": {
+    "uuid": "1f4a4400-a384-488d-b8b8-7207928758a7",
+    "status": "COUNTERPARTY_VASP_NOT_FOUND",
+    "protocol": null,
+    "required": true,
+    "obligations_count": 0,
+    "originator_data": {
+      "name": "Avery Quinn"
+    },
+    "beneficiary_data": {
+      "name": "Avery Quinn",
+      "chain": "ETH",
+      "wallet_address": "0xdff15f178f47790b736b8dcdb3374950fa5ba95c"
+    },
+    "metadata": {}
+  },
+  "network_snapshot": {
+    "uuid": "8017f72c-bd68-4ce4-86c3-71adf0269f9d",
+    "nodes": [
+      {
+        "id": "0xdff15f178f47790b736b8dcdb3374950fa5ba95c",
+        "label": "0xdff1...a95c",
+        "metadata": {
+          "fee_usd": null,
+          "full_address": "0xdff15f178f47790b736b8dcdb3374950fa5ba95c",
+          "screening_type": "WALLET_SCREENING",
+          "block_timestamp": null,
+          "total_value_usd": null,
+          "transaction_hash": null
+        },
+        "is_target": true,
+        "node_type": "wallet",
+        "risk_level": "unknown"
+      }
+    ],
+    "edges": [],
+    "metrics": {
+      "fee_usd": null,
+      "provider": "merklescience",
+      "severity": "UNKNOWN",
+      "risk_score": 0,
+      "total_edges": 0,
+      "total_nodes": 1,
+      "sanctions_hit": false,
+      "screening_type": "WALLET_SCREENING",
+      "block_timestamp": null,
+      "total_value_usd": null,
+      "omitted_incoming": 0,
+      "omitted_outgoing": 0
+    }
+  },
+  "remediation": {
+    "session_id": "66b03170-e99a-4538-bb9c-98359cf8b323",
+    "url": "https://verify.staging.didit.me/session/r_M0j7XVwkZM",
+    "status": "Not Started"
+  },
+  "action_required": {
+    "type": "wallet_ownership",
+    "url": "https://verify.staging.didit.me/wallet-ownership/t_roPl9_InsE_0lTOT1K6VtTLkddIVP9",
+    "widget_session_id": "e9074c2c-63fa-47e0-a284-cc2d9bb66319",
+    "expires_at": "2026-10-13T22:39:31.843238+00:00"
+  }
+}
