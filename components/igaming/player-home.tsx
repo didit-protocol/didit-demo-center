@@ -45,6 +45,9 @@ const MARKET = {
   ],
 };
 
+/** Shown while Didit scores a transaction; staging can take several seconds. */
+const CHECKING = "Checking with Didit…";
+
 const EXCLUDED_UNTIL = () =>
   new Date(Date.now() + 1000 * 60 * 60 * 24 * 182).toLocaleDateString("en-GB", {
     day: "numeric",
@@ -63,10 +66,11 @@ function Wallet({ aurora }: { aurora: Aurora }) {
   const headroom = limitHeadroom(state.depositLimit, totals.depositedToday);
   const verified = Boolean(state.kyc?.listed);
   const busy = aurora.busy === mode;
-  const overLimit =
-    mode === "deposit" && headroom !== null && amount > headroom;
-  const overBalance = mode === "withdrawal" && amount > totals.balance;
   const blocked = state.selfExcluded;
+  const overLimit =
+    !blocked && mode === "deposit" && headroom !== null && amount > headroom;
+  const overBalance =
+    !blocked && mode === "withdrawal" && amount > totals.balance;
 
   return (
     <section className="ig-card flex flex-col gap-4 p-5">
@@ -168,7 +172,9 @@ function Wallet({ aurora }: { aurora: Aurora }) {
           ) : (
             <ArrowUpRight aria-hidden className="size-4" />
           )}
-          {mode === "deposit" ? "Deposit" : "Withdraw"} {formatMoney(amount)}
+          {busy
+            ? CHECKING
+            : `${mode === "deposit" ? "Deposit" : "Withdraw"} ${formatMoney(amount)}`}
         </button>
       )}
       {overLimit ? (
@@ -342,9 +348,11 @@ function BetSlip({ aurora }: { aurora: Aurora }) {
         }
       >
         {busy ? <Spinner /> : null}
-        {short
-          ? "Deposit to place a bet"
-          : `Bet ${formatMoney(stake)} · returns ${formatMoney(stake * selection.odds)}`}
+        {busy
+          ? CHECKING
+          : short
+            ? "Deposit to place a bet"
+            : `Bet ${formatMoney(stake)} · returns ${formatMoney(stake * selection.odds)}`}
       </button>
     </section>
   );
@@ -396,7 +404,7 @@ function BonusCard({ aurora }: { aurora: Aurora }) {
           onClick={() => void aurora.claimBonus()}
         >
           {busy ? <Spinner /> : null}
-          Claim free bet
+          {busy ? CHECKING : "Claim free bet"}
         </button>
       )}
       {claim && !state.secondAccount ? (
@@ -566,7 +574,7 @@ function ActivityList({ aurora }: { aurora: Aurora }) {
                 </div>
                 <div className="flex flex-none flex-col items-end gap-1.5">
                   <span className="tnum text-sm font-semibold text-ink">
-                    {item.kind === "deposit_limit"
+                    {item.kind === "deposit_limit" || !item.record
                       ? formatMoney(item.amount)
                       : `${out ? "-" : "+"}${formatMoney(item.amount)}`}
                   </span>

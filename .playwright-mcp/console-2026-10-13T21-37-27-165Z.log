@@ -25,3 +25,6 @@
 [  196999ms] [INFO] [SessionWebSocket] Received: {current_step: AGE_ESTIMATION, current_step_v2: AGE_ESTIMATION} @ https://verify.staging.didit.me/_next/static/chunks/7235.3bab60b631463f16.js:10
 [  196999ms] [INFO] [Welcome] Session update received: {current_step: AGE_ESTIMATION, current_step_v2: AGE_ESTIMATION} @ https://verify.staging.didit.me/_next/static/chunks/7235.3bab60b631463f16.js:10
 [  213892ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom.development.js:38559
+[  266578ms] [ERROR] Failed to load resource: the server responded with a status of 400 () @ https://verification.staging.didit.me/v1/transactions/:0
+[  288343ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:186
+[  289289ms] [LOG] [Fast Refresh] done in 946ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/components/react-dev-overlay/app/hot-reloader-client.js:43
