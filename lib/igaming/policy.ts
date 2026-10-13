@@ -593,7 +593,7 @@ export function payoutView(
       headline: "payout refused",
       label: "Refused",
       tone: "declined",
-      message: `Refused by Didit: ${error ?? "no answer"} ${PAYOUT_KEPT}`,
+      message: `Refused by Didit: ${(error ?? "no answer").trim().replace(/\.?$/, ".")} ${PAYOUT_KEPT}`,
     };
   const view = transactionView("withdrawal", status);
 

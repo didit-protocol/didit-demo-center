@@ -139,6 +139,32 @@ test("a self-excluded player is never asked to verify a held deposit", () => {
   );
 });
 
+test("the self-exclusion payout only says paid back once Didit approved it", () => {
+  assert.equal(policy.payoutView("APPROVED", null).headline, "paid back to your card");
+  for (const status of ["IN_REVIEW", "DECLINED", "AWAITING_USER", "SOMETHING"])
+    assert.doesNotMatch(policy.payoutView(status, null).headline, /paid back/);
+
+  const review = policy.payoutView("IN_REVIEW", null);
+
+  assert.equal(review.headline, "payout in review");
+  assert.equal(review.label, "In review");
+  assert.equal(review.message, "Withdrawal held for a quick review by our team.");
+
+  // Declined or refused, the money is still in the closed account.
+  const declined = policy.payoutView("DECLINED", null);
+
+  assert.equal(declined.headline, "payout declined");
+  assert.equal(declined.tone, "declined");
+  assert.match(declined.message, /^Withdrawal declined\. .*contact support/);
+
+  const refused = policy.payoutView(null, "The individual is in the blocklist");
+
+  assert.equal(refused.headline, "payout refused");
+  assert.equal(refused.label, "Refused");
+  assert.match(refused.message, /^Refused by Didit: The individual is in the blocklist\. .*contact support/);
+  assert.match(policy.payoutView(null, "Not allowed.").message, /^Refused by Didit: Not allowed\. The/);
+});
+
 test("session statuses read in the player's words", () => {
   assert.match(policy.sessionView("age", "Approved").message, /18 or over/);
   assert.equal(policy.sessionView("kyc", "Declined").tone, "declined");
