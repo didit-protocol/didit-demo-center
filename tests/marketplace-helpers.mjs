@@ -31,7 +31,7 @@ export const RECORDED = {
 export const API = "https://verification.staging.didit.me";
 
 /**
- * routes: { "GET /v3/...": body | (request) => [status, body] }.
+ * routes: { "GET /v3/...": body | [status, body] | (request) => [status, body] }.
  * Unknown routes answer 404 so a test fails loudly on an unexpected call.
  */
 export function fakeApi(routes) {
@@ -54,7 +54,11 @@ export function fakeApi(routes) {
     }
 
     const [status, payload] =
-      typeof route === "function" ? route(call) : [200, route];
+      typeof route === "function"
+        ? route(call)
+        : Array.isArray(route) && typeof route[0] === "number"
+          ? route
+          : [200, route];
 
     return new Response(JSON.stringify(payload), { status });
   };

@@ -65,9 +65,15 @@ test("a high-value order carries the age check link, never its token", () => {
 
 test("the subject is the APPLICANT party, not the counterparty shop", () => {
   const raw = fixture("transaction-order-awaiting-user");
+  const roles = raw.parties.map((party) => party.role).sort();
 
-  assert.equal(raw.parties[0].role, "COUNTERPARTY");
+  assert.deepEqual(roles, ["APPLICANT", "COUNTERPARTY"]);
+  // Whatever order the API lists the parties in.
   assert.equal(subjectVendor(raw), RECORDED.buyer);
+  assert.equal(
+    subjectVendor({ ...raw, parties: [...raw.parties].reverse() }),
+    RECORDED.buyer,
+  );
   assert.ok(isMarketplaceTransaction(raw));
   assert.ok(!isMarketplaceTransaction({ ...raw, props: { demo_app: "fintech" } }));
 });

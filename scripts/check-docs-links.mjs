@@ -4,8 +4,8 @@
  *
  * A dead docs link is worse than no link: it is the first thing a developer
  * clicks after watching a demo run. This walks the `docsPath` on every demo,
- * every `request.docsPath`, and the shared DOC_PATHS map, and fetches each URL
- * on docs.didit.me.
+ * every `request.docsPath`, the marketplace demo's guide and the shared
+ * DOC_PATHS map, and fetches each URL on docs.didit.me.
  *
  * Usage:
  *   npm run check:docs-links
@@ -34,6 +34,17 @@ function collectPaths() {
   const demos = fs.readFileSync(path.join(repoRoot, "lib/demos.ts"), "utf8");
 
   for (const match of demos.matchAll(/docsPath:\s*"([^"]+)"/g)) {
+    found.add(match[1]);
+  }
+
+  // The marketplace demo's "How this uses Didit" panel (lib/marketplace/guide.ts)
+  // declares its links on the same `docsPath:` key.
+  const marketplace = fs.readFileSync(
+    path.join(repoRoot, "lib/marketplace/guide.ts"),
+    "utf8",
+  );
+
+  for (const match of marketplace.matchAll(/docsPath:\s*"([^"]+)"/g)) {
     found.add(match[1]);
   }
 
