@@ -3,6 +3,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 
+import { IntlMessageFormat } from "intl-messageformat";
+
 import { LOCALES } from "../vendor/didit-website/lib/site.ts";
 
 const dir = new URL("../messages/fintech/", import.meta.url);
@@ -64,7 +66,7 @@ for (const locale of LOCALES.filter((l) => l !== "en")) {
 test("no em dashes and no unbalanced ICU braces anywhere", () => {
   for (const locale of LOCALES) {
     for (const [key, text] of flatten(read(locale))) {
-      assert.doesNotMatch(text, /—/, `${locale} ${key} has an em dash`);
+      assert.doesNotMatch(text, /\u2014/, `${locale} ${key} has an em dash`);
       assert.equal(
         (text.match(/\{/g) ?? []).length,
         (text.match(/\}/g) ?? []).length,
@@ -72,6 +74,13 @@ test("no em dashes and no unbalanced ICU braces anywhere", () => {
       );
       // An apostrophe right before a brace would quote the placeholder in ICU.
       assert.doesNotMatch(text, /'\{/, `${locale} ${key} quotes a placeholder`);
+      // And every string is valid ICU that formats with its placeholders.
+      const values = Object.fromEntries(placeholders(text).map((p) => [p, "x"]));
+
+      assert.doesNotThrow(
+        () => new IntlMessageFormat(text, locale).format(values),
+        `${locale} ${key} is not valid ICU`,
+      );
     }
   }
 });
