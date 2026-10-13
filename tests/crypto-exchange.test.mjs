@@ -324,6 +324,6 @@ test("the side panel links every call to a docs page and avoids em dashes", () =
     for (const call of step.calls) {
       assert.match(call.docsPath, /^[a-z0-9-]+(\/[a-z0-9-]+)+$/);
     }
-    assert.equal(JSON.stringify(step).includes("—"), false, step.id);
+    assert.equal(JSON.stringify(step).includes("\u2014"), false, step.id);
   }
 });
