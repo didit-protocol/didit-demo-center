@@ -75,14 +75,6 @@ function ThemeToggle({
       aria-label="Theme"
       className="inline-flex h-9 items-center rounded-pill border border-line bg-canvas p-0.5"
       role="radiogroup"
-      onKeyDown={(event) =>
-        onRadioGroupKeyDown(
-          event,
-          THEME_OPTIONS.map((option) => option.value),
-          theme,
-          onChange,
-        )
-      }
     >
       {THEME_OPTIONS.map((option) => (
         <button
@@ -98,6 +90,14 @@ function ThemeToggle({
           tabIndex={theme === option.value ? 0 : -1}
           type="button"
           onClick={() => onChange(option.value)}
+          onKeyDown={(event) =>
+            onRadioGroupKeyDown(
+              event,
+              THEME_OPTIONS.map((item) => item.value),
+              theme,
+              onChange,
+            )
+          }
         >
           <option.icon className="size-3.5" />
           {option.label}

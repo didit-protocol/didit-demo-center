@@ -288,7 +288,7 @@ test("the option groups are one Tab stop, follow the arrow keys and show every d
   // Text cut off with an ellipsis is wider than the box that clips it.
   const clipped = (group: Locator) =>
     group.evaluate((element) =>
-      [...element.querySelectorAll("span")].some(
+      Array.from(element.querySelectorAll("span")).some(
         (span) => span.clientWidth > 0 && span.scrollWidth > span.clientWidth,
       ),
     );

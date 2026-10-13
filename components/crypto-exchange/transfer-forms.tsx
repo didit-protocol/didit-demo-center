@@ -50,19 +50,7 @@ function ChoiceList<T extends string>({
   onChange: (value: T) => void;
 }) {
   return (
-    <div
-      aria-label={name}
-      className="flex flex-col gap-2"
-      role="radiogroup"
-      onKeyDown={(event) =>
-        onRadioGroupKeyDown(
-          event,
-          choices.map((choice) => choice.value),
-          value,
-          onChange,
-        )
-      }
-    >
+    <div aria-label={name} className="flex flex-col gap-2" role="radiogroup">
       {choices.map((choice) => (
         <button
           key={choice.value}
@@ -77,6 +65,14 @@ function ChoiceList<T extends string>({
           tabIndex={value === choice.value ? 0 : -1}
           type="button"
           onClick={() => onChange(choice.value)}
+          onKeyDown={(event) =>
+            onRadioGroupKeyDown(
+              event,
+              choices.map((item) => item.value),
+              value,
+              onChange,
+            )
+          }
         >
           <span
             className={cn(
