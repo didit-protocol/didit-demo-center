@@ -1,0 +1,268 @@
+{
+  "page": {
+    "eyebrow": "Demo per sector · Fintech",
+    "title": "Kestrel, un neobanc construït sobre Didit",
+    "lede": "Obre un compte, verifica la teva identitat i mou diners. Cada pas fa servir l’API real de Didit: KYC i AML en l’alta, monitoratge de transaccions en cada pagament i cribratge AML continu després.",
+    "allDemos": "Totes les demos",
+    "staging": "En directe a l’staging de Didit",
+    "reset": "Torna a començar",
+    "theme": {
+      "label": "Tema de color",
+      "light": "Clar",
+      "dark": "Fosc"
+    },
+    "unavailable": {
+      "title": "Aquesta demo funciona a l’staging de Didit",
+      "body": "Obrir un compte aquí executa una verificació d’identitat i un cribratge AML reals per a l’organització de demostració de Didit, per això la demo se serveix des de l’entorn d’staging.",
+      "cta": "Obre la demo a l’staging"
+    }
+  },
+  "bank": {
+    "name": "Kestrel",
+    "fictional": "Banc fictici amb finalitats de demostració"
+  },
+  "common": {
+    "back": "Enrere",
+    "retry": "Torna-ho a provar",
+    "loading": "S’està carregant…",
+    "error": "Alguna cosa ha fallat en comunicar-se amb Didit. Torna-ho a provar d’aquí a un moment.",
+    "diditError": "Didit ha respost: {detail}",
+    "unavailable": "Aquesta demo no està disponible en aquest desplegament."
+  },
+  "welcome": {
+    "title": "Un compte corrent que s’obre en minuts",
+    "body": "Un IBAN al teu nom, transferències instantànies per Europa i sense quota mensual.",
+    "points": {
+      "verify": "Verifica’t amb el teu document i una selfie",
+      "send": "Envia i rep diners des del primer moment",
+      "safe": "Cada pagament es revisa per detectar frau"
+    },
+    "cta": "Obre un compte",
+    "note": "Fes servir el teu propi document: les dades van només a l’entorn d’staging de Didit, mai a un banc real."
+  },
+  "signup": {
+    "progress": "Pas {current} de {total}",
+    "title": "Explica’ns qui ets",
+    "body": "Fem servir aquestes dades per obrir el teu compte. Les confirmes amb el teu document al pas següent.",
+    "name": "Nom complet",
+    "namePlaceholder": "Tal com apareix al teu document",
+    "email": "Correu electrònic",
+    "emailPlaceholder": "tu@exemple.cat",
+    "country": "País de residència",
+    "countryPlaceholder": "Tria un país",
+    "consent": "Si continues, acceptes que Kestrel comparteixi les teves dades amb Didit per verificar la teva identitat.",
+    "submit": "Continua",
+    "submitting": "S’està obrint el teu compte…",
+    "errors": {
+      "name": "Introdueix el teu nom complet.",
+      "email": "Introdueix una adreça de correu vàlida.",
+      "country": "Tria el país on vius."
+    }
+  },
+  "verify": {
+    "progress": "Pas {current} de {total}",
+    "title": "Verifica la teva identitat",
+    "body": "Hem de confirmar qui ets abans d’obrir el teu compte. Triga uns dos minuts.",
+    "steps": {
+      "id": "Escaneja un document d’identitat oficial",
+      "liveness": "Grava un vídeo selfie curt",
+      "face": "Comparem la teva selfie amb el teu document",
+      "aml": "Revisem el teu nom en llistes de sancions i de PEP"
+    },
+    "cta": "Verifica la meva identitat",
+    "resume": "Continua la verificació",
+    "starting": "S’està obrint la verificació…",
+    "phone": "No tens càmera aquí? La verificació mostra un codi QR per acabar al mòbil.",
+    "cancelled": "Has tancat la verificació abans d’acabar. El teu progrés s’ha desat i pots continuar on ho havies deixat.",
+    "failed": "No s’ha pogut iniciar la verificació. {reason}"
+  },
+  "checking": {
+    "title": "Estem comprovant les teves dades",
+    "body": "Sol trigar menys d’un minut. Mantén aquesta pàgina oberta.",
+    "slow": "Triga més del normal. Continuem comprovant en segon pla.",
+    "checks": {
+      "id": "Document d’identitat",
+      "liveness": "Prova de vida",
+      "face": "Coincidència facial",
+      "aml": "Cribratge de sancions i PEP"
+    },
+    "status": {
+      "pending": "En espera",
+      "passed": "Superat",
+      "review": "En revisió",
+      "failed": "No superat"
+    }
+  },
+  "outcome": {
+    "approved": {
+      "title": "El teu compte està obert",
+      "body": "Et donem la benvinguda a Kestrel, {name}. El teu compte està a punt: afegeix-hi diners i comença a fer-lo servir.",
+      "cta": "Vés al meu compte"
+    },
+    "review": {
+      "title": "Estem revisant la teva sol·licitud",
+      "body": "Necessitem una mica més de temps per confirmar algunes dades. La majoria de revisions acaben en un dia laborable i t’escriurem a {email} tan bon punt acabem.",
+      "live": "Aquesta pàgina s’actualitza sola quan acabi la revisió."
+    },
+    "declined": {
+      "title": "No hem pogut obrir el teu compte",
+      "body": "No hem pogut verificar la teva identitat, de manera que ara mateix no et podem obrir un compte.",
+      "cta": "Torna a començar"
+    },
+    "expired": {
+      "title": "La teva verificació ha caducat",
+      "body": "L’enllaç de verificació ja no és vàlid. Torna a començar per obrir el teu compte.",
+      "cta": "Comença de nou"
+    }
+  },
+  "home": {
+    "greeting": "Hola, {name}",
+    "balance": "Saldo disponible",
+    "held": "{amount} retinguts",
+    "add": "Afegeix diners",
+    "send": "Envia diners",
+    "activity": "Moviments",
+    "refresh": "Actualitza",
+    "emptyTitle": "Encara no hi ha pagaments",
+    "emptyBody": "Primer afegeix diners i després envia’n. Les transferències de {threshold} o més es revisen abans de sortir del teu compte.",
+    "limit": "Has arribat al límit de la demo de {limit} pagaments. Torna a començar per obrir un compte nou.",
+    "verified": "Identitat verificada"
+  },
+  "payment": {
+    "fromSelf": "Recàrrega des del teu altre banc",
+    "to": "A {name}",
+    "status": {
+      "received": "Rebut",
+      "sent": "Enviat",
+      "held": "Retingut",
+      "declined": "Rebutjat",
+      "action": "Cal una acció"
+    }
+  },
+  "pay": {
+    "depositTitle": "Afegeix diners",
+    "depositBody": "Des del teu compte en un altre banc, al teu nom.",
+    "transferTitle": "Envia diners",
+    "transferBody": "A qualsevol persona amb un compte bancari a Europa.",
+    "amount": "Import",
+    "otherAmount": "Un altre import",
+    "recipient": "Destinatari",
+    "recipientPlaceholder": "Nom complet del destinatari",
+    "available": "Disponible: {amount}",
+    "reviewHint": "Les transferències de {threshold} o més es retenen per a una revisió ràpida abans de sortir.",
+    "willReview": "Aquesta transferència es revisarà abans de sortir.",
+    "submitDeposit": "Afegeix {amount}",
+    "submitTransfer": "Envia {amount}",
+    "submitting": "S’està enviant…",
+    "errors": {
+      "amount": "Introdueix un import entre {min} i {max}.",
+      "counterparty": "Introdueix el nom complet del destinatari.",
+      "insufficient": "Només tens {available} disponibles.",
+      "limit": "Has arribat al límit de pagaments de la demo per a aquest compte."
+    }
+  },
+  "result": {
+    "received": {
+      "title": "{amount} afegits",
+      "body": "Els diners ja són al teu compte i a punt per fer-los servir."
+    },
+    "sent": {
+      "title": "{amount} enviats a {name}",
+      "body": "Haurien d’arribar en pocs segons."
+    },
+    "held": {
+      "title": "El teu pagament està retingut",
+      "body": "Estem fent una revisió ràpida d’aquest pagament abans que surti del teu compte. Els diners queden reservats fins aleshores i aquesta pantalla s’actualitza tan bon punt acabi la revisió."
+    },
+    "declined": {
+      "title": "Pagament rebutjat",
+      "body": "Aquest pagament no s’ha fet i no ha sortit cap diner del teu compte."
+    },
+    "action": {
+      "title": "Necessitem alguna cosa de tu",
+      "body": "Confirma la teva identitat per alliberar aquest pagament."
+    },
+    "done": "Fet"
+  },
+  "monitoring": {
+    "title": "Monitoratge AML continu",
+    "body": "Quan t’hi uneixes, el teu perfil es torna a cribrar cada dia en llistes de sancions, PEP i notícies adverses. Una nova inclusió arriba al nostre equip de compliment sense demanar-te que et tornis a verificar.",
+    "cta": "Previsualitza el monitoratge d’aquest compte",
+    "loading": "S’està consultant Didit…",
+    "rows": {
+      "profiles": "Perfils trobats",
+      "alreadyMonitored": "Ja monitorats",
+      "withScreening": "Cribratge de l’alta per monitorar",
+      "needsScreening": "Es cribrarien primer",
+      "missingIdentity": "Falten dades d’identitat",
+      "annualCost": "Cost del monitoratge per any"
+    },
+    "note": "Només és una estimació: no s’ha activat, cribrat ni facturat res."
+  },
+  "panel": {
+    "title": "Com fa servir Didit",
+    "subtitle": "Els mòduls i les crides a l’API darrere de cada pas, en directe a l’staging.",
+    "open": "Com fa servir Didit",
+    "close": "Tanca",
+    "current": "Ets aquí",
+    "modules": "Mòduls",
+    "calls": "Crides a l’API",
+    "docs": "Docs",
+    "steps": {
+      "signup": {
+        "title": "Alta",
+        "body": "El formulari propi del banc. L’identificador de client que crea s’envia a Didit com a vendor_data, la clau que lliga cada sessió, pagament i cribratge a aquesta persona."
+      },
+      "verify": {
+        "title": "Verificació d’identitat",
+        "body": "Una sola sessió allotjada executa el flux del banc: verificació del document, prova de vida activa, coincidència facial 1:1, cribratge AML i anàlisi d’IP."
+      },
+      "decision": {
+        "title": "Decisió",
+        "body": "L’estat de la sessió decideix el compte: Approved l’obre, In Review espera un analista, Declined el manté tancat. El client no en veu mai el motiu."
+      },
+      "payments": {
+        "title": "Monitoratge de transaccions",
+        "body": "Cada pagament s’envia amb el mateix vendor_data. Les regles s’executen de manera síncrona i el veredicte torna a la resposta."
+      },
+      "review": {
+        "title": "Revisió",
+        "body": "Les transferències de {threshold} o més compleixen la regla «{rule}» i esperen un analista a la consola. L’app torna a llegir el pagament i s’actualitza quan decideix."
+      },
+      "monitoring": {
+        "title": "Monitoratge AML continu",
+        "body": "Activa el cribratge diari dels clients verificats. La demo només demana l’estimació, que no escriu res."
+      }
+    },
+    "moduleNames": {
+      "idVerification": "Verificació de documents",
+      "liveness": "Prova de vida activa",
+      "faceMatch": "Coincidència facial 1:1",
+      "aml": "Cribratge AML",
+      "ipAnalysis": "Anàlisi d’IP",
+      "transactions": "Monitoratge de transaccions",
+      "rules": "Motor de regles",
+      "webhooks": "Webhooks",
+      "manualReview": "Revisió manual",
+      "ongoing": "Monitoratge continu"
+    }
+  },
+  "operator": {
+    "title": "Vista de l’operador",
+    "body": "El que veu l’equip de compliment del banc sobre aquest client a la consola de Didit.",
+    "empty": "Encara res. Els registres apareixen aquí a mesura que avances a l’app.",
+    "session": "Sessió de verificació",
+    "sessionNumber": "Sessió núm. {number}",
+    "transaction": "Transacció núm. {number}",
+    "score": "Puntuació de risc",
+    "rule": "Regla aplicada",
+    "noRule": "Cap regla aplicada",
+    "open": "Obre a la consola",
+    "openConsole": "Obre la consola",
+    "find": "Cerca {record} a la consola.",
+    "login": "Cal iniciar sessió a la consola de l’organització de demostració de Didit."
+  },
+  "amount": {
+    "presets": "Tria un import"
+  }
+}

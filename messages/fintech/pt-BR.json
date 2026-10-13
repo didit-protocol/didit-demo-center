@@ -1,0 +1,268 @@
+{
+  "page": {
+    "eyebrow": "Demo por setor · Fintech",
+    "title": "Kestrel, um banco digital construído com Didit",
+    "lede": "Abra uma conta, verifique sua identidade e movimente dinheiro. Cada etapa usa a API real da Didit: KYC e AML no cadastro, monitoramento de transações em cada pagamento e triagem AML contínua depois.",
+    "allDemos": "Todas as demos",
+    "staging": "Ao vivo no staging da Didit",
+    "reset": "Começar de novo",
+    "theme": {
+      "label": "Tema de cores",
+      "light": "Claro",
+      "dark": "Escuro"
+    },
+    "unavailable": {
+      "title": "Esta demo roda no staging da Didit",
+      "body": "Abrir uma conta aqui executa uma verificação de identidade e uma triagem AML reais para a organização de demonstração da Didit, por isso a demo é servida a partir do ambiente de staging.",
+      "cta": "Abrir a demo no staging"
+    }
+  },
+  "bank": {
+    "name": "Kestrel",
+    "fictional": "Banco fictício para fins de demonstração"
+  },
+  "common": {
+    "back": "Voltar",
+    "retry": "Tentar novamente",
+    "loading": "Carregando…",
+    "error": "Algo deu errado ao falar com a Didit. Tente novamente em instantes.",
+    "diditError": "A Didit respondeu: {detail}",
+    "unavailable": "Esta demo não está disponível nesta implantação."
+  },
+  "welcome": {
+    "title": "Uma conta corrente aberta em minutos",
+    "body": "Um IBAN no seu nome, transferências instantâneas pela Europa e sem mensalidade.",
+    "points": {
+      "verify": "Verifique-se com seu documento e uma selfie",
+      "send": "Envie e receba dinheiro na hora",
+      "safe": "Cada pagamento é checado contra fraude"
+    },
+    "cta": "Abrir uma conta",
+    "note": "Use seu próprio documento: os dados vão apenas para o ambiente de staging da Didit, nunca para um banco real."
+  },
+  "signup": {
+    "progress": "Etapa {current} de {total}",
+    "title": "Conte sobre você",
+    "body": "Usamos estes dados para abrir sua conta. Você os confirma com seu documento na próxima etapa.",
+    "name": "Nome completo",
+    "namePlaceholder": "Como aparece no seu documento",
+    "email": "E-mail",
+    "emailPlaceholder": "voce@exemplo.com",
+    "country": "País de residência",
+    "countryPlaceholder": "Escolha um país",
+    "consent": "Ao continuar, você concorda que o Kestrel compartilhe seus dados com a Didit para verificar sua identidade.",
+    "submit": "Continuar",
+    "submitting": "Abrindo sua conta…",
+    "errors": {
+      "name": "Informe seu nome completo.",
+      "email": "Informe um e-mail válido.",
+      "country": "Escolha o país onde você mora."
+    }
+  },
+  "verify": {
+    "progress": "Etapa {current} de {total}",
+    "title": "Verifique sua identidade",
+    "body": "Precisamos confirmar quem você é antes de abrir sua conta. Leva cerca de dois minutos.",
+    "steps": {
+      "id": "Escaneie um documento oficial com foto",
+      "liveness": "Grave um vídeo selfie curto",
+      "face": "Comparamos sua selfie com seu documento",
+      "aml": "Checamos seu nome em listas de sanções e de PEP"
+    },
+    "cta": "Verificar minha identidade",
+    "resume": "Continuar a verificação",
+    "starting": "Abrindo a verificação…",
+    "phone": "Sem câmera aqui? A verificação mostra um QR code para terminar no celular.",
+    "cancelled": "Você fechou a verificação antes de terminar. Seu progresso foi salvo, então dá para continuar de onde parou.",
+    "failed": "Não foi possível iniciar a verificação. {reason}"
+  },
+  "checking": {
+    "title": "Conferindo seus dados",
+    "body": "Normalmente leva menos de um minuto. Mantenha esta página aberta.",
+    "slow": "Está demorando mais que o normal. Seguimos conferindo em segundo plano.",
+    "checks": {
+      "id": "Documento de identidade",
+      "liveness": "Prova de vida",
+      "face": "Comparação facial",
+      "aml": "Triagem de sanções e PEP"
+    },
+    "status": {
+      "pending": "Aguardando",
+      "passed": "Aprovado",
+      "review": "Em análise",
+      "failed": "Reprovado"
+    }
+  },
+  "outcome": {
+    "approved": {
+      "title": "Sua conta está aberta",
+      "body": "Boas-vindas ao Kestrel, {name}. Sua conta está pronta: adicione dinheiro e comece a usar.",
+      "cta": "Ir para minha conta"
+    },
+    "review": {
+      "title": "Estamos analisando seu pedido",
+      "body": "Precisamos de um pouco mais de tempo para confirmar alguns dados. A maioria das análises termina em um dia útil, e vamos escrever para {email} assim que terminarmos.",
+      "live": "Esta página se atualiza sozinha quando a análise terminar."
+    },
+    "declined": {
+      "title": "Não conseguimos abrir sua conta",
+      "body": "Não conseguimos verificar sua identidade, então não podemos abrir uma conta para você agora.",
+      "cta": "Começar de novo"
+    },
+    "expired": {
+      "title": "Sua verificação expirou",
+      "body": "O link de verificação não é mais válido. Comece de novo para abrir sua conta.",
+      "cta": "Recomeçar"
+    }
+  },
+  "home": {
+    "greeting": "Olá, {name}",
+    "balance": "Saldo disponível",
+    "held": "{amount} retidos",
+    "add": "Adicionar dinheiro",
+    "send": "Enviar dinheiro",
+    "activity": "Movimentações",
+    "refresh": "Atualizar",
+    "emptyTitle": "Nenhum pagamento ainda",
+    "emptyBody": "Adicione dinheiro primeiro e depois envie um pouco. Transferências de {threshold} ou mais são checadas antes de sair da sua conta.",
+    "limit": "Você atingiu o limite da demo de {limit} pagamentos. Comece de novo para abrir outra conta.",
+    "verified": "Identidade verificada"
+  },
+  "payment": {
+    "fromSelf": "Recarga do seu outro banco",
+    "to": "Para {name}",
+    "status": {
+      "received": "Recebido",
+      "sent": "Enviado",
+      "held": "Retido",
+      "declined": "Recusado",
+      "action": "Ação necessária"
+    }
+  },
+  "pay": {
+    "depositTitle": "Adicionar dinheiro",
+    "depositBody": "Da sua conta em outro banco, no seu próprio nome.",
+    "transferTitle": "Enviar dinheiro",
+    "transferBody": "Para qualquer pessoa com conta bancária na Europa.",
+    "amount": "Valor",
+    "otherAmount": "Outro valor",
+    "recipient": "Destinatário",
+    "recipientPlaceholder": "Nome completo do destinatário",
+    "available": "Disponível: {amount}",
+    "reviewHint": "Transferências de {threshold} ou mais ficam retidas para uma checagem rápida antes de sair.",
+    "willReview": "Esta transferência será checada antes de sair.",
+    "submitDeposit": "Adicionar {amount}",
+    "submitTransfer": "Enviar {amount}",
+    "submitting": "Enviando…",
+    "errors": {
+      "amount": "Informe um valor entre {min} e {max}.",
+      "counterparty": "Informe o nome completo do destinatário.",
+      "insufficient": "Você só tem {available} disponíveis.",
+      "limit": "Você atingiu o limite de pagamentos da demo para esta conta."
+    }
+  },
+  "result": {
+    "received": {
+      "title": "{amount} adicionados",
+      "body": "O dinheiro está na sua conta e pronto para usar."
+    },
+    "sent": {
+      "title": "{amount} enviados para {name}",
+      "body": "Deve chegar em segundos."
+    },
+    "held": {
+      "title": "Seu pagamento está retido",
+      "body": "Estamos fazendo uma checagem rápida deste pagamento antes que ele saia da sua conta. O dinheiro fica reservado até lá, e esta tela se atualiza assim que a checagem terminar."
+    },
+    "declined": {
+      "title": "Pagamento recusado",
+      "body": "Este pagamento não foi concluído e nenhum dinheiro saiu da sua conta."
+    },
+    "action": {
+      "title": "Precisamos de algo de você",
+      "body": "Confirme sua identidade para liberar este pagamento."
+    },
+    "done": "Concluir"
+  },
+  "monitoring": {
+    "title": "Monitoramento AML contínuo",
+    "body": "Depois que você entra, seu perfil é triado de novo todos os dias em listas de sanções, PEP e mídia negativa. Uma nova inclusão chega à nossa equipe de compliance sem pedir que você se verifique de novo.",
+    "cta": "Prévia do monitoramento desta conta",
+    "loading": "Consultando a Didit…",
+    "rows": {
+      "profiles": "Perfis encontrados",
+      "alreadyMonitored": "Já monitorados",
+      "withScreening": "Triagem do cadastro a monitorar",
+      "needsScreening": "Seriam triados primeiro",
+      "missingIdentity": "Dados de identidade faltando",
+      "annualCost": "Custo do monitoramento por ano"
+    },
+    "note": "Apenas uma estimativa: nada foi ativado, triado ou cobrado."
+  },
+  "panel": {
+    "title": "Como isto usa a Didit",
+    "subtitle": "Os módulos e as chamadas de API por trás de cada etapa, ao vivo no staging.",
+    "open": "Como isto usa a Didit",
+    "close": "Fechar",
+    "current": "Você está aqui",
+    "modules": "Módulos",
+    "calls": "Chamadas de API",
+    "docs": "Docs",
+    "steps": {
+      "signup": {
+        "title": "Cadastro",
+        "body": "O formulário do próprio banco. O ID de cliente que ele cria é enviado à Didit como vendor_data, a chave que liga cada sessão, pagamento e triagem a esta pessoa."
+      },
+      "verify": {
+        "title": "Verificação de identidade",
+        "body": "Uma única sessão hospedada executa o fluxo do banco: verificação de documento, prova de vida ativa, comparação facial 1:1, triagem AML e análise de IP."
+      },
+      "decision": {
+        "title": "Decisão",
+        "body": "O status da sessão decide a conta: Approved abre, In Review aguarda um analista, Declined mantém fechada. O cliente nunca vê o motivo."
+      },
+      "payments": {
+        "title": "Monitoramento de transações",
+        "body": "Cada pagamento é enviado com o mesmo vendor_data. As regras rodam de forma síncrona e o veredito volta na resposta."
+      },
+      "review": {
+        "title": "Análise",
+        "body": "Transferências de {threshold} ou mais acionam a regra \"{rule}\" e aguardam um analista no console. O app relê o pagamento e se atualiza quando ele decide."
+      },
+      "monitoring": {
+        "title": "Monitoramento AML contínuo",
+        "body": "Ativa a triagem diária de clientes verificados. A demo pede apenas a estimativa, que não grava nada."
+      }
+    },
+    "moduleNames": {
+      "idVerification": "Verificação de documento",
+      "liveness": "Prova de vida ativa",
+      "faceMatch": "Comparação facial 1:1",
+      "aml": "Triagem AML",
+      "ipAnalysis": "Análise de IP",
+      "transactions": "Monitoramento de transações",
+      "rules": "Motor de regras",
+      "webhooks": "Webhooks",
+      "manualReview": "Análise manual",
+      "ongoing": "Monitoramento contínuo"
+    }
+  },
+  "operator": {
+    "title": "Visão do operador",
+    "body": "O que a equipe de compliance do banco vê sobre este cliente no console da Didit.",
+    "empty": "Nada ainda. Os registros aparecem aqui conforme você avança no app.",
+    "session": "Sessão de verificação",
+    "sessionNumber": "Sessão nº {number}",
+    "transaction": "Transação nº {number}",
+    "score": "Pontuação de risco",
+    "rule": "Regra acionada",
+    "noRule": "Nenhuma regra acionada",
+    "open": "Abrir no console",
+    "openConsole": "Abrir o console",
+    "find": "Procure {record} no console.",
+    "login": "Requer login no console da organização de demonstração da Didit."
+  },
+  "amount": {
+    "presets": "Escolha um valor"
+  }
+}
