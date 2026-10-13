@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 
 import { ACCOUNTS, completeHostedFlow, mockKestrel } from "./kestrel-mocks";
 
@@ -277,6 +277,69 @@ test("the withdrawal form checks the amount and the address before submitting", 
   await page.getByRole("button", { name: "Withdraw", exact: true }).click();
   await expect(page.getByText(/valid Ethereum address/)).toBeVisible();
   expect(mock.requests.some((r) => r.url.endsWith("/token"))).toBe(false);
+});
+
+test("the option groups are one Tab stop, follow the arrow keys and show every description in full", async ({
+  page,
+}) => {
+  await mockKestrel(page);
+  await open(page);
+
+  // Text cut off with an ellipsis is wider than the box that clips it.
+  const clipped = (group: Locator) =>
+    group.evaluate((element) =>
+      [...element.querySelectorAll("span")].some(
+        (span) => span.clientWidth > 0 && span.scrollWidth > span.clientWidth,
+      ),
+    );
+
+  const area = page.locator(".kestrel");
+  const light = page.getByRole("radio", { name: "Light" });
+  const dark = page.getByRole("radio", { name: "Dark" });
+
+  await expect(dark).toHaveAttribute("tabindex", "-1");
+  await light.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(dark).toBeFocused();
+  await expect(area).toHaveAttribute("data-theme", "dark");
+  await page.keyboard.press("ArrowLeft");
+  await expect(light).toBeFocused();
+  await expect(area).toHaveAttribute("data-theme", "light");
+
+  await app(page).getByRole("button", { name: "Deposit", exact: true }).click();
+  const sources = page.getByRole("radiogroup", { name: "Deposit source" });
+  const own = sources.getByRole("radio", { name: /From your wallet/ });
+  const unknown = sources.getByRole("radio", { name: /unknown sender/ });
+
+  expect(await clipped(sources)).toBe(false);
+  await own.focus();
+  await page.keyboard.press("ArrowDown");
+  await expect(unknown).toBeFocused();
+  await expect(unknown).toHaveAttribute("aria-checked", "true");
+  await page.keyboard.press("ArrowDown");
+  await expect(own).toBeFocused();
+  await expect(own).toHaveAttribute("aria-checked", "true");
+  await page.keyboard.press("Tab");
+  await expect(page.getByLabel("Amount")).toBeFocused();
+
+  await page.getByRole("button", { name: "Receive deposit" }).click();
+  await expect(stage(page)).toContainText("Deposit credited");
+  await backToWallet(page);
+
+  await app(page)
+    .getByRole("button", { name: "Withdraw", exact: true })
+    .click();
+  const destinations = page.getByRole("radiogroup", {
+    name: "Withdrawal destination",
+  });
+
+  expect(await clipped(destinations)).toBe(false);
+  await destinations.getByRole("radio", { name: /Your wallet/ }).focus();
+  await page.keyboard.press("ArrowUp");
+  await expect(
+    destinations.getByRole("radio", { name: /Another address/ }),
+  ).toBeFocused();
+  await expect(page.getByPlaceholder("0x...")).toBeVisible();
 });
 
 test("the Didit panel follows the user and links every call to the docs", async ({
