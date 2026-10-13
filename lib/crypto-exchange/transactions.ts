@@ -12,12 +12,14 @@
  *   with a token the backend minted for that user. Device intelligence comes
  *   along for free and the subject is bound to the token server-side.
  *
- * Both paths speak the same camelCase wire payload, which is what the builders
- * below produce. The module is self-contained (no local imports) so the unit
- * tests can load it with plain `node --test`.
+ * Both end up as the same camelCase wire payload and the same transaction
+ * record. The module is self-contained (no local imports) so the unit tests
+ * can load it with plain `node --test`.
  *
  * https://docs.didit.me/transaction-monitoring/sdk-transaction-submission
  */
+
+import type { DiditTransactionPayload } from "@didit-protocol/sdk-web";
 
 /** Stamped on every Kestrel transaction as `props.demo_app`, so the demo's rules
  * (see lib/crypto-exchange/policy.ts) can never touch another demo's traffic. */
@@ -75,8 +77,9 @@ export function newTxnId(kind: "dep" | "wd", uuid: string): string {
   return `kestrel-${kind}-${uuid}`;
 }
 
-/* ── Wire payloads ──────────────────────────────────────────────────────── */
+/* ── Payloads ───────────────────────────────────────────────────────────── */
 
+/** The camelCase wire payload `POST /v3/transactions/` and `/v1/` accept. */
 export interface WireParticipant {
   type?: string;
   externalUserId?: string;
@@ -99,11 +102,6 @@ export interface WirePayload {
   subject: WireParticipant;
   counterparty?: WireParticipant;
   props: Record<string, string>;
-  travelRule?: {
-    status: string;
-    originatorData: Record<string, string>;
-    beneficiaryData: Record<string, string>;
-  };
   includeCryptoScreening: true;
 }
 
@@ -155,7 +153,9 @@ export function buildDepositPayload(input: {
 }
 
 /**
- * The withdrawal the user requests on their device, as a Travel Rule transfer.
+ * The withdrawal the user requests on their device, as a Travel Rule transfer,
+ * in the web SDK's own payload shape (`submitTransaction` maps it onto the wire
+ * format above).
  *
  * - `own-wallet` declares the destination self-hosted (`unhosted_wallet`), so
  *   Didit skips VASP routing and asks for proof that the wallet is the user's.
@@ -174,34 +174,39 @@ export function buildWithdrawalPayload(input: {
   destination: WithdrawalDestination;
   address: string;
   beneficiaryName: string;
-}): WirePayload {
+}): DiditTransactionPayload {
   const beneficiary = input.beneficiaryName.trim() || input.fullName;
-  const methodType =
-    input.destination === "own-wallet" ? "unhosted_wallet" : "crypto_wallet";
+  const address = input.address.trim();
 
   return {
     txnId: input.txnId,
-    type: "travelRule",
-    info: {
+    category: "travelRule",
+    details: {
       direction: "out",
       amount: input.amount,
       currency: CX_ASSET,
       currencyType: "crypto",
-      type: "withdrawal",
+      actionType: "withdrawal",
       cryptoParams: { crypto_chain: CX_CHAIN },
     },
     subject: { type: "individual", fullName: input.fullName },
     counterparty: {
       type: "individual",
       fullName: beneficiary,
-      paymentMethod: { type: methodType, accountId: input.address.trim() },
+      paymentMethod: {
+        type: input.destination === "own-wallet" ? "unhosted_wallet" : "crypto_wallet",
+        accountId: address,
+      },
     },
-    props: { demo_app: CX_DEMO_APP, withdrawal_destination: input.destination },
+    customProperties: {
+      demo_app: CX_DEMO_APP,
+      withdrawal_destination: input.destination,
+    },
     travelRule: {
       // Ignored once Travel Rule is enabled: Didit drives the exchange itself.
       status: "AWAITING_COUNTERPARTY",
       originatorData: { name: input.fullName },
-      beneficiaryData: { name: beneficiary, wallet_address: input.address.trim() },
+      beneficiaryData: { name: beneficiary, wallet_address: address },
     },
     includeCryptoScreening: true,
   };
