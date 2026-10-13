@@ -9,3 +9,4 @@
 [   37167ms] [INFO] [SessionWebSocket] opened @ https://verify.staging.didit.me/_next/static/chunks/7235.3bab60b631463f16.js:10
 [   37192ms] [INFO] [SessionWebSocket] Received: {current_step: AGE_ESTIMATION, current_step_v2: AGE_ESTIMATION} @ https://verify.staging.didit.me/_next/static/chunks/7235.3bab60b631463f16.js:10
 [   37193ms] [INFO] [Welcome] Session update received: {current_step: AGE_ESTIMATION, current_step_v2: AGE_ESTIMATION} @ https://verify.staging.didit.me/_next/static/chunks/7235.3bab60b631463f16.js:10
+[   87708ms] [INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/compiled/react-dom/cjs/react-dom.development.js:38559
