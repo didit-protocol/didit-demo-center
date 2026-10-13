@@ -136,6 +136,8 @@ test("a withdrawal to the user's wallet needs wallet proof, then a selfie, then 
 
   await withdraw(page, /Your wallet/, "0.4");
 
+  await expect(stage(page)).toContainText("Prove the wallet is yours");
+
   // Submitted with the SDK: a Travel Rule transfer to a declared self-hosted wallet.
   const submitted = mock.requests.find((r) => r.url.endsWith("/v1/transactions/"))?.body as {
     type: string;
@@ -149,7 +151,6 @@ test("a withdrawal to the user's wallet needs wallet proof, then a selfie, then 
   expect(submitted.counterparty.paymentMethod.type).toBe("unhosted_wallet");
   expect(submitted.includeCryptoScreening).toBe(true);
 
-  await expect(stage(page)).toContainText("Prove the wallet is yours");
   await expect(page.getByTestId("kestrel-compliance-view")).toContainText(
     "UNCONFIRMED_OWNERSHIP",
   );
