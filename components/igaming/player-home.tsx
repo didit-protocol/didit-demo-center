@@ -87,7 +87,8 @@ function Cashier({ aurora }: { aurora: Aurora }) {
   const headroom = limitHeadroom(state.depositLimit, totals.depositedToday);
   const verified = Boolean(state.kyc?.listed);
   const busy = aurora.busy === mode;
-  const overLimit = mode === "deposit" && headroom !== null && amount > headroom;
+  const overLimit =
+    mode === "deposit" && headroom !== null && amount > headroom;
   const overBalance = mode === "withdrawal" && amount > totals.balance;
   const verb = mode === "deposit" ? "Deposit" : "Withdraw";
   const Icon = mode === "deposit" ? ArrowDownLeft : ArrowUpRight;
@@ -231,7 +232,8 @@ function ClosedCashier({ aurora }: { aurora: Aurora }) {
   const state = aurora.state!;
   const busy = aurora.busy === "deposit";
   const payout = state.activity.find(
-    (item) => item.kind === "withdrawal" && item.detail === SELF_EXCLUSION_PAYOUT,
+    (item) =>
+      item.kind === "withdrawal" && item.detail === SELF_EXCLUSION_PAYOUT,
   );
   const view = payout?.record
     ? transactionView("withdrawal", payout.record.status)

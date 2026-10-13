@@ -390,10 +390,21 @@ const VIA_STYLE: Record<LogEntry["via"], string> = {
   sdk: "bg-success-bg text-success",
 };
 
+/** Transaction statuses and `submitTransaction` error types that are not a pass. */
+const OUTCOME_STYLE: Record<string, string> = {
+  AWAITING_USER: "text-warning",
+  IN_REVIEW: "text-warning",
+  DECLINED: "text-danger",
+  invalid_token: "text-danger",
+  expired_token: "text-danger",
+  validation: "text-danger",
+  network: "text-danger",
+};
+
 /**
  * The right-hand column: the HTTP status when the page read the response
- * itself, otherwise what the web SDK reported (a transaction status, or the
- * type of its error), otherwise the hosted flow is still open.
+ * itself, otherwise what the web SDK reported (the transaction's status, or
+ * the type of its error), otherwise the hosted flow is still open.
  */
 function logResult(entry: LogEntry): { text: string; className: string } {
   if (entry.status !== null)
@@ -404,15 +415,11 @@ function logResult(entry: LogEntry): { text: string; className: string } {
   if (entry.outcome)
     return {
       text: entry.outcome,
-      className: SDK_FAILURES.includes(entry.outcome)
-        ? "text-danger"
-        : "text-success",
+      className: OUTCOME_STYLE[entry.outcome] ?? "text-success",
     };
 
   return { text: "open", className: "text-muted" };
 }
-
-const SDK_FAILURES = ["invalid_token", "expired_token", "validation", "network"];
 
 function ApiLog({ aurora }: { aurora: Aurora }) {
   if (aurora.log.length === 0) {

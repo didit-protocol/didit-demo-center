@@ -8,6 +8,7 @@ import {
   ArrowRight,
   CircleCheck,
   CircleX,
+  type LucideIcon,
   MapPin,
   ScanFace,
   Timer,
@@ -17,12 +18,20 @@ import { Notice, Spinner, StatusPill } from "./ui";
 
 import {
   OPERATOR_NAME,
+  type Tone,
   licensedMarket,
   sessionView,
 } from "@/lib/igaming/policy";
 import { cn } from "@/lib/utils";
 
 const STEPS = ["Your details", "Age check", "Play"];
+
+function stepStyle(index: number, current: number): string {
+  if (index < current) return "bg-success text-canvas";
+  if (index === current) return "bg-ink text-canvas";
+
+  return "bg-surface text-muted";
+}
 
 function Stepper({ current }: { current: number }) {
   return (
@@ -32,11 +41,7 @@ function Stepper({ current }: { current: number }) {
           <span
             className={cn(
               "flex size-5 items-center justify-center rounded-pill text-[11px] font-semibold",
-              index < current
-                ? "bg-success text-canvas"
-                : index === current
-                  ? "bg-ink text-canvas"
-                  : "bg-surface text-muted",
+              stepStyle(index, current),
             )}
           >
             {index + 1}
@@ -187,6 +192,74 @@ function Row({
   );
 }
 
+const RESULT_ICON: Record<Tone, { Icon: LucideIcon; className: string }> = {
+  approved: { Icon: CircleCheck, className: "bg-success-bg text-success" },
+  declined: { Icon: CircleX, className: "bg-danger-bg text-danger" },
+  review: { Icon: Timer, className: "bg-surface text-muted" },
+  info: { Icon: Timer, className: "bg-surface text-muted" },
+  neutral: { Icon: Timer, className: "bg-surface text-muted" },
+};
+
+/** What the player can do next, by the age check's outcome. */
+function AgeActions({ aurora, tone }: { aurora: Aurora; tone: Tone }) {
+  const checking = aurora.busy === "age";
+
+  if (tone === "approved")
+    return (
+      <button
+        className="ig-btn ig-btn-primary pl-5 pr-3"
+        type="button"
+        onClick={aurora.enterLobby}
+      >
+        Enter the lobby
+        <ArrowRight aria-hidden className="size-5" />
+      </button>
+    );
+  if (tone === "declined")
+    return (
+      <button
+        className="ig-btn ig-btn-quiet"
+        type="button"
+        onClick={aurora.reset}
+      >
+        Start over
+      </button>
+    );
+  if (tone === "review")
+    return (
+      <button
+        className="ig-btn ig-btn-quiet"
+        disabled={checking}
+        type="button"
+        onClick={() => aurora.checkAge()}
+      >
+        {checking ? <Spinner /> : null}
+        Check again
+      </button>
+    );
+
+  return (
+    <>
+      <button
+        className="ig-btn ig-btn-primary"
+        disabled={!aurora.sdkReady}
+        type="button"
+        onClick={() => aurora.resumeAge()}
+      >
+        <ScanFace aria-hidden className="size-4" />
+        Continue the age check
+      </button>
+      <button
+        className="ig-btn ig-btn-quiet"
+        type="button"
+        onClick={() => void aurora.retryAge()}
+      >
+        Start a new check
+      </button>
+    </>
+  );
+}
+
 /** What the age check decided, and the location it saw. */
 export function AgeResult({ aurora }: { aurora: Aurora }) {
   const state = aurora.state;
@@ -241,11 +314,7 @@ export function AgeResult({ aurora }: { aurora: Aurora }) {
   const view = sessionView("age", summary.status);
   const approved = view.tone === "approved";
   const market = licensedMarket(summary.ip?.countryCode);
-  const Icon = approved
-    ? CircleCheck
-    : view.tone === "declined"
-      ? CircleX
-      : Timer;
+  const { Icon, className: iconStyle } = RESULT_ICON[view.tone];
   const firstName = state.name.split(" ")[0];
 
   return (
@@ -255,11 +324,7 @@ export function AgeResult({ aurora }: { aurora: Aurora }) {
         <span
           className={cn(
             "flex size-11 flex-none items-center justify-center rounded-sm",
-            approved
-              ? "bg-success-bg text-success"
-              : view.tone === "declined"
-                ? "bg-danger-bg text-danger"
-                : "bg-surface text-muted",
+            iconStyle,
           )}
         >
           <Icon aria-hidden className="size-6" />
@@ -334,53 +399,7 @@ export function AgeResult({ aurora }: { aurora: Aurora }) {
       ) : null}
 
       <div className="flex flex-wrap gap-2.5">
-        {approved ? (
-          <button
-            className="ig-btn ig-btn-primary pl-5 pr-3"
-            type="button"
-            onClick={aurora.enterLobby}
-          >
-            Enter the lobby
-            <ArrowRight aria-hidden className="size-5" />
-          </button>
-        ) : view.tone === "declined" ? (
-          <button
-            className="ig-btn ig-btn-quiet"
-            type="button"
-            onClick={aurora.reset}
-          >
-            Start over
-          </button>
-        ) : view.tone === "review" ? (
-          <button
-            className="ig-btn ig-btn-quiet"
-            disabled={checking}
-            type="button"
-            onClick={() => aurora.checkAge()}
-          >
-            {checking ? <Spinner /> : null}
-            Check again
-          </button>
-        ) : (
-          <>
-            <button
-              className="ig-btn ig-btn-primary"
-              disabled={!aurora.sdkReady}
-              type="button"
-              onClick={() => aurora.resumeAge()}
-            >
-              <ScanFace aria-hidden className="size-4" />
-              Continue the age check
-            </button>
-            <button
-              className="ig-btn ig-btn-quiet"
-              type="button"
-              onClick={() => void aurora.retryAge()}
-            >
-              Start a new check
-            </button>
-          </>
-        )}
+        <AgeActions aurora={aurora} tone={view.tone} />
       </div>
     </div>
   );
