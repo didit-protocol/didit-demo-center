@@ -1,0 +1,162 @@
+{
+  "recorded": "2026-10-13, verification.staging.didit.me, demo organization",
+  "source": "real response; hosted-flow links and tokens redacted",
+  "request": {
+    "transaction_id": "fintech-demo-rec-1791926220-1",
+    "transaction_category": "finance",
+    "transaction_details": {
+      "direction": "inbound",
+      "amount": "10000.00",
+      "currency": "EUR",
+      "currency_kind": "fiat",
+      "action_type": "deposit"
+    },
+    "subject": {
+      "entity_type": "individual",
+      "vendor_data": "fintech-demo-rec-1791926220",
+      "full_name": "Lena Fischer",
+      "address": {
+        "country": "DEU"
+      }
+    },
+    "counterparty": {
+      "entity_type": "individual",
+      "full_name": "Lena Fischer"
+    },
+    "custom_properties": {
+      "demo_app": "fintech"
+    }
+  },
+  "status": 201,
+  "response": {
+    "uuid": "364b8236-d40f-49e1-a33a-e6c1433e08e8",
+    "environment": "live",
+    "transaction_number": 6,
+    "txn_id": "fintech-demo-rec-1791926220-1",
+    "txn_date": "2026-10-13T21:17:01.391026Z",
+    "zone_id": null,
+    "transaction_type": "finance",
+    "action_type": "deposit",
+    "direction": "INBOUND",
+    "status": "APPROVED",
+    "source": "LIVE",
+    "amount": "10000",
+    "currency": "EUR",
+    "currency_type": "fiat",
+    "amount_in_default_currency": null,
+    "default_currency_code": null,
+    "preferred_currency_amount": "11191.37164942643324987",
+    "preferred_currency_code": "USD",
+    "payment_details": null,
+    "payment_txn_id": null,
+    "score": 0,
+    "severity": null,
+    "decision_reason_code": null,
+    "decision_reason_label": null,
+    "vendor_data": "fintech-demo-rec-1791926220",
+    "metadata": {
+      "subject": {
+        "address": {
+          "country": "DEU"
+        },
+        "full_name": "Lena Fischer",
+        "entity_type": "individual",
+        "vendor_data": "fintech-demo-rec-1791926220"
+      },
+      "counterparty": {
+        "full_name": "Lena Fischer",
+        "entity_type": "individual"
+      }
+    },
+    "props": {
+      "demo_app": "fintech"
+    },
+    "tags": [],
+    "parties": [
+      {
+        "uuid": "80499892-6887-435c-8912-b6fca7e3e4df",
+        "role": "APPLICANT",
+        "entity_type": "individual",
+        "kind": "USER",
+        "vendor_data": "fintech-demo-rec-1791926220",
+        "full_name": "Lena Fischer",
+        "first_name": null,
+        "last_name": null,
+        "country_code": "DEU",
+        "dob": null,
+        "address": {
+          "country": "DEU"
+        },
+        "institution_info": {},
+        "device": {},
+        "external_party_snapshot": null
+      },
+      {
+        "uuid": "882929cb-50cd-4530-87d8-edbc4d7499e4",
+        "role": "COUNTERPARTY",
+        "entity_type": "individual",
+        "kind": "EXTERNAL",
+        "vendor_data": null,
+        "full_name": "Lena Fischer",
+        "first_name": null,
+        "last_name": null,
+        "country_code": null,
+        "dob": null,
+        "address": {},
+        "institution_info": {},
+        "device": {},
+        "external_party_snapshot": {
+          "address": {},
+          "country": null,
+          "full_name": "Lena Fischer",
+          "last_name": null,
+          "first_name": null,
+          "entity_type": "individual",
+          "vendor_data": null,
+          "date_of_birth": null,
+          "device_context": {},
+          "institution_details": {}
+        }
+      }
+    ],
+    "payment_methods": [],
+    "documents": [],
+    "activities": [
+      {
+        "uuid": "69b2a32b-88a9-4f7e-9e23-dfb317e059be",
+        "activity_type": "TRANSACTION_CREATED",
+        "source": "TRANSACTION",
+        "status": "APPROVED",
+        "title": "deposit",
+        "description": null,
+        "metadata": {
+          "amount": "10000.000000000000000000",
+          "currency": "EUR",
+          "direction": "INBOUND",
+          "action_type": "deposit"
+        },
+        "occurred_at": "2026-10-13T21:17:01.396258Z"
+      }
+    ],
+    "alerts": [],
+    "rule_runs": [],
+    "provider_results": [],
+    "travel_rule": null,
+    "network_snapshot": null,
+    "remediation": null,
+    "action_required": null,
+    "cost_breakdown": {
+      "total_price": 0.02,
+      "items": [
+        {
+          "usage_type": "transaction_monitoring",
+          "price": 0.02,
+          "details": {
+            "product": "transactions"
+          },
+          "created_at": "2026-10-13T21:17:01.448334Z"
+        }
+      ]
+    }
+  }
+}
