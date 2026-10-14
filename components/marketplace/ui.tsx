@@ -195,9 +195,10 @@ export function ActionButton({
     <button
       aria-busy={busy || undefined}
       className={cn(BUTTON_VARIANT[variant], "h-10 px-4", className)}
-      disabled={busy || rest.disabled}
       type="button"
       {...rest}
+      // After the spread, so a caller's own `disabled` cannot lift the busy lock.
+      disabled={busy || rest.disabled}
     >
       {busy ? <LoaderCircle className="size-4 animate-spin" /> : null}
       {children}
