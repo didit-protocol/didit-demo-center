@@ -264,7 +264,7 @@ export function OperatorLink({ account }: { account: KestrelAccount }) {
       </span>
       <a
         className="inline-flex items-center gap-1 font-medium text-blue hover:text-blue-deep"
-        href={consoleLinks.session(account.sessionId)}
+        href={consoleLinks(account.console).session(account.sessionId)}
         rel="noreferrer"
         target="_blank"
       >

@@ -1,5 +1,6 @@
 "use client";
 
+import type { ConsoleContext } from "@/lib/crypto-exchange/console";
 import type { AccountView } from "@/lib/crypto-exchange/onboarding";
 
 import * as React from "react";
@@ -18,7 +19,11 @@ import {
 
 type SdkModule = typeof import("@didit-protocol/sdk-web").DiditSdk;
 
-export type KestrelAccount = AccountView & { userId: string };
+export type KestrelAccount = AccountView & {
+  userId: string;
+  /** For Console deep links; null until the application has a transaction. */
+  console: ConsoleContext | null;
+};
 
 export interface ActivityItem {
   id: string;

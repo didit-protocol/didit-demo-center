@@ -27,8 +27,8 @@ import {
 } from "./ui";
 
 import {
-  CONSOLE_DEEP_LINKS,
   consoleLinks,
+  type ConsoleContext,
 } from "@/lib/crypto-exchange/console";
 import {
   depositOutcome,
@@ -203,7 +203,15 @@ function Section({
   );
 }
 
-export function ComplianceView({ view }: { view: TransactionView }) {
+export function ComplianceView({
+  view,
+  console: context,
+}: {
+  view: TransactionView;
+  console: ConsoleContext | null;
+}) {
+  const links = consoleLinks(context);
+
   const screening = view.screening;
   const band = riskBand(screening?.riskScore ?? null);
   const factors = Array.from(new Set(screening?.riskFactors ?? []));
@@ -226,7 +234,7 @@ export function ComplianceView({ view }: { view: TransactionView }) {
         </div>
         <a
           className="btn-base h-9 bg-canvas px-3.5 text-[13px] text-ink hover:bg-surface"
-          href={consoleLinks.transaction(view.id)}
+          href={links.transaction(view.id)}
           rel="noreferrer"
           target="_blank"
         >
@@ -380,7 +388,7 @@ export function ComplianceView({ view }: { view: TransactionView }) {
               <Row label="Session">
                 <a
                   className="inline-flex items-center gap-1 break-all text-[12px] text-blue hover:text-blue-deep"
-                  href={consoleLinks.session(view.stepUp.sessionId)}
+                  href={links.session(view.stepUp.sessionId)}
                   rel="noreferrer"
                   target="_blank"
                 >
@@ -393,7 +401,7 @@ export function ComplianceView({ view }: { view: TransactionView }) {
           </Section>
         )}
 
-        {!CONSOLE_DEEP_LINKS && (
+        {!context && (
           <p className="m-0 px-1 text-[12px] leading-[18px] text-muted">
             The Console opens on its home page here; search for the transaction
             id above to land on this record.
@@ -510,7 +518,7 @@ export function TransferDetail({
 
       {kestrel.sdkError && <Notice tone="declined">{kestrel.sdkError}</Notice>}
 
-      <ComplianceView view={view} />
+      <ComplianceView console={kestrel.account?.console ?? null} view={view} />
     </div>
   );
 }
