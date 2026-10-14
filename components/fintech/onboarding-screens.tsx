@@ -265,6 +265,14 @@ export function FailureText({ error }: { error: ApiError }) {
   return <>{t("common.error")}</>;
 }
 
+/** The verify button's label: busy, coming back to a session, or first time. */
+function verifyLabel(starting: boolean, resume: boolean) {
+  if (starting) return "verify.starting";
+  if (resume) return "verify.resume";
+
+  return "verify.cta";
+}
+
 export function VerifyScreen({
   resume,
   starting,
@@ -333,11 +341,7 @@ export function VerifyScreen({
           ) : (
             <BadgeCheck aria-hidden className="size-5" />
           )}
-          {starting
-            ? t("verify.starting")
-            : resume
-              ? t("verify.resume")
-              : t("verify.cta")}
+          {t(verifyLabel(starting, resume))}
         </button>
         <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-xs text-muted">
           <Smartphone aria-hidden className="size-3.5 flex-none" />

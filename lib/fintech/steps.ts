@@ -1,7 +1,7 @@
 /**
  * The "How this uses Didit" panel: for each step of the bank's journey, the
- * Didit modules it runs and the exact API calls this demo makes, with the docs
- * page for each. Copy lives in messages/fintech/*.json under `panel.steps`;
+ * Didit modules it runs, the exact API calls this demo makes and the webhooks a
+ * production app would add, with the docs page for each. Copy lives in messages/fintech/*.json under `panel.steps`;
  * this file holds only what is not language: icons, endpoints and paths.
  *
  * Every `docsPath` is checked against docs.didit.me by
@@ -32,7 +32,10 @@ export interface ApiCall {
 export interface Step {
   key: StepKey;
   modules: { key: ModuleKey; icon: string }[];
+  /** The calls this demo makes. */
   calls: ApiCall[];
+  /** What a production app adds: the demo polls instead of receiving these. */
+  production: ApiCall[];
 }
 
 const M = (name: string) => `/icons/modules/${name}.svg`;
@@ -43,6 +46,7 @@ export const STEPS: Step[] = [
     key: "signup",
     modules: [],
     calls: [],
+    production: [],
   },
   {
     key: "verify",
@@ -65,6 +69,7 @@ export const STEPS: Step[] = [
         docsPath: "integration/web-sdks/javascript-sdk",
       },
     ],
+    production: [],
   },
   {
     key: "decision",
@@ -75,6 +80,8 @@ export const STEPS: Step[] = [
         path: "/v3/session/{session_id}/decision/",
         docsPath: "sessions-api/retrieve-session",
       },
+    ],
+    production: [
       {
         method: "WEBHOOK",
         path: "status.updated",
@@ -95,6 +102,7 @@ export const STEPS: Step[] = [
         docsPath: "management-api/transactions/create",
       },
     ],
+    production: [],
   },
   {
     key: "review",
@@ -108,6 +116,8 @@ export const STEPS: Step[] = [
         path: "/v3/transactions/{uuid}/",
         docsPath: "management-api/transactions/get",
       },
+    ],
+    production: [
       {
         method: "WEBHOOK",
         path: "transaction.status.updated",
@@ -125,6 +135,7 @@ export const STEPS: Step[] = [
         docsPath: "management-api/aml-monitoring/toggle-users",
       },
     ],
+    production: [],
   },
 ];
 

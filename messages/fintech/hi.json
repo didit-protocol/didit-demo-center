@@ -207,6 +207,7 @@
     "current": "आप यहाँ हैं",
     "modules": "मॉड्यूल",
     "calls": "API कॉल",
+    "production": "प्रोडक्शन ऐप ये भी जोड़ता है",
     "docs": "दस्तावेज़",
     "steps": {
       "signup": {

@@ -207,6 +207,7 @@
     "current": "当前步骤",
     "modules": "模块",
     "calls": "API 调用",
+    "production": "正式应用还会添加",
     "docs": "文档",
     "steps": {
       "signup": {

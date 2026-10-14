@@ -297,17 +297,41 @@ export interface PaymentInput {
 }
 
 function toAmount(value: unknown): number | null {
-  const n =
-    typeof value === "number"
-      ? value
-      : typeof value === "string" && /^\d+(\.\d{1,2})?$/.test(value.trim())
-        ? Number(value.trim())
-        : NaN;
+  let n = NaN;
+
+  if (typeof value === "number") n = value;
+  else if (typeof value === "string" && /^\d+(\.\d{1,2})?$/.test(value.trim()))
+    n = Number(value.trim());
 
   if (!Number.isFinite(n)) return null;
   if (Math.round(n * 100) / 100 !== n) return null;
 
   return n;
+}
+
+/**
+ * A typed amount as a plain decimal string, whichever marks the visitor used.
+ * "," and "." both work as either separator: when both appear the last one
+ * is the decimal mark; a mark that repeats, or a single one followed by
+ * exactly three digits after a non-zero number, groups thousands, as in
+ * "10,000" or "10.000"; any other single mark is decimal, as in "10,5" or
+ * "0.125". Spaces and apostrophes are dropped. Anything else is left for
+ * parsePayment to reject.
+ */
+export function normaliseAmount(raw: string): string {
+  const value = raw.replace(/[\s\u00a0\u202f']/g, "");
+  const marks = value.match(/[.,]/g) ?? [];
+
+  if (marks.length === 0) return value;
+
+  const last = Math.max(value.lastIndexOf(","), value.lastIndexOf("."));
+  const whole = value.slice(0, last).replace(/[.,]/g, "");
+  const tail = value.slice(last + 1);
+  const grouping =
+    new Set(marks).size === 1 &&
+    (marks.length > 1 || (/^\d{3}$/.test(tail) && !/^0*$/.test(whole)));
+
+  return grouping ? whole + tail : `${whole}.${tail}`;
 }
 
 export function parsePayment(

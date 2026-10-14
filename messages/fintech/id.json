@@ -207,6 +207,7 @@
     "current": "Anda di sini",
     "modules": "Modul",
     "calls": "Panggilan API",
+    "production": "Aplikasi produksi menambahkan",
     "docs": "Dokumentasi",
     "steps": {
       "signup": {

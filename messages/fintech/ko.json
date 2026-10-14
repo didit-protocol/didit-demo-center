@@ -207,6 +207,7 @@
     "current": "현재 단계",
     "modules": "모듈",
     "calls": "API 호출",
+    "production": "실서비스 앱에서 추가하는 항목",
     "docs": "문서",
     "steps": {
       "signup": {

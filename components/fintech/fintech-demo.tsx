@@ -24,7 +24,12 @@ import {
   type VerificationView,
 } from "./api";
 import { BankFrame, ThemeToggle, useDemoTheme } from "./bank-frame";
-import { DiditPanel, OperatorView, PanelSheet } from "./didit-panel";
+import {
+  DiditPanel,
+  OperatorView,
+  PanelButton,
+  PanelSheet,
+} from "./didit-panel";
 import {
   CheckingScreen,
   FailureText,
@@ -125,9 +130,9 @@ function screenFor(verification: VerificationView | null): Screen {
 
 /**
  * Alder, the fintech demo: a neobank whose every step is a real Didit call
- * on staging. The bank app is on the left, and on the right (a bottom sheet on
- * phones) the "How this uses Didit" panel follows the visitor through the
- * journey and shows the operator side of the same records.
+ * on staging. The bank app is on the left, and on the right (a sheet opened
+ * from the page header on phones) the "How this uses Didit" panel follows the
+ * visitor through the journey and shows the operator side of the same records.
  */
 export function FintechDemo({
   live,
@@ -170,6 +175,7 @@ export function FintechDemo({
   const [slow, setSlow] = React.useState(false);
   const [monitoringActive, setMonitoringActive] = React.useState(false);
   const [sheetOpen, setSheetOpen] = React.useState(false);
+  const closeSheet = React.useCallback(() => setSheetOpen(false), []);
 
   // ── Loading the visitor's account ─────────────────────────────────
   const load = React.useCallback(async () => {
@@ -577,7 +583,7 @@ export function FintechDemo({
       data-theme={theme}
       dir={locale === "ar" ? "rtl" : undefined}
     >
-      <Container className="pb-24 pt-6 sm:pb-16 lg:pt-8" size="xl">
+      <Container className="pb-16 pt-6 lg:pt-8" size="xl">
         <Link
           className={cn(
             "inline-flex items-center gap-1.5 rounded-2xs text-[13px] font-medium text-muted hover:text-ink",
@@ -607,6 +613,7 @@ export function FintechDemo({
               </span>
             ) : null}
             <ThemeToggle theme={theme} onChange={setTheme} />
+            <PanelButton onOpen={() => setSheetOpen(true)} />
             {account ? (
               <button
                 className="btn-outline h-9 px-3.5 text-[13px]"
@@ -633,7 +640,7 @@ export function FintechDemo({
           )}
         </div>
       </Container>
-      <PanelSheet open={isPhone && sheetOpen} onOpenChange={setSheetOpen}>
+      <PanelSheet open={isPhone && sheetOpen} onClose={closeSheet}>
         {isPhone ? panel : null}
       </PanelSheet>
     </section>

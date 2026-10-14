@@ -39,6 +39,7 @@ import {
   MAX_AMOUNT,
   MIN_AMOUNT,
   REVIEW_THRESHOLD,
+  normaliseAmount,
   parsePayment,
   triggersReview,
   type Balances,
@@ -267,6 +268,31 @@ export function HomeScreen({
   );
 }
 
+/** Why a payment was refused, in the bank's words where the demo knows it. */
+function PayFailure({
+  error,
+  available,
+}: {
+  error: ApiError;
+  available: number;
+}) {
+  const t = useTranslations("Fintech");
+  const money = useMoney();
+
+  if (error.error === "insufficient_funds") {
+    return (
+      <>
+        {t("pay.errors.insufficient", {
+          available: money(error.available ?? available),
+        })}
+      </>
+    );
+  }
+  if (error.error === "limit") return <>{t("pay.errors.limit")}</>;
+
+  return <FailureText error={error} />;
+}
+
 const PRESETS: Record<PaymentKind, number[]> = {
   deposit: [1000, 5000, 10000],
   transfer: [250, 1000, 6000],
@@ -286,9 +312,11 @@ export function PayScreen({
 }) {
   const t = useTranslations("Fintech");
   const money = useMoney();
-  const [amount, setAmount] = React.useState<string>(
+  // What the visitor typed; `amount` is the same value as a plain decimal.
+  const [typed, setTyped] = React.useState<string>(
     String(PRESETS[kind][kind === "deposit" ? 2 : 0]),
   );
+  const amount = normaliseAmount(typed);
   const [counterparty, setCounterparty] = React.useState("");
   const [errors, setErrors] = React.useState<PaymentField[]>([]);
   const [failure, setFailure] = React.useState<ApiError | null>(null);
@@ -301,7 +329,7 @@ export function PayScreen({
     presets,
     presets.includes(value) ? value : null,
     (next) => {
-      setAmount(String(next));
+      setTyped(String(next));
       setErrors((e) => e.filter((f) => f !== "amount"));
     },
   );
@@ -391,7 +419,7 @@ export function PayScreen({
                 )}
                 type="button"
                 onClick={() => {
-                  setAmount(String(option));
+                  setTyped(String(option));
                   setErrors((e) => e.filter((f) => f !== "amount"));
                 }}
               >
@@ -414,9 +442,9 @@ export function PayScreen({
             <input
               className={cn(inputClass, "tnum")}
               inputMode="decimal"
-              value={amount}
+              value={typed}
               onChange={(event) => {
-                setAmount(event.target.value.replace(",", "."));
+                setTyped(event.target.value);
                 setErrors((e) => e.filter((f) => f !== "amount"));
               }}
             />
@@ -441,15 +469,7 @@ export function PayScreen({
 
         {failure ? (
           <Notice tone="declined">
-            {failure.error === "insufficient_funds" ? (
-              t("pay.errors.insufficient", {
-                available: money(failure.available ?? available),
-              })
-            ) : failure.error === "limit" ? (
-              t("pay.errors.limit")
-            ) : (
-              <FailureText error={failure} />
-            )}
+            <PayFailure available={available} error={failure} />
           </Notice>
         ) : null}
       </div>

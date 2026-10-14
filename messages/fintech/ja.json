@@ -207,6 +207,7 @@
     "current": "現在のステップ",
     "modules": "モジュール",
     "calls": "API 呼び出し",
+    "production": "本番アプリで追加するもの",
     "docs": "ドキュメント",
     "steps": {
       "signup": {
