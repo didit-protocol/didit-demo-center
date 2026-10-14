@@ -1,0 +1,269 @@
+{
+  "page": {
+    "eyebrow": "Onyesho la sekta · Teknolojia ya fedha",
+    "title": "Alder, benki ya kidijitali iliyojengwa juu ya Didit",
+    "lede": "Fungua akaunti, thibitisha utambulisho wako na hamisha pesa. Kila hatua inatumia API halisi ya Didit: KYC na AML wakati wa kujisajili, ufuatiliaji wa miamala kwa kila malipo, kisha uchunguzi wa AML unaoendelea.",
+    "allDemos": "Maonyesho yote",
+    "staging": "Moja kwa moja kwenye staging ya Didit",
+    "reset": "Anza upya",
+    "theme": {
+      "label": "Mandhari ya rangi",
+      "light": "Angavu",
+      "dark": "Giza"
+    },
+    "unavailable": {
+      "title": "Onyesho hili linaendeshwa kwenye staging ya Didit",
+      "body": "Kufungua akaunti hapa kunaendesha uthibitishaji halisi wa utambulisho na uchunguzi halisi wa AML kwa shirika la maonyesho la Didit, ndiyo maana onyesho linatolewa kutoka mazingira ya staging.",
+      "cta": "Fungua onyesho kwenye staging"
+    }
+  },
+  "bank": {
+    "name": "Alder",
+    "fictional": "Benki ya kubuni kwa ajili ya maonyesho"
+  },
+  "common": {
+    "back": "Rudi",
+    "retry": "Jaribu tena",
+    "loading": "Inapakia…",
+    "error": "Hitilafu imetokea wakati wa kuwasiliana na Didit. Jaribu tena baada ya muda mfupi.",
+    "diditError": "Didit imejibu: {detail}",
+    "unavailable": "Onyesho hili halipatikani kwenye usambazaji huu."
+  },
+  "welcome": {
+    "title": "Akaunti ya sasa inayofunguliwa kwa dakika chache",
+    "body": "IBAN kwa jina lako, uhamisho wa papo hapo kote Ulaya na bila ada ya kila mwezi.",
+    "points": {
+      "verify": "Thibitisha kwa kitambulisho chako na picha ya selfie",
+      "send": "Tuma na pokea pesa mara moja",
+      "safe": "Kila malipo hukaguliwa dhidi ya ulaghai"
+    },
+    "cta": "Fungua akaunti",
+    "note": "Tumia kitambulisho chako mwenyewe: data inakwenda tu kwenye mazingira ya staging ya Didit, kamwe si kwa benki halisi."
+  },
+  "signup": {
+    "progress": "Hatua {current} kati ya {total}",
+    "title": "Tueleze kukuhusu",
+    "body": "Tunatumia taarifa hizi kufungua akaunti yako. Utazithibitisha kwa kitambulisho chako katika hatua inayofuata.",
+    "name": "Jina kamili",
+    "namePlaceholder": "Kama lilivyo kwenye kitambulisho chako",
+    "email": "Barua pepe",
+    "emailPlaceholder": "wewe@mfano.com",
+    "country": "Nchi unayoishi",
+    "countryPlaceholder": "Chagua nchi",
+    "consent": "Kwa kuendelea unakubali kwamba Alder itashiriki taarifa zako na Didit ili kuthibitisha utambulisho wako.",
+    "submit": "Endelea",
+    "submitting": "Inafungua akaunti yako…",
+    "errors": {
+      "name": "Weka jina lako kamili.",
+      "email": "Weka anwani sahihi ya barua pepe.",
+      "country": "Chagua nchi unayoishi."
+    }
+  },
+  "verify": {
+    "progress": "Hatua {current} kati ya {total}",
+    "title": "Thibitisha utambulisho wako",
+    "body": "Tunatakiwa kuthibitisha wewe ni nani kabla ya kufungua akaunti yako. Inachukua takriban dakika mbili.",
+    "steps": {
+      "id": "Changanua kitambulisho rasmi cha serikali",
+      "liveness": "Rekodi video fupi ya selfie",
+      "face": "Tunalinganisha selfie yako na kitambulisho chako",
+      "aml": "Tunakagua jina lako kwenye orodha za vikwazo na PEP"
+    },
+    "cta": "Thibitisha utambulisho wangu",
+    "resume": "Endelea na uthibitishaji",
+    "starting": "Inafungua uthibitishaji…",
+    "phone": "Huna kamera hapa? Uthibitishaji unaonyesha msimbo wa QR ili kumalizia kwenye simu yako.",
+    "cancelled": "Ulifunga uthibitishaji kabla ya kumaliza. Maendeleo yako yamehifadhiwa, unaweza kuendelea ulipoishia.",
+    "failed": "Uthibitishaji haukuweza kuanza. {reason}"
+  },
+  "checking": {
+    "title": "Tunakagua taarifa zako",
+    "body": "Kwa kawaida huchukua chini ya dakika moja. Acha ukurasa huu wazi.",
+    "slow": "Inachukua muda mrefu kuliko kawaida. Tunaendelea kukagua chinichini.",
+    "checks": {
+      "id": "Hati ya utambulisho",
+      "liveness": "Ugunduzi wa uhai",
+      "face": "Ulinganisho wa uso",
+      "aml": "Uchunguzi wa vikwazo na PEP"
+    },
+    "status": {
+      "pending": "Inasubiri",
+      "passed": "Imefaulu",
+      "review": "Inakaguliwa",
+      "failed": "Haikufaulu"
+    }
+  },
+  "outcome": {
+    "approved": {
+      "title": "Akaunti yako imefunguliwa",
+      "body": "Karibu Alder, {name}. Akaunti yako iko tayari: weka pesa na uanze kuitumia.",
+      "cta": "Nenda kwenye akaunti yangu"
+    },
+    "review": {
+      "title": "Tunakagua ombi lako",
+      "body": "Tunahitaji muda kidogo zaidi kuthibitisha baadhi ya taarifa. Ukaguzi mwingi hukamilika ndani ya siku moja ya kazi, na tutatuma barua pepe kwa {email} mara tu tukimaliza.",
+      "live": "Ukurasa huu utajisasisha wenyewe ukaguzi utakapoisha."
+    },
+    "declined": {
+      "title": "Hatukuweza kufungua akaunti yako",
+      "body": "Hatukuweza kuthibitisha utambulisho wako, kwa hivyo hatuwezi kukufungulia akaunti kwa sasa.",
+      "cta": "Anza upya"
+    },
+    "expired": {
+      "title": "Uthibitishaji wako umeisha muda",
+      "body": "Kiungo cha uthibitishaji si halali tena. Anza tena ili kufungua akaunti yako.",
+      "cta": "Anza tena"
+    }
+  },
+  "home": {
+    "greeting": "Habari, {name}",
+    "balance": "Salio linalopatikana",
+    "held": "{amount} zimezuiliwa",
+    "add": "Weka pesa",
+    "send": "Tuma pesa",
+    "activity": "Shughuli",
+    "refresh": "Onyesha upya",
+    "emptyTitle": "Bado hakuna malipo",
+    "emptyBody": "Weka pesa kwanza, kisha tuma kiasi fulani. Uhamisho wa {threshold} au zaidi hukaguliwa kabla ya kutoka kwenye akaunti yako.",
+    "limit": "Umefikia kikomo cha onyesho cha malipo {limit}. Anza upya ili kufungua akaunti mpya.",
+    "verified": "Utambulisho umethibitishwa"
+  },
+  "payment": {
+    "fromSelf": "Kuongeza salio kutoka benki yako nyingine",
+    "to": "Kwa {name}",
+    "status": {
+      "received": "Imepokelewa",
+      "sent": "Imetumwa",
+      "held": "Imezuiliwa",
+      "declined": "Imekataliwa",
+      "action": "Hatua inahitajika"
+    }
+  },
+  "pay": {
+    "depositTitle": "Weka pesa",
+    "depositBody": "Kutoka akaunti yako katika benki nyingine, kwa jina lako mwenyewe.",
+    "transferTitle": "Tuma pesa",
+    "transferBody": "Kwa mtu yeyote mwenye akaunti ya benki barani Ulaya.",
+    "amount": "Kiasi",
+    "otherAmount": "Kiasi kingine",
+    "recipient": "Mpokeaji",
+    "recipientPlaceholder": "Jina kamili la mpokeaji",
+    "available": "Kinachopatikana: {amount}",
+    "reviewHint": "Uhamisho wa {threshold} au zaidi huzuiliwa kwa ukaguzi mfupi kabla ya kutoka.",
+    "willReview": "Uhamisho huu utakaguliwa kabla ya kutoka.",
+    "submitDeposit": "Weka {amount}",
+    "submitTransfer": "Tuma {amount}",
+    "submitting": "Inatuma…",
+    "errors": {
+      "amount": "Weka kiasi kati ya {min} na {max}.",
+      "counterparty": "Weka jina kamili la mpokeaji.",
+      "insufficient": "Una {available} tu zinazopatikana.",
+      "limit": "Umefikia kikomo cha malipo cha onyesho kwa akaunti hii."
+    }
+  },
+  "result": {
+    "received": {
+      "title": "{amount} zimewekwa",
+      "body": "Pesa ziko kwenye akaunti yako na ziko tayari kutumika."
+    },
+    "sent": {
+      "title": "{amount} zimetumwa kwa {name}",
+      "body": "Zinapaswa kufika ndani ya sekunde chache."
+    },
+    "held": {
+      "title": "Malipo yako yamezuiliwa",
+      "body": "Tunafanya ukaguzi mfupi wa malipo haya kabla hayajatoka kwenye akaunti yako. Pesa zimetengwa hadi wakati huo, na skrini hii itajisasisha mara ukaguzi utakapoisha."
+    },
+    "declined": {
+      "title": "Malipo yamekataliwa",
+      "body": "Malipo haya hayakufanikiwa na hakuna pesa iliyotoka kwenye akaunti yako."
+    },
+    "action": {
+      "title": "Tunahitaji kitu kutoka kwako",
+      "body": "Thibitisha utambulisho wako ili kuachilia malipo haya."
+    },
+    "done": "Imekamilika"
+  },
+  "monitoring": {
+    "title": "Ufuatiliaji wa AML unaoendelea",
+    "body": "Baada ya kujiunga, wasifu wako huchunguzwa tena kila siku dhidi ya orodha za vikwazo, PEP na habari hasi. Uorodheshaji mpya unafika kwa timu yetu ya utiifu bila kukuomba uthibitishe tena.",
+    "cta": "Hakiki ufuatiliaji wa akaunti hii",
+    "loading": "Inauliza Didit…",
+    "rows": {
+      "profiles": "Wasifu uliolingana",
+      "alreadyMonitored": "Tayari unafuatiliwa",
+      "withScreening": "Uchunguzi wa usajili wa kufuatilia",
+      "needsScreening": "Ungechunguzwa kwanza",
+      "missingIdentity": "Data ya utambulisho haijakamilika",
+      "annualCost": "Gharama ya ufuatiliaji kwa mwaka"
+    },
+    "note": "Makadirio tu: hakuna kilichowashwa, kuchunguzwa wala kutozwa."
+  },
+  "panel": {
+    "title": "Jinsi hii inavyotumia Didit",
+    "subtitle": "Moduli na miito ya API nyuma ya kila hatua, moja kwa moja kwenye staging.",
+    "open": "Jinsi hii inavyotumia Didit",
+    "close": "Funga",
+    "current": "Uko hapa",
+    "modules": "Moduli",
+    "calls": "Miito ya API",
+    "production": "Programu ya uzalishaji huongeza",
+    "docs": "Nyaraka",
+    "steps": {
+      "signup": {
+        "title": "Kujisajili",
+        "body": "Fomu ya benki yenyewe. Kitambulisho cha mteja kinachoundwa hutumwa kwa Didit kama vendor_data, ufunguo unaounganisha kila kipindi, malipo na uchunguzi na mtu huyu."
+      },
+      "verify": {
+        "title": "Uthibitishaji wa utambulisho",
+        "body": "Kipindi kimoja kilichopangishwa huendesha mtiririko wa benki: uthibitishaji wa hati, ugunduzi hai wa uhai, ulinganisho wa uso 1:1, uchunguzi wa AML na uchambuzi wa IP."
+      },
+      "decision": {
+        "title": "Uamuzi",
+        "body": "Hali ya kipindi huamua akaunti: Approved huifungua, In Review husubiri mchambuzi, Declined huiacha imefungwa. Mteja haoni sababu kamwe."
+      },
+      "payments": {
+        "title": "Ufuatiliaji wa miamala",
+        "body": "Kila malipo hutumwa na vendor_data ileile. Sheria huendeshwa papo hapo na uamuzi hurudi kwenye jibu."
+      },
+      "review": {
+        "title": "Ukaguzi",
+        "body": "Uhamisho wa {threshold} au zaidi hulingana na sheria \"{rule}\" na husubiri mchambuzi kwenye dashibodi. Programu husoma malipo tena na kujisasisha anapoamua."
+      },
+      "monitoring": {
+        "title": "Ufuatiliaji wa AML unaoendelea",
+        "body": "Huwasha uchunguzi wa kila siku kwa wateja waliothibitishwa. Onyesho huomba makadirio tu, ambayo hayaandiki chochote."
+      }
+    },
+    "moduleNames": {
+      "idVerification": "Uthibitishaji wa kitambulisho",
+      "liveness": "Ugunduzi hai wa uhai",
+      "faceMatch": "Ulinganisho wa uso 1:1",
+      "aml": "Uchunguzi wa AML",
+      "ipAnalysis": "Uchambuzi wa IP",
+      "transactions": "Ufuatiliaji wa miamala",
+      "rules": "Injini ya sheria",
+      "webhooks": "Webhooks",
+      "manualReview": "Ukaguzi wa mikono",
+      "ongoing": "Ufuatiliaji unaoendelea"
+    }
+  },
+  "operator": {
+    "title": "Mwonekano wa mhudumu",
+    "body": "Kile timu ya utiifu ya benki inachoona kuhusu mteja huyu kwenye dashibodi ya Didit.",
+    "empty": "Bado hakuna kitu. Rekodi zitaonekana hapa unapoendelea kwenye programu.",
+    "session": "Kipindi cha uthibitishaji",
+    "sessionNumber": "Kipindi #{number}",
+    "transaction": "Muamala #{number}",
+    "score": "Alama ya hatari",
+    "rule": "Sheria iliyolingana",
+    "noRule": "Hakuna sheria iliyolingana",
+    "open": "Fungua kwenye dashibodi",
+    "openConsole": "Fungua dashibodi",
+    "find": "Tafuta {record} kwenye dashibodi.",
+    "login": "Inahitaji kuingia kwenye dashibodi ya shirika la maonyesho la Didit."
+  },
+  "amount": {
+    "presets": "Chagua kiasi"
+  }
+}
