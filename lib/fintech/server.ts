@@ -1,4 +1,4 @@
-import type { AccountState } from "./account-cookie.ts";
+import type { AccountState } from "./account-cookie";
 
 import {
   CUSTOMER_PREFIX,
@@ -19,7 +19,7 @@ import {
   type MonitoringEstimate,
   type OnboardingView,
   type PaymentView,
-} from "./model.ts";
+} from "./model";
 
 /**
  * The fintech demo's server side, one function per API route.

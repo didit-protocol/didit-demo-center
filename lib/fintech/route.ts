@@ -1,4 +1,4 @@
-import type { FintechEnv, Reply } from "./server.ts";
+import type { FintechEnv, Reply } from "./server";
 
 import { randomUUID } from "node:crypto";
 
@@ -11,7 +11,7 @@ import {
   openAccount,
   sealAccount,
   type AccountState,
-} from "./account-cookie.ts";
+} from "./account-cookie";
 
 import { VERIFICATION_BASE_URL } from "@/lib/auth-service";
 import { siteConfig } from "@/config/site";
