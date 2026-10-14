@@ -268,8 +268,7 @@ async function listWorkflows(call: WorkflowCall): Promise<WorkflowRow[]> {
     }
 
     const data = reply.body as
-      | WorkflowRow[]
-      | { results?: WorkflowRow[]; next?: string | null };
+      WorkflowRow[] | { results?: WorkflowRow[]; next?: string | null };
 
     rows.push(...(Array.isArray(data) ? data : (data.results ?? [])));
     next =
