@@ -16,7 +16,12 @@ import {
   REVIEW_THRESHOLD,
   type CheckStatus,
 } from "@/lib/fintech/model";
-import { MODULE_DOCS, STEPS, type StepKey } from "@/lib/fintech/steps";
+import {
+  MODULE_DOCS,
+  STEPS,
+  type ApiCall,
+  type StepKey,
+} from "@/lib/fintech/steps";
 import { cn } from "@/lib/utils";
 
 const METHOD_STYLE: Record<string, string> = {
@@ -45,14 +50,6 @@ const CHECK_TONE: Record<CheckStatus, Tone> = {
   passed: "approved",
   review: "review",
   failed: "declined",
-};
-
-const DOT: Record<Tone, string> = {
-  neutral: "bg-table-head",
-  approved: "bg-success",
-  review: "bg-warning",
-  declined: "bg-danger",
-  info: "bg-blue",
 };
 
 function ConsoleLink({
@@ -166,22 +163,18 @@ export function OperatorView({
             <p className="fx-code m-0 mt-1 break-all text-[11px] text-table-head">
               {verification.sessionId}
             </p>
-            <ul className="m-0 mt-2.5 grid list-none grid-cols-2 gap-x-3 gap-y-1.5 p-0">
+            <ul className="m-0 mt-2.5 flex list-none flex-col gap-1.5 p-0">
               {verification.checks.map((check) => (
                 <li
                   key={check.key}
-                  className="flex min-w-0 items-center gap-1.5 text-[12px] text-muted"
+                  className="flex min-w-0 items-center justify-between gap-3 text-[12px] text-muted"
                 >
-                  <span
-                    className={cn(
-                      "size-2 flex-none rounded-pill",
-                      DOT[CHECK_TONE[check.status]],
-                    )}
-                    title={t(`checking.status.${check.status}`)}
-                  />
                   <span className="truncate">
                     {t(`checking.checks.${check.key}`)}
                   </span>
+                  <Chip tone={CHECK_TONE[check.status]}>
+                    {t(`checking.status.${check.status}`)}
+                  </Chip>
                 </li>
               ))}
             </ul>
@@ -254,12 +247,52 @@ export function OperatorView({
   );
 }
 
+function CallList({ calls }: { calls: ApiCall[] }) {
+  const t = useTranslations("Fintech");
+
+  return (
+    <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
+      {calls.map((call) => (
+        <li
+          key={call.path}
+          className="flex items-center gap-2 rounded-sm border border-line bg-canvas px-2.5 py-2"
+        >
+          <span
+            className={cn(
+              "fx-code flex-none rounded-2xs px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em]",
+              METHOD_STYLE[call.method],
+            )}
+          >
+            {call.method}
+          </span>
+          <code className="fx-code min-w-0 flex-1 truncate text-[12px] text-ink">
+            {call.path}
+          </code>
+          <a
+            aria-label={`${t("panel.docs")}: ${call.path}`}
+            className={cn(
+              "inline-flex flex-none items-center gap-0.5 rounded-2xs text-[12px] font-medium text-blue hover:text-blue-deep",
+              focusRing,
+            )}
+            href={docs(call.docsPath)}
+            rel="noreferrer"
+            target="_blank"
+          >
+            {t("panel.docs")}
+            <ArrowUpRight aria-hidden className="size-3" />
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /** The steps, each expandable; the visitor's current step opens by itself. */
 export function DiditSteps({ current }: { current: StepKey }) {
   const t = useTranslations("Fintech");
   const money = useMoney();
   const idPrefix = React.useId();
-  const [open, setOpen] = React.useState<StepKey>(current);
+  const [open, setOpen] = React.useState<StepKey | null>(current);
 
   React.useEffect(() => setOpen(current), [current]);
 
@@ -282,14 +315,14 @@ export function DiditSteps({ current }: { current: StepKey }) {
             data-step={step.key}
           >
             <button
-              aria-controls={`${idPrefix}-${step.key}`}
+              aria-controls={expanded ? `${idPrefix}-${step.key}` : undefined}
               aria-expanded={expanded}
               className={cn(
                 "flex w-full items-center gap-3 rounded-md px-4 py-3 text-start",
                 focusRing,
               )}
               type="button"
-              onClick={() => setOpen(step.key)}
+              onClick={() => setOpen(expanded ? null : step.key)}
             >
               <span
                 className={cn(
@@ -361,39 +394,16 @@ export function DiditSteps({ current }: { current: StepKey }) {
                     <p className="eyebrow eyebrow-muted mb-2 mt-3.5">
                       {t("panel.calls")}
                     </p>
-                    <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
-                      {step.calls.map((call) => (
-                        <li
-                          key={call.path}
-                          className="flex items-center gap-2 rounded-sm border border-line bg-canvas px-2.5 py-2"
-                        >
-                          <span
-                            className={cn(
-                              "fx-code flex-none rounded-2xs px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em]",
-                              METHOD_STYLE[call.method],
-                            )}
-                          >
-                            {call.method}
-                          </span>
-                          <code className="fx-code min-w-0 flex-1 truncate text-[12px] text-ink">
-                            {call.path}
-                          </code>
-                          <a
-                            aria-label={`${t("panel.docs")}: ${call.path}`}
-                            className={cn(
-                              "inline-flex flex-none items-center gap-0.5 rounded-2xs text-[12px] font-medium text-blue hover:text-blue-deep",
-                              focusRing,
-                            )}
-                            href={docs(call.docsPath)}
-                            rel="noreferrer"
-                            target="_blank"
-                          >
-                            {t("panel.docs")}
-                            <ArrowUpRight aria-hidden className="size-3" />
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
+                    <CallList calls={step.calls} />
+                  </>
+                ) : null}
+
+                {step.production.length > 0 ? (
+                  <>
+                    <p className="eyebrow eyebrow-muted mb-2 mt-3.5">
+                      {t("panel.production")}
+                    </p>
+                    <CallList calls={step.production} />
                   </>
                 ) : null}
               </div>
@@ -435,38 +445,50 @@ export function DiditPanel({
 }
 
 /**
- * Phones: the panel opens from a floating button in the demo centre's modal
- * (focus trap, Escape, focus restored on close), so the bank app keeps the
- * whole screen.
+ * Phones: opens the panel's sheet. It sits with the demo's own controls in
+ * the page header rather than floating, so it never covers the bank's
+ * buttons.
+ */
+export function PanelButton({ onOpen }: { onOpen: () => void }) {
+  const t = useTranslations("Fintech");
+
+  return (
+    <button
+      className={cn(
+        "btn-base h-9 border border-blue/40 bg-blue-soft px-3.5 text-[13px] text-blue-deep hover:bg-blue/[0.2] sm:hidden",
+        focusRing,
+      )}
+      type="button"
+      onClick={onOpen}
+    >
+      <Layers aria-hidden className="size-3.5" />
+      {t("panel.open")}
+    </button>
+  );
+}
+
+/**
+ * Phones: the panel in the demo centre's modal (focus trap, Escape, focus
+ * restored to PanelButton on close), so the bank app keeps the whole screen.
  */
 export function PanelSheet({
   open,
-  onOpenChange,
+  onClose,
   children,
 }: {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onClose: () => void;
   children: React.ReactNode;
 }) {
   const t = useTranslations("Fintech");
-  const close = React.useCallback(() => onOpenChange(false), [onOpenChange]);
 
   return (
-    <>
-      <button
-        className="btn-dark fixed bottom-4 end-4 z-[60] h-11 px-4 shadow-lg sm:hidden"
-        type="button"
-        onClick={() => onOpenChange(true)}
-      >
-        <Layers aria-hidden className="size-4" />
-        {t("panel.open")}
-      </button>
-      <Modal
-        label={t("panel.title")}
-        open={open}
-        width="max-w-[560px] h-[calc(100dvh-32px)] bg-[rgb(var(--fx-page))]"
-        onClose={close}
-      >
+    <Modal
+      label={t("panel.title")}
+      open={open}
+      width="max-w-[560px] h-[calc(100dvh-32px)] bg-[rgb(var(--fx-page))]"
+      onClose={onClose}
+    >
         <div className="flex h-full min-h-0 flex-col">
           <div className="flex flex-none justify-end px-3 pt-3">
             <button
@@ -476,7 +498,7 @@ export function PanelSheet({
                 focusRing,
               )}
               type="button"
-              onClick={close}
+              onClick={onClose}
             >
               <X aria-hidden className="size-4" />
             </button>
@@ -485,7 +507,6 @@ export function PanelSheet({
             {children}
           </div>
         </div>
-      </Modal>
-    </>
+    </Modal>
   );
 }
