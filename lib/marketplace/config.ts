@@ -13,7 +13,8 @@
 export interface MarketWorkflows {
   /**
    * The seller KYB workflow, from NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID (the id
-   * `npm run marketplace:setup -- --apply` prints). Empty until it is set.
+   * `npm run marketplace:setup -- --activate` prints, see the README). Empty
+   * until it is set.
    */
   kyb: string;
   /** The adaptive age check the high-value rule opens for buyers. */

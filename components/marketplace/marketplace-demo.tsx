@@ -106,24 +106,62 @@ function ChapterTabs() {
   );
 }
 
+/**
+ * The phone's bottom sheet. Behaves like the demo centre's modal
+ * (demo-center/modal.tsx): locks the page, traps Tab inside the sheet, closes
+ * on Escape or a scrim click and gives focus back to what opened it.
+ */
 function GuideSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const market = useMarket();
   const panelRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
     if (!open) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+
+    const restore = document.activeElement as HTMLElement | null;
+
+    document.documentElement.style.overflow = "hidden";
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.stopPropagation();
+        onClose();
+
+        return;
+      }
+      const panel = panelRef.current;
+
+      if (event.key !== "Tab" || !panel) return;
+
+      const focusable = Array.from(
+        panel.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((el) => el.offsetParent !== null);
+
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      // Focus starts on the panel itself, so Shift+Tab from there wraps too.
+      const outside = !panel.contains(active);
+
+      if (event.shiftKey && (outside || active === first || active === panel)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (outside || active === last)) {
+        event.preventDefault();
+        first.focus();
+      }
     };
 
-    document.addEventListener("keydown", onKey);
-    // Same page lock the demo centre's modal uses (see demo-center/modal.tsx).
-    document.documentElement.style.overflow = "hidden";
+    document.addEventListener("keydown", onKeyDown, true);
     panelRef.current?.focus();
 
     return () => {
-      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("keydown", onKeyDown, true);
       document.documentElement.style.overflow = "";
+      restore?.focus?.();
     };
   }, [open, onClose]);
 
@@ -175,6 +213,8 @@ function Shell({
 }) {
   const market = useMarket();
   const [sheetOpen, setSheetOpen] = React.useState(false);
+  // Stable, so a re-render while the sheet is open does not move focus.
+  const closeSheet = React.useCallback(() => setSheetOpen(false), []);
   const [guideExpanded, setGuideExpanded] = React.useState(false);
   const Chapter = CHAPTERS[market.chapter];
   const guide = getChapter(market.chapter);
@@ -341,7 +381,7 @@ function Shell({
           How this uses Didit
         </button>
       </div>
-      <GuideSheet open={sheetOpen} onClose={() => setSheetOpen(false)} />
+      <GuideSheet open={sheetOpen} onClose={closeSheet} />
     </div>
   );
 }
