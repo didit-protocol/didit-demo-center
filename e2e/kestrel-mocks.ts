@@ -78,6 +78,15 @@ export const ACCOUNTS = {
 
 export type AccountKey = keyof typeof ACCOUNTS;
 
+/**
+ * The Console ids GET /account hands the page for deep links. Placeholders:
+ * on a real server they come from Didit's own transaction summaries.
+ */
+export const CONSOLE = {
+  organizationId: "e2e-organization",
+  applicationId: "e2e-application",
+};
+
 /** Which recorded transaction each submission returns. */
 const WITHDRAWAL_FIXTURE: Record<string, string> = {
   "own-wallet": "withdrawal-own-wallet",
@@ -125,10 +134,13 @@ export async function mockKestrel(
   options: {
     account?: AccountKey | null;
     afterOnboarding?: AccountKey;
+    /** null: the application has no transaction yet, so no Console ids. */
+    console?: typeof CONSOLE | null;
     seedWallets?: boolean;
   } = {},
 ): Promise<KestrelMock> {
   let account = options.account === undefined ? "approved" : options.account;
+  const consoleIds = options.console === undefined ? CONSOLE : options.console;
   const mock: KestrelMock = { transactions: new Map(), requests: [] };
   const record = (route: Route) => {
     const request = route.request();
@@ -174,7 +186,9 @@ export async function mockKestrel(
     }
 
     return json(route, {
-      account: account ? { ...ACCOUNTS[account], userId: USER_ID } : null,
+      account: account
+        ? { ...ACCOUNTS[account], userId: USER_ID, console: consoleIds }
+        : null,
     });
   });
 

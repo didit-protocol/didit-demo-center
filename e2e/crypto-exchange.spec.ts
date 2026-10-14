@@ -1,6 +1,12 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
-import { ACCOUNTS, completeHostedFlow, mockKestrel } from "./kestrel-mocks";
+import {
+  ACCOUNTS,
+  CONSOLE,
+  completeHostedFlow,
+  mockKestrel,
+  raw,
+} from "./kestrel-mocks";
 
 /**
  * Kestrel (/crypto-exchange) end to end, on desktop and on a phone.
@@ -146,9 +152,14 @@ test("a deposit from a sanctioned wallet is frozen, with the compliance view", a
     "Wallet risk: sanctioned wallet (crypto exchange demo)",
   );
   await expect(compliance).toContainText("Sanctions / Multi-Regime Designated");
+  // The Console ids come from the server, so the link lands on this record.
   await expect(
     compliance.getByRole("link", { name: "Open in the Didit Console" }),
-  ).toHaveAttribute("href", /business\.staging\.didit\.me\/console/);
+  ).toHaveAttribute(
+    "href",
+    `https://business.staging.didit.me/console/${CONSOLE.organizationId}/${CONSOLE.applicationId}/transactions/detail/${raw("deposit-unknown-sender").uuid}`,
+  );
+  await expect(compliance).not.toContainText("search for the transaction");
 
   await backToWallet(page);
   await expect(page.getByTestId("kestrel-balance")).toHaveText("0.00 ETH");
