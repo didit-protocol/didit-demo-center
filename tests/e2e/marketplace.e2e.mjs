@@ -1,11 +1,13 @@
 // End-to-end flows of the marketplace demo, driven in a real browser against a
 // running app that talks to Didit staging. Nothing is mocked: every status in
-// these assertions is the decision the live rules and API returned.
+// these assertions is the decision the live rules and API returned, so the
+// test runs only with E2E_LIVE=1.
 //
-//   npm run build && npm run start -- -p 3111 &     # NEXT_PUBLIC_IS_STAGING=true
-//   MARKETPLACE_E2E_URL=http://localhost:3111 npm run test:e2e:marketplace
+//   npm run build && npm run start &     # NEXT_PUBLIC_IS_STAGING=true
+//   E2E_LIVE=1 BASE_URL=http://localhost:3000 npm run test:e2e
 //
-// Optional: CHROMIUM_PATH=/usr/bin/chromium to use a system browser.
+// CHROMIUM_PATH points Playwright at a system Chromium when its own browser
+// is not installed.
 //
 // Each run uses a fresh browser profile, so it is a fresh device: the first
 // shop's sign-up is approved and the second one, opened from the same profile,
@@ -14,10 +16,11 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { chromium } from "playwright";
 
-const BASE_URL = process.env.MARKETPLACE_E2E_URL;
-const skip = BASE_URL
-  ? false
-  : "set MARKETPLACE_E2E_URL to a running instance on staging";
+const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
+const skip =
+  process.env.E2E_LIVE === "1"
+    ? false
+    : "live staging flow: set E2E_LIVE=1 against an app on staging";
 
 const LIVE_TIMEOUT = 45000;
 
