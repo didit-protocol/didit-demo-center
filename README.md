@@ -130,17 +130,64 @@ An entry with `workflowPlaceholder: true` has no published workflow on this
 environment yet; the detail modal disables **Start demo** and says so rather
 than failing on a 400.
 
+## Marketplace demo (`/marketplace`)
+
+An industry demo rather than a module demo: **Northmarket**, a resale
+marketplace running Didit end to end in five chapters, every control live
+against Didit staging and the demo organization.
+
+| Chapter | What runs |
+| --- | --- |
+| Seller onboarding | A `seller_signup` sent to transaction monitoring from the browser with the web SDK, then the shop's KYB in the hosted flow: registry (UBO tier), key people with their own ID check, documents, company AML |
+| Buyer checkout | Every order monitored; orders of EUR 1,000 or more held by a rule (`AWAITING_USER`) until the buyer passes the adaptive age check that rule opens |
+| Payouts | Locked until the KYB is Approved (the server refuses the token), then monitored |
+| Fraud | A second shop opened from the same browser is held: both sign-ups carry the same persistent device id |
+| Operator view | The held transaction's rules, score, tags, notes, device and network, KYB review, and Console v2 deep links |
+
+A "How this uses Didit" panel lists each chapter's modules and calls, linked
+to docs.didit.me (checked by `npm run check:docs-links`).
+
+**How it stays private.** The browser never sees the API key. The server
+mints short-lived transaction tokens (`POST /v3/transactions/sdk-token/`) for
+identities it created, keeps the visitor's shops, buyer and transaction ids in
+one signed httpOnly cookie, reads back only records whose ids are in that
+cookie, and returns trimmed summaries (no session tokens, documents or dates
+of birth). See `lib/marketplace/server.ts` and `lib/marketplace/summaries.ts`.
+
+**Setup on the application behind `API_KEY`** (staging only):
+
+```sh
+npm run marketplace:setup                # dry run: what exists
+npm run marketplace:setup -- --activate  # create what is missing, rules ACTIVE
+```
+
+It creates the seller KYB workflow and three rules from
+`lib/marketplace/setup.ts`, each matching only transactions carrying
+`custom_properties.demo_app = "marketplace"`. Paste the printed KYB workflow id
+into `STAGING_WORKFLOWS.kyb` in `lib/marketplace/config.ts`; until then the
+page says the KYB is not published and everything else runs.
+
+`DIDIT_CONSOLE_ORG_ID` and `DIDIT_CONSOLE_APP_ID` are optional. Without them the
+server reads the console organization and application from the API to build
+the Console v2 links.
+
 ## Checks
 
 ```sh
+<<<<<<< ours
 npm test                     # node --test (unit tests and /api/igaming route tests)
 npm run test:e2e             # Playwright flows for /igaming against BASE_URL
                              # (E2E_LIVE=1 adds a real staging session)
+=======
+npm test                     # node --test (unit and route-handler tests)
+>>>>>>> theirs
 npm run typecheck            # tsc --noEmit
 npm run lint                 # eslint (vendor/ is excluded - it is synced)
 npm run build                # next build
 npm run check:website-chrome # vendored chrome matches the website repo
 npm run check:docs-links     # every "Docs" button resolves on docs.didit.me
+MARKETPLACE_E2E_URL=http://localhost:3111 npm run test:e2e:marketplace
+                             # live marketplace flows in a real browser (staging)
 ```
 
 ### Visual proof
