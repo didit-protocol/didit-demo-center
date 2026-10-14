@@ -48,6 +48,7 @@ async function open({ viewport = DESKTOP, colorScheme = "light" } = {}) {
 }
 
 const NOT_STARTED = fixture("decision-not-started").response;
+const SESSION = fixture("session-create").response;
 
 /** An approved customer, as the account cookie holds them. */
 const approvedAccount = (tx = []) => ({
@@ -123,7 +124,7 @@ test("finishing the hosted flow checks the decision and opens the account", asyn
 
   // The SDK modal opens the session's hosted flow, then reports completion.
   await page.getByRole("heading", { name: "Checking your details" }).waitFor();
-  assert.equal(jar.account.sid, NOT_STARTED.session_id);
+  assert.equal(jar.account.sid, SESSION.session_id);
   assert.equal(await currentStep(page), "decision");
 
   didit.decision.status = "Approved";
@@ -133,7 +134,7 @@ test("finishing the hosted flow checks the decision and opens the account", asyn
   // The operator panel shows the session as the console does.
   const operator = page.getByTestId("fx-operator");
 
-  await operator.getByText(`Session #${NOT_STARTED.session_number}`).waitFor();
+  await operator.getByText(`Session #${SESSION.session_number}`).waitFor();
   await operator.getByText("Approved").first().waitFor();
 
   await page.getByRole("button", { name: "Go to my account" }).click();
@@ -382,9 +383,9 @@ test("amount presets are a radio group with arrow keys and a focus ring", async 
 
   await presets.getByRole("radio", { name: "€10,000.00", checked: true }).waitFor();
   await presets.getByRole("radio", { checked: true }).focus();
-  assert.notEqual(await focusShadow(page), "none");
   await page.keyboard.press("Home");
   await presets.getByRole("radio", { name: "€1,000.00", checked: true }).waitFor();
+  assert.notEqual(await focusShadow(page), "none");
   assert.equal(await page.getByLabel("Other amount").inputValue(), "1000");
   await page.keyboard.press("ArrowLeft");
   await presets.getByRole("radio", { name: "€10,000.00", checked: true }).waitFor();

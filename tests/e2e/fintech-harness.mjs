@@ -100,8 +100,19 @@ export function recordedDidit({ status = "Not Started" } = {}) {
         201,
       );
     }
-    if (method === "GET" && /\/v3\/session\/[^/]+\/decision\/$/.test(path)) {
-      return json(decisionWith(decision.status));
+    const session = path.match(/^\/v3\/session\/([^/]+)\/decision\/$/);
+
+    if (method === "GET" && session) {
+      // The decision of the session the app created (the recorded one), so
+      // the panel's session id and number agree.
+      const created = fixture("session-create").response;
+
+      return json({
+        ...decisionWith(decision.status, session[1]),
+        ...(session[1] === created.session_id
+          ? { session_number: created.session_number }
+          : {}),
+      });
     }
     if (method === "POST" && path === "/v3/transactions/") {
       const details = body.transaction_details;
