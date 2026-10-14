@@ -1,0 +1,247 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base ─────────────────────────────────────────────────────────────
+ * Mirrors fe-didit-website-v4's own base layer so the vendored chrome sits
+ * in exactly the typographic context it has on didit.me. The design tokens
+ * themselves come from vendor/didit-website/styles/tokens.css, imported once
+ * in app/layout.tsx ahead of this sheet.
+ */
+@layer base {
+  * {
+    border-color: rgb(var(--border));
+  }
+
+  html,
+  body {
+    background: rgb(var(--canvas));
+    color: rgb(var(--ink));
+    font-family:
+      var(--font-sans), "Inter", ui-sans-serif, system-ui, -apple-system,
+      BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-synthesis: none;
+    font-feature-settings: "ss01", "cv11";
+    /* Any descendant wider than the viewport (a long session URL, a code
+       block) must be contained rather than widening the page. `clip` and not
+       `hidden`, which would break `position: sticky` on the chrome. */
+    overflow-x: clip;
+    max-width: 100vw;
+  }
+
+  /* Lighthouse mobile wants >=12px. Preflight's 0.875em would render 11.5px. */
+  code,
+  kbd,
+  samp,
+  pre {
+    font-size: max(0.875em, 12px);
+  }
+}
+
+/* ── Demo centre components ───────────────────────────────────────────
+ * Every value here is a design-system token. Nothing invents a colour, a
+ * radius or a duration - if a literal appears it is because the token sheet
+ * has no entry for it, and it is called out in a comment.
+ */
+@layer components {
+  /* Tracked all-caps label. Inter, never body weight - the system's one
+     eyebrow treatment, matching `.eyebrow` on didit.me. */
+  .eyebrow {
+    @apply m-0 font-mono text-[10px] font-medium uppercase leading-none tracking-[0.16em] text-muted;
+  }
+
+  .eyebrow-accent {
+    @apply text-blue;
+  }
+
+  .eyebrow-muted {
+    @apply text-table-head;
+  }
+
+  /* Monospace-slot text. Inter is the only typeface, so "mono" here means
+     tabular figures rather than a second family - matching the system rule. */
+  .tnum {
+    font-feature-settings: "tnum";
+  }
+
+  /* ── Buttons - all pills, per the radius rule ── */
+  .btn-base {
+    @apply inline-flex flex-none items-center justify-center gap-2 rounded-pill text-sm font-medium transition-colors duration-fast focus-visible:shadow-ring focus-visible:outline-none;
+  }
+
+  .btn-primary {
+    @apply btn-base bg-blue text-canvas hover:bg-blue-deep;
+  }
+
+  .btn-dark {
+    @apply btn-base bg-ink text-canvas hover:bg-accent-black;
+  }
+
+  .btn-muted {
+    @apply btn-base bg-elevated text-muted hover:bg-black/[0.08] hover:text-ink;
+  }
+
+  .btn-outline {
+    @apply btn-base border border-line bg-canvas text-muted hover:bg-surface hover:text-ink;
+  }
+
+  /* ── Catalogue card ── */
+  .demo-card {
+    @apply flex cursor-pointer flex-col gap-3.5 rounded-xs border border-line bg-canvas p-[18px] text-left transition-[box-shadow,transform,border-color] duration-base ease-out hover:-translate-y-0.5 hover:border-subtle-gray/40 hover:shadow-md focus-visible:shadow-ring focus-visible:outline-none;
+  }
+
+  /* ── Chips ── */
+  .filter-chip {
+    @apply inline-flex h-8 items-center gap-[7px] rounded-pill border px-3 text-[13px] font-medium tracking-tight transition-colors duration-fast;
+  }
+
+  .filter-chip-on {
+    @apply border-ink bg-ink text-canvas;
+  }
+
+  .filter-chip-off {
+    @apply border-line bg-canvas text-muted hover:bg-surface;
+  }
+
+  .mode-chip {
+    @apply inline-flex h-[22px] flex-none items-center rounded-pill px-2 font-mono text-[9px] font-medium uppercase tracking-[0.16em];
+  }
+
+  .mode-chip-hosted {
+    @apply bg-blue-soft text-blue-deep;
+  }
+
+  .mode-chip-api {
+    @apply bg-black/[0.06] text-muted;
+  }
+
+  .meta-chip {
+    @apply inline-flex items-center rounded-pill bg-black/[0.06] px-2 text-[11px] tracking-tight text-muted;
+  }
+
+  .module-chip {
+    @apply inline-flex h-7 items-center gap-[7px] rounded-pill bg-blue/[0.12] py-0 pl-1.5 pr-2.5 text-xs font-medium text-blue-deep;
+  }
+
+  /* ── Panels: the bordered blocks that hold code, rows and traces ── */
+  .panel {
+    @apply overflow-hidden rounded-xs border border-line;
+  }
+
+  .panel-head {
+    @apply flex items-center gap-2 border-b border-line bg-surface px-3.5 py-2.5;
+  }
+
+  .panel-title {
+    @apply m-0 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-muted;
+  }
+
+  .code-block {
+    @apply m-0 overflow-x-auto p-4 font-mono text-xs leading-5;
+    /* Code is the one place Inter is wrong - a real monospace stack keeps
+       JSON columns aligned. The system fixes the UI typeface, not `pre`. */
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+      monospace;
+  }
+
+  /* ── Modals ── */
+  .modal-scrim {
+    @apply absolute inset-0 bg-ink/60 backdrop-blur-[6px];
+  }
+
+  .modal-panel {
+    @apply relative flex w-full flex-col overflow-hidden rounded-lg border border-line bg-canvas shadow-lg;
+  }
+}
+
+/* ── Legacy component classes ─────────────────────────────────────────
+ * Kept verbatim for the routes that predate the redesign and were out of its
+ * scope: /accs, /ibeta and the CAPTCHA demo. Nothing in components/demo-center
+ * uses them. Delete a rule here the day its last caller goes.
+ */
+@layer components {
+  .text-headline {
+    @apply text-[20px] font-semibold leading-[1.25] tracking-[-0.5px] sm:text-[24px] md:text-[28px];
+  }
+
+  .text-title {
+    @apply text-[16px] font-semibold leading-[1.3] sm:text-[18px];
+  }
+
+  .text-body {
+    @apply text-[14px] leading-[1.6] sm:text-[15px];
+  }
+
+  .text-body-small {
+    @apply text-[13px] leading-[1.5] sm:text-[14px];
+  }
+
+  .text-label-lg {
+    @apply text-[14px] font-semibold sm:text-[15px];
+  }
+
+  .text-label-sm {
+    @apply text-[11px] font-medium uppercase tracking-[0.5px] sm:text-[12px];
+  }
+
+  .section-wrapper {
+    @apply flex min-h-screen flex-col;
+  }
+
+  .section-container {
+    @apply mx-auto w-full max-w-[1234px] flex-1 px-4 py-10 sm:py-12 md:px-6 md:py-14 lg:px-10 lg:py-16;
+  }
+
+  .card-base {
+    @apply rounded-xl border border-[#e5e5e5] bg-white p-4 transition-all duration-200 sm:p-5;
+  }
+
+  .badge-info {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-[#2567ff]/20 bg-[#2567ff]/10 px-3 py-1 text-[12px] font-semibold text-[#2567ff];
+  }
+
+  .btn-secondary {
+    @apply rounded-full border border-[#e5e5e5] bg-[#f5f5f7] px-6 py-2.5 text-[14px] font-semibold text-[#1a1a1a] transition-all hover:border-[#d0d0d0] hover:bg-[#ebebed] sm:py-3 sm:text-[15px];
+  }
+
+  .btn-ghost {
+    @apply rounded-full px-4 py-2 text-[14px] font-medium text-[#4b5058] transition-all hover:bg-[#f5f5f7] hover:text-[#1a1a1a];
+  }
+
+  .feature-pill {
+    @apply inline-flex items-center gap-2 rounded-full bg-[#f5f5f7] px-3.5 py-2 text-[13px] font-medium text-[#4b5058] ring-1 ring-[#e5e5e5] transition-all;
+  }
+
+  .feature-pill-selected {
+    @apply ring-2 ring-[#2567ff];
+  }
+
+  .input-base {
+    @apply w-full rounded-lg border border-[#e5e5e5] bg-white px-3.5 py-2.5 text-[14px] text-[#1a1a1a] transition-all placeholder:text-[#c4c7c7] focus:border-[#2567ff] focus:outline-none focus:ring-2 focus:ring-[#2567ff]/20 sm:text-[15px];
+  }
+
+  .icon-container {
+    @apply flex size-10 items-center justify-center rounded-lg bg-[#f5f5f7] sm:size-11;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--elevated));
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--table-head));
+}
