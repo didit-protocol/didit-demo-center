@@ -59,7 +59,7 @@
 /* didit.me's focus ring (`shadow-ring`) is a 20% blue halo drawn for white
  * surfaces; on the dark canvas it all but disappears. The dark theme draws the
  * same 3px ring in its own blue, strong enough to read (3:1) against the
- * canvas. Only elements that draw a Tailwind shadow on focus pick it up. */
-.kestrel[data-theme="dark"] :is(a, button, input, [tabindex]):focus-visible {
+ * canvas. Only controls that draw a Tailwind shadow pick it up. */
+.kestrel[data-theme="dark"] :is(a, button, input):focus-visible {
   --tw-shadow: 0 0 0 3px rgb(var(--blue) / 0.7);
 }
