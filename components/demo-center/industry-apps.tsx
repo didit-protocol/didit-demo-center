@@ -19,6 +19,15 @@ const INDUSTRY_APPS = [
     blurb:
       "Casino and sportsbook: age estimation at sign-up, licensed markets, monitored deposits, an ID check at 2,000 EUR, bonus abuse and self-exclusion.",
   },
+  // Marketplace demo (DID-7138).
+  {
+    href: "/marketplace",
+    icon: "/icons/industries/marketplaces.svg",
+    industry: "Marketplace",
+    title: "Northmarket",
+    blurb:
+      "Resale marketplace: seller KYB with UBOs and the representatives' ID checks, buyer age checks at 1,000 EUR, monitored orders and payouts, and a second shop caught on a shared device.",
+  },
 ];
 
 export function IndustryApps() {
