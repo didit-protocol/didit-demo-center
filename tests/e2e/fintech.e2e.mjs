@@ -1,13 +1,16 @@
 // End-to-end flows of the fintech demo (/fintech) in a real browser.
 //
-//   npm run build && npm run start &         # or npm run dev
+//   npm run build && npm run start &         # a staging build (.env)
 //   npm run test:e2e                         # BASE_URL=http://localhost:3000
-//   FINTECH_E2E_LIVE=1 npm run test:e2e      # adds the runs against staging
+//   E2E_LIVE=1 npm run test:e2e              # adds the runs against staging
 //
 // The offline tests answer /api/fintech/* with the real handlers over
 // responses recorded from Didit staging (see fintech-harness.mjs). The live
 // tests call Didit staging for real; only the identity decision is set by the
 // test, because nobody can pass KYC from a sandbox with no ID and no camera.
+//
+// CHROMIUM_PATH points Playwright at a system Chromium when its own browser
+// is not installed.
 import test from "node:test";
 import assert from "node:assert/strict";
 import { chromium } from "playwright";
@@ -21,7 +24,7 @@ import {
 } from "./fintech-harness.mjs";
 
 const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
-const LIVE = process.env.FINTECH_E2E_LIVE === "1";
+const LIVE = process.env.E2E_LIVE === "1";
 const DESKTOP = { width: 1440, height: 1000 };
 const PHONE = { width: 390, height: 844 };
 
@@ -241,7 +244,7 @@ test("money moves through transaction monitoring; a big transfer is held", async
   await context.close();
 });
 
-test("ongoing monitoring is previewed with Didit's estimate", async () => {
+test("ongoing monitoring: explained to the customer, estimated for the operator", async () => {
   const { context, page } = await open();
   const jar = await installFintechApi(
     page,
@@ -250,7 +253,15 @@ test("ongoing monitoring is previewed with Didit's estimate", async () => {
 
   jar.account = approvedAccount();
   await page.goto(`${BASE_URL}/fintech`);
+
+  // The bank app explains it; what it costs is not the customer's business.
+  const app = page.getByRole("region", { name: "Alder" });
+
+  await app.getByRole("heading", { name: "Ongoing AML monitoring" }).waitFor();
+  assert.doesNotMatch(await app.innerText(), /\$|USD|Preview/);
+
   await page
+    .getByTestId("fx-operator")
     .getByRole("button", { name: "Preview monitoring for this account" })
     .click();
 
@@ -292,12 +303,114 @@ test("on a phone the panel opens as a bottom sheet", async () => {
   await page.getByRole("button", { name: "Open an account" }).waitFor();
 
   const sheet = page.getByRole("dialog", { name: "How this uses Didit" });
+  const trigger = page.getByRole("button", { name: "How this uses Didit" });
 
   assert.equal(await sheet.count(), 0);
-  await page.getByRole("button", { name: "How this uses Didit" }).click();
+  // One panel in the page at a time, so its ids stay unique.
+  assert.equal(await page.getByTestId("fx-operator").count(), 0);
+  await trigger.click();
   await sheet.getByText("Sign up").first().waitFor();
+  assert.equal(await page.getByTestId("fx-operator").count(), 1);
+
+  // Tab stays inside the sheet; Escape closes it and focus goes back.
+  for (let i = 0; i < 12; i += 1) await page.keyboard.press("Tab");
+  assert.ok(
+    await page.evaluate(() =>
+      Boolean(document.activeElement?.closest('[role="dialog"]')),
+    ),
+  );
   await page.keyboard.press("Escape");
   await sheet.waitFor({ state: "detached" });
+  assert.equal(
+    await page.evaluate(() => document.activeElement?.textContent?.trim()),
+    "How this uses Didit",
+  );
+  await context.close();
+});
+
+/** The focused element's box-shadow, which is where the focus ring is drawn. */
+const focusShadow = (page) =>
+  page.evaluate(() => getComputedStyle(document.activeElement).boxShadow);
+
+test("option groups take one Tab stop and move with the arrow keys", async () => {
+  for (const colorScheme of ["light", "dark"]) {
+    const { context, page } = await open({ colorScheme });
+
+    await installFintechApi(page, recordedDidit());
+    await page.goto(`${BASE_URL}/fintech`);
+
+    // The theme switch: the chosen option is the only one in the Tab order.
+    const theme = page.getByRole("radiogroup", { name: "Colour theme" });
+    const chosen = theme.getByRole("radio", { checked: true });
+
+    await page.waitForFunction(
+      (scheme) =>
+        document.querySelector('[data-testid="fx-demo"]')?.dataset.theme ===
+        scheme,
+      colorScheme,
+    );
+    assert.deepEqual(
+      await theme
+        .getByRole("radio")
+        .evaluateAll((radios) => radios.map((r) => r.tabIndex)),
+      colorScheme === "light" ? [0, -1] : [-1, 0],
+    );
+    await chosen.focus();
+    // Keyboard focus shows a ring on the selected pill in both themes.
+    await page.keyboard.press(colorScheme === "light" ? "ArrowRight" : "ArrowLeft");
+    const next = colorScheme === "light" ? "Dark" : "Light";
+
+    await theme.getByRole("radio", { name: next, checked: true }).waitFor();
+    assert.equal(
+      await page.evaluate(() => document.activeElement?.textContent?.trim()),
+      next,
+    );
+    assert.notEqual(await focusShadow(page), "none");
+    await context.close();
+  }
+});
+
+test("amount presets are a radio group with arrow keys and a focus ring", async () => {
+  const { context, page } = await open();
+  const jar = await installFintechApi(page, recordedDidit({ status: "Approved" }));
+
+  jar.account = approvedAccount();
+  await page.goto(`${BASE_URL}/fintech`);
+  await page.getByRole("button", { name: "Add money" }).click();
+
+  const presets = page.getByRole("radiogroup", { name: "Choose an amount" });
+
+  await presets.getByRole("radio", { name: "€10,000.00", checked: true }).waitFor();
+  await presets.getByRole("radio", { checked: true }).focus();
+  assert.notEqual(await focusShadow(page), "none");
+  await page.keyboard.press("Home");
+  await presets.getByRole("radio", { name: "€1,000.00", checked: true }).waitFor();
+  assert.equal(await page.getByLabel("Other amount").inputValue(), "1000");
+  await page.keyboard.press("ArrowLeft");
+  await presets.getByRole("radio", { name: "€10,000.00", checked: true }).waitFor();
+
+  // A typed amount that is no preset leaves the first one as the Tab stop.
+  await page.getByLabel("Other amount").fill("1234");
+  assert.deepEqual(
+    await presets.getByRole("radio").evaluateAll((r) => r.map((b) => b.tabIndex)),
+    [0, -1, -1],
+  );
+  await context.close();
+});
+
+test("in Arabic the demo reads right to left", async () => {
+  const { context, page } = await open();
+
+  await context.addCookies([
+    { name: "NEXT_LOCALE", value: "ar", url: BASE_URL },
+  ]);
+  await installFintechApi(page, recordedDidit());
+  await page.goto(`${BASE_URL}/fintech`);
+
+  const demo = page.getByTestId("fx-demo");
+
+  assert.equal(await demo.getAttribute("dir"), "rtl");
+  await page.getByRole("button", { name: "افتح حسابًا" }).waitFor();
   await context.close();
 });
 
@@ -305,7 +418,7 @@ test("on a phone the panel opens as a bottom sheet", async () => {
 
 test(
   "live: the real route creates a real session and opens its hosted flow",
-  { skip: !LIVE && "set FINTECH_E2E_LIVE=1 to run against staging" },
+  { skip: !LIVE && "set E2E_LIVE=1 to run against staging" },
   async () => {
     const { context, page } = await open();
 
@@ -334,7 +447,7 @@ test(
 
 test(
   "live: payments post to staging and the review rule holds a big transfer",
-  { skip: !LIVE && "set FINTECH_E2E_LIVE=1 to run against staging" },
+  { skip: !LIVE && "set E2E_LIVE=1 to run against staging" },
   async () => {
     const didit = stagingDidit({ status: "In Progress" });
 
