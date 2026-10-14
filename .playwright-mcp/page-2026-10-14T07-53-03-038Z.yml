@@ -1,0 +1,453 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - region "Announcement" [ref=e5]:
+      - generic [ref=e6]:
+        - generic [ref=e7]:
+          - text: Didit Raises
+          - generic [ref=e8]: $7.5M
+          - text: to Build the Infrastructure for Identity and Fraud
+        - link "Read the announcement" [ref=e9] [cursor=pointer]:
+          - /url: https://didit.me/blog/didit-7-5m-seed-infrastructure-identity-fraud/
+      - button "Dismiss announcement" [ref=e14] [cursor=pointer]
+    - banner [ref=e18]:
+      - generic [ref=e19]:
+        - generic [ref=e20]:
+          - link [ref=e21] [cursor=pointer]:
+            - /url: /
+            - img "Didit" [ref=e23]
+          - navigation [ref=e24]:
+            - button "Solutions" [ref=e26] [cursor=pointer]
+            - button "Developers" [ref=e30] [cursor=pointer]
+            - button "Resources" [ref=e34] [cursor=pointer]
+            - link "Pricing" [ref=e38] [cursor=pointer]:
+              - /url: https://didit.me/pricing/
+            - button "Search" [disabled] [ref=e39]
+        - generic [ref=e43]:
+          - 'button "Change language. Current language: English." [ref=e44] [cursor=pointer]':
+            - generic [ref=e46]: English
+          - link "Sign up" [ref=e47] [cursor=pointer]:
+            - /url: https://business.didit.me?utm_source=navbar
+          - link "Talk to us" [ref=e48] [cursor=pointer]:
+            - /url: https://didit.me/get-a-demo/
+  - main [ref=e49]:
+    - generic [ref=e50]:
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - paragraph [ref=e55]: Didit demo · Marketplace
+            - heading "Northmarket" [level=1] [ref=e59]
+            - paragraph [ref=e60]: Pre-owned design, watches and gear, from verified shops. Sellers are verified as businesses before they get paid, big orders ask the buyer to verify, and every order, payout and sign-up is monitored - live, against Didit staging.
+          - generic [ref=e61]:
+            - button "Switch to dark" [ref=e62] [cursor=pointer]
+            - button "Start over" [disabled] [ref=e65]
+        - navigation "Chapters" [ref=e70]:
+          - list [ref=e71]:
+            - listitem [ref=e72]:
+              - button "1 Seller onboarding" [ref=e73] [cursor=pointer]:
+                - generic [ref=e74]: "1"
+                - generic [ref=e75]: Seller onboarding
+            - listitem [ref=e76]:
+              - button "2 Buyer checkout" [ref=e77] [cursor=pointer]:
+                - generic [ref=e78]: "2"
+                - generic [ref=e79]: Buyer checkout
+            - listitem [ref=e80]:
+              - button "3 Payouts" [ref=e81] [cursor=pointer]:
+                - generic [ref=e82]: "3"
+                - generic [ref=e83]: Payouts
+            - listitem [ref=e84]:
+              - 'button "4 Fraud: a second shop" [ref=e85] [cursor=pointer]':
+                - generic [ref=e86]: "4"
+                - generic [ref=e87]: "Fraud: a second shop"
+            - listitem [ref=e88]:
+              - button "5 Operator view" [ref=e89] [cursor=pointer]:
+                - generic [ref=e90]: "5"
+                - generic [ref=e91]: Operator view
+      - generic [ref=e93]:
+        - region [ref=e94]:
+          - generic [ref=e95]:
+            - paragraph [ref=e96]: Chapter 1 of 5
+            - heading "Seller onboarding" [level=2] [ref=e97]
+        - complementary [ref=e99]:
+          - generic [ref=e101]:
+            - generic [ref=e102]:
+              - paragraph [ref=e103]: How this uses Didit
+              - heading "1. Seller onboarding" [level=2] [ref=e104]
+            - generic [ref=e105]:
+              - paragraph [ref=e106]: Modules
+              - list [ref=e107]:
+                - listitem [ref=e108]: Business verification (KYB)
+                - listitem [ref=e109]: Key people and UBOs
+                - listitem [ref=e110]: KYB documents
+                - listitem [ref=e111]: ID verification for representatives
+                - listitem [ref=e112]: Transaction monitoring
+            - generic [ref=e113]:
+              - paragraph [ref=e114]: Calls, in order
+              - list [ref=e115]:
+                - listitem [ref=e116]:
+                  - generic [ref=e117]: Your server
+                  - paragraph [ref=e119]: POST /v3/transactions/sdk-token/
+                  - paragraph [ref=e120]: Mints a short-lived token for the shop's vendor_data, so the browser can report the sign-up without the API key.
+                  - link "docs.didit.me/transaction-monitoring/sdk-transaction-submission" [ref=e121] [cursor=pointer]:
+                    - /url: https://docs.didit.me/transaction-monitoring/sdk-transaction-submission
+                - listitem [ref=e128]:
+                  - generic [ref=e129]: Browser
+                  - paragraph [ref=e131]: DiditSdk.shared.submitTransaction()
+                  - paragraph [ref=e132]: Sends the seller_signup event with the device fingerprint the SDK attaches.
+                  - link "docs.didit.me/transaction-monitoring/sdk-transaction-submission" [ref=e133] [cursor=pointer]:
+                    - /url: https://docs.didit.me/transaction-monitoring/sdk-transaction-submission
+                - listitem [ref=e140]:
+                  - generic [ref=e141]: Your server
+                  - paragraph [ref=e143]: POST /v3/session/
+                  - paragraph [ref=e144]: Creates the KYB session for the seller's KYB workflow, with the company in expected_details.
+                  - link "docs.didit.me/sessions-api/create-session" [ref=e145] [cursor=pointer]:
+                    - /url: https://docs.didit.me/sessions-api/create-session
+                - listitem [ref=e152]:
+                  - generic [ref=e153]: Browser
+                  - paragraph [ref=e155]: "DiditSdk.shared.startVerification({ url })"
+                  - paragraph [ref=e156]: "Opens the hosted flow: registry search with shareholders and UBOs, key people, documents."
+                  - link "docs.didit.me/integration/web-sdks/javascript-sdk" [ref=e157] [cursor=pointer]:
+                    - /url: https://docs.didit.me/integration/web-sdks/javascript-sdk
+                - listitem [ref=e164]:
+                  - generic [ref=e165]: Didit
+                  - paragraph [ref=e167]: Key people KYC
+                  - paragraph [ref=e168]: Each representative or owner the seller submits gets their own ID check, linked to the KYB.
+                  - link "docs.didit.me/business-verification/key-people" [ref=e169] [cursor=pointer]:
+                    - /url: https://docs.didit.me/business-verification/key-people
+                - listitem [ref=e176]:
+                  - generic [ref=e177]: Your server
+                  - paragraph [ref=e179]: "GET /v3/session/{id}/decision/"
+                  - paragraph [ref=e180]: Reads registry_checks, key_people_checks and document_verifications. Payouts unlock on Approved.
+                  - link "docs.didit.me/business-verification/response-schema" [ref=e181] [cursor=pointer]:
+                    - /url: https://docs.didit.me/business-verification/response-schema
+  - region "Ask an AI to summarise this page" [ref=e188]:
+    - generic [ref=e189]:
+      - generic [ref=e190]: Ask an AI to summarise this page
+      - list [ref=e191]:
+        - listitem [ref=e192]:
+          - link "Open this page in ChatGPT" [ref=e193] [cursor=pointer]:
+            - /url: https://chatgpt.com/?q=Please%20read%20https%3A%2F%2Fdemos.didit.me%2Fmarketplace%20and%20summarise%20this%20page%20for%20me.%20Tell%20me%20what%20Didit%20is%2C%20which%20verification%20demos%20this%20page%20runs%2C%20who%20they%20are%20for%2C%20and%20how%20to%20integrate%20them.%20Cite%20the%20URL%20in%20your%20answer.
+        - listitem [ref=e196]:
+          - link "Open this page in Claude" [ref=e197] [cursor=pointer]:
+            - /url: https://claude.ai/new?q=Please%20read%20https%3A%2F%2Fdemos.didit.me%2Fmarketplace%20and%20summarise%20this%20page%20for%20me.%20Tell%20me%20what%20Didit%20is%2C%20which%20verification%20demos%20this%20page%20runs%2C%20who%20they%20are%20for%2C%20and%20how%20to%20integrate%20them.%20Cite%20the%20URL%20in%20your%20answer.
+        - listitem [ref=e200]:
+          - link "Open this page in Perplexity" [ref=e201] [cursor=pointer]:
+            - /url: https://www.perplexity.ai/?q=Please%20read%20https%3A%2F%2Fdemos.didit.me%2Fmarketplace%20and%20summarise%20this%20page%20for%20me.%20Tell%20me%20what%20Didit%20is%2C%20which%20verification%20demos%20this%20page%20runs%2C%20who%20they%20are%20for%2C%20and%20how%20to%20integrate%20them.%20Cite%20the%20URL%20in%20your%20answer.
+        - listitem [ref=e204]:
+          - link "Open this page in Google AI Mode" [ref=e205] [cursor=pointer]:
+            - /url: https://www.google.com/search?udm=50&q=Please%20read%20https%3A%2F%2Fdemos.didit.me%2Fmarketplace%20and%20summarise%20this%20page%20for%20me.%20Tell%20me%20what%20Didit%20is%2C%20which%20verification%20demos%20this%20page%20runs%2C%20who%20they%20are%20for%2C%20and%20how%20to%20integrate%20them.%20Cite%20the%20URL%20in%20your%20answer.
+        - listitem [ref=e208]:
+          - link "Open this page in Grok" [ref=e209] [cursor=pointer]:
+            - /url: https://grok.com/?q=Please%20read%20https%3A%2F%2Fdemos.didit.me%2Fmarketplace%20and%20summarise%20this%20page%20for%20me.%20Tell%20me%20what%20Didit%20is%2C%20which%20verification%20demos%20this%20page%20runs%2C%20who%20they%20are%20for%2C%20and%20how%20to%20integrate%20them.%20Cite%20the%20URL%20in%20your%20answer.
+  - contentinfo [ref=e213]:
+    - generic [ref=e214]:
+      - generic [ref=e215]:
+        - generic [ref=e216]:
+          - img "Didit" [ref=e218]
+          - generic [ref=e219]:
+            - paragraph [ref=e220]: One API for identity and fraud.
+            - paragraph [ref=e221]: SOC 2 · ISO 27001 · iBeta PAD L1 · GDPR · eIDAS 2.0 · MiCA · AMLD6 · DORA-aligned
+            - paragraph [ref=e222]:
+              - text: Recognised by Spain's Tesoro, Banco de España, and SEPBLAC as safer than in-person verification.
+              - link "Read the report" [ref=e223] [cursor=pointer]:
+                - /url: https://didit.me/security-compliance/#regulator
+            - generic "Backed by Y Combinator, Robinhood Ventures" [ref=e225]:
+              - generic [ref=e226]: Backed by
+              - generic [ref=e227]:
+                - link [ref=e228] [cursor=pointer]:
+                  - /url: https://www.ycombinator.com/companies/didit
+                  - img "Y Combinator" [ref=e229]
+                - link [ref=e230] [cursor=pointer]:
+                  - /url: https://robinhood.com/us/en/stocks/RVII/
+                  - img "Robinhood Ventures" [ref=e231]
+            - paragraph [ref=e232]: San Francisco, USA · Headquarters
+            - link "Email Didit" [ref=e233] [cursor=pointer]:
+              - /url: mailto:hello@didit.me
+              - text: hello@didit.me
+            - link "Didit is rated 4.9 out of 5 on G2" [ref=e237] [cursor=pointer]:
+              - /url: https://www.g2.com/products/didit-identity-verification/reviews
+              - generic [ref=e238]: "4.9"
+              - paragraph [ref=e267]: Infrastructure for identity and fraud
+        - generic [ref=e268]:
+          - generic [ref=e269]: Solutions
+          - list [ref=e270]:
+            - listitem [ref=e271]:
+              - link "Full KYC onboarding" [ref=e272] [cursor=pointer]:
+                - /url: https://didit.me/solutions/full-kyc-onboarding/
+            - listitem [ref=e274]:
+              - link "Age verification" [ref=e275] [cursor=pointer]:
+                - /url: https://didit.me/solutions/age-verification/
+            - listitem [ref=e277]:
+              - link "Crypto on-ramp KYC + KYT" [ref=e278] [cursor=pointer]:
+                - /url: https://didit.me/solutions/crypto-onramp-kyc-kyt/
+            - listitem [ref=e280]:
+              - link "Stop account takeovers" [ref=e281] [cursor=pointer]:
+                - /url: https://didit.me/solutions/account-takeover/
+            - listitem [ref=e283]:
+              - link "Block multi-account abuse" [ref=e284] [cursor=pointer]:
+                - /url: https://didit.me/solutions/multi-account-abuse/
+            - listitem [ref=e286]:
+              - link "Gig worker verification" [ref=e287] [cursor=pointer]:
+                - /url: https://didit.me/solutions/gig-worker-verification/
+            - listitem [ref=e289]:
+              - link "Proof of human" [ref=e290] [cursor=pointer]:
+                - /url: https://didit.me/solutions/proof-of-human/
+            - listitem [ref=e292]:
+              - link "Block bots" [ref=e293] [cursor=pointer]:
+                - /url: https://didit.me/solutions/bot-detection/
+            - listitem [ref=e295]:
+              - link "iGaming responsible gaming" [ref=e296] [cursor=pointer]:
+                - /url: https://didit.me/solutions/igaming-responsible-gaming/
+            - listitem [ref=e298]:
+              - link "MiCA crypto user verification" [ref=e299] [cursor=pointer]:
+                - /url: https://didit.me/solutions/mica-crypto-user-verification/
+            - listitem [ref=e301]:
+              - link "Crypto Travel Rule" [ref=e302] [cursor=pointer]:
+                - /url: https://didit.me/solutions/crypto-travel-rule/
+            - listitem [ref=e304]:
+              - link "UBO verification (6AMLD)" [ref=e305] [cursor=pointer]:
+                - /url: https://didit.me/solutions/ubo-verification-6amld/
+            - listitem [ref=e307]:
+              - link "BNPL underwriting" [ref=e308] [cursor=pointer]:
+                - /url: https://didit.me/solutions/bnpl-underwriting/
+            - listitem [ref=e310]:
+              - link "PSD3 SCA" [ref=e311] [cursor=pointer]:
+                - /url: https://didit.me/solutions/psd3-sca/
+            - listitem [ref=e313]:
+              - link "Marketplace seller KYB" [ref=e314] [cursor=pointer]:
+                - /url: https://didit.me/solutions/marketplace-seller-kyb/
+            - listitem [ref=e316]:
+              - link "Employee onboarding" [ref=e317] [cursor=pointer]:
+                - /url: https://didit.me/solutions/employee-onboarding/
+            - listitem [ref=e319]:
+              - link "NFC ePassport onboarding" [ref=e320] [cursor=pointer]:
+                - /url: https://didit.me/solutions/nfc-epassport-onboarding/
+            - listitem [ref=e322]:
+              - link "Password recovery" [ref=e323] [cursor=pointer]:
+                - /url: https://didit.me/solutions/password-recovery/
+            - listitem [ref=e325]:
+              - link "All use cases" [ref=e326] [cursor=pointer]:
+                - /url: https://didit.me/solutions/
+        - generic [ref=e330]:
+          - generic [ref=e331]: Products
+          - list [ref=e332]:
+            - listitem [ref=e333]:
+              - link "User Verification (KYC)" [ref=e334] [cursor=pointer]:
+                - /url: https://didit.me/products/free-kyc/
+            - listitem [ref=e340]:
+              - link "Business Verification (KYB)" [ref=e341] [cursor=pointer]:
+                - /url: https://didit.me/products/business-verification/
+            - listitem [ref=e344]:
+              - link "Transaction Monitoring" [ref=e345] [cursor=pointer]:
+                - /url: https://didit.me/products/transaction-monitoring/
+            - listitem [ref=e348]:
+              - link "Wallet Screening (KYT)" [ref=e349] [cursor=pointer]:
+                - /url: https://didit.me/products/wallet-screening/
+            - listitem [ref=e352]:
+              - link "AML Screening" [ref=e353] [cursor=pointer]:
+                - /url: https://didit.me/products/aml-screening/
+            - listitem [ref=e356]:
+              - link "ID Verification" [ref=e357] [cursor=pointer]:
+                - /url: https://didit.me/products/id-verification/
+            - listitem [ref=e360]:
+              - link "Liveness" [ref=e361] [cursor=pointer]:
+                - /url: https://didit.me/products/liveness/
+            - listitem [ref=e364]:
+              - link "Face Match 1:1" [ref=e365] [cursor=pointer]:
+                - /url: https://didit.me/products/face-match-1to1/
+            - listitem [ref=e368]:
+              - link "Face Search 1:N" [ref=e369] [cursor=pointer]:
+                - /url: https://didit.me/products/face-search-1ton/
+            - listitem [ref=e372]:
+              - link "Biometric Authentication" [ref=e373] [cursor=pointer]:
+                - /url: https://didit.me/products/biometric-authentication/
+            - listitem [ref=e376]:
+              - link "Age Estimation" [ref=e377] [cursor=pointer]:
+                - /url: https://didit.me/products/age-estimation/
+            - listitem [ref=e380]:
+              - link "NFC Reading" [ref=e381] [cursor=pointer]:
+                - /url: https://didit.me/products/nfc-verification/
+            - listitem [ref=e384]:
+              - link "Database Validation" [ref=e385] [cursor=pointer]:
+                - /url: https://didit.me/products/database-validation/
+            - listitem [ref=e388]:
+              - link "Device & IP Analysis" [ref=e389] [cursor=pointer]:
+                - /url: https://didit.me/products/device-ip-analysis/
+            - listitem [ref=e392]:
+              - link "Email Verification" [ref=e393] [cursor=pointer]:
+                - /url: https://didit.me/products/email-verification/
+            - listitem [ref=e396]:
+              - link "Phone Verification" [ref=e397] [cursor=pointer]:
+                - /url: https://didit.me/products/phone-verification/
+            - listitem [ref=e400]:
+              - link "Workflow Orchestrator" [ref=e401] [cursor=pointer]:
+                - /url: https://didit.me/products/workflow-orchestrator/
+            - listitem [ref=e404]:
+              - link "White Label" [ref=e405] [cursor=pointer]:
+                - /url: https://didit.me/products/white-label/
+            - listitem [ref=e408]:
+              - link "All products" [ref=e409] [cursor=pointer]:
+                - /url: https://didit.me/products/
+      - generic [ref=e413]:
+        - generic [ref=e414]:
+          - generic [ref=e415]: Industries
+          - list [ref=e416]:
+            - listitem [ref=e417]:
+              - link "Fintech" [ref=e418] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-fintech/
+            - listitem [ref=e421]:
+              - link "Crypto / Web3" [ref=e422] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-crypto/
+            - listitem [ref=e425]:
+              - link "Marketplaces" [ref=e426] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-marketplaces/
+            - listitem [ref=e429]:
+              - link "Mobility" [ref=e430] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-mobility/
+            - listitem [ref=e433]:
+              - link "iGaming / Gambling" [ref=e434] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-igaming/
+            - listitem [ref=e437]:
+              - link "Banking" [ref=e438] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-banking/
+            - listitem [ref=e441]:
+              - link "Insurance" [ref=e442] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-insurance/
+            - listitem [ref=e445]:
+              - link "E-commerce" [ref=e446] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-ecommerce/
+            - listitem [ref=e449]:
+              - link "Telecom" [ref=e450] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-telecom/
+            - listitem [ref=e453]:
+              - link "All industries" [ref=e454] [cursor=pointer]:
+                - /url: https://didit.me/industries/
+        - generic [ref=e458]:
+          - generic [ref=e459]: Developers
+          - list [ref=e460]:
+            - listitem [ref=e461]:
+              - link "Documentation" [ref=e462] [cursor=pointer]:
+                - /url: https://docs.didit.me
+            - listitem [ref=e467]:
+              - link "API Reference" [ref=e468] [cursor=pointer]:
+                - /url: https://docs.didit.me/api-reference
+            - listitem [ref=e473]:
+              - link "Quickstart, 5 min" [ref=e474] [cursor=pointer]:
+                - /url: https://docs.didit.me/getting-started/quick-start
+            - listitem [ref=e479]:
+              - link "Integration prompt" [ref=e480] [cursor=pointer]:
+                - /url: https://docs.didit.me/integration/integration-prompt
+            - listitem [ref=e485]:
+              - link "MCP Server" [ref=e486] [cursor=pointer]:
+                - /url: https://docs.didit.me/mcp
+            - listitem [ref=e491]:
+              - link "Agent Skills" [ref=e492] [cursor=pointer]:
+                - /url: https://docs.didit.me/getting-started/agent-skills
+            - listitem [ref=e497]:
+              - link "SDKs" [ref=e498] [cursor=pointer]:
+                - /url: https://docs.didit.me/integration/web-sdks/overview
+            - listitem [ref=e503]:
+              - link "Sandbox (free)" [ref=e504] [cursor=pointer]:
+                - /url: https://business.didit.me
+            - listitem [ref=e509]:
+              - link "Changelog" [ref=e510] [cursor=pointer]:
+                - /url: https://docs.didit.me/changelog
+            - listitem [ref=e515]:
+              - link "Service Status" [ref=e516] [cursor=pointer]:
+                - /url: https://status.didit.me
+            - listitem [ref=e521]:
+              - link "Demo Center" [ref=e522] [cursor=pointer]:
+                - /url: https://demos.didit.me
+        - generic [ref=e527]:
+          - generic [ref=e528]: Pricing & Compare
+          - list [ref=e529]:
+            - listitem [ref=e530]:
+              - link "Pricing" [ref=e531] [cursor=pointer]:
+                - /url: https://didit.me/pricing/
+            - listitem [ref=e533]:
+              - link "vs Sumsub" [ref=e534] [cursor=pointer]:
+                - /url: https://didit.me/switch/sumsub-alternative/
+            - listitem [ref=e536]:
+              - link "vs Veriff" [ref=e537] [cursor=pointer]:
+                - /url: https://didit.me/switch/veriff-alternative/
+            - listitem [ref=e539]:
+              - link "vs Onfido" [ref=e540] [cursor=pointer]:
+                - /url: https://didit.me/switch/onfido-alternative/
+            - listitem [ref=e542]:
+              - link "vs Jumio" [ref=e543] [cursor=pointer]:
+                - /url: https://didit.me/switch/jumio-alternative/
+            - listitem [ref=e545]:
+              - link "vs Persona" [ref=e546] [cursor=pointer]:
+                - /url: https://didit.me/switch/persona-alternative/
+            - listitem [ref=e548]:
+              - link "vs Stripe Identity" [ref=e549] [cursor=pointer]:
+                - /url: https://didit.me/switch/stripe-identity-alternative/
+            - listitem [ref=e551]:
+              - link "Countries supported" [ref=e552] [cursor=pointer]:
+                - /url: https://didit.me/solutions/countries/
+            - listitem [ref=e554]:
+              - link "Supported documents" [ref=e555] [cursor=pointer]:
+                - /url: https://didit.me/supported-documents/
+            - listitem [ref=e557]:
+              - link "All competitor comparisons" [ref=e558] [cursor=pointer]:
+                - /url: https://didit.me/switch/
+        - generic [ref=e562]:
+          - generic [ref=e563]: Company
+          - list [ref=e564]:
+            - listitem [ref=e565]:
+              - link "About us" [ref=e566] [cursor=pointer]:
+                - /url: https://didit.me/about-us/
+            - listitem [ref=e568]:
+              - link "Blog" [ref=e569] [cursor=pointer]:
+                - /url: https://didit.me/blog/
+            - listitem [ref=e571]:
+              - link "Browse all articles" [ref=e572] [cursor=pointer]:
+                - /url: https://didit.me/blog/archive/
+            - listitem [ref=e574]:
+              - link "Success Stories" [ref=e575] [cursor=pointer]:
+                - /url: https://didit.me/success-stories/
+            - listitem [ref=e577]:
+              - link "Security & Compliance" [ref=e578] [cursor=pointer]:
+                - /url: https://didit.me/security-compliance/
+            - listitem [ref=e580]:
+              - link "Brand kit" [ref=e581] [cursor=pointer]:
+                - /url: https://didit.me/brand/
+            - listitem [ref=e583]:
+              - link "Support" [ref=e584] [cursor=pointer]:
+                - /url: https://didit.me/support/
+            - listitem [ref=e586]:
+              - link "Help Center" [ref=e587] [cursor=pointer]:
+                - /url: https://help.didit.me
+            - listitem [ref=e592]:
+              - link "Contact" [ref=e593] [cursor=pointer]:
+                - /url: https://didit.me/get-a-demo/
+            - listitem [ref=e595]:
+              - link "Get a demo" [ref=e596] [cursor=pointer]:
+                - /url: https://didit.me/get-a-demo/
+            - listitem [ref=e598]:
+              - link "Careers" [ref=e599] [cursor=pointer]:
+                - /url: https://didit.jobs.personio.com/
+    - generic [ref=e605]:
+      - generic [ref=e607]:
+        - text: © 2026 Didit ·
+        - link "Privacy" [ref=e608] [cursor=pointer]:
+          - /url: https://didit.me/terms/privacy-policy/
+        - text: ·
+        - link "Cookies" [ref=e609] [cursor=pointer]:
+          - /url: https://didit.me/terms/cookies/
+        - text: ·
+        - link "Terms for Business" [ref=e610] [cursor=pointer]:
+          - /url: https://didit.me/terms/business/
+        - text: ·
+        - link "Contact" [ref=e611] [cursor=pointer]:
+          - /url: https://didit.me/get-a-demo/
+      - generic [ref=e613]:
+        - link "Didit on LinkedIn" [ref=e614] [cursor=pointer]:
+          - /url: https://www.linkedin.com/company/91001155
+        - link "Didit on X (Twitter)" [ref=e619] [cursor=pointer]:
+          - /url: https://x.com/getdidit
+        - link "Didit on YouTube" [ref=e622] [cursor=pointer]:
+          - /url: https://www.youtube.com/@getdidit
+        - link "Didit on GitHub" [ref=e626] [cursor=pointer]:
+          - /url: https://github.com/didit-protocol
+        - 'button "Change language. Current language: English." [ref=e630] [cursor=pointer]':
+          - generic [ref=e632]: English
