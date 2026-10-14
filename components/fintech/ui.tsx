@@ -23,6 +23,65 @@ export function toneClasses(tone: Tone) {
   return TONE[tone];
 }
 
+/** The ring every custom control shows on keyboard focus, as `.btn-base` does. */
+export const focusRing = "focus-visible:shadow-ring focus-visible:outline-none";
+
+const ARROW_STEP: Record<string, number> = {
+  ArrowRight: 1,
+  ArrowDown: 1,
+  ArrowLeft: -1,
+  ArrowUp: -1,
+};
+
+/**
+ * Keyboard behaviour of a single-choice group (`role="radiogroup"`), as the
+ * WAI-ARIA radio group pattern describes it: one Tab stop, on the chosen
+ * option (the first one when none is chosen), and the arrow keys, Home and
+ * End move the choice and the focus together. On a right-to-left page the
+ * left and right arrows swap.
+ */
+export function useRadioGroup<T>(
+  options: readonly T[],
+  value: T | null,
+  onChange: (value: T) => void,
+) {
+  const refs = React.useRef<(HTMLButtonElement | null)[]>([]);
+  const selected = value === null ? -1 : options.indexOf(value);
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    const current = refs.current.indexOf(event.currentTarget);
+    let next: number | null = null;
+
+    if (event.key in ARROW_STEP) {
+      const rtl =
+        getComputedStyle(event.currentTarget).direction === "rtl" &&
+        (event.key === "ArrowLeft" || event.key === "ArrowRight");
+      const step = ARROW_STEP[event.key] * (rtl ? -1 : 1);
+
+      next = (current + step + options.length) % options.length;
+    } else if (event.key === "Home") {
+      next = 0;
+    } else if (event.key === "End") {
+      next = options.length - 1;
+    }
+    if (next === null) return;
+
+    event.preventDefault();
+    onChange(options[next]);
+    refs.current[next]?.focus();
+  };
+
+  return (index: number) => ({
+    ref: (element: HTMLButtonElement | null) => {
+      refs.current[index] = element;
+    },
+    role: "radio" as const,
+    "aria-checked": index === selected,
+    tabIndex: index === (selected >= 0 ? selected : 0) ? 0 : -1,
+    onKeyDown,
+  });
+}
+
 /** Euros in the visitor's language. */
 export function useMoney() {
   const locale = useLocale();
