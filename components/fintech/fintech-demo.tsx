@@ -12,6 +12,7 @@ import { Container } from "@website/components/ui/container";
 import {
   HomeScreen,
   MonitoringCard,
+  MonitoringPreview,
   PayScreen,
   PaymentResultScreen,
 } from "./account-screens";
@@ -33,7 +34,7 @@ import {
   WelcomeScreen,
   outcomeKind,
 } from "./onboarding-screens";
-import { Notice, Spinner } from "./ui";
+import { Notice, Spinner, focusRing } from "./ui";
 
 import {
   MAX_PAYMENTS,
@@ -42,6 +43,7 @@ import {
   type PaymentKind,
 } from "@/lib/fintech/model";
 import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
 
 type SdkModule = typeof import("@didit-protocol/sdk-web").DiditSdk;
 
@@ -87,6 +89,23 @@ function usePoll(active: boolean, ms: number, task: () => Promise<void>) {
   }, [active, ms]);
 }
 
+/** Below Tailwind's `sm` breakpoint the panel moves into a sheet. */
+function useIsPhone() {
+  const [phone, setPhone] = React.useState(false);
+
+  React.useEffect(() => {
+    const query = window.matchMedia("(max-width: 639.98px)");
+    const sync = () => setPhone(query.matches);
+
+    sync();
+    query.addEventListener("change", sync);
+
+    return () => query.removeEventListener("change", sync);
+  }, []);
+
+  return phone;
+}
+
 /** Which screen an account in this onboarding state lands on. */
 function screenFor(verification: VerificationView | null): Screen {
   if (!verification) return "verify";
@@ -123,6 +142,7 @@ export function FintechDemo({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [theme, setTheme] = useDemoTheme();
+  const isPhone = useIsPhone();
   const sdkRef = React.useRef<SdkModule | null>(null);
 
   const [screen, setScreen] = React.useState<Screen>(
@@ -149,6 +169,7 @@ export function FintechDemo({
   const [checkingSince, setCheckingSince] = React.useState(0);
   const [slow, setSlow] = React.useState(false);
   const [monitoringActive, setMonitoringActive] = React.useState(false);
+  const [sheetOpen, setSheetOpen] = React.useState(false);
 
   // ── Loading the visitor's account ─────────────────────────────────
   const load = React.useCallback(async () => {
@@ -386,12 +407,21 @@ export function FintechDemo({
     }
   })();
 
+  const approved = verification?.status === "approved";
+
+  // Rendered in one place at a time: beside the bank from the `sm` size up,
+  // in the sheet below it.
   const panel = (
     <DiditPanel
       current={step}
       operator={
         <OperatorView
           consoleHome={`${siteConfig.links.console}/console`}
+          monitoring={
+            approved ? (
+              <MonitoringPreview onPreview={() => setMonitoringActive(true)} />
+            ) : null
+          }
           payments={payments}
           verification={verification}
         />
@@ -510,9 +540,7 @@ export function FintechDemo({
             failure={paymentsError}
             limit={MAX_PAYMENTS}
             loading={paymentsLoading}
-            monitoring={
-              <MonitoringCard onActivate={() => setMonitoringActive(true)} />
-            }
+            monitoring={<MonitoringCard />}
             name={account?.name ?? ""}
             payments={payments}
             onAdd={() => {
@@ -537,17 +565,20 @@ export function FintechDemo({
 
   return (
     <section
-      className="fintech-theme border-b border-line bg-canvas text-ink"
+      className="fintech-theme border-b border-line"
       data-testid="fx-demo"
       data-theme={theme}
       dir={locale === "ar" ? "rtl" : undefined}
     >
       <Container className="pb-24 pt-6 sm:pb-16 lg:pt-8" size="xl">
         <Link
-          className="inline-flex items-center gap-1.5 text-[13px] font-medium text-muted hover:text-ink"
+          className={cn(
+            "inline-flex items-center gap-1.5 rounded-2xs text-[13px] font-medium text-muted hover:text-ink",
+            focusRing,
+          )}
           href="/"
         >
-          <ArrowLeft aria-hidden className="size-4" />
+          <ArrowLeft aria-hidden className="size-4 rtl:-scale-x-100" />
           {t("page.allDemos")}
         </Link>
 
@@ -588,12 +619,16 @@ export function FintechDemo({
               {renderScreen()}
             </BankFrame>
           </div>
-          <div className="hidden sm:block lg:sticky lg:top-[104px]">
-            {panel}
-          </div>
+          {isPhone ? null : (
+            <div className="hidden sm:block lg:sticky lg:top-[calc(var(--site-header-bottom,104px)+16px)]">
+              {panel}
+            </div>
+          )}
         </div>
       </Container>
-      <PanelSheet>{panel}</PanelSheet>
+      <PanelSheet open={isPhone && sheetOpen} onOpenChange={setSheetOpen}>
+        {isPhone ? panel : null}
+      </PanelSheet>
     </section>
   );
 }

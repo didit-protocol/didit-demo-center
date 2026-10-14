@@ -87,7 +87,7 @@ export function WelcomeScreen({ onStart }: { onStart: () => void }) {
           onClick={onStart}
         >
           {t("welcome.cta")}
-          <ArrowRight aria-hidden className="size-5" />
+          <ArrowRight aria-hidden className="size-5 rtl:-scale-x-100" />
         </button>
         <p className="mt-3 text-center text-xs leading-[16px] text-muted">
           {t("welcome.note")}
@@ -483,7 +483,7 @@ export function OutcomeScreen({
             onClick={onContinue}
           >
             {t("outcome.approved.cta")}
-            <ArrowRight aria-hidden className="size-5" />
+            <ArrowRight aria-hidden className="size-5 rtl:-scale-x-100" />
           </button>
         ) : null}
         {kind === "declined" || kind === "expired" ? (

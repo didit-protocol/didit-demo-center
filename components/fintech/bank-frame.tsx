@@ -4,6 +4,8 @@ import * as React from "react";
 import { useTranslations } from "next-intl";
 import { Moon, Sun } from "lucide-react";
 
+import { focusRing, useRadioGroup } from "./ui";
+
 import { cn } from "@/lib/utils";
 
 /** Alder's mark: a fictional brand, drawn here so it ships no asset. */
@@ -23,7 +25,7 @@ export function BankMark({
         width="32"
       />
       <path
-        d="M9 23.5V8.5m0 8.2 9.8-8.2M13.4 13.2l8.6 10.3"
+        d="M9.5 23.5 16 8.5l6.5 15M12.1 17.6h7.8"
         stroke="white"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -131,6 +133,11 @@ export function ThemeToggle({
     { value: "light", icon: Sun },
     { value: "dark", icon: Moon },
   ] as const;
+  const radio = useRadioGroup(
+    options.map((option) => option.value),
+    theme,
+    onChange,
+  );
 
   return (
     <div
@@ -138,17 +145,17 @@ export function ThemeToggle({
       className="inline-flex h-9 items-center gap-0.5 rounded-pill border border-line bg-surface p-0.5"
       role="radiogroup"
     >
-      {options.map(({ value, icon: Icon }) => (
+      {options.map(({ value, icon: Icon }, index) => (
         <button
           key={value}
-          aria-checked={theme === value}
+          {...radio(index)}
           className={cn(
             "inline-flex h-8 items-center gap-1.5 rounded-pill px-3 text-[13px] font-medium transition-colors duration-fast",
+            focusRing,
             theme === value
               ? "bg-canvas text-ink shadow-sm"
               : "text-muted hover:text-ink",
           )}
-          role="radio"
           type="button"
           onClick={() => onChange(value)}
         >
