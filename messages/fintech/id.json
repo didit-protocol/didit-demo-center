@@ -1,7 +1,7 @@
 {
   "page": {
     "eyebrow": "Demo industri · Fintech",
-    "title": "Kestrel, neobank yang dibangun di atas Didit",
+    "title": "Alder, neobank yang dibangun di atas Didit",
     "lede": "Buka rekening, verifikasi identitas Anda, dan pindahkan uang. Setiap langkah memakai API Didit yang sebenarnya: KYC dan AML saat mendaftar, pemantauan transaksi di setiap pembayaran, lalu penyaringan AML berkelanjutan.",
     "allDemos": "Semua demo",
     "staging": "Aktif di staging Didit",
@@ -18,7 +18,7 @@
     }
   },
   "bank": {
-    "name": "Kestrel",
+    "name": "Alder",
     "fictional": "Bank fiktif untuk keperluan demo"
   },
   "common": {
@@ -50,7 +50,7 @@
     "emailPlaceholder": "anda@contoh.com",
     "country": "Negara tempat tinggal",
     "countryPlaceholder": "Pilih negara",
-    "consent": "Dengan melanjutkan, Anda setuju Kestrel membagikan data Anda kepada Didit untuk memverifikasi identitas Anda.",
+    "consent": "Dengan melanjutkan, Anda setuju Alder membagikan data Anda kepada Didit untuk memverifikasi identitas Anda.",
     "submit": "Lanjutkan",
     "submitting": "Membuka rekening Anda…",
     "errors": {
@@ -96,7 +96,7 @@
   "outcome": {
     "approved": {
       "title": "Rekening Anda sudah dibuka",
-      "body": "Selamat datang di Kestrel, {name}. Rekening Anda siap: tambahkan uang dan mulai gunakan.",
+      "body": "Selamat datang di Alder, {name}. Rekening Anda siap: tambahkan uang dan mulai gunakan.",
       "cta": "Ke rekening saya"
     },
     "review": {

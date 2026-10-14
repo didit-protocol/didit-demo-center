@@ -1,7 +1,7 @@
 {
   "page": {
     "eyebrow": "산업별 데모 · 핀테크",
-    "title": "Kestrel, Didit으로 만든 네오뱅크",
+    "title": "Alder, Didit으로 만든 네오뱅크",
     "lede": "계좌를 열고, 신원을 인증하고, 돈을 옮겨 보세요. 모든 단계가 Didit의 실제 API로 동작합니다. 가입 시 KYC와 AML, 모든 결제의 거래 모니터링, 이후 지속적인 AML 스크리닝까지.",
     "allDemos": "모든 데모",
     "staging": "Didit 스테이징에서 실행 중",
@@ -18,7 +18,7 @@
     }
   },
   "bank": {
-    "name": "Kestrel",
+    "name": "Alder",
     "fictional": "데모용 가상 은행"
   },
   "common": {
@@ -50,7 +50,7 @@
     "emailPlaceholder": "you@example.com",
     "country": "거주 국가",
     "countryPlaceholder": "국가 선택",
-    "consent": "계속하면 Kestrel이 신원 인증을 위해 회원님의 정보를 Didit과 공유하는 데 동의하게 됩니다.",
+    "consent": "계속하면 Alder이 신원 인증을 위해 회원님의 정보를 Didit과 공유하는 데 동의하게 됩니다.",
     "submit": "계속",
     "submitting": "계좌를 개설하는 중…",
     "errors": {
@@ -96,7 +96,7 @@
   "outcome": {
     "approved": {
       "title": "계좌가 개설되었습니다",
-      "body": "Kestrel에 오신 것을 환영합니다, {name}님. 계좌가 준비되었습니다. 돈을 입금하고 사용을 시작하세요.",
+      "body": "Alder에 오신 것을 환영합니다, {name}님. 계좌가 준비되었습니다. 돈을 입금하고 사용을 시작하세요.",
       "cta": "내 계좌로 이동"
     },
     "review": {

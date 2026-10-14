@@ -1,7 +1,7 @@
 {
   "page": {
     "eyebrow": "Demo por setor · Fintech",
-    "title": "Kestrel, um banco digital construído com Didit",
+    "title": "Alder, um banco digital construído com Didit",
     "lede": "Abra uma conta, verifique sua identidade e movimente dinheiro. Cada etapa usa a API real da Didit: KYC e AML no cadastro, monitoramento de transações em cada pagamento e triagem AML contínua depois.",
     "allDemos": "Todas as demos",
     "staging": "Ao vivo no staging da Didit",
@@ -18,7 +18,7 @@
     }
   },
   "bank": {
-    "name": "Kestrel",
+    "name": "Alder",
     "fictional": "Banco fictício para fins de demonstração"
   },
   "common": {
@@ -50,7 +50,7 @@
     "emailPlaceholder": "voce@exemplo.com",
     "country": "País de residência",
     "countryPlaceholder": "Escolha um país",
-    "consent": "Ao continuar, você concorda que o Kestrel compartilhe seus dados com a Didit para verificar sua identidade.",
+    "consent": "Ao continuar, você concorda que o Alder compartilhe seus dados com a Didit para verificar sua identidade.",
     "submit": "Continuar",
     "submitting": "Abrindo sua conta…",
     "errors": {
@@ -96,7 +96,7 @@
   "outcome": {
     "approved": {
       "title": "Sua conta está aberta",
-      "body": "Boas-vindas ao Kestrel, {name}. Sua conta está pronta: adicione dinheiro e comece a usar.",
+      "body": "Boas-vindas ao Alder, {name}. Sua conta está pronta: adicione dinheiro e comece a usar.",
       "cta": "Ir para minha conta"
     },
     "review": {

@@ -1,7 +1,7 @@
 {
   "page": {
     "eyebrow": "行业演示 · 金融科技",
-    "title": "Kestrel：基于 Didit 构建的数字银行",
+    "title": "Alder：基于 Didit 构建的数字银行",
     "lede": "开户、验证身份、转账汇款。每一步都调用 Didit 的真实 API：注册时进行 KYC 和反洗钱筛查，每笔付款经过交易监控，之后持续进行反洗钱筛查。",
     "allDemos": "全部演示",
     "staging": "运行于 Didit 预发布环境",
@@ -18,7 +18,7 @@
     }
   },
   "bank": {
-    "name": "Kestrel",
+    "name": "Alder",
     "fictional": "仅用于演示的虚构银行"
   },
   "common": {
@@ -50,7 +50,7 @@
     "emailPlaceholder": "you@example.com",
     "country": "居住国家/地区",
     "countryPlaceholder": "选择国家/地区",
-    "consent": "继续即表示您同意 Kestrel 与 Didit 共享您的信息以验证您的身份。",
+    "consent": "继续即表示您同意 Alder 与 Didit 共享您的信息以验证您的身份。",
     "submit": "继续",
     "submitting": "正在开立账户…",
     "errors": {
@@ -96,7 +96,7 @@
   "outcome": {
     "approved": {
       "title": "您的账户已开立",
-      "body": "欢迎加入 Kestrel，{name}。您的账户已就绪：存入资金即可开始使用。",
+      "body": "欢迎加入 Alder，{name}。您的账户已就绪：存入资金即可开始使用。",
       "cta": "前往我的账户"
     },
     "review": {

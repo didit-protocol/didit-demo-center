@@ -57,7 +57,7 @@ for (const locale of LOCALES.filter((l) => l !== "en")) {
       if (text === english && !sameEverywhere.has(key)) identical += 1;
     }
 
-    // A few words are legitimately the same (e.g. "Fintech", "Kestrel"); a
+    // A few words are legitimately the same (e.g. "Fintech", "Alder"); a
     // file that is mostly English was not translated.
     assert.ok(identical <= 3, `${locale}: ${identical} strings left in English`);
   });

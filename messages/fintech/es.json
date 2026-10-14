@@ -1,7 +1,7 @@
 {
   "page": {
     "eyebrow": "Demo por sector · Fintech",
-    "title": "Kestrel, un neobanco construido sobre Didit",
+    "title": "Alder, un neobanco construido sobre Didit",
     "lede": "Abre una cuenta, verifica tu identidad y mueve dinero. Cada paso usa la API real de Didit: KYC y AML en el alta, monitorización de transacciones en cada pago y cribado AML continuo después.",
     "allDemos": "Todas las demos",
     "staging": "En vivo en el staging de Didit",
@@ -18,7 +18,7 @@
     }
   },
   "bank": {
-    "name": "Kestrel",
+    "name": "Alder",
     "fictional": "Banco ficticio con fines de demostración"
   },
   "common": {
@@ -50,7 +50,7 @@
     "emailPlaceholder": "tu@ejemplo.com",
     "country": "País de residencia",
     "countryPlaceholder": "Elige un país",
-    "consent": "Al continuar aceptas que Kestrel comparta tus datos con Didit para verificar tu identidad.",
+    "consent": "Al continuar aceptas que Alder comparta tus datos con Didit para verificar tu identidad.",
     "submit": "Continuar",
     "submitting": "Abriendo tu cuenta…",
     "errors": {
@@ -96,7 +96,7 @@
   "outcome": {
     "approved": {
       "title": "Tu cuenta está abierta",
-      "body": "Te damos la bienvenida a Kestrel, {name}. Tu cuenta está lista: añade dinero y empieza a usarla.",
+      "body": "Te damos la bienvenida a Alder, {name}. Tu cuenta está lista: añade dinero y empieza a usarla.",
       "cta": "Ir a mi cuenta"
     },
     "review": {

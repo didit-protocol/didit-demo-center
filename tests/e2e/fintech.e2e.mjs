@@ -125,7 +125,7 @@ test("finishing the hosted flow checks the decision and opens the account", asyn
 
   didit.decision.status = "Approved";
   await page.getByRole("heading", { name: "Your account is open" }).waitFor();
-  await page.getByText("Welcome to Kestrel, Lena.").waitFor();
+  await page.getByText("Welcome to Alder, Lena.").waitFor();
 
   // The operator panel shows the session as the console does.
   const operator = page.getByTestId("fx-operator");
@@ -160,7 +160,7 @@ test("a review never tells the customer why, and ends on its own", async () => {
   await page.goto(`${BASE_URL}/fintech`);
   await page.getByRole("heading", { name: "We are reviewing your application" }).waitFor();
 
-  const app = page.getByRole("region", { name: "Kestrel" });
+  const app = page.getByRole("region", { name: "Alder" });
 
   assert.doesNotMatch(await app.innerText(), /AML|sanction|PEP|match/i);
   // The operator side does show which check is under review.

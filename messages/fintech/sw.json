@@ -1,7 +1,7 @@
 {
   "page": {
     "eyebrow": "Onyesho la sekta · Teknolojia ya fedha",
-    "title": "Kestrel, benki ya kidijitali iliyojengwa juu ya Didit",
+    "title": "Alder, benki ya kidijitali iliyojengwa juu ya Didit",
     "lede": "Fungua akaunti, thibitisha utambulisho wako na hamisha pesa. Kila hatua inatumia API halisi ya Didit: KYC na AML wakati wa kujisajili, ufuatiliaji wa miamala kwa kila malipo, kisha uchunguzi wa AML unaoendelea.",
     "allDemos": "Maonyesho yote",
     "staging": "Moja kwa moja kwenye staging ya Didit",
@@ -18,7 +18,7 @@
     }
   },
   "bank": {
-    "name": "Kestrel",
+    "name": "Alder",
     "fictional": "Benki ya kubuni kwa ajili ya maonyesho"
   },
   "common": {
@@ -50,7 +50,7 @@
     "emailPlaceholder": "wewe@mfano.com",
     "country": "Nchi unayoishi",
     "countryPlaceholder": "Chagua nchi",
-    "consent": "Kwa kuendelea unakubali kwamba Kestrel itashiriki taarifa zako na Didit ili kuthibitisha utambulisho wako.",
+    "consent": "Kwa kuendelea unakubali kwamba Alder itashiriki taarifa zako na Didit ili kuthibitisha utambulisho wako.",
     "submit": "Endelea",
     "submitting": "Inafungua akaunti yako…",
     "errors": {
@@ -96,7 +96,7 @@
   "outcome": {
     "approved": {
       "title": "Akaunti yako imefunguliwa",
-      "body": "Karibu Kestrel, {name}. Akaunti yako iko tayari: weka pesa na uanze kuitumia.",
+      "body": "Karibu Alder, {name}. Akaunti yako iko tayari: weka pesa na uanze kuitumia.",
       "cta": "Nenda kwenye akaunti yangu"
     },
     "review": {

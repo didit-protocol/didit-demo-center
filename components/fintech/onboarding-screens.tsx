@@ -18,7 +18,7 @@ import {
   UserCheck,
 } from "lucide-react";
 
-import { KestrelMark } from "./bank-frame";
+import { BankMark } from "./bank-frame";
 import {
   Chip,
   Field,
@@ -57,7 +57,7 @@ export function WelcomeScreen({ onStart }: { onStart: () => void }) {
         aria-hidden
         className="fintech-card-art relative mb-8 aspect-[1.586] w-full max-w-[300px] self-center overflow-hidden rounded-md p-5 text-white shadow-md"
       >
-        <KestrelMark className="size-8" tone="inverted" />
+        <BankMark className="size-8" tone="inverted" />
         <span className="absolute right-5 top-6 h-6 w-8 rounded-[5px] bg-white/25" />
         <p className="absolute bottom-5 left-5 m-0 text-lg font-display tracking-display">
           {t("bank.name")}

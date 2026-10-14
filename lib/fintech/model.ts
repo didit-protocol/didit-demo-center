@@ -6,7 +6,7 @@
  * hand it the real Didit payloads; it hands back the small views the app
  * renders. Nothing here invents a status: every value is read off the API.
  *
- * The demo runs one fictional bank ("Kestrel") against the demo organization
+ * The demo runs one fictional bank ("Alder") against the demo organization
  * on Didit STAGING:
  *
  * - onboarding is the published staging workflow "2. KYC ACTIVE LIVENESS"

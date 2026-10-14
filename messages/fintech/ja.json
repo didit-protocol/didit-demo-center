@@ -1,7 +1,7 @@
 {
   "page": {
     "eyebrow": "業界別デモ · フィンテック",
-    "title": "Kestrel：Didit で構築したネオバンク",
+    "title": "Alder：Didit で構築したネオバンク",
     "lede": "口座を開設し、本人確認をして、お金を動かしましょう。各ステップは Didit の実際の API で動きます。登録時の KYC と AML、すべての支払いでの取引モニタリング、その後の継続的な AML スクリーニングです。",
     "allDemos": "すべてのデモ",
     "staging": "Didit ステージングで稼働中",
@@ -18,7 +18,7 @@
     }
   },
   "bank": {
-    "name": "Kestrel",
+    "name": "Alder",
     "fictional": "デモ用の架空の銀行です"
   },
   "common": {
@@ -50,7 +50,7 @@
     "emailPlaceholder": "you@example.com",
     "country": "居住国",
     "countryPlaceholder": "国を選択",
-    "consent": "続行すると、Kestrel が本人確認のためにあなたの情報を Didit と共有することに同意したものとみなされます。",
+    "consent": "続行すると、Alder が本人確認のためにあなたの情報を Didit と共有することに同意したものとみなされます。",
     "submit": "続ける",
     "submitting": "口座を開設しています…",
     "errors": {
@@ -96,7 +96,7 @@
   "outcome": {
     "approved": {
       "title": "口座が開設されました",
-      "body": "Kestrel へようこそ、{name} さん。口座の準備ができました。入金してご利用を始めましょう。",
+      "body": "Alder へようこそ、{name} さん。口座の準備ができました。入金してご利用を始めましょう。",
       "cta": "口座へ移動"
     },
     "review": {

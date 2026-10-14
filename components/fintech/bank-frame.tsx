@@ -6,8 +6,8 @@ import { Moon, Sun } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-/** Kestrel's mark: a fictional brand, drawn here so it ships no asset. */
-export function KestrelMark({
+/** Alder's mark: a fictional brand, drawn here so it ships no asset. */
+export function BankMark({
   className,
   tone = "brand",
 }: {
@@ -63,7 +63,7 @@ export function BankFrame({
       role="region"
     >
       <div className="flex flex-none items-center gap-2.5 border-b border-line px-5 py-3.5">
-        <KestrelMark className="size-7" />
+        <BankMark className="size-7" />
         <div className="min-w-0 flex-1">
           <p className="m-0 text-[15px] font-semibold leading-[18px] tracking-tight text-ink">
             {t("bank.name")}

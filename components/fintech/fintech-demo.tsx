@@ -105,7 +105,7 @@ function screenFor(verification: VerificationView | null): Screen {
 }
 
 /**
- * Kestrel, the fintech demo: a neobank whose every step is a real Didit call
+ * Alder, the fintech demo: a neobank whose every step is a real Didit call
  * on staging. The bank app is on the left, and on the right (a bottom sheet on
  * phones) the "How this uses Didit" panel follows the visitor through the
  * journey and shows the operator side of the same records.
