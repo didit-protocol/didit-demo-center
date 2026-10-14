@@ -172,10 +172,12 @@ test("a review never tells the customer why, and ends on its own", async () => {
   const app = page.getByRole("region", { name: "Alder" });
 
   assert.doesNotMatch(await app.innerText(), /AML|sanction|PEP|match/i);
-  // The operator side does show which check is under review.
+  // The operator side does show which check is under review, in words.
   await page
     .getByTestId("fx-operator")
-    .locator('[title="Under review"]')
+    .getByRole("listitem")
+    .filter({ hasText: "Sanctions and PEP screening" })
+    .getByText("Under review")
     .waitFor();
 
   // An analyst approves in the console; the next read opens the account.
@@ -332,6 +334,72 @@ test("on a phone the panel opens as a bottom sheet", async () => {
     "How this uses Didit",
   );
   await context.close();
+});
+
+test("a step opens and closes again; webhooks are marked as production", async () => {
+  const { context, page } = await open();
+
+  await installFintechApi(page, recordedDidit());
+  await page.goto(`${BASE_URL}/fintech`);
+  await page.getByRole("button", { name: "Open an account" }).waitFor();
+
+  const step = page.getByRole("button", { name: "Decision" });
+
+  assert.equal(await step.getAttribute("aria-expanded"), "false");
+  assert.equal(await step.getAttribute("aria-controls"), null);
+  await step.click();
+  assert.equal(await step.getAttribute("aria-expanded"), "true");
+
+  const region = page.locator(`[id="${await step.getAttribute("aria-controls")}"]`);
+
+  await region.getByText("A production app adds").waitFor();
+  assert.match(await region.innerText(), /status\.updated/);
+  await step.click();
+  assert.equal(await step.getAttribute("aria-expanded"), "false");
+  assert.equal(await region.count(), 0);
+  await context.close();
+});
+
+test("on a phone nothing covers the bank's own buttons", async () => {
+  for (const colorScheme of ["light", "dark"]) {
+    const { context, page } = await open({ viewport: PHONE, colorScheme });
+    const jar = await installFintechApi(
+      page,
+      recordedDidit({ status: "Approved" }),
+    );
+
+    jar.account = approvedAccount();
+    await page.goto(`${BASE_URL}/fintech`);
+    await page.getByText("No payments yet").waitFor();
+
+    // The panel's button sits with the demo's controls, above the bank.
+    const trigger = await page
+      .getByRole("button", { name: "How this uses Didit" })
+      .boundingBox();
+    const bank = await page.getByRole("region", { name: "Alder" }).boundingBox();
+
+    assert.ok(trigger.y + trigger.height <= bank.y);
+
+    // Whatever is drawn at the centre of each action is that action.
+    for (const name of ["Add money", "Send money"]) {
+      const button = page.getByRole("button", { name, exact: true });
+
+      await button.scrollIntoViewIfNeeded();
+      assert.ok(
+        await button.evaluate((el) => {
+          const box = el.getBoundingClientRect();
+          const hit = document.elementFromPoint(
+            box.x + box.width / 2,
+            box.y + box.height / 2,
+          );
+
+          return el.contains(hit);
+        }),
+        `${name} is covered (${colorScheme})`,
+      );
+    }
+    await context.close();
+  }
 });
 
 /** The focused element's box-shadow, which is where the focus ring is drawn. */
