@@ -6,8 +6,9 @@
  * clicks after watching a demo run. This walks the `docsPath` on every demo,
  * every `request.docsPath`, the shared DOC_PATHS map and the "How this uses
  * Didit" panels of /igaming (lib/igaming/steps.ts), /fintech
- * (lib/fintech/steps.ts) and /marketplace (lib/marketplace/guide.ts), and
- * fetches each URL on docs.didit.me.
+ * (lib/fintech/steps.ts), /marketplace (lib/marketplace/guide.ts) and
+ * /crypto-exchange (lib/crypto-exchange/panel.ts), and fetches each URL on
+ * docs.didit.me.
  *
  * Usage:
  *   npm run check:docs-links
@@ -26,18 +27,20 @@ const ORIGIN = "https://docs.didit.me";
 
 /**
  * The catalogue is TypeScript, so rather than compile it we read the paths out
- * of the source. Both files declare them as plain string literals on a
- * `docsPath:` key (lib/demos.ts) or inside the DOC_PATHS object (lib/docs.ts),
+ * of the source. They are plain string literals on a `docsPath:` key
+ * (lib/demos.ts and the panels) or inside the DOC_PATHS object (lib/docs.ts),
  * which keeps this check dependency-free.
  */
 function collectPaths() {
   const found = new Set();
 
+  // The catalogue and the industry apps' "How this uses Didit" panels.
   for (const file of [
     "lib/demos.ts",
     "lib/igaming/steps.ts",
     "lib/fintech/steps.ts",
     "lib/marketplace/guide.ts",
+    "lib/crypto-exchange/panel.ts",
   ]) {
     const source = fs.readFileSync(path.join(repoRoot, file), "utf8");
 

@@ -36,6 +36,14 @@ const INDUSTRY_APPS = [
     blurb:
       "Resale marketplace: seller KYB with UBOs and the representatives' ID checks, buyer age checks at 1,000 EUR, monitored orders and payouts, and a second shop caught on a shared device.",
   },
+  {
+    href: "/crypto-exchange",
+    icon: "/icons/industries/crypto.svg",
+    industry: "Crypto exchange",
+    title: "Kestrel",
+    blurb:
+      "KYC and AML at sign-up, wallet screening on every deposit and withdrawal, the Travel Rule and a selfie step-up, with the compliance view of each transfer.",
+  },
 ];
 
 export function IndustryApps() {
