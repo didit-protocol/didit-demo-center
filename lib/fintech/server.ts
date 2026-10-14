@@ -252,11 +252,11 @@ async function fetchPayments(
       didit(env, "GET", `/v3/transactions/${encodeURIComponent(id)}/`),
     ),
   );
-  const console = await links(env);
+  const urls = await links(env);
 
   return sortPayments(records.map(reduceTransaction)).map((p) => ({
     ...p,
-    consoleUrl: console.transaction(p.id),
+    consoleUrl: urls.transaction(p.id),
   }));
 }
 

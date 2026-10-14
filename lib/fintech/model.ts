@@ -543,23 +543,26 @@ export function reduceMonitoringEstimate(body: unknown): MonitoringEstimate {
 
 // ── Console (the operator side) ───────────────────────────────────────
 
+export interface ConsoleIds {
+  orgId: string;
+  appId: string;
+}
+
 export interface ConsoleTarget {
   origin: string;
-  orgId: string | null;
-  appId: string | null;
+  /** Null when they could not be looked up (see discoverConsoleIds). */
+  ids: ConsoleIds | null;
 }
 
 /**
- * Deep links into the Business Console. The console addresses records by
- * organization and application id, which an API key cannot look up, so they
- * come from configuration; without them the panel links the console itself
- * and names the record to open.
+ * Deep links into the Business Console, which addresses records by
+ * organization and application id. Without the ids every link is null and
+ * the panel links the console itself, naming the record to open.
  */
 export function consoleLinks(target: ConsoleTarget) {
-  const base =
-    target.orgId && target.appId
-      ? `${target.origin}/console/${encodeURIComponent(target.orgId)}/${encodeURIComponent(target.appId)}`
-      : null;
+  const base = target.ids
+    ? `${target.origin}/console/${encodeURIComponent(target.ids.orgId)}/${encodeURIComponent(target.ids.appId)}`
+    : null;
 
   return {
     home: `${target.origin}/console`,

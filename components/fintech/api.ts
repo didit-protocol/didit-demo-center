@@ -63,7 +63,6 @@ export const api = {
     call<{ sessionId: string; sessionNumber: number | null; url: string }>(
       "POST",
       "verification",
-      { origin: window.location.origin },
     ),
   verification: () =>
     call<{ verification: VerificationView }>("GET", "verification"),

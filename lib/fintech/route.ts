@@ -1,3 +1,4 @@
+import type { ConsoleIds } from "./model";
 import type { FintechEnv, Reply } from "./server";
 
 import { randomUUID } from "node:crypto";
@@ -12,9 +13,12 @@ import {
   sealAccount,
   type AccountState,
 } from "./account-cookie";
+import { discoverConsoleIds } from "./server";
 
 import { VERIFICATION_BASE_URL } from "@/lib/auth-service";
 import { siteConfig } from "@/config/site";
+
+let consoleIdsCache: ConsoleIds | null = null;
 
 /**
  * Glue between Next's route handlers and lib/fintech/server.ts.
@@ -23,26 +27,26 @@ import { siteConfig } from "@/config/site";
  * there runs AML screening, which is billed per screening on production, and
  * the demo organization's rule and workflow live on staging. Anywhere else
  * every route answers 503 and the page says where the demo runs.
- *
- * `DIDIT_CONSOLE_ORG_ID` and `DIDIT_CONSOLE_APP_ID` are optional: the ids of
- * the console organization and application behind API_KEY. With them the
- * operator panel deep-links each session and transaction; without them it
- * links the console and names the record.
  */
 export function fintechEnv(): FintechEnv {
-  return {
+  const env: FintechEnv = {
     apiKey: process.env.API_KEY || "",
     apiBase: VERIFICATION_BASE_URL,
     live: process.env.NEXT_PUBLIC_IS_STAGING === "true",
-    console: {
-      origin: siteConfig.links.console,
-      orgId: process.env.DIDIT_CONSOLE_ORG_ID || null,
-      appId: process.env.DIDIT_CONSOLE_APP_ID || null,
+    callbackUrl: `${siteConfig.url}/fintech`,
+    consoleOrigin: siteConfig.links.console,
+    // The ids never change for an API key: one lookup per server.
+    consoleIds: async () => {
+      consoleIdsCache ??= await discoverConsoleIds(env);
+
+      return consoleIdsCache;
     },
     fetch: (input, init) => fetch(input, init),
     now: () => Date.now(),
     newId: () => randomUUID(),
   };
+
+  return env;
 }
 
 export function readAccount(
