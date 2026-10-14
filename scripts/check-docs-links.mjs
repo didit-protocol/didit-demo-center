@@ -6,8 +6,13 @@
  * clicks after watching a demo run. This walks the `docsPath` on every demo,
  * every `request.docsPath`, the shared DOC_PATHS map and the "How this uses
  * Didit" panels of /igaming (lib/igaming/steps.ts), /fintech
+<<<<<<< HEAD
  * (lib/fintech/steps.ts) and /crypto-exchange (lib/crypto-exchange/panel.ts),
  * and fetches each URL on docs.didit.me.
+=======
+ * (lib/fintech/steps.ts) and /marketplace (lib/marketplace/guide.ts), and
+ * fetches each URL on docs.didit.me.
+>>>>>>> origin/main
  *
  * Usage:
  *   npm run check:docs-links
@@ -38,7 +43,11 @@ function collectPaths() {
     "lib/demos.ts",
     "lib/igaming/steps.ts",
     "lib/fintech/steps.ts",
+<<<<<<< HEAD
     "lib/crypto-exchange/panel.ts",
+=======
+    "lib/marketplace/guide.ts",
+>>>>>>> origin/main
   ]) {
     const source = fs.readFileSync(path.join(repoRoot, file), "utf8");
 
