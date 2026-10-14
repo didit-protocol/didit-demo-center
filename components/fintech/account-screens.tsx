@@ -25,9 +25,11 @@ import {
   Notice,
   ScreenTitle,
   Spinner,
+  focusRing,
   inputClass,
   toneClasses,
   useMoney,
+  useRadioGroup,
   useWhen,
   type Tone,
 } from "./ui";
@@ -82,7 +84,10 @@ function PaymentRow({
   return (
     <li>
       <button
-        className="flex w-full items-center gap-3 px-1 py-3 text-left transition-colors duration-fast hover:bg-surface"
+        className={cn(
+          "flex w-full items-center gap-3 rounded-xs px-1 py-3 text-start transition-colors duration-fast hover:bg-surface",
+          focusRing,
+        )}
         type="button"
         onClick={onOpen}
       >
@@ -217,7 +222,10 @@ export function HomeScreen({
           </h3>
           <button
             aria-label={t("home.refresh")}
-            className="flex size-8 items-center justify-center rounded-pill text-muted transition-colors duration-fast hover:bg-surface hover:text-ink"
+            className={cn(
+              "flex size-8 items-center justify-center rounded-pill text-muted transition-colors duration-fast hover:bg-surface hover:text-ink",
+              focusRing,
+            )}
             type="button"
             onClick={onRefresh}
           >
@@ -288,6 +296,15 @@ export function PayScreen({
 
   const parsed = parsePayment({ kind, amount, counterparty });
   const value = Number(amount);
+  const presets = PRESETS[kind];
+  const preset = useRadioGroup(
+    presets,
+    presets.includes(value) ? value : null,
+    (next) => {
+      setAmount(String(next));
+      setErrors((e) => e.filter((f) => f !== "amount"));
+    },
+  );
   const reviewed = parsed.ok && triggersReview(parsed.value as PaymentInput);
   const transfer = kind === "transfer";
 
@@ -313,11 +330,14 @@ export function PayScreen({
   return (
     <form noValidate className="flex h-full flex-col" onSubmit={submit}>
       <button
-        className="mb-5 inline-flex items-center gap-1.5 self-start text-[13px] font-medium text-muted hover:text-ink"
+        className={cn(
+          "mb-5 inline-flex items-center gap-1.5 self-start rounded-2xs text-[13px] font-medium text-muted hover:text-ink",
+          focusRing,
+        )}
         type="button"
         onClick={onCancel}
       >
-        <ArrowLeft aria-hidden className="size-4" />
+        <ArrowLeft aria-hidden className="size-4 rtl:-scale-x-100" />
         {t("common.back")}
       </button>
       <ScreenTitle
@@ -356,25 +376,26 @@ export function PayScreen({
           <div
             aria-label={t("amount.presets")}
             className="grid grid-cols-3 gap-2"
-            role="group"
+            role="radiogroup"
           >
-            {PRESETS[kind].map((preset) => (
+            {presets.map((option, index) => (
               <button
-                key={preset}
-                aria-pressed={value === preset}
+                key={option}
+                {...preset(index)}
                 className={cn(
                   "tnum h-10 rounded-pill border text-[13px] font-medium transition-colors duration-fast",
-                  value === preset
+                  focusRing,
+                  value === option
                     ? "border-ink bg-ink text-canvas"
                     : "border-line bg-canvas text-ink hover:bg-surface",
                 )}
                 type="button"
                 onClick={() => {
-                  setAmount(String(preset));
+                  setAmount(String(option));
                   setErrors((e) => e.filter((f) => f !== "amount"));
                 }}
               >
-                {money(preset)}
+                {money(option)}
               </button>
             ))}
           </div>
@@ -537,35 +558,12 @@ export function PaymentResultScreen({
 }
 
 /**
- * Ongoing AML monitoring, explained in the app and previewed live: the button
- * asks Didit what switching it on for this customer would do and cost
- * (`estimate_only`), which writes nothing.
+ * Ongoing AML monitoring, explained to the customer the way a bank's app
+ * would. What switching it on costs and does is the operator's business, so
+ * the live estimate sits in the operator view (MonitoringPreview).
  */
-export function MonitoringCard({ onActivate }: { onActivate: () => void }) {
+export function MonitoringCard() {
   const t = useTranslations("Fintech");
-  const [state, setState] = React.useState<
-    | { kind: "idle" }
-    | { kind: "loading" }
-    | { kind: "done"; estimate: MonitoringEstimate }
-    | { kind: "error"; error: ApiError }
-  >({ kind: "idle" });
-
-  const preview = async () => {
-    onActivate();
-    setState({ kind: "loading" });
-    const result = await api.monitoring();
-
-    setState(
-      result.ok
-        ? { kind: "done", estimate: result.data.estimate }
-        : { kind: "error", error: result.error },
-    );
-  };
-
-  const usd = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  });
 
   return (
     <section
@@ -588,10 +586,54 @@ export function MonitoringCard({ onActivate }: { onActivate: () => void }) {
           </p>
         </div>
       </div>
+    </section>
+  );
+}
+
+/**
+ * The live side of ongoing monitoring, for the operator: asks Didit what
+ * switching it on for this customer would do and cost (`estimate_only`),
+ * which enables, screens and bills nothing.
+ */
+export function MonitoringPreview({ onPreview }: { onPreview: () => void }) {
+  const t = useTranslations("Fintech");
+  const [state, setState] = React.useState<
+    | { kind: "idle" }
+    | { kind: "loading" }
+    | { kind: "done"; estimate: MonitoringEstimate }
+    | { kind: "error"; error: ApiError }
+  >({ kind: "idle" });
+
+  const preview = async () => {
+    onPreview();
+    setState({ kind: "loading" });
+    const result = await api.monitoring();
+
+    setState(
+      result.ok
+        ? { kind: "done", estimate: result.data.estimate }
+        : { kind: "error", error: result.error },
+    );
+  };
+
+  // Didit quotes the estimate in US dollars, whatever the page language.
+  const usd = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+
+  return (
+    <div
+      className="rounded-sm border border-line bg-canvas p-3"
+      data-testid="fx-monitoring-preview"
+    >
+      <p className="m-0 text-[13px] font-medium text-ink">
+        {t("monitoring.title")}
+      </p>
 
       {state.kind === "done" ? (
-        <div className="mt-4" data-testid="fx-monitoring-estimate">
-          <dl className="m-0 grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-2 text-[13px]">
+        <div className="mt-2.5" data-testid="fx-monitoring-estimate">
+          <dl className="m-0 grid grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1.5 text-[12px]">
             {(
               [
                 ["profiles", state.estimate.profiles],
@@ -604,18 +646,18 @@ export function MonitoringCard({ onActivate }: { onActivate: () => void }) {
             ).map(([key, value]) => (
               <React.Fragment key={key}>
                 <dt className="text-muted">{t(`monitoring.rows.${key}`)}</dt>
-                <dd className="tnum m-0 text-right font-medium text-ink">
-                  {value}
-                </dd>
+                <dd className="tnum m-0 text-end text-ink">{value}</dd>
               </React.Fragment>
             ))}
           </dl>
-          <p className="m-0 mt-3 text-xs text-muted">{t("monitoring.note")}</p>
+          <p className="m-0 mt-2.5 text-[11px] leading-[14px] text-table-head">
+            {t("monitoring.note")}
+          </p>
         </div>
       ) : null}
 
       {state.kind === "error" ? (
-        <div className="mt-4">
+        <div className="mt-2.5">
           <Notice tone="declined">
             <FailureText error={state.error} />
           </Notice>
@@ -624,7 +666,7 @@ export function MonitoringCard({ onActivate }: { onActivate: () => void }) {
 
       {state.kind !== "done" ? (
         <button
-          className="btn-outline mt-4 h-10 w-full px-4 text-[13px] disabled:opacity-70"
+          className="btn-outline mt-2.5 h-9 w-full px-3.5 text-[13px] disabled:opacity-70"
           disabled={state.kind === "loading"}
           type="button"
           onClick={preview}
@@ -635,6 +677,6 @@ export function MonitoringCard({ onActivate }: { onActivate: () => void }) {
             : t("monitoring.cta")}
         </button>
       ) : null}
-    </section>
+    </div>
   );
 }
