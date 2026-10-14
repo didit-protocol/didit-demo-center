@@ -1,0 +1,241 @@
+{
+  "uuid": "06dbbf52-e4bc-4b6a-8282-c049f1761650",
+  "environment": "live",
+  "transaction_number": 34,
+  "txn_id": "mkt-order-11c97b75943c4d389ec8",
+  "txn_date": "2026-10-13T21:49:54.551940Z",
+  "zone_id": "UTC",
+  "transaction_type": "finance",
+  "action_type": "purchase",
+  "direction": "INBOUND",
+  "status": "AWAITING_USER",
+  "source": "LIVE",
+  "amount": "2900",
+  "currency": "EUR",
+  "currency_type": null,
+  "amount_in_default_currency": null,
+  "default_currency_code": null,
+  "preferred_currency_amount": "3245.497778333665642462",
+  "preferred_currency_code": "USD",
+  "payment_details": "Order: Automatic dive watch",
+  "payment_txn_id": null,
+  "score": 0,
+  "severity": null,
+  "decision_reason_code": null,
+  "decision_reason_label": null,
+  "vendor_data": "mkt-buyer-cbaffda12112",
+  "metadata": {
+    "subject": {
+      "full_name": "Northmarket buyer",
+      "entity_type": "individual",
+      "vendor_data": "mkt-buyer-cbaffda12112",
+      "device_context": {
+        "metadata": {
+          "bot_score": 0,
+          "webview_kind": "browser",
+          "accept_language": "en-US,en;q=0.9",
+          "composite_server_id": "9d73387e58fad7e6bed1157ce5de8563"
+        },
+        "platform": "desktop",
+        "os_family": "Linux",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+        "fingerprint": "heORv5s26Ljg7zJNnFuJvg",
+        "browser_family": "Chrome",
+        "composite_hash": "JJeUspChiRksZgjz6c9S-w",
+        "accept_language": "en-US,en;q=0.9",
+        "network_context": {
+          "ip_address": "34.83.210.9"
+        },
+        "persistent_device_id": "heORv5s26Ljg7zJNnFuJvg"
+      }
+    },
+    "counterparty": {
+      "full_name": "Atelier Nord",
+      "entity_type": "company",
+      "vendor_data": "mkt-seller-9e7b751f882f"
+    }
+  },
+  "props": {
+    "role": "buyer",
+    "listing": "dive-watch",
+    "demo_app": "marketplace",
+    "is_data_center": true
+  },
+  "tags": [
+    {
+      "uuid": "e2f7e75a-3b8a-41ee-8c6f-9091c25c3add",
+      "name": "HIGH_VALUE_ORDER",
+      "color": "#007AFE",
+      "description": null,
+      "source": "custom"
+    }
+  ],
+  "parties": [
+    {
+      "uuid": "c4044de6-8760-49a1-9a11-3b4fca43223c",
+      "role": "APPLICANT",
+      "entity_type": "individual",
+      "kind": "USER",
+      "vendor_data": "mkt-buyer-cbaffda12112",
+      "full_name": "Northmarket buyer",
+      "first_name": null,
+      "last_name": null,
+      "country_code": null,
+      "dob": null,
+      "address": {},
+      "institution_info": {},
+      "device": {
+        "metadata": {
+          "bot_score": 0,
+          "webview_kind": "browser",
+          "accept_language": "en-US,en;q=0.9",
+          "composite_server_id": "9d73387e58fad7e6bed1157ce5de8563"
+        },
+        "platform": "desktop",
+        "os_family": "Linux",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+        "fingerprint": "heORv5s26Ljg7zJNnFuJvg",
+        "browser_family": "Chrome",
+        "composite_hash": "JJeUspChiRksZgjz6c9S-w",
+        "accept_language": "en-US,en;q=0.9",
+        "network_context": {
+          "isp": "Google LLC",
+          "ip_city": "The Dalles",
+          "ip_state": "Oregon",
+          "latitude": 45.59455871582031,
+          "longitude": -121.17868041992188,
+          "time_zone": "America/Los_Angeles",
+          "asn_number": 396982,
+          "ip_address": "34.83.210.9",
+          "ip_country": "United States",
+          "organization": "Google LLC",
+          "is_vpn_or_tor": false,
+          "is_data_center": true,
+          "ip_country_code": "US",
+          "asn_organization": "Google LLC",
+          "time_zone_offset": "-0700"
+        },
+        "persistent_device_id": "heORv5s26Ljg7zJNnFuJvg"
+      },
+      "external_party_snapshot": null
+    },
+    {
+      "uuid": "1d947bb7-38ff-4e13-9628-2ec094138907",
+      "role": "COUNTERPARTY",
+      "entity_type": "company",
+      "kind": "BUSINESS",
+      "vendor_data": "mkt-seller-9e7b751f882f",
+      "full_name": "Atelier Nord",
+      "first_name": null,
+      "last_name": null,
+      "country_code": null,
+      "dob": null,
+      "address": {},
+      "institution_info": {},
+      "device": {},
+      "external_party_snapshot": null
+    }
+  ],
+  "payment_methods": [],
+  "documents": [],
+  "activities": [
+    {
+      "uuid": "9ee77636-0211-40b4-b9ef-4f216cb4226e",
+      "activity_type": "TRANSACTION_CREATED",
+      "source": "TRANSACTION",
+      "status": "AWAITING_USER",
+      "title": "purchase",
+      "description": null,
+      "metadata": {
+        "amount": "2900.000000000000000000",
+        "currency": "EUR",
+        "direction": "INBOUND",
+        "action_type": "purchase"
+      },
+      "occurred_at": "2026-10-13T21:49:54.557097Z"
+    }
+  ],
+  "alerts": [],
+  "rule_runs": [
+    {
+      "uuid": "23b464ee-e39f-434c-8679-a4f5d9d63d52",
+      "rule": "71d58068-b16e-4ed0-acdb-3ebf56ceaf0b",
+      "rule_title": "Marketplace demo: high-value order needs an age check",
+      "rule_description": "Orders of EUR 1,000 or more wait until the buyer passes an age check.",
+      "rule_category": "finance",
+      "matched": true,
+      "is_test": false,
+      "mode": "ACTIVE",
+      "severity": null,
+      "score_delta": 0,
+      "status_target": "AWAITING_USER",
+      "action_summary": "change_status:AWAITING_USER; add_tag:HIGH_VALUE_ORDER",
+      "metadata": {
+        "conditions": [
+          {
+            "field": "custom_values.demo_app",
+            "matched": true,
+            "operator": "eq",
+            "group_index": null,
+            "group_logic": "AND",
+            "field_source": null,
+            "current_value": "marketplace",
+            "expected_value": "marketplace"
+          },
+          {
+            "field": "currency",
+            "matched": true,
+            "operator": "eq",
+            "group_index": null,
+            "group_logic": "AND",
+            "field_source": null,
+            "current_value": "EUR",
+            "expected_value": "EUR"
+          },
+          {
+            "field": "amount",
+            "matched": true,
+            "operator": "gte",
+            "group_index": null,
+            "group_logic": "AND",
+            "field_source": null,
+            "current_value": "2900.000000000000000000",
+            "expected_value": 1000
+          }
+        ],
+        "scope_match": true,
+        "aggregations": []
+      },
+      "created_at": "2026-10-13T21:49:54.667893Z"
+    }
+  ],
+  "provider_results": [],
+  "travel_rule": null,
+  "network_snapshot": null,
+  "remediation": {
+    "session_id": "b28caac7-a4e2-4f4c-bdae-9b09dd45726a",
+    "session_token": "REDACTED_TOKEN",
+    "url": "https://verify.staging.didit.me/session/REDACTED_TOKEN",
+    "status": "Not Started"
+  },
+  "action_required": {
+    "type": "verification_session",
+    "url": "https://verify.staging.didit.me/session/REDACTED_TOKEN",
+    "session_id": "b28caac7-a4e2-4f4c-bdae-9b09dd45726a",
+    "session_token": "REDACTED_TOKEN",
+    "status": "Not Started"
+  },
+  "cost_breakdown": {
+    "total_price": 0.02,
+    "items": [
+      {
+        "usage_type": "transaction_monitoring",
+        "price": 0.02,
+        "details": {
+          "product": "transactions"
+        },
+        "created_at": "2026-10-13T21:49:54.767445Z"
+      }
+    ]
+  }
+}
