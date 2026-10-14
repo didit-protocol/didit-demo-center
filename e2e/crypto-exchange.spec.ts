@@ -467,6 +467,69 @@ test("on a phone the Didit panel dialog keeps the keyboard inside it", async ({
   ).toBe("");
 });
 
+test("the selected theme and amount pills show a focus ring in both themes", async ({
+  page,
+}) => {
+  await mockKestrel(page);
+  await open(page);
+
+  // The site's ring on light surfaces; the dark theme's own, stronger one.
+  const LIGHT_RING = "rgba(37, 103, 255, 0.2) 0px 0px 0px 3px";
+  const DARK_RING = "rgba(84, 138, 255, 0.7) 0px 0px 0px 3px";
+  const shadow = (locator: Locator) =>
+    locator.evaluate((element) => getComputedStyle(element).boxShadow);
+  const light = page.getByRole("radio", { name: "Light" });
+  const dark = page.getByRole("radio", { name: "Dark" });
+
+  // The selected pill is ink on canvas, so the ring is all that shows focus.
+  expect(await shadow(light)).toBe("none");
+  await light.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(dark).toBeFocused();
+  await expect.poll(() => shadow(dark)).toBe(DARK_RING);
+  await page.keyboard.press("ArrowLeft");
+  await expect(light).toBeFocused();
+  await expect.poll(() => shadow(light)).toBe(LIGHT_RING);
+
+  await app(page).getByRole("button", { name: "Deposit", exact: true }).click();
+  const selected = page.getByRole("button", { name: "1.25 ETH", exact: true });
+
+  expect(await shadow(selected)).toBe("none");
+  await page.getByLabel("Amount").focus();
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Tab");
+  await expect(selected).toBeFocused();
+  await expect.poll(() => shadow(selected)).toBe(LIGHT_RING);
+
+  await dark.click();
+  await page.getByLabel("Amount").focus();
+  await page.keyboard.press("Tab");
+  await page.keyboard.press("Tab");
+  await expect(selected).toBeFocused();
+  await expect.poll(() => shadow(selected)).toBe(DARK_RING);
+});
+
+test("the dialog's close button keeps its circle in the dark theme", async ({
+  page,
+}) => {
+  test.skip(!isPhone(page), "The panel is a dialog below 1024px only.");
+  await mockKestrel(page);
+  await open(page);
+
+  await page.getByRole("radio", { name: "Dark" }).click();
+  await page.getByRole("button", { name: "How this uses Didit" }).click();
+  const close = page
+    .getByRole("dialog", { name: "How this uses Didit" })
+    .getByRole("button", { name: "Close" });
+  const fill = () =>
+    close.evaluate((element) => getComputedStyle(element).backgroundColor);
+
+  // 4% of the dark theme's ink (244 244 246), not of black.
+  expect(await fill()).toBe("rgba(244, 244, 246, 0.04)");
+  await close.hover();
+  await expect.poll(fill).toBe("rgba(244, 244, 246, 0.1)");
+});
+
 test("the theme switch darkens the demo area and is remembered", async ({
   page,
 }) => {
