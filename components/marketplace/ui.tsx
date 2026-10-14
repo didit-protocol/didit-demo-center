@@ -101,7 +101,8 @@ export function CardHeader({
 }) {
   return (
     <div className="mb-5 flex flex-wrap items-start gap-3">
-      <div className="min-w-0 flex-1">
+      {/* At least 10rem for the title, so a wide aside wraps below it on a phone. */}
+      <div className="min-w-0 flex-1 basis-40">
         {eyebrow ? <p className="eyebrow mb-2">{eyebrow}</p> : null}
         <h3 className="m-0 text-lg font-medium tracking-tight text-ink">
           {title}
