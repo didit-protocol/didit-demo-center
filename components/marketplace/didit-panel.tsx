@@ -85,9 +85,9 @@ export function DiditPanel({
                 rel="noreferrer"
                 target="_blank"
               >
-                <BookOpen className="size-3.5" />
+                <BookOpen className="size-3.5 flex-none" />
                 docs.didit.me/{call.docsPath}
-                <ExternalLink className="size-3" />
+                <ExternalLink className="size-3 flex-none" />
               </a>
             </li>
           ))}

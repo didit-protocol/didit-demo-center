@@ -81,7 +81,7 @@ export function PayoutsChapter() {
             className="flex flex-wrap items-end gap-3"
             onSubmit={(event) => {
               event.preventDefault();
-              if (parsed) market.payout(seller, parsed);
+              if (parsed && !market.busy) market.payout(seller, parsed);
             }}
           >
             <div className="w-full max-w-[220px]">
