@@ -152,6 +152,11 @@ test("closing the hosted flow keeps the session and offers to continue", async (
   await page.getByRole("button", { name: "Verify my identity" }).click();
   await page.getByText("You closed the verification before finishing.").waitFor();
   await page.getByRole("button", { name: "Continue verification" }).waitFor();
+  // The session exists now, so the operator side already shows it.
+  await page
+    .getByTestId("fx-operator")
+    .getByText(`Session #${SESSION.session_number}`)
+    .waitFor();
   await context.close();
 });
 
