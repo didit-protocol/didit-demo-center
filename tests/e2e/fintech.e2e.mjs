@@ -380,7 +380,7 @@ test("on a phone nothing covers the bank's own buttons", async () => {
 
     assert.ok(trigger.y + trigger.height <= bank.y);
 
-    // Whatever is drawn at the centre of each action is that action.
+    // Whatever is drawn anywhere on each action is that action.
     for (const name of ["Add money", "Send money"]) {
       const button = page.getByRole("button", { name, exact: true });
 
@@ -388,12 +388,17 @@ test("on a phone nothing covers the bank's own buttons", async () => {
       assert.ok(
         await button.evaluate((el) => {
           const box = el.getBoundingClientRect();
-          const hit = document.elementFromPoint(
-            box.x + box.width / 2,
-            box.y + box.height / 2,
-          );
 
-          return el.contains(hit);
+          return [0.1, 0.5, 0.9].every((x) =>
+            [0.15, 0.5, 0.85].every((y) =>
+              el.contains(
+                document.elementFromPoint(
+                  box.x + box.width * x,
+                  box.y + box.height * y,
+                ),
+              ),
+            ),
+          );
         }),
         `${name} is covered (${colorScheme})`,
       );
