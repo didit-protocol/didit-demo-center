@@ -101,8 +101,7 @@ export function CardHeader({
 }) {
   return (
     <div className="mb-5 flex flex-wrap items-start gap-3">
-      {/* At least 10rem for the title, so a wide aside wraps below it on a phone. */}
-      <div className="min-w-0 flex-1 basis-40">
+      <div className="min-w-0 flex-1">
         {eyebrow ? <p className="eyebrow mb-2">{eyebrow}</p> : null}
         <h3 className="m-0 text-lg font-medium tracking-tight text-ink">
           {title}
@@ -196,10 +195,9 @@ export function ActionButton({
     <button
       aria-busy={busy || undefined}
       className={cn(BUTTON_VARIANT[variant], "h-10 px-4", className)}
+      disabled={busy || rest.disabled}
       type="button"
       {...rest}
-      // After the spread, so a caller's own `disabled` cannot lift the busy lock.
-      disabled={busy || rest.disabled}
     >
       {busy ? <LoaderCircle className="size-4 animate-spin" /> : null}
       {children}
