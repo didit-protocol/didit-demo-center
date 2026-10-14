@@ -28,7 +28,7 @@ export const DIDIT_V3 = `${VERIFICATION_BASE_URL}/v3`;
  * `vendor_data` (the reason PR #5 stopped the catalogue fetching decisions by
  * id).
  */
-const COOKIE = "kestrel_account";
+export const ACCOUNT_COOKIE = "kestrel_account";
 const COOKIE_MAX_AGE = 60 * 60 * 24;
 
 export interface KestrelCookie {
@@ -92,14 +92,14 @@ export function verifyAccountCookie(
 }
 
 export function readAccountCookie(request: NextRequest): KestrelCookie | null {
-  return verifyAccountCookie(request.cookies.get(COOKIE)?.value, apiKey());
+  return verifyAccountCookie(request.cookies.get(ACCOUNT_COOKIE)?.value, apiKey());
 }
 
 export function writeAccountCookie(
   response: NextResponse,
   value: KestrelCookie,
 ) {
-  response.cookies.set(COOKIE, signAccountCookie(value, apiKey()), {
+  response.cookies.set(ACCOUNT_COOKIE, signAccountCookie(value, apiKey()), {
     httpOnly: true,
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
@@ -109,7 +109,7 @@ export function writeAccountCookie(
 }
 
 export function clearAccountCookie(response: NextResponse) {
-  response.cookies.set(COOKIE, "", { path: "/", maxAge: 0 });
+  response.cookies.set(ACCOUNT_COOKIE, "", { path: "/", maxAge: 0 });
 }
 
 export function json<T>(data: T, init?: ResponseInit) {
