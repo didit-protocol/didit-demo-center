@@ -489,24 +489,24 @@ export function PanelSheet({
       width="max-w-[560px] h-[calc(100dvh-32px)] bg-[rgb(var(--fx-page))]"
       onClose={onClose}
     >
-        <div className="flex h-full min-h-0 flex-col">
-          <div className="flex flex-none justify-end px-3 pt-3">
-            <button
-              aria-label={t("panel.close")}
-              className={cn(
-                "flex size-8 items-center justify-center rounded-pill bg-elevated text-muted transition-colors duration-fast hover:text-ink",
-                focusRing,
-              )}
-              type="button"
-              onClick={onClose}
-            >
-              <X aria-hidden className="size-4" />
-            </button>
-          </div>
-          <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6">
-            {children}
-          </div>
+      <div className="flex h-full min-h-0 flex-col">
+        <div className="flex flex-none justify-end px-3 pt-3">
+          <button
+            aria-label={t("panel.close")}
+            className={cn(
+              "flex size-8 items-center justify-center rounded-pill bg-elevated text-muted transition-colors duration-fast hover:text-ink",
+              focusRing,
+            )}
+            type="button"
+            onClick={onClose}
+          >
+            <X aria-hidden className="size-4" />
+          </button>
         </div>
+        <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6">
+          {children}
+        </div>
+      </div>
     </Modal>
   );
 }
