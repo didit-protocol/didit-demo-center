@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto";
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { STAGING_WORKFLOWS } from "./config.ts";
+import { marketWorkflows } from "./config.ts";
 import {
   STATE_COOKIE,
   STATE_MAX_AGE,
@@ -20,6 +20,8 @@ import { siteConfig } from "@/config/site";
 /**
  * Glue between Next's route handlers and lib/marketplace/server.ts.
  *
+ * `NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID` is the seller KYB workflow; without it
+ * the page says the KYB is not published and everything else runs.
  * `DIDIT_CONSOLE_ORG_ID` and `DIDIT_CONSOLE_APP_ID` are optional: the console
  * organization and application behind API_KEY. Without them the server reads
  * both from the API itself (see resolveConsoleIds).
@@ -29,7 +31,7 @@ export function marketEnv(): MarketEnv {
     apiKey: process.env.API_KEY || "",
     apiBase: VERIFICATION_BASE_URL,
     isStaging: process.env.NEXT_PUBLIC_IS_STAGING === "true",
-    workflows: STAGING_WORKFLOWS,
+    workflows: marketWorkflows(process.env.NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID),
     console: {
       origin: siteConfig.links.console,
       orgId: process.env.DIDIT_CONSOLE_ORG_ID || null,

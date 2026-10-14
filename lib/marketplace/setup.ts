@@ -229,3 +229,114 @@ export function ruleDefinitions(ageWorkflowId: string) {
     },
   ];
 }
+
+/**
+ * The only calls the KYB setup makes. Reading and creating, nothing else: the
+ * setup never edits, archives or deletes a workflow that already exists.
+ */
+export type WorkflowCall = (
+  method: "GET" | "POST",
+  path: string,
+  body?: unknown,
+) => Promise<{ status: number; body: unknown }>;
+
+export interface KybWorkflowSetup {
+  /**
+   * found: this demo's workflow already exists. created: it was just created.
+   * existing: the create was refused and another KYB workflow is used instead.
+   * missing: not created (a dry run, or refused with no KYB workflow to use).
+   */
+  outcome: "found" | "created" | "existing" | "missing";
+  workflow: { id: string; label: string | null } | null;
+  /** The API's answer when it refused the create. */
+  refusal: { status: number; body: unknown } | null;
+  /** Distinct workflow ids on the application, archived ones included. */
+  workflowCount: number;
+}
+
+async function listWorkflows(call: WorkflowCall): Promise<WorkflowRow[]> {
+  const rows: WorkflowRow[] = [];
+  let next: string | null = "/v3/workflows/?limit=100";
+
+  while (next) {
+    const reply = await call("GET", next);
+
+    if (reply.status !== 200) {
+      throw new Error(
+        `GET ${next} -> ${reply.status} ${JSON.stringify(reply.body)}`,
+      );
+    }
+
+    const data = reply.body as
+      | WorkflowRow[]
+      | { results?: WorkflowRow[]; next?: string | null };
+
+    rows.push(...(Array.isArray(data) ? data : (data.results ?? [])));
+    next =
+      !Array.isArray(data) && data.next
+        ? data.next.replace(/^https?:\/\/[^/]+/, "")
+        : null;
+  }
+
+  return rows;
+}
+
+/**
+ * Finds the seller KYB workflow by name and, with `apply`, creates it when it
+ * is missing. If the API refuses the create (an application at its workflow
+ * limit, for one), the application's newest published KYB workflow is used
+ * instead and the refusal is returned so the caller can report it.
+ */
+export async function ensureKybWorkflow(
+  call: WorkflowCall,
+  options: { apply: boolean; countries: string[]; personWorkflowUuid: string },
+): Promise<KybWorkflowSetup> {
+  const rows = await listWorkflows(call);
+  const workflowCount = new Set(rows.map((row) => row.workflow_id)).size;
+  const own = findDemoKybWorkflow(rows);
+
+  if (own) {
+    return {
+      outcome: "found",
+      workflow: { id: own.workflow_id, label: own.workflow_label },
+      refusal: null,
+      workflowCount,
+    };
+  }
+  if (!options.apply) {
+    return { outcome: "missing", workflow: null, refusal: null, workflowCount };
+  }
+
+  const reply = await call(
+    "POST",
+    "/v3/workflows/",
+    kybWorkflowDefinition(options.countries, options.personWorkflowUuid),
+  );
+
+  if (reply.status === 200 || reply.status === 201) {
+    const created = reply.body as { workflow_id: string };
+
+    return {
+      outcome: "created",
+      workflow: { id: created.workflow_id, label: KYB_WORKFLOW_LABEL },
+      refusal: null,
+      workflowCount: workflowCount + 1,
+    };
+  }
+  if (reply.status >= 500) {
+    throw new Error(
+      `POST /v3/workflows/ -> ${reply.status} ${JSON.stringify(reply.body)}`,
+    );
+  }
+
+  const fallback = findExistingKybWorkflow(rows);
+
+  return {
+    outcome: fallback ? "existing" : "missing",
+    workflow: fallback
+      ? { id: fallback.workflow_id, label: fallback.workflow_label }
+      : null,
+    refusal: { status: reply.status, body: reply.body },
+    workflowCount,
+  };
+}
