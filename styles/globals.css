@@ -228,8 +228,8 @@
 }
 
 /* ── Marketplace demo (/marketplace) ─────────────────────────────────
- * The one surface in the demo centre with a dark theme. The didit.me chrome
- * stays light; only the marketplace wrapper re-points the design tokens, so
+ * The marketplace's light and dark theme. The didit.me chrome stays light;
+ * only the marketplace wrapper re-points the design tokens, so
  * every `bg-canvas`, `text-ink`, `border-line` inside it follows the theme.
  * Values are the console v2 dark ramp: the same blue accent, neutral greys
  * lifted for contrast, and the semantic pairs re-balanced for a dark surface.
