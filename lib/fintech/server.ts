@@ -15,7 +15,7 @@ import {
   sortPayments,
   transactionPayload,
   type Balances,
-  type ConsoleTarget,
+  type ConsoleIds,
   type MonitoringEstimate,
   type OnboardingView,
   type PaymentView,
@@ -41,7 +41,15 @@ export interface FintechEnv {
   apiBase: string;
   /** False on any environment but staging: the demo then refuses to run. */
   live: boolean;
-  console: ConsoleTarget;
+  /**
+   * Where the hosted flow sends the person back: always this site's own
+   * /fintech, never an address the request supplies.
+   */
+  callbackUrl: string;
+  /** The Business Console, e.g. https://business.staging.didit.me */
+  consoleOrigin: string;
+  /** The organization and application behind the API key (see consoleIds). */
+  consoleIds: () => Promise<ConsoleIds | null>;
   fetch: typeof fetch;
   now: () => number;
   newId: () => string;
@@ -169,6 +177,43 @@ function guard(env: FintechEnv): Reply | null {
   return env.live && env.apiKey ? null : fail(503, "unavailable");
 }
 
+/**
+ * The organization and application ids behind the API key, for Console deep
+ * links. Neither is in a decision or a transaction detail, but every
+ * transaction summary carries both, so one `GET /v3/transactions/?limit=1`
+ * answers it (the same lookup /igaming makes). Null when the application has
+ * no transaction yet or Didit cannot be reached: the panel then links the
+ * Console itself. Uncached here; lib/fintech/route.ts caches it per server.
+ */
+export async function discoverConsoleIds(
+  env: Pick<FintechEnv, "apiBase" | "apiKey" | "fetch">,
+): Promise<ConsoleIds | null> {
+  try {
+    const data = await didit(
+      env as FintechEnv,
+      "GET",
+      "/v3/transactions/?limit=1",
+    );
+    const first = Array.isArray(data.results)
+      ? (data.results[0] as Record<string, unknown> | undefined)
+      : undefined;
+
+    return typeof first?.organization_id === "string" &&
+      typeof first?.application_id === "string"
+      ? { orgId: first.organization_id, appId: first.application_id }
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+async function links(env: FintechEnv) {
+  return consoleLinks({
+    origin: env.consoleOrigin,
+    ids: await env.consoleIds().catch(() => null),
+  });
+}
+
 function accountView(state: AccountState): AccountView {
   return {
     id: state.id,
@@ -194,7 +239,7 @@ async function fetchVerification(
   return {
     ...view,
     sessionId: view.sessionId || sessionId,
-    consoleUrl: consoleLinks(env.console).session(view.sessionId || sessionId),
+    consoleUrl: (await links(env)).session(view.sessionId || sessionId),
   };
 }
 
@@ -202,16 +247,16 @@ async function fetchPayments(
   env: FintechEnv,
   state: AccountState,
 ): Promise<PaymentWithLink[]> {
-  const links = consoleLinks(env.console);
   const records = await Promise.all(
     state.tx.map((id) =>
       didit(env, "GET", `/v3/transactions/${encodeURIComponent(id)}/`),
     ),
   );
+  const console = await links(env);
 
   return sortPayments(records.map(reduceTransaction)).map((p) => ({
     ...p,
-    consoleUrl: links.transaction(p.id),
+    consoleUrl: console.transaction(p.id),
   }));
 }
 
@@ -281,20 +326,6 @@ export async function deleteAccount(): Promise<Reply> {
 
 // ── /api/fintech/verification ─────────────────────────────────────────
 
-function callbackFrom(origin: unknown): string | null {
-  if (typeof origin !== "string") return null;
-
-  try {
-    const url = new URL(origin);
-
-    if (url.protocol !== "https:" && url.protocol !== "http:") return null;
-
-    return `${url.origin}/fintech`;
-  } catch {
-    return null;
-  }
-}
-
 /**
  * Creates the onboarding session (`POST /v3/session/`) with the bank's fixed
  * workflow. Didit hands back the same unfinished session for the same
@@ -311,9 +342,6 @@ export async function startVerification(
   if (!state) return fail(401, "no_account");
 
   const input = (body ?? {}) as Record<string, unknown>;
-  const callback = callbackFrom(input.origin);
-
-  if (!callback) return fail(400, "invalid", { fields: ["origin"] });
 
   try {
     if (state.sid) {
@@ -330,7 +358,7 @@ export async function startVerification(
       "/v3/session/",
       sessionPayload(
         state,
-        callback,
+        env.callbackUrl,
         sessionLanguage(typeof input.locale === "string" ? input.locale : ""),
       ),
     );
@@ -451,7 +479,7 @@ export async function createPayment(
       body: {
         payment: {
           ...payment,
-          consoleUrl: consoleLinks(env.console).transaction(payment.id),
+          consoleUrl: (await links(env)).transaction(payment.id),
         },
       },
       account: { ...state, tx: [...state.tx, payment.id] },
