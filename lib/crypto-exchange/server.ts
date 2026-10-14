@@ -1,5 +1,7 @@
+import type { ConsoleContext } from "./console";
 import type { NextRequest } from "next/server";
 
+import { createHmac, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 
 import { toAccountView, type AccountView } from "./onboarding";
@@ -19,10 +21,12 @@ export const DIDIT_V3 = `${VERIFICATION_BASE_URL}/v3`;
 
 /**
  * The visitor's Kestrel account: the `vendor_data` Kestrel gave them and their
- * onboarding session. httpOnly, so page scripts never see it; every route
- * re-checks that a Didit record it returns carries this `vendor_data`, which
- * is what stops one visitor reading another's session or transactions (the
- * reason PR #5 stopped the catalogue fetching decisions by id).
+ * onboarding session, signed with the API key. httpOnly, so page scripts never
+ * see it, and signed, so knowing someone's `vendor_data` (the app header shows
+ * it) and a session or transaction id is not enough to read their records.
+ * Every route also re-checks that a Didit record it returns carries this
+ * `vendor_data` (the reason PR #5 stopped the catalogue fetching decisions by
+ * id).
  */
 const COOKIE = "kestrel_account";
 const COOKIE_MAX_AGE = 60 * 60 * 24;
@@ -32,12 +36,45 @@ export interface KestrelCookie {
   sessionId: string;
 }
 
-export function readAccountCookie(request: NextRequest): KestrelCookie | null {
-  const raw = request.cookies.get(COOKIE)?.value;
+function apiKey(): string {
+  return process.env.API_KEY || "";
+}
 
-  if (!raw) return null;
+function signature(payload: string, secret: string): string {
+  return createHmac("sha256", `kestrel-account-v1:${secret}`)
+    .update(payload)
+    .digest("base64url");
+}
+
+/** The cookie's value: the account as base64url JSON, a dot, its signature. */
+export function signAccountCookie(value: KestrelCookie, secret: string) {
+  const payload = Buffer.from(
+    JSON.stringify({ v: value.vendorData, s: value.sessionId }),
+  ).toString("base64url");
+
+  return `${payload}.${signature(payload, secret)}`;
+}
+
+/** The account inside a cookie value, or null when it is missing or forged. */
+export function verifyAccountCookie(
+  raw: string | null | undefined,
+  secret: string,
+): KestrelCookie | null {
+  if (!raw || !secret) return null;
+  const dot = raw.lastIndexOf(".");
+
+  if (dot <= 0) return null;
+  const payload = raw.slice(0, dot);
+  const given = Buffer.from(raw.slice(dot + 1));
+  const expected = Buffer.from(signature(payload, secret));
+
+  if (given.length !== expected.length || !timingSafeEqual(given, expected)) {
+    return null;
+  }
   try {
-    const parsed = JSON.parse(Buffer.from(raw, "base64url").toString("utf8"));
+    const parsed = JSON.parse(
+      Buffer.from(payload, "base64url").toString("utf8"),
+    );
 
     if (
       typeof parsed?.v === "string" &&
@@ -48,29 +85,27 @@ export function readAccountCookie(request: NextRequest): KestrelCookie | null {
       return { vendorData: parsed.v, sessionId: parsed.s };
     }
   } catch {
-    // A cookie this app did not write: treat it as no account.
+    // Signed but unreadable: treat it as no account.
   }
 
   return null;
+}
+
+export function readAccountCookie(request: NextRequest): KestrelCookie | null {
+  return verifyAccountCookie(request.cookies.get(COOKIE)?.value, apiKey());
 }
 
 export function writeAccountCookie(
   response: NextResponse,
   value: KestrelCookie,
 ) {
-  response.cookies.set(
-    COOKIE,
-    Buffer.from(
-      JSON.stringify({ v: value.vendorData, s: value.sessionId }),
-    ).toString("base64url"),
-    {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      maxAge: COOKIE_MAX_AGE,
-    },
-  );
+  response.cookies.set(COOKIE, signAccountCookie(value, apiKey()), {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: COOKIE_MAX_AGE,
+  });
 }
 
 export function clearAccountCookie(response: NextResponse) {
@@ -104,7 +139,7 @@ export async function didit(
     const response = await fetch(`${DIDIT_V3}${path}`, {
       method,
       headers: {
-        "x-api-key": process.env.API_KEY || "",
+        "x-api-key": apiKey(),
         "Content-Type": "application/json",
       },
       body: body === undefined ? undefined : JSON.stringify(body),
@@ -199,4 +234,28 @@ export async function lookupAccount(
   }
 
   return { ok: true, cookie, account };
+}
+
+let consoleCache: ConsoleContext | null = null;
+
+/**
+ * Organization and application ids for Console deep links. Neither id is in a
+ * decision or a transaction detail, but every transaction summary carries
+ * both, and they never change for an API key - so one list call is cached for
+ * the life of the server. Null (the links open the Console) until the
+ * application has a transaction.
+ */
+export async function consoleContext(): Promise<ConsoleContext | null> {
+  if (consoleCache) return consoleCache;
+  const result = await didit("GET", "/transactions/?limit=1");
+  const results = result.data?.results;
+  const first = Array.isArray(results) ? results[0] : null;
+  const organizationId = first?.organization_id;
+  const applicationId = first?.application_id;
+
+  if (typeof organizationId !== "string" || typeof applicationId !== "string")
+    return null;
+  consoleCache = { organizationId, applicationId };
+
+  return consoleCache;
 }
