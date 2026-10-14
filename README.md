@@ -242,7 +242,7 @@ PROOF_SESSION_ID=<a real session id> npm run shots
 Writes the catalogue, both modal families and the 390px layouts to `proof/`.
 The catalogue is light-only, exactly like didit.me and help.didit.me - the
 design system ships no dark token set. Only the industry demos (`/igaming`,
-`/fintech`) have a dark theme.
+`/fintech`, `/marketplace`) have a dark theme.
 
 ## Technical documentation
 
