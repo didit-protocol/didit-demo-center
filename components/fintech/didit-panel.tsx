@@ -7,7 +7,9 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ArrowUpRight, ChevronDown, Layers, X } from "lucide-react";
 
-import { Chip, useMoney, type Tone } from "./ui";
+import { Chip, focusRing, useMoney, type Tone } from "./ui";
+
+import { Modal } from "@/components/demo-center/modal";
 
 import { docs } from "@/lib/docs";
 import {
@@ -68,7 +70,10 @@ function ConsoleLink({
   if (href) {
     return (
       <a
-        className="inline-flex items-center gap-1 text-[13px] font-medium text-blue hover:text-blue-deep"
+        className={cn(
+          "inline-flex items-center gap-1 rounded-2xs text-[13px] font-medium text-blue hover:text-blue-deep",
+          focusRing,
+        )}
         href={href}
         rel="noreferrer"
         target="_blank"
@@ -82,7 +87,10 @@ function ConsoleLink({
   return (
     <p className="m-0 text-xs leading-[16px] text-muted">
       <a
-        className="inline-flex items-center gap-1 font-medium text-blue hover:text-blue-deep"
+        className={cn(
+          "inline-flex items-center gap-1 rounded-2xs font-medium text-blue hover:text-blue-deep",
+          focusRing,
+        )}
         href={home}
         rel="noreferrer"
         target="_blank"
@@ -105,26 +113,30 @@ export function OperatorView({
   verification,
   payments,
   consoleHome,
+  monitoring,
 }: {
   verification: VerificationView | null;
   payments: PaymentWithLink[];
   consoleHome: string;
+  /** The ongoing-monitoring estimate, once the customer is approved. */
+  monitoring?: React.ReactNode;
 }) {
   const t = useTranslations("Fintech");
   const money = useMoney();
+  const titleId = React.useId();
   const recent = payments.slice(0, 3);
 
   return (
     <section
-      aria-labelledby="fx-operator"
-      className="rounded-md border border-line bg-surface p-4"
+      aria-labelledby={titleId}
+      className="rounded-md border border-line bg-canvas p-4"
       data-testid="fx-operator"
     >
       <div className="mb-3 flex items-center gap-2">
         <Layers aria-hidden className="size-4 text-muted" />
         <h3
           className="m-0 text-[14px] font-semibold tracking-tight text-ink"
-          id="fx-operator"
+          id={titleId}
         >
           {t("operator.title")}
         </h3>
@@ -141,7 +153,7 @@ export function OperatorView({
 
       <div className="flex flex-col gap-2.5">
         {verification ? (
-          <div className="rounded-sm border border-line bg-canvas p-3">
+          <div className="rounded-sm border border-line bg-surface p-3">
             <div className="flex items-center justify-between gap-2">
               <p className="m-0 text-[13px] font-medium text-ink">
                 {verification.sessionNumber
@@ -152,7 +164,7 @@ export function OperatorView({
               </p>
               <RawStatus status={verification.rawStatus} />
             </div>
-            <p className="m-0 mt-1 break-all font-mono text-[11px] text-table-head">
+            <p className="fx-code m-0 mt-1 break-all text-[11px] text-table-head">
               {verification.sessionId}
             </p>
             <ul className="m-0 mt-2.5 grid list-none grid-cols-2 gap-x-3 gap-y-1.5 p-0">
@@ -191,13 +203,13 @@ export function OperatorView({
         {recent.map((p) => (
           <div
             key={p.id}
-            className="rounded-sm border border-line bg-canvas p-3"
+            className="rounded-sm border border-line bg-surface p-3"
             data-testid="fx-operator-transaction"
           >
             <div className="flex items-center justify-between gap-2">
               <p className="m-0 text-[13px] font-medium text-ink">
                 {t("operator.transaction", { number: p.number ?? "-" })}
-                <span className="tnum ml-1.5 font-normal text-muted">
+                <span className="tnum ms-1.5 font-normal text-muted">
                   {p.direction === "in" ? "+" : "-"}
                   {money(p.amount)}
                 </span>
@@ -214,7 +226,7 @@ export function OperatorView({
                       <span key={rule.title} className="block">
                         {rule.title}
                         {rule.actions ? (
-                          <span className="block font-mono text-[11px] text-table-head">
+                          <span className="fx-code block text-[11px] text-table-head">
                             {rule.actions}
                           </span>
                         ) : null}
@@ -232,6 +244,8 @@ export function OperatorView({
             </div>
           </div>
         ))}
+
+        {monitoring}
       </div>
 
       <p className="m-0 mt-3 text-[11px] leading-[14px] text-table-head">
@@ -245,6 +259,7 @@ export function OperatorView({
 export function DiditSteps({ current }: { current: StepKey }) {
   const t = useTranslations("Fintech");
   const money = useMoney();
+  const idPrefix = React.useId();
   const [open, setOpen] = React.useState<StepKey>(current);
 
   React.useEffect(() => setOpen(current), [current]);
@@ -268,9 +283,12 @@ export function DiditSteps({ current }: { current: StepKey }) {
             data-step={step.key}
           >
             <button
-              aria-controls={`fx-step-${step.key}`}
+              aria-controls={`${idPrefix}-${step.key}`}
               aria-expanded={expanded}
-              className="flex w-full items-center gap-3 px-4 py-3 text-left"
+              className={cn(
+                "flex w-full items-center gap-3 rounded-md px-4 py-3 text-start",
+                focusRing,
+              )}
               type="button"
               onClick={() => setOpen(step.key)}
             >
@@ -300,7 +318,7 @@ export function DiditSteps({ current }: { current: StepKey }) {
             </button>
 
             {expanded ? (
-              <div className="px-4 pb-4" id={`fx-step-${step.key}`}>
+              <div className="px-4 pb-4" id={`${idPrefix}-${step.key}`}>
                 <p className="m-0 text-[13px] leading-[19px] text-muted">
                   {t(`panel.steps.${step.key}.body`, {
                     threshold: money(REVIEW_THRESHOLD),
@@ -317,7 +335,7 @@ export function DiditSteps({ current }: { current: StepKey }) {
                       {step.modules.map((m) => (
                         <a
                           key={m.key}
-                          className="module-chip hover:bg-blue/[0.2]"
+                          className={cn("module-chip hover:bg-blue/[0.2]", focusRing)}
                           href={docs(MODULE_DOCS[m.key].docsPath)}
                           rel="noreferrer"
                           target="_blank"
@@ -349,17 +367,21 @@ export function DiditSteps({ current }: { current: StepKey }) {
                         >
                           <span
                             className={cn(
-                              "flex-none rounded-2xs px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.08em]",
+                              "fx-code flex-none rounded-2xs px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em]",
                               METHOD_STYLE[call.method],
                             )}
                           >
                             {call.method}
                           </span>
-                          <code className="min-w-0 flex-1 truncate font-mono text-[12px] text-ink">
+                          <code className="fx-code min-w-0 flex-1 truncate text-[12px] text-ink">
                             {call.path}
                           </code>
                           <a
-                            className="inline-flex flex-none items-center gap-0.5 text-[12px] font-medium text-blue hover:text-blue-deep"
+                            aria-label={`${t("panel.docs")}: ${call.path}`}
+                            className={cn(
+                              "inline-flex flex-none items-center gap-0.5 rounded-2xs text-[12px] font-medium text-blue hover:text-blue-deep",
+                              focusRing,
+                            )}
                             href={docs(call.docsPath)}
                             rel="noreferrer"
                             target="_blank"
@@ -389,13 +411,14 @@ export function DiditPanel({
   operator: React.ReactNode;
 }) {
   const t = useTranslations("Fintech");
+  const titleId = React.useId();
 
   return (
-    <aside aria-labelledby="fx-panel" className="flex flex-col gap-4">
+    <aside aria-labelledby={titleId} className="flex flex-col gap-4">
       <div>
         <h2
           className="m-0 text-[20px] font-display tracking-display text-ink"
-          id="fx-panel"
+          id={titleId}
         >
           {t("panel.title")}
         </h2>
@@ -410,76 +433,57 @@ export function DiditPanel({
 }
 
 /**
- * Phones: the panel lives in a bottom sheet behind a floating button, so the
- * bank app keeps the whole screen.
+ * Phones: the panel opens from a floating button in the demo centre's modal
+ * (focus trap, Escape, focus restored on close), so the bank app keeps the
+ * whole screen.
  */
-export function PanelSheet({ children }: { children: React.ReactNode }) {
+export function PanelSheet({
+  open,
+  onOpenChange,
+  children,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  children: React.ReactNode;
+}) {
   const t = useTranslations("Fintech");
-  const [open, setOpen] = React.useState(false);
-  const closeRef = React.useRef<HTMLButtonElement | null>(null);
-
-  React.useEffect(() => {
-    if (!open) return;
-    document.documentElement.style.overflow = "hidden";
-    closeRef.current?.focus();
-
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
-    };
-
-    document.addEventListener("keydown", onKey);
-
-    return () => {
-      document.documentElement.style.overflow = "";
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [open]);
+  const close = React.useCallback(() => onOpenChange(false), [onOpenChange]);
 
   return (
     <>
       <button
-        className="btn-dark fixed bottom-4 right-4 z-[60] h-11 px-4 shadow-lg sm:hidden"
+        className="btn-dark fixed bottom-4 end-4 z-[60] h-11 px-4 shadow-lg sm:hidden"
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => onOpenChange(true)}
       >
         <Layers aria-hidden className="size-4" />
         {t("panel.open")}
       </button>
-      {open ? (
-        <div className="fixed inset-0 z-[90] sm:hidden">
-          <button
-            aria-label={t("panel.close")}
-            className="modal-scrim animate-fade-in cursor-default"
-            tabIndex={-1}
-            type="button"
-            onClick={() => setOpen(false)}
-          />
-          <div
-            aria-label={t("panel.title")}
-            aria-modal="true"
-            className="absolute inset-x-0 bottom-0 flex max-h-[88dvh] flex-col rounded-t-lg border-t border-line bg-canvas shadow-lg"
-            role="dialog"
-          >
-            <div className="flex flex-none items-center justify-between px-4 pb-2 pt-3">
-              <span
-                aria-hidden
-                className="absolute left-1/2 top-1.5 h-1 w-10 -translate-x-1/2 rounded-pill bg-elevated"
-              />
-              <span />
-              <button
-                ref={closeRef}
-                aria-label={t("panel.close")}
-                className="flex size-8 items-center justify-center rounded-pill bg-elevated text-muted hover:text-ink"
-                type="button"
-                onClick={() => setOpen(false)}
-              >
-                <X aria-hidden className="size-4" />
-              </button>
-            </div>
-            <div className="overflow-y-auto px-4 pb-6">{children}</div>
+      <Modal
+        label={t("panel.title")}
+        open={open}
+        width="max-w-[560px] h-[calc(100dvh-32px)] bg-[rgb(var(--fx-page))]"
+        onClose={close}
+      >
+        <div className="flex h-full min-h-0 flex-col">
+          <div className="flex flex-none justify-end px-3 pt-3">
+            <button
+              aria-label={t("panel.close")}
+              className={cn(
+                "flex size-8 items-center justify-center rounded-pill bg-elevated text-muted transition-colors duration-fast hover:text-ink",
+                focusRing,
+              )}
+              type="button"
+              onClick={close}
+            >
+              <X aria-hidden className="size-4" />
+            </button>
+          </div>
+          <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6">
+            {children}
           </div>
         </div>
-      ) : null}
+      </Modal>
     </>
   );
 }
