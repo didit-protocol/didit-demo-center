@@ -222,6 +222,17 @@ export function FintechDemo({
     if (screen === "home") refreshPayments();
   }, [screen, refreshPayments]);
 
+  /** Re-reads the decision; a settled one moves the bank to its outcome. */
+  const readDecision = React.useCallback(async () => {
+    const result = await api.verification();
+
+    if (!result.ok) return;
+    const next = result.data.verification;
+
+    setVerification(next);
+    if (outcomeKind(next.status)) setScreen("outcome");
+  }, []);
+
   // ── The hosted verification flow (Didit web SDK) ──────────────────
   React.useEffect(() => {
     if (!live) return;
@@ -278,6 +289,8 @@ export function FintechDemo({
     setAccount((current) =>
       current ? { ...current, hasSession: true } : current,
     );
+    // The session exists from here on: show it in the operator view.
+    readDecision();
     if (!sdkRef.current) {
       // The SDK is still loading: the hosted flow works as a plain page too.
       window.location.assign(result.data.url);
@@ -295,16 +308,6 @@ export function FintechDemo({
   };
 
   // ── Waiting on decisions ──────────────────────────────────────────
-  const readDecision = React.useCallback(async () => {
-    const result = await api.verification();
-
-    if (!result.ok) return;
-    const next = result.data.verification;
-
-    setVerification(next);
-    if (outcomeKind(next.status)) setScreen("outcome");
-  }, []);
-
   usePoll(screen === "checking", POLL_CHECKING_MS, async () => {
     await readDecision();
     if (checkingSince && Date.now() - checkingSince > SLOW_AFTER_MS) {
