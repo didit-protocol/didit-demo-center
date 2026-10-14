@@ -19,6 +19,14 @@ const INDUSTRY_APPS = [
     blurb:
       "Casino and sportsbook: age estimation at sign-up, licensed markets, monitored deposits, an ID check at 2,000 EUR, bonus abuse and self-exclusion.",
   },
+  {
+    href: "/crypto-exchange",
+    icon: "/icons/industries/crypto.svg",
+    industry: "Crypto exchange",
+    title: "Kestrel",
+    blurb:
+      "KYC and AML at sign-up, wallet screening on every deposit and withdrawal, the Travel Rule and a selfie step-up, with the compliance view of each transfer.",
+  },
 ];
 
 export function IndustryApps() {

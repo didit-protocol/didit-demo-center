@@ -71,6 +71,45 @@ The demo area has a light and a dark theme (Console v2 dark palette, scoped to
 the page in [`styles/igaming.css`](styles/igaming.css)); the didit.me chrome
 around it stays light.
 
+## Industry demo: crypto exchange (`/crypto-exchange`)
+
+Kestrel, a fictional crypto exchange, runs Didit end to end. Every call is
+live against the environment `NEXT_PUBLIC_IS_STAGING` selects; nothing on the
+page is a fixture.
+
+| Step | Didit surface |
+| --- | --- |
+| Sign-up | KYC + AML workflow: `POST /v3/session/`, the web SDK's `startVerification`, `GET /v3/session/{id}/decision/` |
+| Deposit | The exchange's backend reports it with `POST /v3/transactions/`; Didit screens the sending wallet and runs the rules |
+| Withdrawal | `POST /v3/transactions/sdk-token/` on the server, only once the KYC is approved; `submitTransaction` in the browser as a Travel Rule transfer |
+| Wallet proof and selfie step-up | Come back as the transaction's `action_required`; the page opens them in the web SDK |
+| Risky wallet | A demo rule holds a deposit or withdrawal whose wallet scores 75 or above; a sanctioned wallet is declined |
+| Operator side | `GET /v3/transactions/{id}/`, trimmed, plus Console deep links for the session and each transaction |
+
+The account is a random `vendor_data` (`kestrel-…`) and its onboarding
+session in a signed, httpOnly cookie. The server routes under
+`app/api/crypto-exchange` only ever return records that carry that
+`vendor_data`, and refuse to move money until Didit's decision for the
+onboarding session is `Approved`. The Console ids for the deep links come
+from the API itself, so there is nothing to configure. The hosted flow's
+return URL is always this site's `/crypto-exchange` (`siteConfig.url`).
+
+**One-time setup per environment.** The workflows are in
+[`lib/crypto-exchange/policy.ts`](lib/crypto-exchange/policy.ts) (staging
+only for now: the onboarding workflow runs a paid AML screening). Install the
+three demo rules and the application's Travel Rule settings (idempotent,
+matched by title):
+
+```sh
+npm run crypto-exchange:setup -- --dry-run   # print what would change
+npm run crypto-exchange:setup                # create or update them
+```
+
+Every rule matches only transactions with `custom_values.demo_app ==
+"crypto-exchange"`, so other demos on the same application are untouched. The
+light and dark themes are scoped to the demo area in
+[`styles/crypto-exchange.css`](styles/crypto-exchange.css).
+
 ## Site chrome
 
 The navbar, announcement bar and footer are **not written here**. They are
@@ -133,9 +172,13 @@ than failing on a 400.
 ## Checks
 
 ```sh
-npm test                     # node --test (unit tests and /api/igaming route tests)
+npm test                     # node --test (unit tests and the /api/igaming and
+                             # /api/crypto-exchange route tests)
 npm run test:e2e             # Playwright flows for /igaming against BASE_URL
                              # (E2E_LIVE=1 adds a real staging session)
+npm run build && npm run test:e2e:crypto-exchange
+                             # Playwright flows for /crypto-exchange, desktop and
+                             # phone, on recorded Didit responses
 npm run typecheck            # tsc --noEmit
 npm run lint                 # eslint (vendor/ is excluded - it is synced)
 npm run build                # next build

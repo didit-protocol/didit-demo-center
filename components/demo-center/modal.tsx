@@ -63,7 +63,13 @@ export function Modal({
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
 
-      if (event.shiftKey && document.activeElement === first) {
+      // The panel itself holds focus right after opening: Shift+Tab from it
+      // must wrap too, not leave for the page behind.
+      if (
+        event.shiftKey &&
+        (document.activeElement === first ||
+          document.activeElement === panelRef.current)
+      ) {
         event.preventDefault();
         last.focus();
       } else if (!event.shiftKey && document.activeElement === last) {
@@ -130,7 +136,7 @@ export function ModalCloseButton({
     <button
       aria-label="Close"
       className={cn(
-        "flex flex-none items-center justify-center rounded-pill bg-black/[0.04] text-muted transition-colors duration-fast hover:bg-black/[0.1] hover:text-ink",
+        "flex flex-none items-center justify-center rounded-pill bg-ink/[0.04] text-muted transition-colors duration-fast hover:bg-ink/[0.1] hover:text-ink",
         size === "lg" ? "size-9" : "size-8",
       )}
       type="button"
