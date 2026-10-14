@@ -10,7 +10,6 @@ import { ArrowUpRight, ChevronDown, Layers, X } from "lucide-react";
 import { Chip, focusRing, useMoney, type Tone } from "./ui";
 
 import { Modal } from "@/components/demo-center/modal";
-
 import { docs } from "@/lib/docs";
 import {
   REVIEW_RULE,
@@ -335,7 +334,10 @@ export function DiditSteps({ current }: { current: StepKey }) {
                       {step.modules.map((m) => (
                         <a
                           key={m.key}
-                          className={cn("module-chip hover:bg-blue/[0.2]", focusRing)}
+                          className={cn(
+                            "module-chip hover:bg-blue/[0.2]",
+                            focusRing,
+                          )}
                           href={docs(MODULE_DOCS[m.key].docsPath)}
                           rel="noreferrer"
                           target="_blank"

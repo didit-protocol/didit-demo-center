@@ -19,6 +19,14 @@ const INDUSTRY_APPS = [
     blurb:
       "Casino and sportsbook: age estimation at sign-up, licensed markets, monitored deposits, an ID check at 2,000 EUR, bonus abuse and self-exclusion.",
   },
+  {
+    href: "/fintech",
+    icon: "/icons/industries/fintech.svg",
+    industry: "Fintech",
+    title: "Alder",
+    blurb:
+      "Neobank: sign-up with KYC and AML screening, payments through transaction monitoring, a large transfer held for review and ongoing AML monitoring.",
+  },
 ];
 
 export function IndustryApps() {
