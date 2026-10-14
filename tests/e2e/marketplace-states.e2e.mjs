@@ -139,6 +139,36 @@ test("an approved KYB unlocks payouts, in both themes and on a phone", async () 
   }
 });
 
+test("a payout in flight locks its button, so a second click sends nothing", async () => {
+  const approved = summarizeKyb({ ...decision, status: "Approved" });
+  const { context, page } = await mockedPage(stateWith({ kybWorkflow: true, kyb: approved }));
+  let tokenRequests = 0;
+  let release;
+  const held = new Promise((resolve) => {
+    release = resolve;
+  });
+
+  // Hold the token request open, as a slow network would, then refuse it.
+  await page.route("**/api/marketplace/token", async (route) => {
+    tokenRequests += 1;
+    await held;
+    await route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: "Held by the test." }) });
+  });
+
+  await page.goto(`${BASE_URL}/marketplace?chapter=payouts`);
+  const payout = page.getByRole("button", { name: /Pay out/ });
+
+  await payout.click();
+  await page.locator('button[aria-busy="true"]', { hasText: "Pay out" }).waitFor();
+  assert.ok(await payout.isDisabled());
+  await payout.click({ force: true });
+  await page.getByLabel("Amount (EUR)").press("Enter");
+  release();
+  await page.locator('button[aria-busy="true"]').waitFor({ state: "detached" });
+  assert.equal(tokenRequests, 1);
+  await context.close();
+});
+
 test("on a phone the guide sheet keeps keyboard focus inside and gives it back", async () => {
   const { context, page } = await mockedPage(stateWith({ kybWorkflow: true, kyb: null }), {
     viewport: { width: 390, height: 844 },
