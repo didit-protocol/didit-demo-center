@@ -4,8 +4,9 @@
  *
  * A dead docs link is worse than no link: it is the first thing a developer
  * clicks after watching a demo run. This walks the `docsPath` on every demo,
- * every `request.docsPath`, and the shared DOC_PATHS map, and fetches each URL
- * on docs.didit.me.
+ * every `request.docsPath`, the shared DOC_PATHS map and the "How this uses
+ * Didit" panels of /igaming (lib/igaming/steps.ts) and /crypto-exchange
+ * (lib/crypto-exchange/panel.ts), and fetches each URL on docs.didit.me.
  *
  * Usage:
  *   npm run check:docs-links
@@ -25,14 +26,18 @@ const ORIGIN = "https://docs.didit.me";
 /**
  * The catalogue is TypeScript, so rather than compile it we read the paths out
  * of the source. They are plain string literals on a `docsPath:` key
- * (lib/demos.ts, lib/crypto-exchange/panel.ts) or inside the DOC_PATHS object
+ * (lib/demos.ts and the panel files) or inside the DOC_PATHS object
  * (lib/docs.ts), which keeps this check dependency-free.
  */
 function collectPaths() {
   const found = new Set();
 
-  // The catalogue, and the crypto exchange app's "How this uses Didit" panel.
-  for (const file of ["lib/demos.ts", "lib/crypto-exchange/panel.ts"]) {
+  // The catalogue, and the "How this uses Didit" panels of the industry apps.
+  for (const file of [
+    "lib/demos.ts",
+    "lib/igaming/steps.ts",
+    "lib/crypto-exchange/panel.ts",
+  ]) {
     const source = fs.readFileSync(path.join(repoRoot, file), "utf8");
 
     for (const match of source.matchAll(/docsPath:\s*"([^"]+)"/g)) {
