@@ -4,17 +4,22 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 
-import {
+await import("./helpers/register.mjs");
+
+const {
   createAccount,
   createPayment,
   deleteAccount,
+  discoverConsoleIds,
   getAccount,
   listPayments,
   previewMonitoring,
   readVerification,
   startVerification,
-} from "../lib/fintech/server.ts";
-import { MAX_PAYMENTS, ONBOARDING_WORKFLOW_ID } from "../lib/fintech/model.ts";
+} = await import("../lib/fintech/server.ts");
+const { MAX_PAYMENTS, ONBOARDING_WORKFLOW_ID } = await import(
+  "../lib/fintech/model.ts"
+);
 
 const fixture = (name) =>
   JSON.parse(
@@ -67,11 +72,9 @@ function env(fetch, overrides = {}) {
     apiKey: "test-key",
     apiBase: API,
     live: true,
-    console: {
-      origin: "https://business.staging.didit.me",
-      orgId: "org-1",
-      appId: "app-1",
-    },
+    callbackUrl: "https://demos.staging.didit.me/fintech",
+    consoleOrigin: "https://business.staging.didit.me",
+    consoleIds: async () => ({ orgId: "org-1", appId: "app-1" }),
     fetch,
     now: () => NOW,
     newId: () => "6f0c2b1e-0000-4000-8000-000000000001",
@@ -99,7 +102,7 @@ test("outside staging every handler refuses with 503", async () => {
   for (const reply of [
     await getAccount(off, ACCOUNT),
     await createAccount(off, { name: "A B", email: "a@b.co", country: "ESP" }),
-    await startVerification(off, ACCOUNT, { origin: "https://x.y" }),
+    await startVerification(off, ACCOUNT, {}),
     await readVerification(off, ACCOUNT),
     await listPayments(off, ACCOUNT),
     await createPayment(off, ACCOUNT, { kind: "deposit", amount: 10 }),
@@ -150,7 +153,7 @@ test("starting verification creates the session with the fixed workflow", async 
   const reply = await startVerification(
     env(fetch),
     { ...ACCOUNT, sid: null },
-    { origin: "https://demos.staging.didit.me", locale: "pt-PT" },
+    { locale: "pt-PT" },
   );
 
   assert.equal(reply.status, 201);
@@ -166,30 +169,43 @@ test("starting verification creates the session with the fixed workflow", async 
   assert.equal(sent.body.language, "pt");
 });
 
-test("the client cannot pick the workflow or a foreign callback path", async () => {
+test("the client cannot pick the workflow or the return address", async () => {
   const { fetch, calls } = didit({
     "POST /v3/session/": { status: 201, body: SESSION },
   });
 
-  await startVerification(env(fetch), { ...ACCOUNT, sid: null }, {
-    origin: "https://demos.staging.didit.me/evil?x=1",
+  const reply = await startVerification(env(fetch), { ...ACCOUNT, sid: null }, {
+    origin: "https://evil.example",
+    callback: "https://evil.example/phish",
     workflow_id: "00000000-0000-0000-0000-000000000000",
+    vendor_data: "someone-else",
   });
+
+  assert.equal(reply.status, 201);
   assert.equal(calls[0].body.workflow_id, ONBOARDING_WORKFLOW_ID);
   assert.equal(calls[0].body.callback, "https://demos.staging.didit.me/fintech");
+  assert.equal(calls[0].body.vendor_data, ACCOUNT.id);
+});
 
-  const bad = await startVerification(env(fetch), ACCOUNT, {
-    origin: "javascript:alert(1)",
+test("starting again resumes the same unfinished session", async () => {
+  // Staging answers a second POST /v3/session/ for the same vendor_data with
+  // the session it already has (checked 2026-10-14 against #8123).
+  const { fetch, calls } = didit({
+    [decisionPath]: { body: NOT_STARTED },
+    "POST /v3/session/": { status: 201, body: SESSION },
   });
+  const reply = await startVerification(env(fetch), ACCOUNT, {});
 
-  assert.equal(bad.status, 400);
+  assert.equal(reply.status, 201);
+  assert.deepEqual(
+    calls.map((c) => c.key),
+    [decisionPath, "POST /v3/session/"],
+  );
 });
 
 test("a settled onboarding is not restarted", async () => {
   const { fetch, calls } = didit({ [decisionPath]: { body: approved } });
-  const reply = await startVerification(env(fetch), ACCOUNT, {
-    origin: "https://demos.staging.didit.me",
-  });
+  const reply = await startVerification(env(fetch), ACCOUNT, {});
 
   assert.equal(reply.status, 409);
   assert.equal(reply.body.error, "already_verified");
@@ -402,4 +418,45 @@ test("Didit failures come back as 502 with the API's reason", async () => {
 
   assert.equal(offline.status, 502);
   assert.equal(offline.body.upstream, 0);
+});
+
+test("console ids come from the first transaction summary", async () => {
+  const { fetch, calls } = didit({
+    "GET /v3/transactions/?limit=1": {
+      body: { results: [{ organization_id: "org-1", application_id: "app-1" }] },
+    },
+  });
+
+  assert.deepEqual(await discoverConsoleIds(env(fetch)), {
+    orgId: "org-1",
+    appId: "app-1",
+  });
+  assert.equal(calls[0].headers["x-api-key"], "test-key");
+
+  const empty = didit({ "GET /v3/transactions/?limit=1": { body: { results: [] } } });
+
+  assert.equal(await discoverConsoleIds(env(empty.fetch)), null);
+
+  const offline = didit({ "GET /v3/transactions/?limit=1": new TypeError("fetch failed") });
+
+  assert.equal(await discoverConsoleIds(env(offline.fetch)), null);
+});
+
+test("without console ids the records still load, with no deep link", async () => {
+  const { fetch } = didit({ [decisionPath]: { body: NOT_STARTED } });
+  const reply = await readVerification(
+    env(fetch, { consoleIds: async () => null }),
+    ACCOUNT,
+  );
+
+  assert.equal(reply.status, 200);
+  assert.equal(reply.body.verification.consoleUrl, null);
+
+  const failing = await readVerification(
+    env(fetch, { consoleIds: async () => Promise.reject(new Error("down")) }),
+    ACCOUNT,
+  );
+
+  assert.equal(failing.status, 200);
+  assert.equal(failing.body.verification.consoleUrl, null);
 });
