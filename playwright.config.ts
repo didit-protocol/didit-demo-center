@@ -1,10 +1,12 @@
 import { defineConfig, devices } from "@playwright/test";
 
 /**
- * End-to-end tests for the demo's own pages (`npm run test:e2e`).
+ * End-to-end tests for the crypto exchange demo's own pages
+ * (`npm run test:e2e:crypto-exchange`). The iGaming and fintech browser tests
+ * are a separate harness: `npm run test:e2e`.
  *
  * They run against the production build, so build first:
- *   npm run build && npm run test:e2e
+ *   npm run build && npm run test:e2e:crypto-exchange
  *
  * Every Didit call is answered from recorded staging responses
  * (tests/fixtures/crypto-exchange), so the suite is deterministic, needs no API
