@@ -34,7 +34,6 @@ export const GUIDE: ChapterGuide[] = [
       "Business verification (KYB)",
       "Key people and UBOs",
       "KYB documents",
-      "Company AML",
       "ID verification for representatives",
       "Transaction monitoring",
     ],
@@ -64,7 +63,7 @@ export const GUIDE: ChapterGuide[] = [
         side: "browser",
         call: "DiditSdk.shared.startVerification({ url })",
         detail:
-          "Opens the hosted flow: registry search, key people, documents. Company AML runs on its own.",
+          "Opens the hosted flow: registry search with shareholders and UBOs, key people, documents.",
         docsPath: "integration/web-sdks/javascript-sdk",
       },
       {

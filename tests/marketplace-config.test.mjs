@@ -94,14 +94,15 @@ test("payout amounts are bounded and rounded to cents", () => {
   assert.equal(parsePayoutAmount("abc"), null);
 });
 
-test("the KYB workflow verifies the company, its people, documents and AML", () => {
+test("the KYB workflow verifies the company, its owners and people, and its documents", () => {
   const definition = kybWorkflowDefinition(
     SELLER_COUNTRIES.map((country) => country.code),
     "2db28cd2-7713-405f-89ad-144613b7086e",
   );
   const features = definition.features.map((feature) => feature.feature);
 
-  assert.deepEqual(features, ["KYB_REGISTRY", "KYB_KEY_PEOPLE", "KYB_DOCUMENTS", "AML"]);
+  assert.equal(definition.workflow_label, "Demo - Marketplace seller KYB");
+  assert.deepEqual(features, ["KYB_REGISTRY", "KYB_KEY_PEOPLE", "KYB_DOCUMENTS"]);
   assert.equal(definition.status, "published");
 
   const registry = definition.features[0].config.kyb_registry_countries_config;
