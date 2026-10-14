@@ -79,6 +79,14 @@
   background-color: rgb(0 0 0 / 0.6);
 }
 
+/* The preset's focus ring is blue at 20%: too faint around the demo's dark
+   pills and on the dark surface, so the demo draws it stronger. */
+.fintech-theme .focus-visible\:shadow-ring:focus-visible,
+.fintech-theme .focus\:shadow-ring:focus,
+.fintech-theme :is(.btn-primary, .btn-dark, .btn-muted, .btn-outline):focus-visible {
+  --tw-shadow: 0 0 0 3px rgb(var(--blue) / 0.5);
+}
+
 /* The bank's payment card art: brand gradient, no data on it. */
 .fintech-card-art {
   background:
