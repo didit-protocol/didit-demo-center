@@ -14,8 +14,6 @@ import { Hero } from "./hero";
 import { IndustryApps } from "./industry-apps";
 import { ResultsModal, type ResultsState } from "./results-modal";
 
-// Industry demos - the marketplace (DID-7138).
-import { MarketplaceCatalogueCard } from "@/components/marketplace/catalogue-card";
 import { useVerification } from "@/app/hooks/useVerification";
 import {
   type Demo,
@@ -238,10 +236,6 @@ export function Catalogue() {
 
       <Container className="pb-16 pt-8" size="xl">
         <DemoGrid demos={demos} query={query} onOpen={setOpenDemo} />
-        {/* Industry demos - the marketplace (DID-7138). */}
-        <div className="mt-8">
-          <MarketplaceCatalogueCard />
-        </div>
       </Container>
 
       <IndustryApps />

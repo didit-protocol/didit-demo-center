@@ -4,14 +4,9 @@
  *
  * A dead docs link is worse than no link: it is the first thing a developer
  * clicks after watching a demo run. This walks the `docsPath` on every demo,
-<<<<<<< ours
- * every `request.docsPath`, the shared DOC_PATHS map and the /igaming "How this
- * uses Didit" panel (lib/igaming/steps.ts), and fetches each URL on
- * docs.didit.me.
-=======
- * every `request.docsPath`, the marketplace demo's guide and the shared
- * DOC_PATHS map, and fetches each URL on docs.didit.me.
->>>>>>> theirs
+ * every `request.docsPath`, the shared DOC_PATHS map, the /igaming "How this
+ * uses Didit" panel (lib/igaming/steps.ts) and the /marketplace one
+ * (lib/marketplace/guide.ts), and fetches each URL on docs.didit.me.
  *
  * Usage:
  *   npm run check:docs-links
@@ -37,23 +32,16 @@ const ORIGIN = "https://docs.didit.me";
 function collectPaths() {
   const found = new Set();
 
-  for (const file of ["lib/demos.ts", "lib/igaming/steps.ts"]) {
+  for (const file of [
+    "lib/demos.ts",
+    "lib/igaming/steps.ts",
+    "lib/marketplace/guide.ts",
+  ]) {
     const source = fs.readFileSync(path.join(repoRoot, file), "utf8");
 
     for (const match of source.matchAll(/docsPath:\s*"([^"]+)"/g)) {
       found.add(match[1]);
     }
-  }
-
-  // The marketplace demo's "How this uses Didit" panel (lib/marketplace/guide.ts)
-  // declares its links on the same `docsPath:` key.
-  const marketplace = fs.readFileSync(
-    path.join(repoRoot, "lib/marketplace/guide.ts"),
-    "utf8",
-  );
-
-  for (const match of marketplace.matchAll(/docsPath:\s*"([^"]+)"/g)) {
-    found.add(match[1]);
   }
 
   const docs = fs.readFileSync(path.join(repoRoot, "lib/docs.ts"), "utf8");
