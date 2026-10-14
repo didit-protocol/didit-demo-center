@@ -31,6 +31,7 @@ from `GET /v3/session/{id}/decision/` through this app's own server route.
 when the user finishes on a **different device** than the one that started the
 session. It forwards straight to the catalogue, which opens the same modal.
 
+<<<<<<< HEAD
 ## Industry demo: iGaming (`/igaming`)
 
 Aurora Play, a fictional casino and sportsbook, runs Didit end to end. Every
@@ -70,6 +71,44 @@ application are untouched. Thresholds, markets and rule definitions are in
 The demo area has a light and a dark theme (Console v2 dark palette, scoped to
 the page in [`styles/igaming.css`](styles/igaming.css)); the didit.me chrome
 around it stays light.
+=======
+## Industry apps
+
+Beyond single-module demos, the catalogue links to whole products built on
+Didit ([`lib/industry-apps.ts`](lib/industry-apps.ts)).
+
+### Crypto exchange: `/crypto-exchange`
+
+Kestrel, a fictional exchange, runs real Didit flows end to end:
+
+| Step | Didit surface |
+| --- | --- |
+| Sign-up | `POST /v3/session/` on a KYC + AML workflow, opened with the web SDK; the account reads `GET /v3/session/{id}/decision/` |
+| Deposit | the backend reports it with `POST /v3/transactions/`; Didit screens the sending wallet and runs the rules |
+| Withdrawal | `POST /v3/transactions/sdk-token/`, then `DiditSdk.shared.submitTransaction` as a Travel Rule transfer; wallet-ownership proof and a selfie step-up come back as `action_required` |
+| Compliance view | `GET /v3/transactions/{id}/`, trimmed, plus Console links |
+
+The server routes under `app/api/crypto-exchange/` hold the API key, tie each
+visitor to their own `vendor_data` with an httpOnly cookie, and refuse to move
+money until the visitor's KYC is approved.
+
+It needs its workflows (in [`lib/crypto-exchange/policy.ts`](lib/crypto-exchange/policy.ts),
+staging only for now), three demo-scoped transaction rules and Travel Rule
+settings on the application. Install the rules and settings once per
+environment:
+
+```sh
+npm run crypto-exchange:setup -- --dry-run   # print what would change
+npm run crypto-exchange:setup                # create or update them
+```
+
+Set `NEXT_PUBLIC_DIDIT_CONSOLE_ORGANIZATION_ID` and
+`NEXT_PUBLIC_DIDIT_CONSOLE_APPLICATION_ID` to deep-link each record into the
+Console; without them the links open the Console home.
+
+The site itself is light-only, but the app has a light and a dark theme, scoped
+to the demo area in [`styles/crypto-exchange.css`](styles/crypto-exchange.css).
+>>>>>>> rec/demo3
 
 ## Site chrome
 
@@ -133,9 +172,14 @@ than failing on a 400.
 ## Checks
 
 ```sh
+<<<<<<< HEAD
 npm test                     # node --test (unit tests and /api/igaming route tests)
 npm run test:e2e             # Playwright flows for /igaming against BASE_URL
                              # (E2E_LIVE=1 adds a real staging session)
+=======
+npm test                     # node --test (status copy, crypto exchange payloads and policy)
+npm run build && npm run test:e2e  # Playwright, desktop and phone, recorded Didit responses
+>>>>>>> rec/demo3
 npm run typecheck            # tsc --noEmit
 npm run lint                 # eslint (vendor/ is excluded - it is synced)
 npm run build                # next build

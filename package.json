@@ -9,12 +9,17 @@
     "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
     "typecheck": "tsc --noEmit",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"tests/**/*.test.mjs\"",
+<<<<<<< HEAD
     "test:e2e": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-concurrency=1 \"tests/e2e/*.e2e.mjs\"",
     "igaming:setup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/igaming-setup.mjs",
+=======
+    "test:e2e": "playwright test",
+>>>>>>> rec/demo3
     "sync:website-chrome": "node scripts/sync-website-chrome.mjs",
     "check:website-chrome": "node scripts/check-website-chrome-parity.mjs",
     "check:docs-links": "node scripts/check-docs-links.mjs",
-    "shots": "node scripts/capture-screenshots.mjs"
+    "shots": "node scripts/capture-screenshots.mjs",
+    "crypto-exchange:setup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/crypto-exchange-setup.mjs"
   },
   "dependencies": {
     "@didit-protocol/sdk-web": "^0.4.0",
@@ -39,6 +44,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@playwright/test": "1.60.0",
     "@types/node": "20.5.7",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",

@@ -25,14 +25,19 @@ const ORIGIN = "https://docs.didit.me";
 
 /**
  * The catalogue is TypeScript, so rather than compile it we read the paths out
- * of the source. Both files declare them as plain string literals on a
- * `docsPath:` key (lib/demos.ts) or inside the DOC_PATHS object (lib/docs.ts),
- * which keeps this check dependency-free.
+ * of the source. They are plain string literals on a `docsPath:` key
+ * (lib/demos.ts, lib/crypto-exchange/panel.ts) or inside the DOC_PATHS object
+ * (lib/docs.ts), which keeps this check dependency-free.
  */
 function collectPaths() {
   const found = new Set();
 
+<<<<<<< HEAD
   for (const file of ["lib/demos.ts", "lib/igaming/steps.ts"]) {
+=======
+  // The catalogue, and the crypto exchange app's "How this uses Didit" panel.
+  for (const file of ["lib/demos.ts", "lib/crypto-exchange/panel.ts"]) {
+>>>>>>> rec/demo3
     const source = fs.readFileSync(path.join(repoRoot, file), "utf8");
 
     for (const match of source.matchAll(/docsPath:\s*"([^"]+)"/g)) {
