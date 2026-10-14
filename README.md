@@ -71,6 +71,7 @@ The demo area has a light and a dark theme (Console v2 dark palette, scoped to
 the page in [`styles/igaming.css`](styles/igaming.css)); the didit.me chrome
 around it stays light.
 
+<<<<<<< HEAD
 ## Industry demo: marketplace (`/marketplace`)
 
 Northmarket, a fictional resale marketplace, runs Didit end to end in five
@@ -125,6 +126,40 @@ same application are untouched. Definitions are in
 server reads the console organization and application from the API to build
 the Console v2 links.
 
+=======
+## Industry demo: fintech (`/fintech`)
+
+Alder, a fictional neobank, opens an account and moves money on Didit. It runs
+on **staging only** (`NEXT_PUBLIC_IS_STAGING=true`): onboarding runs a real AML
+screening, so on any other build every `/api/fintech` route answers 503 and the
+page links the staging demo instead.
+
+| Step | Didit surface |
+| --- | --- |
+| Sign-up | The bank's own form; the customer id becomes `vendor_data` |
+| Identity verification | `POST /v3/session/` with the onboarding workflow (ID, active liveness, face match, AML screening, IP analysis), then the web SDK's `startVerification` |
+| Account decision | `GET /v3/session/{id}/decision/`, reduced to statuses on the server; In Review keeps polling until an analyst decides |
+| Add and send money | `POST /v3/transactions/`, only once the decision is `Approved` and never above the balance Didit's own records give |
+| Held transfer | A rule holds outbound EUR transfers of 5,000 or more `IN_REVIEW`; the app re-reads `GET /v3/transactions/{uuid}/` until the review ends |
+| Ongoing AML monitoring | Explained in the app; the operator view asks `POST /v3/users/aml-monitoring/` for an `estimate_only` preview, which enables and bills nothing |
+| Operator side | Raw statuses, risk score and matched rule, with Console deep links (ids from `GET /v3/transactions/?limit=1`) |
+
+The account lives in a signed, httpOnly cookie scoped to `/api/fintech`: the
+customer id, the session id and the payment uuids. The server reads only those
+records and returns statuses, never the person's document data. The hosted
+flow's return URL is always this site's `/fintech`. Copy is in
+`messages/fintech/<locale>.json`, one file per language of the site chrome.
+
+**One-time setup on staging.** The review rule lives on the Didit application
+(idempotent, matched by title, scoped to `custom_properties.demo_app =
+"fintech"`):
+
+```sh
+npm run fintech:setup -- --dry-run   # print the payload
+npm run fintech:setup                # create or update it
+```
+
+>>>>>>> origin/main
 ## Site chrome
 
 The navbar, announcement bar and footer are **not written here**. They are
@@ -188,11 +223,17 @@ than failing on a 400.
 ## Checks
 
 ```sh
+<<<<<<< HEAD
 npm test                     # node --test (unit tests, /api/igaming and
                              # /marketplace route tests)
 npm run test:e2e             # Playwright flows for /igaming and /marketplace
                              # against BASE_URL (E2E_LIVE=1 adds the live
                              # staging flows)
+=======
+npm test                     # node --test (unit tests, /api/igaming and /api/fintech)
+npm run test:e2e             # Playwright flows for /igaming and /fintech against
+                             # BASE_URL (E2E_LIVE=1 adds real staging runs)
+>>>>>>> origin/main
 npm run typecheck            # tsc --noEmit
 npm run lint                 # eslint (vendor/ is excluded - it is synced)
 npm run build                # next build
@@ -209,7 +250,8 @@ PROOF_SESSION_ID=<a real session id> npm run shots
 
 Writes the catalogue, both modal families and the 390px layouts to `proof/`.
 The catalogue is light-only, exactly like didit.me and help.didit.me - the
-design system ships no dark token set. Only `/igaming` has a dark theme.
+design system ships no dark token set. Only the industry demos (`/igaming`,
+`/fintech`) have a dark theme.
 
 ## Technical documentation
 
