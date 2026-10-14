@@ -41,11 +41,13 @@ export const MIN_AMOUNT = 1;
 export const MAX_AMOUNT = 50000;
 
 /**
- * The transaction-monitoring rule the demo relies on, exactly as it is sent to
- * `POST /v3/transactions/rules/` by scripts/fintech-transaction-rule.mjs.
+ * The transaction-monitoring rule the demo relies on, exactly as
+ * `npm run fintech:setup` (scripts/fintech-setup.mjs) sends it to
+ * `POST /v3/transactions/rules/`.
  */
 export const REVIEW_RULE = {
   title: "High-value outbound transfer (fintech demo)",
+  mode: "ACTIVE",
   description:
     "Outbound EUR transfers of 5,000 or more from the demos.didit.me fintech demo are held for manual review.",
   category: "finance",
