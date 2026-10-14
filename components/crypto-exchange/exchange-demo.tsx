@@ -81,7 +81,7 @@ function ThemeToggle({
           key={option.value}
           aria-checked={theme === option.value}
           className={cn(
-            "inline-flex h-8 items-center gap-1.5 rounded-pill px-3 text-[13px] font-medium transition-colors duration-fast",
+            "inline-flex h-8 items-center gap-1.5 rounded-pill px-3 text-[13px] font-medium transition-colors duration-fast focus-visible:shadow-ring focus-visible:outline-none",
             theme === option.value
               ? "bg-ink text-canvas"
               : "text-muted hover:text-ink",

@@ -136,7 +136,7 @@ export function ModalCloseButton({
     <button
       aria-label="Close"
       className={cn(
-        "flex flex-none items-center justify-center rounded-pill bg-black/[0.04] text-muted transition-colors duration-fast hover:bg-black/[0.1] hover:text-ink",
+        "flex flex-none items-center justify-center rounded-pill bg-ink/[0.04] text-muted transition-colors duration-fast hover:bg-ink/[0.1] hover:text-ink",
         size === "lg" ? "size-9" : "size-8",
       )}
       type="button"

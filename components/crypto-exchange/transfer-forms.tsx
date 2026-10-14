@@ -141,7 +141,7 @@ function AmountField({
           <button
             key={preset}
             className={cn(
-              "h-7 rounded-pill border px-3 text-xs font-medium tnum transition-colors duration-fast",
+              "h-7 rounded-pill border px-3 text-xs font-medium tnum transition-colors duration-fast focus-visible:shadow-ring focus-visible:outline-none",
               value === preset
                 ? "border-ink bg-ink text-canvas"
                 : "border-line bg-canvas text-muted hover:text-ink",

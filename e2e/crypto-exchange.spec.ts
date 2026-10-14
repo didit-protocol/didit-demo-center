@@ -222,7 +222,17 @@ test("a withdrawal to another exchange shows the Travel Rule routing outcome", a
     "COUNTERPARTY_VASP_NOT_FOUND",
   );
   await backToWallet(page);
-  await expect(page.getByText("On hold")).toBeVisible();
+  // The transfer waits on the user, so its row asks for action and the
+  // balance card holds the amount.
+  const row = page
+    .getByRole("region", { name: "Activity" })
+    .getByRole("listitem")
+    .filter({ hasText: "Withdrawal" });
+
+  await expect(row).toContainText("Action needed");
+  await expect(page.getByRole("region", { name: "Balance" })).toContainText(
+    "On hold 0.30 ETH",
+  );
 });
 
 test("a withdrawal to a sanctioned address is blocked without asking for wallet proof", async ({
