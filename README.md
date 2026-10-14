@@ -31,6 +31,46 @@ from `GET /v3/session/{id}/decision/` through this app's own server route.
 when the user finishes on a **different device** than the one that started the
 session. It forwards straight to the catalogue, which opens the same modal.
 
+## Industry demo: iGaming (`/igaming`)
+
+Aurora Play, a fictional casino and sportsbook, runs Didit end to end. Every
+call is live against the environment `NEXT_PUBLIC_IS_STAGING` selects; nothing
+on the page is a fixture.
+
+| Step | Didit surface |
+| --- | --- |
+| Registration | Adaptive age workflow: `POST /v3/session/`, the web SDK's `startVerification`, `GET /v3/session/{id}/decision/` |
+| Licensed markets | The session's IP analysis, a country list and a transaction rule |
+| Deposits, bets, withdrawals, bonus, limits | `POST /v3/transactions/sdk-token/` on the server, only after `GET /v3/session/{id}/decision/` shows the player's approved age check; `submitTransaction` and `GET /v1/transactions/{id}/` in the browser |
+| ID check at 2,000 EUR | A rule moves the deposit to `AWAITING_USER`; the page opens the returned verification session |
+| Bonus abuse | A rule counting players per device fingerprint |
+| Self-exclusion | The balance is paid back as a monitored withdrawal, then `PATCH /v3/users/{vendor_data}/update-status/` to `BLOCKED`: Didit then refuses the player's transactions |
+| Operator side | Console deep links for the session, each transaction and the player |
+
+The player is a random `vendor_data` (`aurora-play-…`) in a signed, httpOnly
+cookie. The server routes under `app/api/igaming` only ever return records
+that belong to that player, cut down to what the page shows. The 18+ gate is
+the server's, not the page's: the token route mints nothing until Didit's own
+decision for the player's age check is `Approved`. The hosted flow's return
+URL is always this site's `/igaming` (`siteConfig.url`), never one the
+request supplies.
+
+**One-time setup per environment.** The rules and lists live on the Didit
+application, not in this repo. Install them (idempotent, matched by name):
+
+```sh
+npm run igaming:setup -- --dry-run   # print the payloads
+npm run igaming:setup                # create or update them
+```
+
+Every rule matches only `aurora-play-` players, so other demos on the same
+application are untouched. Thresholds, markets and rule definitions are in
+[`lib/igaming/policy.ts`](lib/igaming/policy.ts).
+
+The demo area has a light and a dark theme (Console v2 dark palette, scoped to
+the page in [`styles/igaming.css`](styles/igaming.css)); the didit.me chrome
+around it stays light.
+
 ## Site chrome
 
 The navbar, announcement bar and footer are **not written here**. They are
@@ -93,7 +133,9 @@ than failing on a 400.
 ## Checks
 
 ```sh
-npm test                     # node --test (status-copy unit tests)
+npm test                     # node --test (unit tests and /api/igaming route tests)
+npm run test:e2e             # Playwright flows for /igaming against BASE_URL
+                             # (E2E_LIVE=1 adds a real staging session)
 npm run typecheck            # tsc --noEmit
 npm run lint                 # eslint (vendor/ is excluded - it is synced)
 npm run build                # next build
@@ -109,8 +151,8 @@ PROOF_SESSION_ID=<a real session id> npm run shots
 ```
 
 Writes the catalogue, both modal families and the 390px layouts to `proof/`.
-The site is light-only, exactly like didit.me and help.didit.me - the design
-system ships no dark token set, so there is no dark variant to capture.
+The catalogue is light-only, exactly like didit.me and help.didit.me - the
+design system ships no dark token set. Only `/igaming` has a dark theme.
 
 ## Technical documentation
 
