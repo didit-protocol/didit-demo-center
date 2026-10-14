@@ -109,8 +109,11 @@ test("a KYB waiting on its key people lists them and keeps payouts locked", asyn
 
   await page.goto(`${BASE_URL}/marketplace`);
   await page.getByText("Acme Corporation Limited").first().waitFor();
-  // Alice Chen, the UBO the seller submitted, has her own ID check to do.
-  await page.locator(".mkt-inset", { hasText: "Alice Chen" }).waitFor();
+  // Alice Chen, the UBO the seller submitted, still has an ID check to do.
+  const person = page.locator(".mkt-inset", { hasText: "Alice Chen" });
+
+  await person.waitFor();
+  assert.match(await person.innerText(), /UBO, CEO/);
   assert.equal(await page.getByText("Company AML").count(), 0);
 
   await page.getByRole("button", { name: /Payouts/ }).first().click();

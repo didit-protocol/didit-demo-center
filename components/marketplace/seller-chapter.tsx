@@ -51,6 +51,10 @@ export const countryName = (code: string) =>
 const humanize = (value: string) =>
   value.replace(/_/g, " ").replace(/^\w/, (c) => c.toUpperCase());
 
+/** A key person's role as the registry names it; "ubo" reads as UBO. */
+const roleLabel = (role: string) =>
+  role.toLowerCase() === "ubo" ? "UBO" : humanize(role);
+
 function Step({
   icon: Icon,
   title,
@@ -325,7 +329,7 @@ export function SellerCard({ seller }: { seller: SellerView }) {
                     <div className="min-w-0 flex-1">
                       <p className="m-0 text-sm text-ink">{person.name}</p>
                       <p className="m-0 text-xs text-muted">
-                        {person.roles.map(humanize).join(", ") || "Key person"}
+                        {person.roles.map(roleLabel).join(", ") || "Key person"}
                         {person.ownership !== null
                           ? ` · ${person.ownership}%`
                           : ""}
