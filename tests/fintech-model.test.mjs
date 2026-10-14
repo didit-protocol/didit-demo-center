@@ -13,6 +13,7 @@ import {
   balances,
   consoleLinks,
   isSettled,
+  normaliseAmount,
   onboardingStatus,
   parsePayment,
   parseSignUp,
@@ -26,6 +27,7 @@ import {
   transactionPayload,
   triggersReview,
 } from "../lib/fintech/model.ts";
+import { STEPS } from "../lib/fintech/steps.ts";
 
 const fixture = (name) =>
   JSON.parse(
@@ -193,6 +195,36 @@ test("payment input: amounts, recipients and kinds", () => {
   assert.deepEqual(bad({ kind: "deposit", amount: "1e3" }), ["amount"]);
   assert.deepEqual(bad({ kind: "transfer", amount: 10 }), ["counterparty"]);
   assert.deepEqual(bad({ kind: "refund", amount: 10 }), ["kind"]);
+});
+
+test("typed amounts read the way people write them in any locale", () => {
+  const cases = {
+    "10000": "10000",
+    "10,000": "10000",
+    "10.000": "10000",
+    "1,234,567": "1234567",
+    "10 000": "10000",
+    "10\u202f000,50": "10000.50",
+    "1,234.50": "1234.50",
+    "1.234,50": "1234.50",
+    "10,5": "10.5",
+    "250.50": "250.50",
+    "0.125": "0.125",
+    "6000.": "6000.",
+    "": "",
+  };
+
+  for (const [typed, plain] of Object.entries(cases)) {
+    assert.equal(normaliseAmount(typed), plain, typed);
+  }
+
+  const amount = (typed) =>
+    parsePayment({ kind: "deposit", amount: normaliseAmount(typed) });
+
+  assert.equal(amount("10,000").value.amount, 10000);
+  assert.equal(amount("1.234,50").value.amount, 1234.5);
+  assert.deepEqual(amount("0.125").errors, ["amount"]);
+  assert.deepEqual(amount("€10").errors, ["amount"]);
 });
 
 test("the transaction payload matches what was posted to staging", () => {
@@ -380,4 +412,22 @@ test("console links need the ids, and fall back to the console home", () => {
   assert.equal(bare.session("s-1"), null);
   assert.equal(bare.transaction("t-1"), null);
   assert.equal(bare.home, "https://business.staging.didit.me/console");
+});
+
+test("the panel lists webhooks as production additions, not calls the demo makes", () => {
+  // The demo polls Didit; it has no webhook receiver.
+  for (const step of STEPS) {
+    assert.ok(
+      step.calls.every((call) => call.method !== "WEBHOOK"),
+      step.key,
+    );
+    assert.ok(
+      step.production.every((call) => call.method === "WEBHOOK"),
+      step.key,
+    );
+  }
+  assert.deepEqual(
+    STEPS.flatMap((step) => step.production.map((call) => call.path)),
+    ["status.updated", "transaction.status.updated"],
+  );
 });
