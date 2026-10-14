@@ -17,17 +17,20 @@
 import fs from "node:fs";
 import { randomUUID } from "node:crypto";
 
-import {
+await import("../helpers/register.mjs");
+
+const {
   createAccount,
   createPayment,
   deleteAccount,
+  discoverConsoleIds,
   getAccount,
   listPayments,
   previewMonitoring,
   readVerification,
   startVerification,
-} from "../../lib/fintech/server.ts";
-import { REVIEW_THRESHOLD } from "../../lib/fintech/model.ts";
+} = await import("../../lib/fintech/server.ts");
+const { REVIEW_THRESHOLD } = await import("../../lib/fintech/model.ts");
 
 export const API = "https://verification.staging.didit.me";
 
@@ -146,6 +149,9 @@ export function recordedDidit({ status = "Not Started" } = {}) {
   return {
     fetch,
     decision,
+    // Offline there is no application to read the console ids from: the
+    // panel shows its "open the Console" fallback.
+    consoleIds: async () => null,
     /** What an analyst's decision in the console does to a held payment. */
     decide(status) {
       for (const record of transactions.values()) {
@@ -205,8 +211,16 @@ export function stagingDidit(decision = { status: "Not Started" }) {
 
     return call(url, init);
   };
+  let ids;
 
-  return { fetch, decision, hasKey: Boolean(key) };
+  return {
+    fetch,
+    decision,
+    hasKey: Boolean(key),
+    // The real organization and application behind the key.
+    consoleIds: async () =>
+      (ids ??= await discoverConsoleIds({ apiBase: API, apiKey: key, fetch: call })),
+  };
 }
 
 /**
@@ -219,11 +233,9 @@ export async function installFintechApi(page, didit) {
     apiKey: "e2e",
     apiBase: API,
     live: true,
-    console: {
-      origin: "https://business.staging.didit.me",
-      orgId: null,
-      appId: null,
-    },
+    callbackUrl: "https://demos.staging.didit.me/fintech",
+    consoleOrigin: "https://business.staging.didit.me",
+    consoleIds: didit.consoleIds,
     fetch: didit.fetch,
     now: () => Date.now(),
     newId: () => randomUUID(),
@@ -250,10 +262,7 @@ export async function installFintechApi(page, didit) {
         reply = await readVerification(env, jar.account);
         break;
       case "POST verification":
-        reply = await startVerification(env, jar.account, {
-          origin: body?.origin,
-          locale: "en",
-        });
+        reply = await startVerification(env, jar.account, { locale: "en" });
         break;
       case "GET payments":
         reply = await listPayments(env, jar.account);
