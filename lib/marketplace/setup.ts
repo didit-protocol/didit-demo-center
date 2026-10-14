@@ -2,9 +2,10 @@
  * What the marketplace needs to exist on the Didit application behind
  * API_KEY: one KYB workflow and three transaction-monitoring rules.
  *
- * `scripts/marketplace-setup.mjs` creates them (idempotently, by title), and
- * the "How this uses Didit" panel describes the same objects, so the page and
- * the application can never disagree about what a rule does.
+ * `scripts/marketplace-setup.mjs` creates them (idempotently, the workflow by
+ * name and the rules by title), and the "How this uses Didit" panel describes
+ * the same objects, so the page and the application can never disagree about
+ * what a rule does.
  *
  * Every rule matches only transactions that carry this demo's
  * `custom_properties.demo_app = "marketplace"`, so other traffic on a shared
@@ -21,13 +22,14 @@ export const ACTIONS = {
   payout: "payout",
 } as const;
 
-export const KYB_WORKFLOW_LABEL = "Marketplace demo: seller KYB";
+export const KYB_WORKFLOW_LABEL = "Demo - Marketplace seller KYB";
 
 /**
- * The seller KYB: company registry at the UBO tier, key people with an ID
- * check for every representative and owner, company documents and company AML.
- * `personWorkflowUuid` is the KYC workflow each key person's child session
- * runs (the application's free KYC workflow).
+ * The seller KYB: company registry at the UBO tier (shareholders and UBOs
+ * discovered from the registry), key people with an ID check for every
+ * representative and owner, and company documents. `personWorkflowUuid` is the
+ * KYC workflow each key person's child session runs (the application's free
+ * KYC workflow).
  */
 export function kybWorkflowDefinition(
   countries: string[],
@@ -62,9 +64,55 @@ export function kybWorkflowDefinition(
         feature: "KYB_DOCUMENTS",
         config: { kyb_required_document_groups: ["LEGAL_PRESENCE"] },
       },
-      { feature: "AML" },
     ],
   };
+}
+
+/** The fields the setup reads from a GET /v3/workflows/ row. */
+export interface WorkflowRow {
+  workflow_id: string;
+  workflow_label: string | null;
+  workflow_type: string | null;
+  /** The features joined with " + ", e.g. "KYB_REGISTRY + KYB_DOCUMENTS". */
+  features: string | null;
+  status: string;
+  version: number;
+  is_archived: boolean;
+}
+
+/** This demo's own KYB workflow, found by name. */
+export function findDemoKybWorkflow(rows: WorkflowRow[]): WorkflowRow | null {
+  return (
+    rows.find(
+      (row) => row.workflow_label === KYB_WORKFLOW_LABEL && !row.is_archived,
+    ) ?? null
+  );
+}
+
+/**
+ * Any other published KYB workflow on the application: the fallback when the
+ * demo's own one cannot be created. Newest first, as the API lists them.
+ */
+export function findExistingKybWorkflow(
+  rows: WorkflowRow[],
+): WorkflowRow | null {
+  return (
+    rows.find(
+      (row) =>
+        !row.is_archived &&
+        row.status === "published" &&
+        (row.workflow_type === "kyb" ||
+          (row.features ?? "").includes("KYB_REGISTRY")),
+    ) ?? null
+  );
+}
+
+/**
+ * An application holds at most 50 workflows, archived ones included, and
+ * POST /v3/workflows/ answers 400 with this message once it is full.
+ */
+export function isWorkflowLimitError(body: unknown): boolean {
+  return /Maximum of \d+ workflows per application/.test(JSON.stringify(body));
 }
 
 const demoOnly = {
