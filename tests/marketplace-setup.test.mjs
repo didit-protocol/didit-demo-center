@@ -197,3 +197,23 @@ test("the KYB workflow id comes from the environment", () => {
   assert.equal(marketWorkflows("").kyb, "");
   assert.equal(marketWorkflows(undefined).age, STAGING_WORKFLOWS.age);
 });
+
+test("the routes read the KYB workflow id from NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID", async (t) => {
+  await import("./helpers/register.mjs");
+  const { marketEnv } = await import("../lib/marketplace/route.ts");
+  const { availability } = await import("../lib/marketplace/server.ts");
+  const before = process.env.NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID;
+
+  t.after(() => {
+    if (before === undefined) delete process.env.NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID;
+    else process.env.NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID = before;
+  });
+
+  process.env.NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID = "0f6c1a2e-1111-4222-8333-444455556666";
+  assert.equal(marketEnv().workflows.kyb, "0f6c1a2e-1111-4222-8333-444455556666");
+  assert.equal(marketEnv().workflows.person, STAGING_WORKFLOWS.person);
+
+  delete process.env.NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID;
+  assert.equal(marketEnv().workflows.kyb, "");
+  assert.equal(availability({ ...marketEnv(), isStaging: true, apiKey: "k" }).kyb, false);
+});
