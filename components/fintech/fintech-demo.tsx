@@ -186,9 +186,13 @@ export function FintechDemo({
 
     const { account: current, verification: decision = null } = result.data;
 
+    const next = current ? screenFor(decision) : "welcome";
+
     setAccount(current);
     setVerification(decision);
-    setScreen(current ? screenFor(decision) : "welcome");
+    // Landing on "checking" after a reload starts its "taking longer" clock.
+    if (next === "checking") setCheckingSince(Date.now());
+    setScreen(next);
   }, []);
 
   React.useEffect(() => {

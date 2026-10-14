@@ -17,6 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: messages.page.title,
     description: messages.page.lede,
+    alternates: { canonical: "/fintech" },
   };
 }
 
