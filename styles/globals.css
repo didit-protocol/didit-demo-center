@@ -227,6 +227,110 @@
   }
 }
 
+/* ── Marketplace demo (/marketplace) ─────────────────────────────────
+ * The marketplace's light and dark theme. The didit.me chrome stays light;
+ * only the marketplace wrapper re-points the design tokens, so
+ * every `bg-canvas`, `text-ink`, `border-line` inside it follows the theme.
+ * Dark values are the Business Console v2 dark tokens (console-v2-design,
+ * tokens v2 `[data-theme="dark"]`), the same ones /igaming and /fintech use:
+ * the page and cards on --c-surface, header bands and wells on --c-surface-2.
+ * Translucent console colours are flattened onto the dark surface, because
+ * the tokens here are RGB triples that Tailwind composes with its own alpha.
+ */
+.mkt-theme {
+  color: rgb(var(--ink));
+  background: rgb(var(--canvas));
+}
+
+.mkt-theme.mkt-dark {
+  color-scheme: dark;
+  --canvas: 21 21 23; /* #151517 */
+  --cream: 28 28 31;
+  --surface: 28 28 31; /* #1C1C1F */
+  --elevated: 35 35 39; /* #232327 */
+  --line: 42 42 46; /* #2A2A2E */
+  --muted: 154 154 162; /* #9A9AA2 */
+  --table-head: 107 107 115; /* #6B6B73 */
+  --ink: 245 245 247; /* #F5F5F7 */
+  --accent-black: 232 232 234;
+  --subtle-gray: 74 74 82;
+  --input-pale: 28 28 31;
+  --dark-overlay: 35 35 39;
+  --blue: 77 139 255; /* #4D8BFF */
+  --blue-deep: 106 157 255; /* #6A9DFF */
+  --blue-soft: 29 38 56; /* rgba(77,139,255,.14) on #151517 */
+  --blue-tint: 24 27 36;
+  --success-bg: 27 48 38;
+  --success-fg: 91 214 143; /* #5BD68F */
+  --warning-bg: 48 42 30;
+  --warning-fg: 245 196 81; /* #F5C451 */
+  --danger-bg: 54 27 29;
+  --danger-fg: 255 122 112; /* #FF7A70 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.6);
+  /* Aliases resolve where they are declared (:root), so they are re-pointed
+     here too: the base layer colours every border through --border. */
+  --accent: var(--blue);
+  --ring: var(--blue);
+  --border: var(--line);
+  --input: var(--line);
+}
+
+/* The base layer's border colour is set on `*`, so the scope re-applies it -
+   inside the base layer, where every border utility still wins over it. */
+@layer base {
+  .mkt-theme * {
+    border-color: rgb(var(--border));
+  }
+}
+
+@layer components {
+  .mkt-card {
+    @apply rounded-sm border border-line bg-canvas;
+  }
+
+  .mkt-inset {
+    @apply rounded-xs border border-line bg-surface;
+  }
+
+  /* Pills, per the radius rule. White text on the accent in both themes:
+     `text-canvas` would turn dark on the dark theme. */
+  .mkt-btn {
+    @apply inline-flex flex-none items-center justify-center gap-2 rounded-pill text-sm font-medium transition-colors duration-fast focus-visible:shadow-ring focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .mkt-btn-primary {
+    @apply mkt-btn bg-blue text-white hover:bg-blue/90;
+  }
+
+  .mkt-btn-ink {
+    @apply mkt-btn bg-ink text-canvas hover:bg-ink/85;
+  }
+
+  .mkt-btn-muted {
+    @apply mkt-btn bg-elevated text-ink hover:bg-ink/[0.12];
+  }
+
+  .mkt-btn-ghost {
+    @apply mkt-btn border border-line bg-transparent text-muted hover:bg-surface hover:text-ink;
+  }
+
+  .mkt-input {
+    @apply h-10 w-full rounded-xs border border-line bg-input-pale px-3 text-sm text-ink transition-colors duration-fast placeholder:text-table-head focus:border-blue focus:shadow-ring focus:outline-none;
+  }
+
+  .mkt-label {
+    @apply mb-1.5 block text-xs font-medium text-muted;
+  }
+
+  .mkt-code {
+    @apply rounded-2xs bg-ink/[0.06] px-1.5 py-0.5 text-[12px] text-ink;
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+      monospace;
+  }
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;

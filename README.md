@@ -103,6 +103,60 @@ npm run fintech:setup -- --dry-run   # print the payload
 npm run fintech:setup                # create or update it
 ```
 
+## Industry demo: marketplace (`/marketplace`)
+
+Northmarket, a fictional resale marketplace, runs Didit end to end in five
+chapters. Every control is live against Didit staging and the demo
+organization; the routes answer 503 on any other environment.
+
+| Chapter | Didit surface |
+| --- | --- |
+| Seller onboarding | A `seller_signup` sent to transaction monitoring from the browser with the web SDK, then the shop's KYB in the hosted flow (`POST /v3/session/`): company registry at the UBO tier (shareholders and UBOs), key people with their own ID check, company documents |
+| Buyer checkout | Every order monitored; orders of EUR 1,000 or more held by a rule (`AWAITING_USER`) until the buyer passes the adaptive age check that rule opens |
+| Payouts | Locked until `GET /v3/session/{id}/decision/` shows the KYB Approved (the server refuses the token), then monitored |
+| Fraud | A second shop opened from the same browser is held: both sign-ups carry the same persistent device id |
+| Operator view | The held transaction's rules, score, tags, notes, device and network, KYB review, and Console v2 deep links |
+
+A "How this uses Didit" panel lists each chapter's modules and calls, linked
+to docs.didit.me (checked by `npm run check:docs-links`).
+
+The browser never sees the API key. The server mints short-lived transaction
+tokens (`POST /v3/transactions/sdk-token/`) for identities it created, keeps
+the visitor's shops, buyer and transaction ids in one signed httpOnly cookie,
+reads back only records whose ids are in that cookie, and returns trimmed
+summaries (no session tokens, documents or dates of birth). See
+[`lib/marketplace/server.ts`](lib/marketplace/server.ts) and
+[`lib/marketplace/summaries.ts`](lib/marketplace/summaries.ts).
+
+**One-time setup on the staging application behind `API_KEY`.** The seller
+KYB workflow and three rules live on the Didit application, not in this repo:
+
+```sh
+npm run marketplace:setup                # dry run: what exists
+npm run marketplace:setup -- --activate  # create what is missing, rules ACTIVE
+```
+
+The workflow is found by name, `Demo - Marketplace seller KYB`, and created
+through `POST /v3/workflows/` only when it is missing; existing workflows are
+never edited or deleted. If the API refuses the create (an application holds
+at most 50 workflows, archived ones included), the script uses the
+application's existing published KYB workflow instead, or says there is none.
+Put the id it prints in `.env` and in the hosting environment:
+
+```ini
+NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID=<printed workflow_id>
+```
+
+Without it the seller chapter says the KYB is not published on this
+environment, and everything else runs. The rules match only transactions
+carrying `custom_properties.demo_app = "marketplace"`, so other demos on the
+same application are untouched. Definitions are in
+[`lib/marketplace/setup.ts`](lib/marketplace/setup.ts).
+
+`DIDIT_CONSOLE_ORG_ID` and `DIDIT_CONSOLE_APP_ID` are optional. Without them the
+server reads the console organization and application from the API to build
+the Console v2 links.
+
 ## Industry demo: crypto exchange (`/crypto-exchange`)
 
 Kestrel, a fictional crypto exchange, runs Didit end to end. Every call is
@@ -183,6 +237,7 @@ API_KEY=same-as-didit-client-secret
 NEXT_PUBLIC_REDIRECT_URI=https://demos.didit.me/
 NEXT_PUBLIC_IS_STAGING=false
 DIDIT_LIVENESS_WORKFLOW_ID=your-liveness-only-workflow-id
+NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID=
 ```
 
 `API_KEY` is used only on server-side API routes and must never be exposed
@@ -205,9 +260,11 @@ than failing on a 400.
 
 ```sh
 npm test                     # node --test (unit tests, /api/igaming,
-                             # /api/fintech and /api/crypto-exchange)
-npm run test:e2e             # Playwright flows for /igaming and /fintech against
-                             # BASE_URL (E2E_LIVE=1 adds real staging runs)
+                             # /api/fintech, /api/crypto-exchange and
+                             # /marketplace route tests)
+npm run test:e2e             # Playwright flows for /igaming, /fintech and
+                             # /marketplace against BASE_URL (E2E_LIVE=1 adds
+                             # the live staging flows)
 npm run build && npm run test:e2e:crypto-exchange
                              # Playwright flows for /crypto-exchange, desktop and
                              # phone, on recorded Didit responses
@@ -228,7 +285,7 @@ PROOF_SESSION_ID=<a real session id> npm run shots
 Writes the catalogue, both modal families and the 390px layouts to `proof/`.
 The catalogue is light-only, exactly like didit.me and help.didit.me - the
 design system ships no dark token set. Only the industry demos (`/igaming`,
-`/fintech`) have a dark theme.
+`/fintech`, `/marketplace`) have a dark theme.
 
 ## Technical documentation
 
