@@ -27,6 +27,15 @@ const INDUSTRY_APPS = [
     blurb:
       "Neobank: sign-up with KYC and AML screening, payments through transaction monitoring, a large transfer held for review and ongoing AML monitoring.",
   },
+  // Marketplace demo (DID-7138).
+  {
+    href: "/marketplace",
+    icon: "/icons/industries/marketplaces.svg",
+    industry: "Marketplace",
+    title: "Northmarket",
+    blurb:
+      "Resale marketplace: seller KYB with UBOs and the representatives' ID checks, buyer age checks at 1,000 EUR, monitored orders and payouts, and a second shop caught on a shared device.",
+  },
 ];
 
 export function IndustryApps() {

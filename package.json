@@ -15,7 +15,8 @@
     "sync:website-chrome": "node scripts/sync-website-chrome.mjs",
     "check:website-chrome": "node scripts/check-website-chrome-parity.mjs",
     "check:docs-links": "node scripts/check-docs-links.mjs",
-    "shots": "node scripts/capture-screenshots.mjs"
+    "shots": "node scripts/capture-screenshots.mjs",
+    "marketplace:setup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env scripts/marketplace-setup.mjs"
   },
   "dependencies": {
     "@didit-protocol/sdk-web": "^0.4.0",
