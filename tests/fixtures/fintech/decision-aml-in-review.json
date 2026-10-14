@@ -1,0 +1,24 @@
+{
+  "recorded": "2026-10-13, verification.staging.didit.me, demo organization",
+  "source": "real response; hosted-flow links and tokens redacted",
+  "status": 200,
+  "note": "Trimmed: statuses only, the hits and screened identity are dropped.",
+  "response": {
+    "session_id": "b2e13476-3908-4812-a561-20bd47eb739a",
+    "session_number": 7952,
+    "status": "In Review",
+    "features": [
+      "AML"
+    ],
+    "aml_screenings": [
+      {
+        "status": "In Review",
+        "node_id": "feature_aml",
+        "total_hits": 9
+      }
+    ],
+    "id_verifications": [],
+    "liveness_checks": [],
+    "face_matches": []
+  }
+}

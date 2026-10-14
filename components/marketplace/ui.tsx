@@ -165,7 +165,10 @@ export function Notice({
       <Icon className="mt-0.5 size-4 flex-none" />
       <div className="min-w-0 flex-1 leading-relaxed">
         {title ? <p className="m-0 font-medium">{title}</p> : null}
-        <div className={tone === "neutral" ? "text-muted" : "opacity-90"}>
+        {/* A tone colour on its own tint is under 4.5:1 for body text (the
+            warning one in light), so the body is ink; the tint, icon and
+            title carry the tone. */}
+        <div className={tone === "neutral" ? "text-muted" : "text-ink"}>
           {children}
         </div>
       </div>
