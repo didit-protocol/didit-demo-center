@@ -9,12 +9,9 @@
     "lint": "eslint . --ext .ts,.tsx -c .eslintrc.json --fix",
     "typecheck": "tsc --noEmit",
     "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test \"tests/**/*.test.mjs\"",
-<<<<<<< HEAD
     "test:e2e": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test --test-concurrency=1 \"tests/e2e/*.e2e.mjs\"",
+    "test:e2e:crypto-exchange": "playwright test",
     "igaming:setup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/igaming-setup.mjs",
-=======
-    "test:e2e": "playwright test",
->>>>>>> rec/demo3
     "sync:website-chrome": "node scripts/sync-website-chrome.mjs",
     "check:website-chrome": "node scripts/check-website-chrome-parity.mjs",
     "check:docs-links": "node scripts/check-docs-links.mjs",
