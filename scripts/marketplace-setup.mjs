@@ -1,21 +1,25 @@
 #!/usr/bin/env node
 /**
  * Creates what the marketplace demo (/marketplace) needs on the Didit
- * application behind API_KEY: the seller KYB workflow and the three
- * transaction-monitoring rules. The definitions are in lib/marketplace/setup.ts
- * - the same objects the page's "How this uses Didit" panel describes.
+ * application behind API_KEY: the seller KYB workflow ("Demo - Marketplace
+ * seller KYB") and the three transaction-monitoring rules. The definitions are
+ * in lib/marketplace/setup.ts - the same objects the page's "How this uses
+ * Didit" panel describes.
  *
- * Idempotent: the workflow is matched by label and every rule by title, so a
- * re-run only creates what is missing. Rules follow the rollout the Rules API
- * recommends: created in TEST mode, then switched to ACTIVE.
+ * Idempotent: the workflow is found by name and every rule by title, so a
+ * re-run only creates what is missing. Existing workflows are never edited or
+ * deleted. If the API refuses the create (an application holds at most 50
+ * workflows), the application's existing KYB workflow is used instead. Rules
+ * follow the rollout the Rules API recommends: created in TEST mode, then
+ * switched to ACTIVE.
  *
  * Usage (reads API_KEY and NEXT_PUBLIC_IS_STAGING from .env):
  *   npm run marketplace:setup                 # dry run: prints what exists
  *   npm run marketplace:setup -- --apply      # creates what is missing
  *   npm run marketplace:setup -- --activate   # --apply, then rules ACTIVE
  *
- * Paste the printed KYB workflow id into STAGING_WORKFLOWS.kyb in
- * lib/marketplace/config.ts.
+ * Put the printed NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID in .env and in the hosting
+ * environment's variables.
  *
  * https://docs.didit.me/management-api/workflows/create
  * https://docs.didit.me/transaction-monitoring/rules-api
@@ -25,9 +29,12 @@ import { SELLER_COUNTRIES } from "../lib/marketplace/catalog.ts";
 import { STAGING_WORKFLOWS } from "../lib/marketplace/config.ts";
 import {
   KYB_WORKFLOW_LABEL,
-  kybWorkflowDefinition,
+  ensureKybWorkflow,
+  isWorkflowLimitError,
   ruleDefinitions,
 } from "../lib/marketplace/setup.ts";
+
+const KYB_ENV = "NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID";
 
 const args = new Set(process.argv.slice(2));
 const activate = args.has("--activate");
@@ -42,7 +49,7 @@ if (process.env.NEXT_PUBLIC_IS_STAGING !== "true") {
 
 const base = "https://verification.staging.didit.me";
 
-async function didit(method, path, body) {
+async function call(method, path, body) {
   const response = await fetch(`${base}${path}`, {
     method,
     headers: {
@@ -52,15 +59,23 @@ async function didit(method, path, body) {
     body: body ? JSON.stringify(body) : undefined,
     signal: AbortSignal.timeout(30000),
   });
-  const data = await response.json().catch(() => null);
 
-  if (!response.ok) {
+  return {
+    status: response.status,
+    body: await response.json().catch(() => null),
+  };
+}
+
+async function didit(method, path, body) {
+  const reply = await call(method, path, body);
+
+  if (reply.status >= 400) {
     throw new Error(
-      `${method} ${path} -> ${response.status} ${JSON.stringify(data)}`,
+      `${method} ${path} -> ${reply.status} ${JSON.stringify(reply.body)}`,
     );
   }
 
-  return data;
+  return reply.body;
 }
 
 async function listAll(path) {
@@ -82,51 +97,41 @@ async function listAll(path) {
 }
 
 async function ensureWorkflow() {
-  const workflows = await listAll("/v3/workflows/");
-  const existing = workflows.find(
-    (workflow) =>
-      workflow.workflow_label === KYB_WORKFLOW_LABEL && !workflow.is_archived,
-  );
+  const setup = await ensureKybWorkflow(call, {
+    apply,
+    countries: SELLER_COUNTRIES.map((country) => country.code),
+    personWorkflowUuid: STAGING_WORKFLOWS.person,
+  });
 
-  if (existing) {
-    console.log(
-      `KYB workflow: ${existing.workflow_id} (${existing.status}, v${existing.version})`,
-    );
+  if (setup.refusal) {
+    const reason = isWorkflowLimitError(setup.refusal.body)
+      ? `the application already holds ${setup.workflowCount} workflows (archived ones included) and is at its workflow limit`
+      : `the API answered ${setup.refusal.status} ${JSON.stringify(setup.refusal.body)}`;
 
-    return existing.workflow_id;
-  }
-  if (!apply) {
-    console.log("KYB workflow: not created yet.");
-
-    return null;
+    console.log(`"${KYB_WORKFLOW_LABEL}": NOT created - ${reason}.`);
   }
 
-  try {
-    const created = await didit(
-      "POST",
-      "/v3/workflows/",
-      kybWorkflowDefinition(
-        SELLER_COUNTRIES.map((country) => country.code),
-        STAGING_WORKFLOWS.person,
-      ),
-    );
-
-    console.log(`KYB workflow: created ${created.workflow_id}`);
-
-    return created.workflow_id;
-  } catch (error) {
-    // An application holds at most 50 workflows, archived ones included, and
-    // only deleting one frees a slot. That is the application owner's call,
-    // so the script reports it and carries on with the rules.
-    if (String(error?.message).includes("Maximum of")) {
+  switch (setup.outcome) {
+    case "found":
+      console.log(`"${KYB_WORKFLOW_LABEL}": ${setup.workflow.id}`);
+      break;
+    case "created":
+      console.log(`"${KYB_WORKFLOW_LABEL}": created ${setup.workflow.id}`);
+      break;
+    case "existing":
       console.log(
-        `KYB workflow: NOT created - this application already holds ${workflows.length} workflow versions and is at its workflow limit. Free a slot in the console, then re-run.`,
+        `Using the application's existing KYB workflow instead: "${setup.workflow.label}" ${setup.workflow.id}`,
       );
-
-      return null;
-    }
-    throw error;
+      break;
+    default:
+      console.log(
+        setup.refusal
+          ? "No KYB workflow exists on this application to use instead. Free a workflow slot in the console, then re-run."
+          : `"${KYB_WORKFLOW_LABEL}": not created yet.`,
+      );
   }
+
+  return setup.workflow?.id ?? null;
 }
 
 async function ensureRules() {
@@ -170,9 +175,11 @@ async function main() {
 
   await ensureRules();
 
-  if (workflowId && workflowId !== STAGING_WORKFLOWS.kyb) {
+  if (workflowId) {
     console.log(
-      `\nSet STAGING_WORKFLOWS.kyb = "${workflowId}" in lib/marketplace/config.ts.`,
+      process.env[KYB_ENV] === workflowId
+        ? `\n${KYB_ENV} is already set to it.`
+        : `\nSet it in .env and in the hosting environment:\n${KYB_ENV}=${workflowId}`,
     );
   }
   if (!apply) console.log("\nDry run. Re-run with --apply, then --activate.");
