@@ -1,0 +1,268 @@
+{
+  "page": {
+    "eyebrow": "Demo por setor · Fintech",
+    "title": "Alder, um banco digital construído sobre a Didit",
+    "lede": "Abra uma conta, verifique a sua identidade e movimente dinheiro. Cada passo usa a API real da Didit: KYC e AML no registo, monitorização de transações em cada pagamento e triagem AML contínua a seguir.",
+    "allDemos": "Todas as demos",
+    "staging": "Em direto no staging da Didit",
+    "reset": "Recomeçar",
+    "theme": {
+      "label": "Tema de cores",
+      "light": "Claro",
+      "dark": "Escuro"
+    },
+    "unavailable": {
+      "title": "Esta demo funciona no staging da Didit",
+      "body": "Abrir uma conta aqui executa uma verificação de identidade e uma triagem AML reais para a organização de demonstração da Didit, por isso a demo é servida a partir do ambiente de staging.",
+      "cta": "Abrir a demo no staging"
+    }
+  },
+  "bank": {
+    "name": "Alder",
+    "fictional": "Banco fictício para fins de demonstração"
+  },
+  "common": {
+    "back": "Voltar",
+    "retry": "Tentar de novo",
+    "loading": "A carregar…",
+    "error": "Algo correu mal ao comunicar com a Didit. Tente de novo dentro de momentos.",
+    "diditError": "A Didit respondeu: {detail}",
+    "unavailable": "Esta demo não está disponível nesta implementação."
+  },
+  "welcome": {
+    "title": "Uma conta à ordem aberta em minutos",
+    "body": "Um IBAN em seu nome, transferências imediatas em toda a Europa e sem comissão mensal.",
+    "points": {
+      "verify": "Verifique-se com o seu documento e uma selfie",
+      "send": "Envie e receba dinheiro de imediato",
+      "safe": "Cada pagamento é verificado contra fraude"
+    },
+    "cta": "Abrir uma conta",
+    "note": "Use o seu próprio documento: os dados vão apenas para o ambiente de staging da Didit, nunca para um banco real."
+  },
+  "signup": {
+    "progress": "Passo {current} de {total}",
+    "title": "Fale-nos de si",
+    "body": "Usamos estes dados para abrir a sua conta. Confirma-os com o seu documento no passo seguinte.",
+    "name": "Nome completo",
+    "namePlaceholder": "Tal como consta no seu documento",
+    "email": "E-mail",
+    "emailPlaceholder": "o.seu@exemplo.pt",
+    "country": "País de residência",
+    "countryPlaceholder": "Escolha um país",
+    "consent": "Ao continuar, aceita que o Alder partilhe os seus dados com a Didit para verificar a sua identidade.",
+    "submit": "Continuar",
+    "submitting": "A abrir a sua conta…",
+    "errors": {
+      "name": "Introduza o seu nome completo.",
+      "email": "Introduza um endereço de e-mail válido.",
+      "country": "Escolha o país onde vive."
+    }
+  },
+  "verify": {
+    "progress": "Passo {current} de {total}",
+    "title": "Verifique a sua identidade",
+    "body": "Temos de confirmar quem é antes de abrir a sua conta. Demora cerca de dois minutos.",
+    "steps": {
+      "id": "Digitalize um documento de identificação oficial",
+      "liveness": "Grave um vídeo selfie curto",
+      "face": "Comparamos a sua selfie com o seu documento",
+      "aml": "Verificamos o seu nome em listas de sanções e de PEP"
+    },
+    "cta": "Verificar a minha identidade",
+    "resume": "Continuar a verificação",
+    "starting": "A abrir a verificação…",
+    "phone": "Sem câmara aqui? A verificação mostra um código QR para terminar no telemóvel.",
+    "cancelled": "Fechou a verificação antes de terminar. O seu progresso está guardado, pode continuar onde parou.",
+    "failed": "Não foi possível iniciar a verificação. {reason}"
+  },
+  "checking": {
+    "title": "A verificar os seus dados",
+    "body": "Costuma demorar menos de um minuto. Mantenha esta página aberta.",
+    "slow": "Está a demorar mais do que o habitual. Continuamos a verificar em segundo plano.",
+    "checks": {
+      "id": "Documento de identificação",
+      "liveness": "Prova de vida",
+      "face": "Correspondência facial",
+      "aml": "Triagem de sanções e PEP"
+    },
+    "status": {
+      "pending": "Em espera",
+      "passed": "Aprovado",
+      "review": "Em análise",
+      "failed": "Não aprovado"
+    }
+  },
+  "outcome": {
+    "approved": {
+      "title": "A sua conta está aberta",
+      "body": "Bem-vindo ao Alder, {name}. A sua conta está pronta: adicione dinheiro e comece a utilizá-la.",
+      "cta": "Ir para a minha conta"
+    },
+    "review": {
+      "title": "Estamos a analisar o seu pedido",
+      "body": "Precisamos de um pouco mais de tempo para confirmar alguns dados. A maioria das análises termina num dia útil e enviaremos um e-mail para {email} assim que terminarmos.",
+      "live": "Esta página atualiza-se sozinha quando a análise terminar."
+    },
+    "declined": {
+      "title": "Não foi possível abrir a sua conta",
+      "body": "Não conseguimos verificar a sua identidade, pelo que não podemos abrir-lhe uma conta neste momento.",
+      "cta": "Recomeçar"
+    },
+    "expired": {
+      "title": "A sua verificação expirou",
+      "body": "A ligação de verificação já não é válida. Recomece para abrir a sua conta.",
+      "cta": "Começar outra vez"
+    }
+  },
+  "home": {
+    "greeting": "Olá, {name}",
+    "balance": "Saldo disponível",
+    "held": "{amount} cativos",
+    "add": "Adicionar dinheiro",
+    "send": "Enviar dinheiro",
+    "activity": "Movimentos",
+    "refresh": "Atualizar",
+    "emptyTitle": "Ainda sem pagamentos",
+    "emptyBody": "Adicione primeiro dinheiro e depois envie algum. As transferências de {threshold} ou mais são verificadas antes de saírem da sua conta.",
+    "limit": "Atingiu o limite da demo de {limit} pagamentos. Recomece para abrir uma nova conta.",
+    "verified": "Identidade verificada"
+  },
+  "payment": {
+    "fromSelf": "Carregamento a partir do seu outro banco",
+    "to": "Para {name}",
+    "status": {
+      "received": "Recebido",
+      "sent": "Enviado",
+      "held": "Cativo",
+      "declined": "Recusado",
+      "action": "Ação necessária"
+    }
+  },
+  "pay": {
+    "depositTitle": "Adicionar dinheiro",
+    "depositBody": "A partir da sua conta noutro banco, em seu nome.",
+    "transferTitle": "Enviar dinheiro",
+    "transferBody": "Para qualquer pessoa com conta bancária na Europa.",
+    "amount": "Montante",
+    "otherAmount": "Outro montante",
+    "recipient": "Destinatário",
+    "recipientPlaceholder": "Nome completo do destinatário",
+    "available": "Disponível: {amount}",
+    "reviewHint": "As transferências de {threshold} ou mais ficam cativas para uma verificação rápida antes de saírem.",
+    "willReview": "Esta transferência será verificada antes de sair.",
+    "submitDeposit": "Adicionar {amount}",
+    "submitTransfer": "Enviar {amount}",
+    "submitting": "A enviar…",
+    "errors": {
+      "amount": "Introduza um montante entre {min} e {max}.",
+      "counterparty": "Introduza o nome completo do destinatário.",
+      "insufficient": "Só tem {available} disponíveis.",
+      "limit": "Atingiu o limite de pagamentos da demo para esta conta."
+    }
+  },
+  "result": {
+    "received": {
+      "title": "{amount} adicionados",
+      "body": "O dinheiro está na sua conta e pronto a usar."
+    },
+    "sent": {
+      "title": "{amount} enviados para {name}",
+      "body": "Deverá chegar em segundos."
+    },
+    "held": {
+      "title": "O seu pagamento está cativo",
+      "body": "Estamos a fazer uma verificação rápida deste pagamento antes de sair da sua conta. O dinheiro fica reservado até lá e este ecrã atualiza-se assim que a verificação terminar."
+    },
+    "declined": {
+      "title": "Pagamento recusado",
+      "body": "Este pagamento não foi concluído e não saiu dinheiro da sua conta."
+    },
+    "action": {
+      "title": "Precisamos de algo da sua parte",
+      "body": "Confirme a sua identidade para libertar este pagamento."
+    },
+    "done": "Concluído"
+  },
+  "monitoring": {
+    "title": "Monitorização AML contínua",
+    "body": "Depois de aderir, o seu perfil é novamente triado todos os dias em listas de sanções, PEP e notícias adversas. Uma nova inclusão chega à nossa equipa de compliance sem lhe pedir que se verifique outra vez.",
+    "cta": "Pré-visualizar a monitorização desta conta",
+    "loading": "A consultar a Didit…",
+    "rows": {
+      "profiles": "Perfis encontrados",
+      "alreadyMonitored": "Já monitorizados",
+      "withScreening": "Triagem do registo a monitorizar",
+      "needsScreening": "Seriam triados primeiro",
+      "missingIdentity": "Dados de identidade em falta",
+      "annualCost": "Custo anual da monitorização"
+    },
+    "note": "Apenas uma estimativa: nada foi ativado, triado ou faturado."
+  },
+  "panel": {
+    "title": "Como isto usa a Didit",
+    "subtitle": "Os módulos e as chamadas à API por trás de cada passo, em direto no staging.",
+    "open": "Como isto usa a Didit",
+    "close": "Fechar",
+    "current": "Está aqui",
+    "modules": "Módulos",
+    "calls": "Chamadas à API",
+    "docs": "Docs",
+    "steps": {
+      "signup": {
+        "title": "Registo",
+        "body": "O formulário do próprio banco. O ID de cliente que cria é enviado à Didit como vendor_data, a chave que liga cada sessão, pagamento e triagem a esta pessoa."
+      },
+      "verify": {
+        "title": "Verificação de identidade",
+        "body": "Uma única sessão alojada executa o fluxo do banco: verificação do documento, prova de vida ativa, correspondência facial 1:1, triagem AML e análise de IP."
+      },
+      "decision": {
+        "title": "Decisão",
+        "body": "O estado da sessão decide a conta: Approved abre-a, In Review aguarda um analista, Declined mantém-na fechada. O cliente nunca vê o motivo."
+      },
+      "payments": {
+        "title": "Monitorização de transações",
+        "body": "Cada pagamento é enviado com o mesmo vendor_data. As regras correm de forma síncrona e o veredicto regressa na resposta."
+      },
+      "review": {
+        "title": "Análise",
+        "body": "As transferências de {threshold} ou mais cumprem a regra «{rule}» e aguardam um analista na consola. A app volta a ler o pagamento e atualiza-se quando ele decide."
+      },
+      "monitoring": {
+        "title": "Monitorização AML contínua",
+        "body": "Ativa a triagem diária dos clientes verificados. A demo pede apenas a estimativa, que não grava nada."
+      }
+    },
+    "moduleNames": {
+      "idVerification": "Verificação de documento",
+      "liveness": "Prova de vida ativa",
+      "faceMatch": "Correspondência facial 1:1",
+      "aml": "Triagem AML",
+      "ipAnalysis": "Análise de IP",
+      "transactions": "Monitorização de transações",
+      "rules": "Motor de regras",
+      "webhooks": "Webhooks",
+      "manualReview": "Análise manual",
+      "ongoing": "Monitorização contínua"
+    }
+  },
+  "operator": {
+    "title": "Vista do operador",
+    "body": "O que a equipa de compliance do banco vê sobre este cliente na consola da Didit.",
+    "empty": "Ainda nada. Os registos aparecem aqui à medida que avança na app.",
+    "session": "Sessão de verificação",
+    "sessionNumber": "Sessão n.º {number}",
+    "transaction": "Transação n.º {number}",
+    "score": "Pontuação de risco",
+    "rule": "Regra aplicada",
+    "noRule": "Nenhuma regra aplicada",
+    "open": "Abrir na consola",
+    "openConsole": "Abrir a consola",
+    "find": "Procure {record} na consola.",
+    "login": "Requer sessão iniciada na consola da organização de demonstração da Didit."
+  },
+  "amount": {
+    "presets": "Escolha um montante"
+  }
+}

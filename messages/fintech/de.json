@@ -1,0 +1,268 @@
+{
+  "page": {
+    "eyebrow": "Branchendemo · Fintech",
+    "title": "Alder, eine Neobank auf Basis von Didit",
+    "lede": "Eröffnen Sie ein Konto, bestätigen Sie Ihre Identität und bewegen Sie Geld. Jeder Schritt nutzt die echte Didit-API: KYC und AML bei der Anmeldung, Transaktionsüberwachung bei jeder Zahlung und danach laufendes AML-Screening.",
+    "allDemos": "Alle Demos",
+    "staging": "Live auf Didit-Staging",
+    "reset": "Neu beginnen",
+    "theme": {
+      "label": "Farbschema",
+      "light": "Hell",
+      "dark": "Dunkel"
+    },
+    "unavailable": {
+      "title": "Diese Demo läuft auf Didit-Staging",
+      "body": "Eine Kontoeröffnung hier führt eine echte Identitätsprüfung und ein echtes AML-Screening für die Didit-Demo-Organisation aus. Deshalb wird die Demo aus der Staging-Umgebung bereitgestellt.",
+      "cta": "Demo auf Staging öffnen"
+    }
+  },
+  "bank": {
+    "name": "Alder",
+    "fictional": "Fiktive Bank zu Demonstrationszwecken"
+  },
+  "common": {
+    "back": "Zurück",
+    "retry": "Erneut versuchen",
+    "loading": "Wird geladen…",
+    "error": "Bei der Verbindung mit Didit ist etwas schiefgelaufen. Versuchen Sie es gleich noch einmal.",
+    "diditError": "Antwort von Didit: {detail}",
+    "unavailable": "Diese Demo ist in dieser Bereitstellung nicht verfügbar."
+  },
+  "welcome": {
+    "title": "Ein Girokonto, das in Minuten eröffnet ist",
+    "body": "Eine IBAN auf Ihren Namen, Sofortüberweisungen in ganz Europa und keine Monatsgebühr.",
+    "points": {
+      "verify": "Identifizierung mit Ausweis und Selfie",
+      "send": "Sofort Geld senden und empfangen",
+      "safe": "Jede Zahlung wird auf Betrug geprüft"
+    },
+    "cta": "Konto eröffnen",
+    "note": "Verwenden Sie Ihren eigenen Ausweis: Die Daten gehen nur an die Staging-Umgebung von Didit, nie an eine echte Bank."
+  },
+  "signup": {
+    "progress": "Schritt {current} von {total}",
+    "title": "Erzählen Sie uns von sich",
+    "body": "Damit eröffnen wir Ihr Konto. Im nächsten Schritt bestätigen Sie die Angaben mit Ihrem Ausweis.",
+    "name": "Vollständiger Name",
+    "namePlaceholder": "Wie in Ihrem Ausweis",
+    "email": "E-Mail",
+    "emailPlaceholder": "sie@beispiel.de",
+    "country": "Wohnsitzland",
+    "countryPlaceholder": "Land auswählen",
+    "consent": "Wenn Sie fortfahren, stimmen Sie zu, dass Alder Ihre Angaben zur Identitätsprüfung an Didit weitergibt.",
+    "submit": "Weiter",
+    "submitting": "Ihr Konto wird eröffnet…",
+    "errors": {
+      "name": "Geben Sie Ihren vollständigen Namen ein.",
+      "email": "Geben Sie eine gültige E-Mail-Adresse ein.",
+      "country": "Wählen Sie das Land, in dem Sie leben."
+    }
+  },
+  "verify": {
+    "progress": "Schritt {current} von {total}",
+    "title": "Bestätigen Sie Ihre Identität",
+    "body": "Wir müssen bestätigen, wer Sie sind, bevor wir Ihr Konto eröffnen. Das dauert etwa zwei Minuten.",
+    "steps": {
+      "id": "Scannen Sie einen amtlichen Ausweis",
+      "liveness": "Nehmen Sie ein kurzes Selfie-Video auf",
+      "face": "Wir gleichen Ihr Selfie mit Ihrem Ausweis ab",
+      "aml": "Wir prüfen Ihren Namen gegen Sanktions- und PEP-Listen"
+    },
+    "cta": "Identität bestätigen",
+    "resume": "Prüfung fortsetzen",
+    "starting": "Prüfung wird geöffnet…",
+    "phone": "Keine Kamera zur Hand? Die Prüfung zeigt einen QR-Code, um auf dem Handy fortzufahren.",
+    "cancelled": "Sie haben die Prüfung vor dem Ende geschlossen. Ihr Fortschritt ist gespeichert, Sie können dort weitermachen, wo Sie aufgehört haben.",
+    "failed": "Die Prüfung konnte nicht starten. {reason}"
+  },
+  "checking": {
+    "title": "Ihre Angaben werden geprüft",
+    "body": "Das dauert meist weniger als eine Minute. Lassen Sie diese Seite geöffnet.",
+    "slow": "Das dauert länger als üblich. Wir prüfen im Hintergrund weiter.",
+    "checks": {
+      "id": "Ausweisdokument",
+      "liveness": "Lebenderkennung",
+      "face": "Gesichtsabgleich",
+      "aml": "Sanktions- und PEP-Screening"
+    },
+    "status": {
+      "pending": "Ausstehend",
+      "passed": "Bestanden",
+      "review": "In Prüfung",
+      "failed": "Nicht bestanden"
+    }
+  },
+  "outcome": {
+    "approved": {
+      "title": "Ihr Konto ist eröffnet",
+      "body": "Willkommen bei Alder, {name}. Ihr Konto ist bereit: Zahlen Sie Geld ein und legen Sie los.",
+      "cta": "Zu meinem Konto"
+    },
+    "review": {
+      "title": "Wir prüfen Ihren Antrag",
+      "body": "Wir brauchen etwas mehr Zeit, um einige Angaben zu bestätigen. Die meisten Prüfungen sind innerhalb eines Werktags abgeschlossen, und wir schreiben an {email}, sobald wir fertig sind.",
+      "live": "Diese Seite aktualisiert sich von selbst, wenn die Prüfung endet."
+    },
+    "declined": {
+      "title": "Wir konnten Ihr Konto nicht eröffnen",
+      "body": "Wir konnten Ihre Identität nicht bestätigen und können daher derzeit kein Konto für Sie eröffnen.",
+      "cta": "Neu beginnen"
+    },
+    "expired": {
+      "title": "Ihre Prüfung ist abgelaufen",
+      "body": "Der Prüfungslink ist nicht mehr gültig. Beginnen Sie neu, um Ihr Konto zu eröffnen.",
+      "cta": "Neu starten"
+    }
+  },
+  "home": {
+    "greeting": "Hallo, {name}",
+    "balance": "Verfügbarer Saldo",
+    "held": "{amount} zurückgehalten",
+    "add": "Geld einzahlen",
+    "send": "Geld senden",
+    "activity": "Umsätze",
+    "refresh": "Aktualisieren",
+    "emptyTitle": "Noch keine Zahlungen",
+    "emptyBody": "Zahlen Sie zuerst Geld ein und senden Sie dann etwas. Überweisungen ab {threshold} werden geprüft, bevor sie Ihr Konto verlassen.",
+    "limit": "Sie haben das Demo-Limit von {limit} Zahlungen erreicht. Beginnen Sie neu, um ein neues Konto zu eröffnen.",
+    "verified": "Identität bestätigt"
+  },
+  "payment": {
+    "fromSelf": "Aufladung von Ihrer anderen Bank",
+    "to": "An {name}",
+    "status": {
+      "received": "Erhalten",
+      "sent": "Gesendet",
+      "held": "Zurückgehalten",
+      "declined": "Abgelehnt",
+      "action": "Aktion erforderlich"
+    }
+  },
+  "pay": {
+    "depositTitle": "Geld einzahlen",
+    "depositBody": "Von Ihrem Konto bei einer anderen Bank, auf Ihren eigenen Namen.",
+    "transferTitle": "Geld senden",
+    "transferBody": "An alle mit einem Bankkonto in Europa.",
+    "amount": "Betrag",
+    "otherAmount": "Anderer Betrag",
+    "recipient": "Empfänger",
+    "recipientPlaceholder": "Vollständiger Name des Empfängers",
+    "available": "Verfügbar: {amount}",
+    "reviewHint": "Überweisungen ab {threshold} werden für eine kurze Prüfung zurückgehalten, bevor sie ausgeführt werden.",
+    "willReview": "Diese Überweisung wird vor der Ausführung geprüft.",
+    "submitDeposit": "{amount} einzahlen",
+    "submitTransfer": "{amount} senden",
+    "submitting": "Wird gesendet…",
+    "errors": {
+      "amount": "Geben Sie einen Betrag zwischen {min} und {max} ein.",
+      "counterparty": "Geben Sie den vollständigen Namen des Empfängers ein.",
+      "insufficient": "Sie haben nur {available} verfügbar.",
+      "limit": "Sie haben das Demo-Limit an Zahlungen für dieses Konto erreicht."
+    }
+  },
+  "result": {
+    "received": {
+      "title": "{amount} eingezahlt",
+      "body": "Das Geld ist auf Ihrem Konto und sofort verfügbar."
+    },
+    "sent": {
+      "title": "{amount} an {name} gesendet",
+      "body": "Es sollte in wenigen Sekunden ankommen."
+    },
+    "held": {
+      "title": "Ihre Zahlung wird zurückgehalten",
+      "body": "Wir prüfen diese Zahlung kurz, bevor sie Ihr Konto verlässt. Das Geld ist bis dahin reserviert, und diese Ansicht aktualisiert sich, sobald die Prüfung endet."
+    },
+    "declined": {
+      "title": "Zahlung abgelehnt",
+      "body": "Diese Zahlung wurde nicht ausgeführt und es hat kein Geld Ihr Konto verlassen."
+    },
+    "action": {
+      "title": "Wir brauchen etwas von Ihnen",
+      "body": "Bestätigen Sie Ihre Identität, um diese Zahlung freizugeben."
+    },
+    "done": "Fertig"
+  },
+  "monitoring": {
+    "title": "Laufende AML-Überwachung",
+    "body": "Nach Ihrer Aufnahme wird Ihr Profil täglich erneut gegen Sanktions-, PEP- und Negativpresse-Listen geprüft. Ein neuer Eintrag erreicht unser Compliance-Team, ohne dass Sie sich erneut identifizieren müssen.",
+    "cta": "Überwachung für dieses Konto anzeigen",
+    "loading": "Didit wird gefragt…",
+    "rows": {
+      "profiles": "Gefundene Profile",
+      "alreadyMonitored": "Bereits überwacht",
+      "withScreening": "Zu überwachendes Onboarding-Screening",
+      "needsScreening": "Würden zuerst geprüft",
+      "missingIdentity": "Fehlende Identitätsdaten",
+      "annualCost": "Überwachungskosten pro Jahr"
+    },
+    "note": "Nur eine Schätzung: Es wurde nichts aktiviert, geprüft oder berechnet."
+  },
+  "panel": {
+    "title": "So nutzt die App Didit",
+    "subtitle": "Die Module und API-Aufrufe hinter jedem Schritt, live auf Staging.",
+    "open": "So nutzt die App Didit",
+    "close": "Schließen",
+    "current": "Sie sind hier",
+    "modules": "Module",
+    "calls": "API-Aufrufe",
+    "docs": "Docs",
+    "steps": {
+      "signup": {
+        "title": "Anmeldung",
+        "body": "Das eigene Formular der Bank. Die dabei erzeugte Kunden-ID geht als vendor_data an Didit, der Schlüssel, der jede Sitzung, Zahlung und Prüfung dieser Person zuordnet."
+      },
+      "verify": {
+        "title": "Identitätsprüfung",
+        "body": "Eine gehostete Sitzung führt den Ablauf der Bank aus: Ausweisprüfung, aktive Lebenderkennung, Gesichtsabgleich 1:1, AML-Screening und IP-Analyse."
+      },
+      "decision": {
+        "title": "Entscheidung",
+        "body": "Der Sitzungsstatus entscheidet über das Konto: Approved eröffnet es, In Review wartet auf einen Analysten, Declined lässt es geschlossen. Der Kunde erfährt nie den Grund."
+      },
+      "payments": {
+        "title": "Transaktionsüberwachung",
+        "body": "Jede Zahlung wird mit derselben vendor_data gesendet. Die Regeln laufen synchron und das Ergebnis kommt in der Antwort zurück."
+      },
+      "review": {
+        "title": "Prüfung",
+        "body": "Überweisungen ab {threshold} lösen die Regel „{rule}“ aus und warten in der Konsole auf einen Analysten. Die App liest die Zahlung erneut und aktualisiert sich, wenn er entscheidet."
+      },
+      "monitoring": {
+        "title": "Laufende AML-Überwachung",
+        "body": "Aktiviert das tägliche Screening verifizierter Kunden. Die Demo fragt nur die Schätzung ab, die nichts schreibt."
+      }
+    },
+    "moduleNames": {
+      "idVerification": "Ausweisprüfung",
+      "liveness": "Aktive Lebenderkennung",
+      "faceMatch": "Gesichtsabgleich 1:1",
+      "aml": "AML-Screening",
+      "ipAnalysis": "IP-Analyse",
+      "transactions": "Transaktionsüberwachung",
+      "rules": "Regel-Engine",
+      "webhooks": "Webhooks",
+      "manualReview": "Manuelle Prüfung",
+      "ongoing": "Laufende Überwachung"
+    }
+  },
+  "operator": {
+    "title": "Ansicht für Mitarbeitende",
+    "body": "Was das Compliance-Team der Bank zu diesem Kunden in der Didit-Konsole sieht.",
+    "empty": "Noch nichts. Einträge erscheinen hier, während Sie die App nutzen.",
+    "session": "Prüfsitzung",
+    "sessionNumber": "Sitzung Nr. {number}",
+    "transaction": "Transaktion Nr. {number}",
+    "score": "Risikowert",
+    "rule": "Ausgelöste Regel",
+    "noRule": "Keine Regel ausgelöst",
+    "open": "In der Konsole öffnen",
+    "openConsole": "Konsole öffnen",
+    "find": "Suchen Sie in der Konsole nach {record}.",
+    "login": "Erfordert eine Konsolen-Anmeldung für die Didit-Demo-Organisation."
+  },
+  "amount": {
+    "presets": "Betrag wählen"
+  }
+}
