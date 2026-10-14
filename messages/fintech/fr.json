@@ -207,6 +207,7 @@
     "current": "Vous êtes ici",
     "modules": "Modules",
     "calls": "Appels d’API",
+    "production": "Une app en production ajoute",
     "docs": "Docs",
     "steps": {
       "signup": {
