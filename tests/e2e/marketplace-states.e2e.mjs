@@ -138,3 +138,31 @@ test("an approved KYB unlocks payouts, in both themes and on a phone", async () 
     await context.close();
   }
 });
+
+test("on a phone the guide sheet keeps keyboard focus inside and gives it back", async () => {
+  const { context, page } = await mockedPage(stateWith({ kybWorkflow: true, kyb: null }), {
+    viewport: { width: 390, height: 844 },
+  });
+
+  await page.goto(`${BASE_URL}/marketplace`);
+  const trigger = page.locator("button.mkt-btn-ink.w-full", { hasText: "How this uses Didit" });
+
+  await trigger.focus();
+  await page.keyboard.press("Enter");
+  const sheet = page.getByRole("dialog");
+
+  await sheet.waitFor();
+  // Focus starts on the sheet itself, so Shift+Tab first, then both ways round.
+  for (const key of ["Shift+Tab", ...Array(25).fill("Tab"), ...Array(5).fill("Shift+Tab")]) {
+    await page.keyboard.press(key);
+    assert.ok(
+      await page.evaluate(() => Boolean(document.activeElement?.closest('[role="dialog"]'))),
+      `${key} moved focus out of the sheet`,
+    );
+  }
+
+  await page.keyboard.press("Escape");
+  await sheet.waitFor({ state: "detached" });
+  assert.ok(await trigger.evaluate((el) => el === document.activeElement));
+  await context.close();
+});
