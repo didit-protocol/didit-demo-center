@@ -1,59 +1,82 @@
-/* ── Fintech demo theme ───────────────────────────────────────────────
- * The site is light-only, like didit.me. The fintech demo is a product a
- * prospect will judge in their own app's theme, so it carries a dark variant
- * of the SAME token set: inside `.fintech-theme[data-theme="dark"]` the token
- * variables point at dark values, and every `bg-canvas`, `text-ink`,
- * `border-line`, `bg-success-bg`... class in the demo follows. The site
- * header and footer sit outside the scope and stay light.
+/* The /fintech demo app's theme.
+ *
+ * didit.me ships light tokens only and the vendored navbar and footer stay
+ * light. The demo has to show light AND dark, so inside
+ * `.fintech-theme[data-theme="dark"]` the same token names point at the
+ * Business Console v2 dark palette, the values /igaming uses
+ * (styles/igaming.css). Every `bg-canvas`, `text-ink`, `border-line` in the
+ * demo follows with no per-component dark classes.
  */
+
 .fintech-theme {
+  --fx-page: 246 246 246; /* console --c-bg #F6F6F6 */
   color-scheme: light;
+  background: rgb(var(--fx-page));
+  color: rgb(var(--ink));
 }
 
 .fintech-theme[data-theme="dark"] {
   color-scheme: dark;
+  --fx-page: 14 14 16; /* #0E0E10 */
+  --canvas: 21 21 23; /* #151517 - cards, panels */
+  --cream: 28 28 31;
+  --surface: 28 28 31; /* #1C1C1F - quiet wells */
+  --elevated: 35 35 39; /* #232327 */
+  --line: 42 42 46; /* #2A2A2E */
+  --muted: 154 154 162; /* #9A9AA2 */
+  --table-head: 107 107 115; /* #6B6B73 */
+  --ink: 245 245 247; /* #F5F5F7 */
+  --accent-black: 232 232 234;
+  --subtle-gray: 74 74 82;
+  --input-pale: 28 28 31;
+  --dark-overlay: 35 35 39;
+  --blue: 77 139 255; /* #4D8BFF */
+  --blue-deep: 106 157 255; /* #6A9DFF */
+  --blue-soft: 29 38 56; /* rgba(77,139,255,.14) on #151517 */
+  --blue-tint: 24 27 36;
+  --success-bg: 27 48 38;
+  --success-fg: 91 214 143; /* #5BD68F */
+  --warning-bg: 48 42 30;
+  --warning-fg: 245 196 81; /* #F5C451 */
+  --danger-bg: 54 27 29;
+  --danger-fg: 255 122 112; /* #FF7A70 */
 
-  --canvas: 15 16 18; /* #0F1012 */
-  --cream: 22 23 26;
-  --surface: 23 24 27; /* #17181B */
-  --elevated: 35 37 41; /* #232529 */
-  --line: 44 46 51; /* #2C2E33 */
-  --border: 44 46 51;
-  --input: 44 46 51;
-  --muted: 163 167 174; /* #A3A7AE */
-  --table-head: 122 127 135;
-  --ink: 240 241 243; /* #F0F1F3 */
-  --accent-black: 214 216 220;
-  --subtle-gray: 139 149 165;
-  --input-pale: 29 30 34;
-  --dark-overlay: 8 8 9;
+  /* The shadcn aliases resolve at :root, so they are re-declared here. */
+  --background: var(--canvas);
+  --foreground: var(--ink);
+  --card: var(--canvas);
+  --card-foreground: var(--ink);
+  --popover: var(--canvas);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--canvas);
+  --secondary: var(--surface);
+  --secondary-foreground: var(--ink);
+  --accent: var(--blue);
+  --muted-foreground: var(--muted);
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--blue);
 
-  --blue: 92 141 255; /* #5C8DFF - Didit blue lifted for contrast on dark */
-  --blue-deep: 133 170 255;
-  --blue-soft: 26 39 74;
-  --blue-tint: 19 25 42;
-
-  --success-bg: 17 48 31;
-  --success-fg: 96 211 138;
-  --warning-bg: 54 42 12;
-  --warning-fg: 240 196 92;
-  --danger-bg: 60 25 22;
-  --danger-fg: 255 134 120;
-
-  --background: 15 16 18;
-  --foreground: 240 241 243;
-  --card: 15 16 18;
-  --ring: 92 141 255;
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.6);
 }
 
 /* `btn-primary` writes its label in `text-canvas`, which is near-black in the
    dark scope. White keeps the blue pill legible in both themes. */
 .fintech-theme[data-theme="dark"] .btn-primary {
   color: #fff;
+}
+
+/* `btn-muted` hovers with black/8%, invisible on the dark surface. */
+.fintech-theme[data-theme="dark"] .btn-muted:hover {
+  background-color: rgb(var(--line));
+}
+
+/* The shared modal scrim is `bg-ink/60`; ink turns light in dark mode. */
+.fintech-theme[data-theme="dark"] .modal-scrim {
+  background-color: rgb(0 0 0 / 0.6);
 }
 
 /* The bank's payment card art: brand gradient, no data on it. */
@@ -64,7 +87,12 @@
     linear-gradient(135deg, #10131c 0%, #1b2236 100%);
 }
 
-/* The website's module glyphs are drawn in #1A1A1A; on dark they invert. */
+/* Module glyphs are drawn in #1A1A1A; flip them on the dark surface. */
 .fintech-theme[data-theme="dark"] .fx-glyph {
-  filter: invert(1);
+  filter: invert(0.92);
+}
+
+/* Endpoints and SDK calls. The preset's `font-mono` is Inter, not monospace. */
+:where(.fx-code) {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
 }
