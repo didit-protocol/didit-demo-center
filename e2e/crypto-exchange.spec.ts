@@ -472,6 +472,7 @@ test("the selected theme and amount pills show a focus ring in both themes", asy
   await open(page);
 
   // The site's ring on light surfaces; the dark theme's own, stronger one.
+  // Tailwind lists two transparent ring layers before it.
   const LIGHT_RING = "rgba(37, 103, 255, 0.2) 0px 0px 0px 3px";
   const DARK_RING = "rgba(84, 138, 255, 0.7) 0px 0px 0px 3px";
   const shadow = (locator: Locator) =>
@@ -484,10 +485,10 @@ test("the selected theme and amount pills show a focus ring in both themes", asy
   await light.focus();
   await page.keyboard.press("ArrowRight");
   await expect(dark).toBeFocused();
-  await expect.poll(() => shadow(dark)).toBe(DARK_RING);
+  await expect.poll(() => shadow(dark)).toContain(DARK_RING);
   await page.keyboard.press("ArrowLeft");
   await expect(light).toBeFocused();
-  await expect.poll(() => shadow(light)).toBe(LIGHT_RING);
+  await expect.poll(() => shadow(light)).toContain(LIGHT_RING);
 
   await app(page).getByRole("button", { name: "Deposit", exact: true }).click();
   const selected = page.getByRole("button", { name: "1.25 ETH", exact: true });
@@ -497,14 +498,14 @@ test("the selected theme and amount pills show a focus ring in both themes", asy
   await page.keyboard.press("Tab");
   await page.keyboard.press("Tab");
   await expect(selected).toBeFocused();
-  await expect.poll(() => shadow(selected)).toBe(LIGHT_RING);
+  await expect.poll(() => shadow(selected)).toContain(LIGHT_RING);
 
   await dark.click();
   await page.getByLabel("Amount").focus();
   await page.keyboard.press("Tab");
   await page.keyboard.press("Tab");
   await expect(selected).toBeFocused();
-  await expect.poll(() => shadow(selected)).toBe(DARK_RING);
+  await expect.poll(() => shadow(selected)).toContain(DARK_RING);
 });
 
 test("the dialog's close button keeps its circle in the dark theme", async ({
