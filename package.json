@@ -17,11 +17,8 @@
     "check:website-chrome": "node scripts/check-website-chrome-parity.mjs",
     "check:docs-links": "node scripts/check-docs-links.mjs",
     "shots": "node scripts/capture-screenshots.mjs",
-<<<<<<< HEAD
+    "marketplace:setup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env scripts/marketplace-setup.mjs",
     "crypto-exchange:setup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/crypto-exchange-setup.mjs"
-=======
-    "marketplace:setup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --env-file-if-exists=.env scripts/marketplace-setup.mjs"
->>>>>>> origin/main
   },
   "dependencies": {
     "@didit-protocol/sdk-web": "^0.4.0",
