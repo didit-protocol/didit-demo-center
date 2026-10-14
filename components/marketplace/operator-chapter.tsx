@@ -72,7 +72,7 @@ function Queue() {
                 <button
                   aria-pressed={active}
                   className={cn(
-                    "flex w-full flex-wrap items-center gap-x-3 gap-y-1.5 rounded-xs border px-3.5 py-2.5 text-left transition-colors duration-fast",
+                    "flex w-full items-center gap-3 rounded-xs border px-3.5 py-2.5 text-left transition-colors duration-fast",
                     active
                       ? "border-blue bg-blue-soft"
                       : "border-line bg-canvas hover:bg-surface",
@@ -80,8 +80,7 @@ function Queue() {
                   type="button"
                   onClick={() => market.inspect(tx.uuid)}
                 >
-                  {/* On a phone the pill wraps below, so the title keeps the full width. */}
-                  <span className="min-w-0 basis-full sm:basis-0 sm:flex-1">
+                  <span className="min-w-0 flex-1">
                     <span className="block truncate text-sm text-ink">
                       {transactionTitle(tx)}
                     </span>
@@ -300,7 +299,7 @@ function Inspection() {
                   key={network.id}
                   className="flex flex-wrap items-center gap-3 text-sm"
                 >
-                  <span className="min-w-0 flex-1 basis-40">
+                  <span className="min-w-0 flex-1">
                     <span className="block text-ink">
                       {network.number ?? "Network"}
                       {network.name ? ` · ${network.name}` : ""}
