@@ -312,9 +312,10 @@ function toAmount(value: unknown): number | null {
 /**
  * A typed amount as a plain decimal string, whichever marks the visitor used.
  * "," and "." both work as either separator: when both appear the last one
- * is the decimal mark; a single mark followed by exactly three digits groups
- * thousands, as in "10,000" or "10.000"; any other single mark is decimal,
- * as in "10,5" or "0.125". Spaces are dropped. Anything else is left for
+ * is the decimal mark; a mark that repeats, or a single one followed by
+ * exactly three digits after a non-zero number, groups thousands, as in
+ * "10,000" or "10.000"; any other single mark is decimal, as in "10,5" or
+ * "0.125". Spaces and apostrophes are dropped. Anything else is left for
  * parsePayment to reject.
  */
 export function normaliseAmount(raw: string): string {
