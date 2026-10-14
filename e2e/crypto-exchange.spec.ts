@@ -85,6 +85,12 @@ test("a finished onboarding opens the account", async ({ page }) => {
     page.getByRole("heading", { name: "Welcome, Avery" }),
   ).toBeVisible();
   await expect(page.getByTestId("kestrel-balance")).toHaveText("0.00 ETH");
+  await expect(
+    app(page).getByRole("link", { name: "Open in the Didit Console" }),
+  ).toHaveAttribute(
+    "href",
+    `https://business.staging.didit.me/console/${CONSOLE.organizationId}/${CONSOLE.applicationId}/kyc/verifications/${ACCOUNTS.approved.sessionId}`,
+  );
 });
 
 test("an account in review or declined stays locked", async ({ page }) => {
@@ -164,6 +170,27 @@ test("a deposit from a sanctioned wallet is frozen, with the compliance view", a
   await backToWallet(page);
   await expect(page.getByTestId("kestrel-balance")).toHaveText("0.00 ETH");
   await expect(page.getByText(/0\.80 ETH frozen/)).toBeVisible();
+});
+
+test("without Console ids the operator links open the Console and name the record", async ({
+  page,
+}) => {
+  await mockKestrel(page, { console: null });
+
+  await open(page);
+  await expect(
+    app(page).getByRole("link", { name: "Open in the Didit Console" }),
+  ).toHaveAttribute("href", "https://business.staging.didit.me/console");
+  await deposit(page, /From an unknown sender/, "0.8");
+
+  const compliance = page.getByTestId("kestrel-compliance-view");
+
+  await expect(
+    compliance.getByRole("link", { name: "Open in the Didit Console" }),
+  ).toHaveAttribute("href", "https://business.staging.didit.me/console");
+  await expect(compliance).toContainText(
+    "search for the transaction id above",
+  );
 });
 
 test("a withdrawal to the user's wallet needs wallet proof, then a selfie, then clears", async ({
