@@ -324,6 +324,7 @@ test("only outbound transfers at the threshold go to review", () => {
 });
 
 test("the review rule only matches this demo's EUR transfers", () => {
+  assert.equal(REVIEW_RULE.mode, "ACTIVE");
   assert.equal(REVIEW_RULE.scope.directions[0], "OUTBOUND");
   assert.deepEqual(
     REVIEW_RULE.conditions.map((c) => [c.field, c.operator, c.value]),
@@ -356,11 +357,10 @@ test("the monitoring estimate reduces the real staging answer", () => {
   assert.equal(fixture("aml-monitoring-estimate").request.estimate_only, true);
 });
 
-test("console links need both ids, and fall back to the console home", () => {
+test("console links need the ids, and fall back to the console home", () => {
   const linked = consoleLinks({
     origin: "https://business.staging.didit.me",
-    orgId: "org-1",
-    appId: "app 2",
+    ids: { orgId: "org-1", appId: "app 2" },
   });
 
   assert.equal(
@@ -374,8 +374,7 @@ test("console links need both ids, and fall back to the console home", () => {
 
   const bare = consoleLinks({
     origin: "https://business.staging.didit.me",
-    orgId: "org-1",
-    appId: null,
+    ids: null,
   });
 
   assert.equal(bare.session("s-1"), null);
