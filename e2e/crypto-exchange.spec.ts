@@ -188,9 +188,7 @@ test("without Console ids the operator links open the Console and name the recor
   await expect(
     compliance.getByRole("link", { name: "Open in the Didit Console" }),
   ).toHaveAttribute("href", "https://business.staging.didit.me/console");
-  await expect(compliance).toContainText(
-    "search for the transaction id above",
-  );
+  await expect(compliance).toContainText("search for the transaction id above");
 });
 
 test("a withdrawal to the user's wallet needs wallet proof, then a selfie, then clears", async ({

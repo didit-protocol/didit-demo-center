@@ -2,6 +2,7 @@ import type { ConsoleContext } from "./console";
 import type { NextRequest } from "next/server";
 
 import { createHmac, timingSafeEqual } from "node:crypto";
+
 import { NextResponse } from "next/server";
 
 import { toAccountView, type AccountView } from "./onboarding";
@@ -92,7 +93,10 @@ export function verifyAccountCookie(
 }
 
 export function readAccountCookie(request: NextRequest): KestrelCookie | null {
-  return verifyAccountCookie(request.cookies.get(ACCOUNT_COOKIE)?.value, apiKey());
+  return verifyAccountCookie(
+    request.cookies.get(ACCOUNT_COOKIE)?.value,
+    apiKey(),
+  );
 }
 
 export function writeAccountCookie(
