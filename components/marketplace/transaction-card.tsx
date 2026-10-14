@@ -45,20 +45,17 @@ export function TransactionCard({
 
   return (
     <div className="mkt-inset p-4">
-      <div className="flex flex-wrap items-start gap-3">
-        <div className="min-w-0 flex-1">
-          <p className="eyebrow eyebrow-muted mb-1.5">{KIND_LABEL[tx.kind]}</p>
-          <p className="m-0 text-sm font-medium text-ink">
-            {transactionTitle(tx)}
-          </p>
-          <p className="m-0 mt-0.5 text-xs text-muted">
-            {tx.kind === "signup" ? "No amount" : formatEur(tx.amount)} · score{" "}
-            {tx.score}
-            {tx.severity ? ` · ${tx.severity.toLowerCase()} severity` : ""}
-          </p>
-        </div>
+      {/* The pill shares the eyebrow's row so the title keeps the full width on a phone. */}
+      <div className="mb-1 flex items-center justify-between gap-3">
+        <p className="eyebrow eyebrow-muted m-0">{KIND_LABEL[tx.kind]}</p>
         <StatusPill meta={meta} />
       </div>
+      <p className="m-0 text-sm font-medium text-ink">{transactionTitle(tx)}</p>
+      <p className="m-0 mt-0.5 text-xs text-muted">
+        {tx.kind === "signup" ? "No amount" : formatEur(tx.amount)} · score{" "}
+        {tx.score}
+        {tx.severity ? ` · ${tx.severity.toLowerCase()} severity` : ""}
+      </p>
 
       {compact ? null : (
         <p className="mb-0 mt-2.5 text-[13px] leading-[18px] text-muted">

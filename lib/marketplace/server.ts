@@ -241,9 +241,10 @@ async function sellerView(
   };
 }
 
-async function consoleTarget(env: MarketEnv): Promise<ConsoleTarget> {
-  const ids = await resolveConsoleIds(env);
-
+function consoleTarget(
+  env: MarketEnv,
+  ids: { orgId: string; appId: string } | null,
+): ConsoleTarget {
   return {
     origin: env.console.origin,
     orgId: ids?.orgId ?? null,
@@ -274,7 +275,7 @@ export async function handleState(
   const current = state ?? emptyState(env.now());
   const target =
     live.transactions && current.sellers.some((seller) => seller.sid)
-      ? await consoleTarget(env)
+      ? consoleTarget(env, await resolveConsoleIds(env))
       : null;
   const [sellers, transactions] = await Promise.all([
     live.transactions
@@ -784,7 +785,7 @@ export async function handleOperator(
   if (!raw) return upstream(result, "The transaction could not be read.");
 
   const ids = await resolveConsoleIds(env);
-  const target = await consoleTarget(env);
+  const target = consoleTarget(env, ids);
   const party = subjectParty(raw);
   const subject = subjectVendor(raw);
   const fingerprint = deviceFingerprint(raw);

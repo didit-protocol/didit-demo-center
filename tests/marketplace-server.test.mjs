@@ -416,6 +416,28 @@ test("configured console ids win over the ones read from the API", async () => {
   assert.deepEqual(reply.body.sharedWith, []);
 });
 
+test("the operator view asks the API for the console ids once per request", async () => {
+  const api = fakeApi({
+    [tx(RECORDED.orderApproved)]: fixture("transaction-order-approved"),
+    [`GET /v3/transactions/${RECORDED.orderApproved}/notes/`]: { results: [] },
+    // No row to read the ids from, so nothing is cached either.
+    "GET /v3/transactions/?limit=1": { count: 0, next: null, results: [] },
+  });
+  const reply = await handleOperator(
+    makeEnv({ fetch: api.fetch }),
+    stateWith({ buyer: RECORDED.buyer, tx: [RECORDED.orderApproved] }),
+    RECORDED.orderApproved,
+  );
+
+  assert.equal(reply.status, 200);
+  assert.equal(
+    api.calls.filter((call) => call.path === "/v3/transactions/?limit=1").length,
+    1,
+  );
+  assert.match(reply.body.networkNote, /DIDIT_CONSOLE_ORG_ID/);
+  assert.equal(reply.body.links.transaction.direct, false);
+});
+
 test("the page state lists this browser's shops and transactions, newest first", async () => {
   const api = fakeApi({
     [tx(RECORDED.signupApproved)]: fixture("transaction-signup-approved"),
