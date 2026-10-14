@@ -471,10 +471,10 @@ test("the selected theme and amount pills show a focus ring in both themes", asy
   await mockKestrel(page);
   await open(page);
 
-  // The site's ring on light surfaces; the dark theme's own, stronger one.
-  // Tailwind lists two transparent ring layers before it.
-  const LIGHT_RING = "rgba(37, 103, 255, 0.2) 0px 0px 0px 3px";
-  const DARK_RING = "rgba(84, 138, 255, 0.7) 0px 0px 0px 3px";
+  // `shadow-ring` is a solid 3px ring in the theme's --ring (its blue), after
+  // two transparent layers Tailwind always lists.
+  const LIGHT_RING = "rgb(37, 103, 255) 0px 0px 0px 3px";
+  const DARK_RING = "rgb(84, 138, 255) 0px 0px 0px 3px";
   const shadow = (locator: Locator) =>
     locator.evaluate((element) => getComputedStyle(element).boxShadow);
   const light = page.getByRole("radio", { name: "Light" });
