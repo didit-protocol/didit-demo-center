@@ -1,0 +1,24 @@
+{
+  "recorded": "2026-10-13, verification.staging.didit.me, demo organization",
+  "source": "real response; hosted-flow links and tokens redacted",
+  "request": {
+    "is_enabled": true,
+    "estimate_only": true,
+    "vendor_data_list": [
+      "fintech-demo-rec-1791926220"
+    ]
+  },
+  "status": 200,
+  "response": {
+    "users_total": 1,
+    "already_enabled": 0,
+    "with_existing_aml": 0,
+    "needing_screening": 0,
+    "skipped_no_identity_data": 1,
+    "skipped_blocked": 0,
+    "estimated_screening_cost_usd": 0,
+    "estimated_annual_monitoring_cost_usd": 0,
+    "balance_sufficient": true,
+    "unmatched": []
+  }
+}
