@@ -1,0 +1,170 @@
+{
+  "uuid": "0eb2e39d-02fa-4504-8f6a-f69dc369c479",
+  "environment": "live",
+  "transaction_number": 33,
+  "txn_id": "mkt-order-e66668c6dadc48f9804f",
+  "txn_date": "2026-10-13T21:49:48.593771Z",
+  "zone_id": "UTC",
+  "transaction_type": "finance",
+  "action_type": "purchase",
+  "direction": "INBOUND",
+  "status": "APPROVED",
+  "source": "LIVE",
+  "amount": "180",
+  "currency": "EUR",
+  "currency_type": null,
+  "amount_in_default_currency": null,
+  "default_currency_code": null,
+  "preferred_currency_amount": "201.444689689675798498",
+  "preferred_currency_code": "USD",
+  "payment_details": "Order: Rangefinder film camera",
+  "payment_txn_id": null,
+  "score": 0,
+  "severity": null,
+  "decision_reason_code": null,
+  "decision_reason_label": null,
+  "vendor_data": "mkt-buyer-cbaffda12112",
+  "metadata": {
+    "subject": {
+      "full_name": "Northmarket buyer",
+      "entity_type": "individual",
+      "vendor_data": "mkt-buyer-cbaffda12112",
+      "device_context": {
+        "metadata": {
+          "bot_score": 0,
+          "webview_kind": "browser",
+          "accept_language": "en-US,en;q=0.9",
+          "composite_server_id": "9d73387e58fad7e6bed1157ce5de8563"
+        },
+        "platform": "desktop",
+        "os_family": "Linux",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+        "fingerprint": "heORv5s26Ljg7zJNnFuJvg",
+        "browser_family": "Chrome",
+        "composite_hash": "JJeUspChiRksZgjz6c9S-w",
+        "accept_language": "en-US,en;q=0.9",
+        "network_context": {
+          "ip_address": "34.83.210.9"
+        },
+        "persistent_device_id": "heORv5s26Ljg7zJNnFuJvg"
+      }
+    },
+    "counterparty": {
+      "full_name": "Atelier Nord",
+      "entity_type": "company",
+      "vendor_data": "mkt-seller-9e7b751f882f"
+    }
+  },
+  "props": {
+    "role": "buyer",
+    "listing": "film-camera",
+    "demo_app": "marketplace",
+    "is_data_center": true
+  },
+  "tags": [],
+  "parties": [
+    {
+      "uuid": "b71a9fc9-65f7-4a7e-a4a9-c15fafcbc7f5",
+      "role": "APPLICANT",
+      "entity_type": "individual",
+      "kind": "USER",
+      "vendor_data": "mkt-buyer-cbaffda12112",
+      "full_name": "Northmarket buyer",
+      "first_name": null,
+      "last_name": null,
+      "country_code": null,
+      "dob": null,
+      "address": {},
+      "institution_info": {},
+      "device": {
+        "metadata": {
+          "bot_score": 0,
+          "webview_kind": "browser",
+          "accept_language": "en-US,en;q=0.9",
+          "composite_server_id": "9d73387e58fad7e6bed1157ce5de8563"
+        },
+        "platform": "desktop",
+        "os_family": "Linux",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+        "fingerprint": "heORv5s26Ljg7zJNnFuJvg",
+        "browser_family": "Chrome",
+        "composite_hash": "JJeUspChiRksZgjz6c9S-w",
+        "accept_language": "en-US,en;q=0.9",
+        "network_context": {
+          "isp": "Google LLC",
+          "ip_city": "The Dalles",
+          "ip_state": "Oregon",
+          "latitude": 45.59455871582031,
+          "longitude": -121.17868041992188,
+          "time_zone": "America/Los_Angeles",
+          "asn_number": 396982,
+          "ip_address": "34.83.210.9",
+          "ip_country": "United States",
+          "organization": "Google LLC",
+          "is_vpn_or_tor": false,
+          "is_data_center": true,
+          "ip_country_code": "US",
+          "asn_organization": "Google LLC",
+          "time_zone_offset": "-0700"
+        },
+        "persistent_device_id": "heORv5s26Ljg7zJNnFuJvg"
+      },
+      "external_party_snapshot": null
+    },
+    {
+      "uuid": "3f881ec8-79b4-4882-9a32-4fd2ec32c500",
+      "role": "COUNTERPARTY",
+      "entity_type": "company",
+      "kind": "BUSINESS",
+      "vendor_data": "mkt-seller-9e7b751f882f",
+      "full_name": "Atelier Nord",
+      "first_name": null,
+      "last_name": null,
+      "country_code": null,
+      "dob": null,
+      "address": {},
+      "institution_info": {},
+      "device": {},
+      "external_party_snapshot": null
+    }
+  ],
+  "payment_methods": [],
+  "documents": [],
+  "activities": [
+    {
+      "uuid": "d0f3a848-f5eb-4ea4-b36c-0ba9444f23b9",
+      "activity_type": "TRANSACTION_CREATED",
+      "source": "TRANSACTION",
+      "status": "APPROVED",
+      "title": "purchase",
+      "description": null,
+      "metadata": {
+        "amount": "180.000000000000000000",
+        "currency": "EUR",
+        "direction": "INBOUND",
+        "action_type": "purchase"
+      },
+      "occurred_at": "2026-10-13T21:49:48.597782Z"
+    }
+  ],
+  "alerts": [],
+  "rule_runs": [],
+  "provider_results": [],
+  "travel_rule": null,
+  "network_snapshot": null,
+  "remediation": null,
+  "action_required": null,
+  "cost_breakdown": {
+    "total_price": 0.02,
+    "items": [
+      {
+        "usage_type": "transaction_monitoring",
+        "price": 0.02,
+        "details": {
+          "product": "transactions"
+        },
+        "created_at": "2026-10-13T21:49:48.738726Z"
+      }
+    ]
+  }
+}
