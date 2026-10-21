@@ -4,6 +4,11 @@ import { useState } from "react";
 import { ArrowRight, ScanFace, IdCard } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import {
+  ACCS_ENGINE,
+  ACCS_ESTIMATION_WORKFLOW_ID,
+  ACCS_VERIFICATION_WORKFLOW_ID,
+} from "@/lib/accs-workflows";
 
 type AccsComponent = {
   key: "age-estimation" | "age-verification";
@@ -17,8 +22,7 @@ type AccsComponent = {
 const ACCS_COMPONENTS: AccsComponent[] = [
   {
     key: "age-estimation",
-    // Production-only workflow (ACCS tests run against the production engine)
-    workflowId: "2d958679-f3bf-4747-8a38-9a40a29a6098",
+    workflowId: ACCS_ESTIMATION_WORKFLOW_ID,
     title: "Age Estimation",
     description:
       "Facial age estimation from a live selfie with passive liveness. Challenge-25 policy: Approved only when the estimated age is over 25, Declined otherwise, so under-18 users are never accepted.",
@@ -27,8 +31,7 @@ const ACCS_COMPONENTS: AccsComponent[] = [
   },
   {
     key: "age-verification",
-    // Production-only workflow (ACCS tests run against the production engine)
-    workflowId: "a8942aa3-3bfe-4e1c-b322-d0d43e7ec31f",
+    workflowId: ACCS_VERIFICATION_WORKFLOW_ID,
     title: "Age Verification",
     description:
       "Document-based age verification: ID document scan with fraud checks, passive liveness and 1:1 face match. Returns Approved for genuine 18+ documents, Declined otherwise.",
@@ -137,8 +140,8 @@ export default function AccsPage() {
         )}
 
         <div className="text-xs text-gray-400">
-          Sessions run on the production verification engine. Scan the QR code
-          shown after starting a test to continue on a mobile device.
+          Sessions run on the {ACCS_ENGINE} verification engine. Scan the QR
+          code shown after starting a test to continue on a mobile device.
         </div>
       </div>
     </div>

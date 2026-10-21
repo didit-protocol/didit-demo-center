@@ -1,0 +1,14 @@
+{
+  "recorded": "2026-10-22, verification.staging.didit.me, staging demo application",
+  "source": "real response: the production ACCS age estimation workflow id sent to staging",
+  "request": {
+    "workflow_id": "2d958679-f3bf-4747-8a38-9a40a29a6098",
+    "vendor_data": "repro-accs",
+    "callback": "https://demos.staging.didit.me/verification/callback",
+    "callback_method": "both"
+  },
+  "status": 400,
+  "response": {
+    "workflow_id": "Invalid workflow_id."
+  }
+}

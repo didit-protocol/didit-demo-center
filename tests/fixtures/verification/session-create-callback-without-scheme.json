@@ -1,0 +1,14 @@
+{
+  "recorded": "2026-10-22, verification.staging.didit.me, staging demo application",
+  "source": "real response: a callback with no URL scheme",
+  "request": {
+    "workflow_id": "d444046b-af0d-4e5b-b3ca-95d08419e654",
+    "vendor_data": "repro-accs",
+    "callback": "not a url",
+    "callback_method": "both"
+  },
+  "status": 400,
+  "response": {
+    "callback": ["URL must have a scheme (e.g., https:// or myapp://)"]
+  }
+}

@@ -1,3 +1,8 @@
+import {
+  ACCS_ESTIMATION_WORKFLOW_ID,
+  ACCS_VERIFICATION_WORKFLOW_ID,
+  ACCS_WORKFLOW_NOTE,
+} from "./accs-workflows";
 import { docs } from "./docs";
 
 /**
@@ -603,10 +608,8 @@ export const DEMOS: Demo[] = [
     chips: ["Age Estimation", "ISO/IEC 27566", "No ID required"],
     price: "$0.10 per estimate",
     cta: "Launch session",
-    // ACCS conformance runs against the production engine, so this workflow has
-    // no staging twin - the same id is used on both environments.
-    workflowId: "2d958679-f3bf-4747-8a38-9a40a29a6098",
-    note: "Production workflow - ACCS conformance runs against the production engine.",
+    workflowId: ACCS_ESTIMATION_WORKFLOW_ID,
+    note: ACCS_WORKFLOW_NOTE,
     stats: [
       { value: "ISO 27566", label: "Standard" },
       { value: "ACCS", label: "Certification scheme" },
@@ -661,8 +664,8 @@ export const DEMOS: Demo[] = [
     chips: ["ID Verification", "NFC", "Age attribute only"],
     price: "$0.15 ID + $0.15 NFC + $0.05 face match",
     cta: "Launch session",
-    workflowId: "a8942aa3-3bfe-4e1c-b322-d0d43e7ec31f",
-    note: "Production workflow - ACCS conformance runs against the production engine.",
+    workflowId: ACCS_VERIFICATION_WORKFLOW_ID,
+    note: ACCS_WORKFLOW_NOTE,
     stats: [
       { value: "ISO 27566", label: "Standard" },
       { value: "Age only", label: "Attribute returned" },
