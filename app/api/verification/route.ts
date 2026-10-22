@@ -44,6 +44,36 @@ function withNoStore<T>(data: T, init?: ResponseInit) {
   });
 }
 
+/**
+ * The API's own reason for refusing a request. Besides `detail`, a validation
+ * error comes back keyed by field - `{"workflow_id": "Invalid workflow_id."}`
+ * or `{"non_field_errors": ["..."]}` - so the first message found wins, with
+ * its field name when the message alone would not say what was wrong.
+ */
+function apiErrorMessage(result: unknown): string | null {
+  if (!result || typeof result !== "object") return null;
+
+  const fields = result as Record<string, unknown>;
+
+  for (const key of ["detail", "error", "message"]) {
+    const message = fields[key];
+
+    if (typeof message === "string" && message) return message;
+  }
+
+  for (const [field, value] of Object.entries(fields)) {
+    const message = Array.isArray(value) ? value[0] : value;
+
+    if (typeof message !== "string" || !message) continue;
+
+    return field === "non_field_errors" || message.includes(field)
+      ? message
+      : `${field}: ${message}`;
+  }
+
+  return null;
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const sessionId = searchParams.get("sessionId");
@@ -130,13 +160,9 @@ export async function POST(request: NextRequest) {
       // could not be created (unpublished workflow, no balance, bad portrait)
       // instead of a generic failure.
       const detail =
-        (result && (result.detail || result.error || result.message)) ||
-        "Failed to create verification session";
+        apiErrorMessage(result) || "Failed to create verification session";
 
-      return withNoStore(
-        { error: String(detail) },
-        { status: response.status },
-      );
+      return withNoStore({ error: detail }, { status: response.status });
     }
 
     return withNoStore(result);
