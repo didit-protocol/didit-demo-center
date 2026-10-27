@@ -1,0 +1,20 @@
+[     411ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_1e674e59._.js:14537
+[     949ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5956
+[     962ms] [LOG] [Fast Refresh] done in 113ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5816
+[   16661ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5956
+[   16689ms] [LOG] [Fast Refresh] done in 101ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5816
+[   19231ms] [LOG] [Fast Refresh] rebuilding @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5956
+[   19546ms] [LOG] [Fast Refresh] done in 415ms @ http://127.0.0.1:3000/_next/static/chunks/node_modules_next_dist_client_cf1d9188._.js:5816
+[   23246ms] [INFO] Executing inline script violates the following Content Security Policy directive 'script-src 'self' 'sha256-N8yDQVWMR/pDQxOAkvUc86GXQ1I7TApuE8TZy67WI+M=' 'sha256-mSKeWEbqXifa52In+63tA31pzuGAi+cHNvRkyo5YX7g=' 'sha256-Y7Mv5OC8ipuvtys8FfO9e8xykJmRXCGzSDQmwmcq7tY=' 'wasm-unsafe-eval' https://maps.googleapis.com https://maps.gstatic.com'. Either the 'unsafe-inline' keyword, a hash ('sha256-AGOlb5/mKXLACgG48YJEIekTDHk67SCe+3Ax7zFg5bY='), or a nonce ('nonce-...') is required to enable inline execution. The policy is report-only, so the violation has been logged but no further action has been taken. @ https://verify.staging.didit.me/session/oEWSNNeK1aHl?sdk_presentation=modal&sdk_close_button=true:0
+[   24298ms] [INFO] [SessionWebSocket] opened @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
+[   24305ms] [INFO] [SessionWebSocket] Received: {current_step: LIVENESS, current_step_v2: LIVENESS, current_node_id: feature_liveness} @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
+[   24306ms] [INFO] [Welcome] Session update received: {current_step: LIVENESS, current_step_v2: LIVENESS, current_node_id: feature_liveness} @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
+[   24663ms] [INFO] [SessionWebSocket] Closing connection @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
+[   24664ms] [LOG] [getInitialAppStepAction] currentStep LIVENESS @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
+[   24664ms] [LOG] [getInitialAppStepAction] status Not Started @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
+[   24668ms] [LOG] [useAppStepsNavigation] navigateToSessionStart @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
+[   25093ms] [INFO] [SessionWebSocket] opened @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
+[   25118ms] [INFO] [SessionWebSocket] Received: {current_step: LIVENESS, current_step_v2: LIVENESS, current_node_id: feature_liveness} @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
+[   25118ms] [INFO] [Welcome] Session update received: {current_step: LIVENESS, current_step_v2: LIVENESS, current_node_id: feature_liveness} @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
+[   25391ms] [INFO] speedMbpsFromVerificationApi: 0.49448692152917506 returning {photoMaxSizeKb: 200, videoMaxSizeKb: 500, loadDocumentModel: true, loadFaceModel: true} @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
+[   25391ms] [INFO] speedMbpsFromNextApi: 1.0457872340425531 returning {photoMaxSizeKb: 200, videoMaxSizeKb: 500, loadDocumentModel: true, loadFaceModel: true} @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
