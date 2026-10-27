@@ -200,6 +200,32 @@ export const didit = {
       );
     },
   },
+  events: {
+    /**
+     * `POST /v3/events/sdk-token/`: the monitoring token the browser's
+     * `submitEvent` sends with. Didit takes the person from the token, never
+     * from the event.
+     */
+    sdkToken(
+      input: { vendorData: string; categories?: string[] },
+      env?: DiditEnv,
+    ) {
+      return callDidit<{ sdk_token?: string; token?: string; expires_at?: string }>(
+        "POST",
+        "/v3/events/sdk-token/",
+        {
+          vendor_data: input.vendorData,
+          allowed_event_categories: input.categories ?? [
+            "auth",
+            "session",
+            "bonus",
+            "payment",
+          ],
+        },
+        env,
+      );
+    },
+  },
   users: {
     /** `GET /v3/users/{vendor_data}/`: the person Didit holds for this id. */
     get(vendorData: string, env?: DiditEnv) {
