@@ -14,6 +14,8 @@ async function shot(page: Page, name: string) {
 
 async function step(page: Page, label: string) {
   if (phone(page)) {
+    const fold = page.getByRole("button", { name: "Fold the feed" });
+    if (await fold.isVisible()) await fold.click();
     await page.getByRole("button", { name: /^Step \d of 5/ }).click();
     await page.getByRole("menu", { name: "Demo steps" }).getByRole("menuitem", { name: label }).click();
   } else {
