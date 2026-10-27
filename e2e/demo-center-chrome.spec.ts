@@ -32,7 +32,8 @@ test("the bar: white, a hairline, the colour lockup and the DS v4 controls", asy
   await mockAurora(page);
   await page.goto("/igaming");
 
-  const bar = page.locator("header.dx-bar");
+  // The banner role skips the copy React streams in hidden before hydrating.
+  const bar = page.getByRole("banner");
 
   await expect(bar).toBeVisible();
   expect(await css(bar, "background-color")).toBe("rgb(255, 255, 255)");
@@ -86,7 +87,6 @@ test("the feed: a hairline card on a computer, the collapsed pill on a phone", a
   await mockAurora(page);
   await page.goto("/igaming");
 
-  const viewport = page.viewportSize()!;
   const feed = page.getByTestId("didit-live");
   const pill = page.getByTestId("didit-live-pill");
 
@@ -95,10 +95,11 @@ test("the feed: a hairline card on a computer, the collapsed pill on a phone", a
     await expect(pill).toBeVisible();
     await expect(feed).toHaveCount(0);
     const folded = await box(pill);
+    const app = await box(page.locator(".dx-app"));
 
-    expect(folded.x).toBe(12);
-    expect(folded.x + folded.width).toBe(viewport.width - 12);
-    expect(folded.y + folded.height).toBe(viewport.height - 16);
+    expect(folded.x).toBe(app.x + 12);
+    expect(folded.x + folded.width).toBe(app.x + app.width - 12);
+    expect(folded.y + folded.height).toBe(app.y + app.height - 16);
     expect(await css(pill, "background-color")).toBe("rgb(255, 255, 255)");
     await pill.getByRole("button", { name: /Didit live, \d+ checks?/ }).click();
     await expect(feed).toBeVisible();
@@ -112,9 +113,12 @@ test("the feed: a hairline card on a computer, the collapsed pill on a phone", a
 
   await expect(feed).toBeVisible();
   const card = await box(feed);
+  // The page keeps a stable scrollbar gutter: measure from the app's edges.
+  const app = await box(page.locator(".dx-app"));
 
   expect(card.width).toBe(372);
-  expect(viewport.width - (card.x + card.width)).toBe(20);
+  expect(app.x + app.width - (card.x + card.width)).toBe(20);
+  expect(app.y + app.height - (card.y + card.height)).toBe(20);
   expect(await css(feed, "background-color")).toBe("rgb(255, 255, 255)");
   expect(await css(feed, "border-top-width")).toBe("1px");
   expect(await css(feed, "border-top-color")).toBe("rgb(237, 237, 237)");
