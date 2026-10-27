@@ -30,7 +30,7 @@ export default function VerificationCallback() {
 
     const query = params.toString();
 
-    router.replace(query ? `/?${query}` : "/");
+    router.replace(query ? `/modules?${query}` : "/modules");
   }, [router, searchParams]);
 
   return (
