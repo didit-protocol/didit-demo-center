@@ -532,12 +532,16 @@ export function AlderDemo() {
   ) {
     const hit = stepUpItem.record.ruleHits.find((rule) => rule.statusTarget);
 
+    const askPasskey = authOn && !state?.stepUp?.passkey;
+
     callouts.push({
       id: "rule",
       anchor: "stepup",
-      tone: "hold",
+      tone: askPasskey ? "auth" : "hold",
       side: "left",
-      title: `${hit ? `Rule hit: ${ruleName(hit.title)}` : "Step-up on a new payee"} · ${authOn ? "passkey, then a selfie" : "a selfie"}`,
+      title: askPasskey
+        ? "Step-up on a new payee · passkey, then a selfie"
+        : `${hit ? `Rule hit: ${ruleName(hit.title)}` : "Step-up on a new payee"} · ${authOn ? "passkey ✓, now a selfie" : "a selfie"}`,
     });
   } else if (!modal && view === "security" && state?.takeover) {
     callouts.push({

@@ -6,6 +6,7 @@ import * as React from "react";
 import {
   Apple,
   CircleCheck,
+  Fingerprint,
   KeyRound,
   ScanFace,
   ShieldBan,
@@ -398,7 +399,13 @@ export function StepUpModal({
   return (
     <Layer
       className="al-stepup"
-      label={released ? "Transfer sent" : "Confirm it is you"}
+      label={
+        released
+          ? "Transfer sent"
+          : askPasskey
+            ? "Confirm with your passkey"
+            : "Confirm it is you"
+      }
       onClose={onClose}
     >
       <span
@@ -409,12 +416,18 @@ export function StepUpModal({
         {released ? (
           <CircleCheck size={30} />
         ) : askPasskey ? (
-          <KeyRound size={30} />
+          <Fingerprint size={30} />
         ) : (
           <ScanFace size={30} />
         )}
       </span>
-      <h2>{released ? "Sent" : "Confirm it is you"}</h2>
+      <h2>
+        {released
+          ? "Sent"
+          : askPasskey
+            ? "Confirm with your passkey"
+            : "Confirm it is you"}
+      </h2>
       <p className="al-muted" data-testid="alder-stepup-copy">
         {released
           ? `${formatMoney(item.amount)} is on its way to ${item.counterparty}. It arrives today.`
@@ -473,7 +486,7 @@ export function StepUpModal({
             type="button"
             onClick={onPasskey}
           >
-            <KeyRound aria-hidden size={19} />
+            <Fingerprint aria-hidden size={19} />
             {busy ? "Opening…" : "Confirm with your passkey"}
           </button>
           <button className="al-btn is-ghost" type="button" onClick={onClose}>
