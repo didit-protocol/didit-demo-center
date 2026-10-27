@@ -9,6 +9,7 @@
   "blocks": [
     "root",
     "button",
+    "button-icon",
     "status",
     "tag",
     "tile",

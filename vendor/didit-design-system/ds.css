@@ -337,7 +337,7 @@
   --text-t-app-filter: 450 13px/16px var(--font-sans); /* Filter chips and segmented controls. */
   --text-t-app-label: 450 12px/16px var(--font-sans); /* Card titles, field labels, table headers. Sentence case, never uppercase. */
 }
-/* design-system/components/bundle.css: root, button, status, tag, tile, halftone, window, tabs, eyebrow */
+/* design-system/components/bundle.css: root, button, button-icon, status, tag, tile, halftone, window, tabs, eyebrow */
 /* ---------- 1. Root ---------- */
 .dd { --dd-font: "Didit Grotesk", -apple-system, "Helvetica Neue", Arial, sans-serif; --dd-mono: "Didit Grotesk Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --dd-container: 1200px; --dd-gutter: 32px; --dd-section-y: 112px; --dd-header-h: 64px;
@@ -402,6 +402,9 @@
 .dd .dd-btn-danger:focus-visible { border-color: var(--c-danger); box-shadow: var(--focus-ring-danger, var(--focus-ring)); }
 @media (prefers-reduced-motion: reduce) { .dd-btn:active:not(:disabled) { transform: none; } :is(.dd-btn, .dd-link, .dd-cx-link, .dd-toast-act, a.dd-card, .dd-card.is-act):hover :is(.dd-i, .dd-svg)[data-i] { transform: none; } }
 /* ==== DS4 BUTTON END ==== */
+/* icon-only: a circle as tall as its size, the icon centred (designer: round icon-only buttons) */
+.dd-btn.dd-btn-icon { padding: 0; width: 44px; justify-content: center; border-radius: 50%; } .dd-btn.dd-btn-icon > span:empty { display: none; }
+.dd-btn.dd-btn-icon.dd-btn-xs { width: 28px; } .dd-btn.dd-btn-icon.dd-btn-sm { width: 32px; } .dd-btn.dd-btn-icon.dd-btn-md { width: 36px; } .dd-btn.dd-btn-icon.dd-btn-xl, .dd-btn.dd-btn-icon.dd-btn-lg { width: 52px; }
 .dd-status { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px 0 8px; border-radius: var(--radius-pill); font-size: 13px; line-height: 16px; font-weight: 450; white-space: nowrap; background: var(--c-neutral-bg); color: var(--c-neutral); }
 .dd-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--c-neutral-dot); }
 .dd-status-approved { background: var(--c-success-bg); color: var(--c-success); } .dd-status-approved::before { background: var(--c-success-dot); }

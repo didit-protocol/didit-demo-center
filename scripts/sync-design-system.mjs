@@ -31,6 +31,7 @@ const BUNDLE = "design-system/components/bundle.css";
 export const BLOCKS = [
   ["root", "/* ---------- 1. Root ---------- */", "/* ---------- 2. Type"],
   ["button", "/* ==== DS4 BUTTON BEGIN", "/* ==== DS4 BUTTON END ==== */"],
+  ["button-icon", "/* icon-only: a circle", "/* the danger fill"],
   ["status", ".dd-status {", "/* ==== DS4 TAG BEGIN"],
   ["tag", "/* ==== DS4 TAG BEGIN", "/* ==== DS4 TAG END ==== */"],
   ["tile", "/* Graphite tile", ".dd-plan-mark {"],
