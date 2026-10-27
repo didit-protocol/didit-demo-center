@@ -104,6 +104,7 @@
 .nm-title .nm-badge { height: 28px; padding: 0 11px; font-size: 13px; }
 .nm-title .nm-acts { margin-left: auto; display: flex; gap: 10px; }
 .nm-banner .nm-btn { margin-left: auto; }
+.nm-banner > span { flex: 1; min-width: 0; }
 .nm-banner svg { flex: none; }
 .nm-split { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: 18px; min-height: 0; }
 .nm-split .nm-card { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
