@@ -36,7 +36,8 @@ export async function POST(request: NextRequest) {
 
   // No identity means there is nothing to attribute the events to. This is
   // not an error: a page load must not log a 401 while nobody is signed in.
-  if (!vendorData) return reply({ token: null, expiresAt: null, vendorData: null });
+  if (!vendorData)
+    return reply({ token: null, expiresAt: null, vendorData: null });
 
   const result = await didit.events.sdkToken({ vendorData });
   const token = result.data?.monitoring_token;
