@@ -166,7 +166,9 @@ function linkedRecords(input: AlderConsoleInput): LinkedRecord[] {
   if (input.stepUp)
     linked.push({
       tone: "ver",
-      title: input.stepUpPasskey ? "Passkey + selfie step-up" : "Selfie step-up",
+      title: input.stepUpPasskey
+        ? "Passkey + selfie step-up"
+        : "Selfie step-up",
       detail: `${statusTag(input.stepUp.status).label} · ${short(input.stepUp.sessionId)}`,
     });
   if (input.onboarding)
@@ -327,7 +329,13 @@ function transactionPage(input: AlderConsoleInput): RecordPage | null {
       pairs: [
         [
           "Decided by",
-          released ? (passkey ? "Rule + passkey + selfie" : "Rule + selfie") : hits.length ? "Rules" : "Automatic",
+          released
+            ? passkey
+              ? "Rule + passkey + selfie"
+              : "Rule + selfie"
+            : hits.length
+              ? "Rules"
+              : "Automatic",
         ],
         [
           "Queue",

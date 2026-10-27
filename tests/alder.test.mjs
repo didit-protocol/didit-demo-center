@@ -202,6 +202,65 @@ test("the console view opens the held transfer, then shows how it was released",
   assert.ok(person.page.blocks[0].checks.some((check) => check.label === "AML screening" && check.value === "No matches"));
 });
 
+test("the passkey comes first through Didit Authentication, then the selfie releases the transfer", () => {
+  const [asked] = live.passkeyStarted();
+
+  assert.equal(asked.product, "authentication");
+  assert.equal(asked.title, "Passkey asked");
+  assert.match(asked.code, /reauthenticate\(\)/);
+
+  // The confirmation replaces the "asked" line and says how Didit signed them in.
+  const [passkey] = live.passkeyConfirmed({ methods: ["passkey"], email: "lena.fischer@example.com" });
+
+  assert.equal(passkey.key, asked.key);
+  assert.equal(passkey.title, "Confirmed with the passkey");
+  assert.equal(passkey.detail, "lena.fischer@example.com · one quick selfie releases the payment");
+  assert.equal(live.passkeyConfirmed({ methods: ["code"], email: null })[0].title, "Confirmed with an email code");
+
+  // Only the selfie, the step-up session the rule opened, releases it.
+  const [selfie, released] = live.stepUpDecided(
+    { sessionId: held.action.sessionId, status: "Approved" },
+    { ...held, status: "APPROVED", action: null },
+  );
+
+  assert.equal(selfie.product, "verification");
+  assert.equal(released.title, "Transfer released");
+});
+
+test("the console names the passkey and the selfie once both confirmed the transfer", () => {
+  const at = Date.parse(held.createdAt);
+  const page = (stepUpPasskey) =>
+    consolePages
+      .alderConsole({
+        customer: { customerId: "alder-0f3a9c21d4e85b7a6c19e2d0", name: "Lena Fischer", email: "lena.fischer@example.com", createdAt: at },
+        onboarding: null,
+        stepUp: { sessionId: held.action.sessionId, status: "Approved" },
+        stepUpPasskey,
+        activity: [
+          { key: "t", kind: "transfer", amount: 5000, counterparty: "Jonas Koch", newPayee: true, at, record: { ...held, status: "APPROVED", action: null } },
+        ],
+        events: [],
+        device: null,
+        signIn: "Passkey",
+        takeover: null,
+        now: at,
+      })
+      .find((tab) => tab.id === "transaction").page;
+
+  const both = page("passkey");
+
+  assert.deepEqual(both.kpis[3], { label: "Step-up", value: "Passkey + selfie", unit: "confirmed", color: "ok" });
+  assert.match(both.blocks[0].text, /confirmed it with the passkey and a selfie/);
+  assert.deepEqual(both.side.pairs[0], ["Decided by", "Rule + passkey + selfie"]);
+  assert.equal(both.linked[0].title, "Passkey + selfie step-up");
+
+  // Without Didit Authentication the selfie alone was the step-up.
+  const selfie = page(null);
+
+  assert.equal(selfie.kpis[3].value, "Selfie");
+  assert.match(selfie.blocks[0].text, /confirmed it with a selfie/);
+});
+
 test("the customer cookie is signed and only holds an Alder id", () => {
   const id = customer.newCustomerId();
 

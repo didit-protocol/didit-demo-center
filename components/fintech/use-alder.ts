@@ -698,7 +698,10 @@ export function useAlder(
         current.stepUp?.transactionId === transactionId
           ? {
               ...current,
-              stepUp: { ...current.stepUp, passkey: { at: Date.now(), method } },
+              stepUp: {
+                ...current.stepUp,
+                passkey: { at: Date.now(), method },
+              },
             }
           : current,
       ),
