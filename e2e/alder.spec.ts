@@ -20,6 +20,13 @@ async function openFeed(page: Page) {
   }
 }
 
+/** On a phone the open feed covers the app: fold it before tapping on. */
+async function foldFeed(page: Page) {
+  if (isPhone(page) && (await live(page).isVisible())) {
+    await page.getByRole("button", { name: "Fold the feed" }).click();
+  }
+}
+
 async function goToStep(page: Page, step: string) {
   if (isPhone(page)) {
     await page.getByRole("button", { name: /^Step \d of 5/ }).click();
@@ -91,6 +98,7 @@ test("KYC and AML before the IBAN, monitored payments and the step-up on a 5,000
   );
 
   // Transact: 5,000 EUR to a payee Lena has never paid is held.
+  await foldFeed(page);
   await goToStep(page, "Transact");
   const send = page.getByTestId("alder-send");
 
