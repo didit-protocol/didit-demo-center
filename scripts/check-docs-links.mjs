@@ -5,14 +5,8 @@
  * A dead docs link is worse than no link: it is the first thing a developer
  * clicks after watching a demo run. This walks the `docsPath` on every demo,
  * every `request.docsPath`, the shared DOC_PATHS map and the "How this uses
-<<<<<<< HEAD
- * Didit" panels of /fintech (lib/fintech/steps.ts) and
- * /crypto-exchange (lib/crypto-exchange/panel.ts), and fetches each URL on
+ * Didit" panel of /fintech (lib/fintech/steps.ts), and fetches each URL on
  * docs.didit.me.
-=======
- * Didit" panels of /fintech (lib/fintech/steps.ts) and /marketplace
- * (lib/marketplace/guide.ts), and fetches each URL on docs.didit.me.
->>>>>>> origin/main
  *
  * Usage:
  *   npm run check:docs-links
@@ -42,11 +36,6 @@ function collectPaths() {
   for (const file of [
     "lib/demos.ts",
     "lib/fintech/steps.ts",
-<<<<<<< HEAD
-    "lib/crypto-exchange/panel.ts",
-=======
-    "lib/marketplace/guide.ts",
->>>>>>> origin/main
   ]) {
     const source = fs.readFileSync(path.join(repoRoot, file), "utf8");
 
