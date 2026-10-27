@@ -532,7 +532,7 @@ export function AlderDemo() {
   ) {
     const hit = stepUpItem.record.ruleHits.find((rule) => rule.statusTarget);
 
-    const askPasskey = authOn && !state?.stepUp?.passkey;
+    const askPasskey = !state?.stepUp?.passkey;
 
     callouts.push({
       id: "rule",
@@ -705,7 +705,6 @@ export function AlderDemo() {
                 busy={bank.busy === "stepUp" || authBusy}
                 item={stepUpItem}
                 passkey={
-                  !authOn ||
                   state.stepUp?.transactionId !== stepUpItem.record?.id
                     ? null
                     : state.stepUp?.passkey
