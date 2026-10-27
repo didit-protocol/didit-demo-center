@@ -398,7 +398,7 @@ export function useAlder(emit: (signal: AlderSignal) => void = () => undefined) 
   );
 
   const pay = React.useCallback(
-    async (request: PaymentRequest) => {
+    async (request: PaymentRequest & { color?: string }) => {
       setBusy("send");
       setNotice(null);
       try {
@@ -415,8 +415,10 @@ export function useAlder(emit: (signal: AlderSignal) => void = () => undefined) 
   );
 
   /** The account's first week, once: salary, the switch and card payments. */
+  const seeding = React.useRef(false);
   const seed = React.useCallback(async () => {
-    if (!stateRef.current || stateRef.current.seeded) return;
+    if (!stateRef.current || stateRef.current.seeded || seeding.current) return;
+    seeding.current = true;
     setBusy("seed");
     update((current) => ({ ...current, seeded: true }));
     try {
@@ -433,6 +435,7 @@ export function useAlder(emit: (signal: AlderSignal) => void = () => undefined) 
       update((current) => ({ ...current, seeded: false }));
       fail(error);
     } finally {
+      seeding.current = false;
       setBusy(null);
     }
   }, [send, update]);

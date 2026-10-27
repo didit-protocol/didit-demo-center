@@ -23,7 +23,7 @@ import { DemoShell } from "@/components/didit-live/demo-shell";
 import { alder } from "@/lib/didit/demos";
 import { SIGNUP_INTENT, useDidit } from "@/lib/didit/provider";
 import { useLive } from "@/lib/didit/use-live";
-import { STEP_UP_AMOUNT, payeeById, ruleName } from "@/lib/fintech/alder";
+import { payeeById, ruleName } from "@/lib/fintech/alder";
 import { alderConsole } from "@/lib/fintech/console-pages";
 import {
   authEvent,
@@ -335,7 +335,7 @@ export function AlderDemo() {
       newPayee: !chosen.known,
       detail: chosen.known ? "Transfer" : "Transfer · new payee",
       color: "#6D28D9",
-    } as Parameters<typeof bank.pay>[0]);
+    });
 
     if (!item) return;
     if (item.record?.status === "AWAITING_USER" || item.error) {
@@ -380,9 +380,6 @@ export function AlderDemo() {
   /* ── The five steps ── */
 
   const activity = state?.activity ?? [];
-  const transfer = activity.find(
-    (item) => item.kind === "transfer" && item.record,
-  );
   const stepUpItem =
     activity.find((item) => item.key === stepUpKey) ??
     (state?.stepUp
@@ -739,12 +736,4 @@ export function AlderDemo() {
       {screen}
     </DemoShell>
   );
-}
-
-/** For tests: the amount the send form starts at is the rule's threshold. */
-export const DEFAULT_TRANSFER = STEP_UP_AMOUNT;
-void transferOf;
-
-function transferOf() {
-  return null;
 }
