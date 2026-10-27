@@ -17,13 +17,15 @@ async function recordEvents(page: Page) {
     /https:\/\/verification\.(staging\.)?didit\.me\/v1\/events\//,
     async (route) => {
       const request = route.request();
+      const events =
+        request.method() === "POST" ? request.postDataJSON().events : [];
 
       if (request.method() === "POST") {
         batches.push({
           url: request.url(),
-          actions: request
-            .postDataJSON()
-            .events.map((event: { action_type: string }) => event.action_type),
+          actions: events.map(
+            (event: { action_type: string }) => event.action_type,
+          ),
           token: request.headers()["x-monitoring-token"],
         });
       }
@@ -31,7 +33,14 @@ async function recordEvents(page: Page) {
         status: 202,
         contentType: "application/json",
         headers: { "access-control-allow-origin": "*" },
-        body: JSON.stringify({ results: [] }),
+        body: JSON.stringify({
+          results: events.map((_: unknown, index: number) => ({
+            index,
+            outcome: "accepted",
+            event_uuid: `00000000-0000-4000-9000-${String(index + 1).padStart(12, "0")}`,
+            status: "APPROVED",
+          })),
+        }),
       });
     },
   );
