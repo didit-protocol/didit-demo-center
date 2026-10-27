@@ -577,3 +577,81 @@ export function shortAddress(address: string): string {
     ? `${address.slice(0, 6)}…${address.slice(-4)}`
     : address;
 }
+
+/* ── The user's ledger, from Didit's decisions alone ───────────────────── */
+
+export interface ActivityItem {
+  /** The Didit transaction id. */
+  id: string;
+  kind: "deposit" | "withdrawal";
+  asset: Asset;
+  /** The other side's wallet, as the user entered or chose it. */
+  wallet: string;
+  createdAt: string;
+  view: TransactionView;
+}
+
+export interface AssetBalance {
+  /** Credited deposits less what has left. */
+  total: number;
+  /** What can be withdrawn now. */
+  available: number;
+  /** Withdrawals waiting for the Travel Rule or the selfie. */
+  held: number;
+}
+
+const round8 = (value: number) => Math.round(value * 1e8) / 1e8;
+
+/**
+ * Balances per asset. A deposit counts once Didit approves it; a withdrawal
+ * holds its funds until Didit blocks it, and leaves once it is ready.
+ */
+export function balancesOf(
+  activity: ActivityItem[],
+): Record<Asset, AssetBalance> {
+  const result = {} as Record<Asset, AssetBalance>;
+
+  for (const asset of Object.keys(ASSETS) as Asset[]) {
+    let credited = 0;
+    let sent = 0;
+    let held = 0;
+
+    for (const item of activity) {
+      if (item.asset !== asset) continue;
+      const amount = Number(item.view.amount) || 0;
+
+      if (item.kind === "deposit") {
+        if (item.view.status === "APPROVED") credited += amount;
+        continue;
+      }
+      const stage = withdrawalStage(item.view);
+
+      if (stage === "ready") sent += amount;
+      else if (withdrawalHoldsFunds(stage)) held += amount;
+    }
+    result[asset] = {
+      total: round8(credited - sent),
+      available: round8(credited - sent - held),
+      held: round8(held),
+    };
+  }
+
+  return result;
+}
+
+/** A transfer is final once Didit and the Travel Rule have nothing left to say. */
+export function isSettled(item: Pick<ActivityItem, "kind" | "view">): boolean {
+  if (item.kind === "deposit")
+    return ["APPROVED", "DECLINED"].includes(item.view.status);
+
+  return ["ready", "blocked"].includes(withdrawalStage(item.view));
+}
+
+/** "Wallet risk: sanctioned wallet (crypto exchange demo)" → "Sanctioned wallet". */
+export function ruleName(title: string): string {
+  const name = title
+    .replace(/\s*\(crypto exchange demo\)\s*$/i, "")
+    .replace(/^(Wallet risk|Withdrawal step-up):\s*/i, "");
+
+  return name.charAt(0).toUpperCase() + name.slice(1);
+}
