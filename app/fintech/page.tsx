@@ -18,7 +18,7 @@ const manrope = Manrope({
 export const metadata: Metadata = {
   title: "Fintech demo: Alder",
   description:
-    "A fictional neobank running Didit end to end: a passkey sign-up, KYC and AML before the IBAN, a 5,000 EUR transfer to a new payee held for a step-up, and an account takeover blocked at sign-in.",
+    "A fictional neobank running Didit end to end: a passkey sign-up, KYC and AML before the IBAN, a 5,000 EUR transfer to a new payee held for a selfie step-up, and an account takeover blocked at sign-in.",
   alternates: { canonical: "/fintech" },
 };
 

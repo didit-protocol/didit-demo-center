@@ -134,7 +134,12 @@ export interface AlderMock {
 }
 
 export async function mockAlder(page: Page): Promise<AlderMock> {
-  const mock: AlderMock = { submitted: [], bodies: [], headers: [], events: [] };
+  const mock: AlderMock = {
+    submitted: [],
+    bodies: [],
+    headers: [],
+    events: [],
+  };
   let customer = false;
   let stepUpDone = false;
   const records = new Map<string, Record<string, unknown>>();

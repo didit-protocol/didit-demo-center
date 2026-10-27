@@ -109,7 +109,9 @@ test("KYC and AML before the IBAN, monitored payments and the step-up on a 5,000
   await send.getByRole("button", { name: "Send 5,000.00 EUR" }).click();
   const stepUp = page.getByRole("dialog", { name: "Confirm it is you" });
 
-  await expect(stepUp).toContainText("This is your first payment to Jonas Koch");
+  await expect(stepUp).toContainText(
+    "This is your first payment to Jonas Koch",
+  );
   expect(mock.submitted.at(-1)).toBe("transfer-held");
   expect(mock.bodies.at(-1)?.props).toMatchObject({
     demo_app: "fintech",
