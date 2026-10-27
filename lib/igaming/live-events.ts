@@ -29,7 +29,8 @@ const capital = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 export function ageText(summary: SessionSummary): string {
   if (summary.estimatedAge !== null && summary.documentAge !== null)
     return `Estimated ${summary.estimatedAge}, ${summary.documentAge} on the ID`;
-  if (summary.estimatedAge !== null) return `Estimated age ${summary.estimatedAge}`;
+  if (summary.estimatedAge !== null)
+    return `Estimated age ${summary.estimatedAge}`;
   if (summary.documentAge !== null) return `${summary.documentAge} on the ID`;
 
   return "Age confirmed";
@@ -274,7 +275,9 @@ export function deviceEvents(device: DeviceRead): LiveInput[] {
       key: "sig-bot",
       tone: human ? "sig" : "stop",
       product: "signals",
-      title: human ? "Bot protection: human" : "Bot protection: likely automated",
+      title: human
+        ? "Bot protection: human"
+        : "Bot protection: likely automated",
       detail: `Bot score ${device.botScore.toFixed(2)}`,
     },
   ];

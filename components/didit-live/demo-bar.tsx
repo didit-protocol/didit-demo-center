@@ -50,8 +50,11 @@ export function DemoBar({
   return (
     <header className="dx-bar">
       <Link aria-label="Didit Demo Center" href="/">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img alt="Didit" className="dx-logo" src="/brand/didit-lockup-white.png" />
+        <img
+          alt="Didit"
+          className="dx-logo"
+          src="/brand/didit-lockup-white.png"
+        />
       </Link>
       <span aria-hidden className="dx-sep" />
       <Link className="dx-center" href="/">

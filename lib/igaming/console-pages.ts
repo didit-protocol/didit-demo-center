@@ -37,7 +37,12 @@ export interface AuroraConsoleInput {
   kyc: SessionSummary | null;
   activity: ActivityItem[];
   events: LiveEvent[];
-  device: { persistentId: string; botScore: number; browser: string; os: string } | null;
+  device: {
+    persistentId: string;
+    botScore: number;
+    browser: string;
+    os: string;
+  } | null;
   /** Every account opened in this browser, the current one included. */
   accounts: DeviceAccount[];
   /** "Passkey", "Email code"; null without Didit Authentication. */
@@ -49,7 +54,10 @@ export interface AuroraConsoleInput {
 const time = (at: number, now: number) => {
   const date = new Date(at);
   const today = new Date(now).toDateString() === date.toDateString();
-  const clock = date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+  const clock = date.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 
   return today
     ? `Today, ${clock}`
@@ -57,12 +65,19 @@ const time = (at: number, now: number) => {
 };
 
 const day = (at: number) =>
-  new Date(at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+  new Date(at).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 
-const short = (id: string) => (id.length > 14 ? `${id.slice(0, 12)}…${id.slice(-4)}` : id);
+const short = (id: string) =>
+  id.length > 14 ? `${id.slice(0, 12)}…${id.slice(-4)}` : id;
 
 const percent = (value: number | null) =>
-  value === null ? null : `${value > 1 ? value.toFixed(1) : (value * 100).toFixed(1)}%`;
+  value === null
+    ? null
+    : `${value > 1 ? value.toFixed(1) : (value * 100).toFixed(1)}%`;
 
 function statusTag(status: string): Tag {
   const s = status.toUpperCase().replace(/ /g, "_");
@@ -72,7 +87,10 @@ function statusTag(status: string): Tag {
   if (s === "AWAITING_USER") return { label: "On hold", tone: "rev" };
   if (s === "IN_REVIEW") return { label: "In review", tone: "rev" };
 
-  return { label: status.charAt(0) + status.slice(1).toLowerCase().replace(/_/g, " "), tone: "neu" };
+  return {
+    label: status.charAt(0) + status.slice(1).toLowerCase().replace(/_/g, " "),
+    tone: "neu",
+  };
 }
 
 function riskOf(activity: ActivityItem[]) {
@@ -93,29 +111,51 @@ function identityChecks(input: AuroraConsoleInput): Check[] {
     const face = percent(kyc.faceMatch);
     const live = percent(kyc.liveness);
 
-    if (face) checks.push({ label: "Face match", value: `${face} · selfie vs document`, ok: kyc.status === "Approved" });
-    if (live) checks.push({ label: "Liveness", value: `Passed · ${live}`, ok: true });
+    if (face)
+      checks.push({
+        label: "Face match",
+        value: `${face} · selfie vs document`,
+        ok: kyc.status === "Approved",
+      });
+    if (live)
+      checks.push({ label: "Liveness", value: `Passed · ${live}`, ok: true });
   }
   if (age) {
     checks.push({
       label: "Age",
-      value: [ageText(age), kyc?.documentAge ? `${kyc.documentAge} on the ID` : null]
+      value: [
+        ageText(age),
+        kyc?.documentAge ? `${kyc.documentAge} on the ID` : null,
+      ]
         .filter(Boolean)
         .join(", "),
-      ok: age.status === "Approved" ? true : age.status === "Declined" ? false : null,
+      ok:
+        age.status === "Approved"
+          ? true
+          : age.status === "Declined"
+            ? false
+            : null,
     });
   }
   if (kyc?.documentType) {
     checks.push({
       label: "Document",
-      value: [kyc.documentType, kyc.documentCountry].filter(Boolean).join(" · "),
-      ok: kyc.status === "Approved" ? true : kyc.status === "Declined" ? false : null,
+      value: [kyc.documentType, kyc.documentCountry]
+        .filter(Boolean)
+        .join(" · "),
+      ok:
+        kyc.status === "Approved"
+          ? true
+          : kyc.status === "Declined"
+            ? false
+            : null,
     });
   }
   if (kyc && kyc.amlHits !== null) {
     checks.push({
       label: "AML",
-      value: kyc.amlHits === 0 ? "No matches" : `${kyc.amlHits} possible matches`,
+      value:
+        kyc.amlHits === 0 ? "No matches" : `${kyc.amlHits} possible matches`,
       ok: kyc.amlHits === 0,
     });
   }
@@ -124,15 +164,24 @@ function identityChecks(input: AuroraConsoleInput): Check[] {
 }
 
 function timeline(events: LiveEvent[], now: number): TimelineItem[] {
-  return events
-    .slice(0, 12)
-    .map((event) => ({ tone: event.tone, title: event.title, detail: event.detail, at: time(event.at, now) }));
+  return events.slice(0, 12).map((event) => ({
+    tone: event.tone,
+    title: event.title,
+    detail: event.detail,
+    at: time(event.at, now),
+  }));
 }
 
 /** The transaction the team would open: the held one, else the newest. */
-export function focusTransaction(activity: ActivityItem[]): ActivityItem | null {
+export function focusTransaction(
+  activity: ActivityItem[],
+): ActivityItem | null {
   return (
-    activity.find((item) => item.record && ["AWAITING_USER", "IN_REVIEW", "DECLINED"].includes(item.record.status)) ??
+    activity.find(
+      (item) =>
+        item.record &&
+        ["AWAITING_USER", "IN_REVIEW", "DECLINED"].includes(item.record.status),
+    ) ??
     activity.find((item) => item.record) ??
     null
   );
@@ -140,7 +189,9 @@ export function focusTransaction(activity: ActivityItem[]): ActivityItem | null 
 
 function linkedRecords(input: AuroraConsoleInput): LinkedRecord[] {
   const linked: LinkedRecord[] = [];
-  const others = input.accounts.filter((account) => account.playerId !== input.player?.playerId);
+  const others = input.accounts.filter(
+    (account) => account.playerId !== input.player?.playerId,
+  );
 
   for (const other of others.slice(0, 2)) {
     linked.push({ tone: "sig", title: other.label, detail: "Same device" });
@@ -177,7 +228,9 @@ function personPage(input: AuroraConsoleInput): RecordPage | null {
   if (!player) return null;
   const name = input.kyc?.fullName ?? player.name ?? player.email;
   const risk = riskOf(input.activity);
-  const others = input.accounts.filter((account) => account.playerId !== player.playerId).length;
+  const others = input.accounts.filter(
+    (account) => account.playerId !== player.playerId,
+  ).length;
   const tag: Tag =
     input.kyc?.status === "Approved"
       ? { label: "Verified", tone: "ok" }
@@ -185,7 +238,9 @@ function personPage(input: AuroraConsoleInput): RecordPage | null {
         ? { label: "Age checked", tone: "info" }
         : { label: "Not verified", tone: "neu" };
   const checks = identityChecks(input);
-  const signIns = input.events.filter((event) => event.product === "authentication").length;
+  const signIns = input.events.filter(
+    (event) => event.product === "authentication",
+  ).length;
 
   return {
     kind: "person",
@@ -204,11 +259,24 @@ function personPage(input: AuroraConsoleInput): RecordPage | null {
     },
     kpis: [
       input.signIn
-        ? { label: "Sign-ins", value: String(Math.max(signIns, 1)), unit: input.signIn.toLowerCase() }
+        ? {
+            label: "Sign-ins",
+            value: String(Math.max(signIns, 1)),
+            unit: input.signIn.toLowerCase(),
+          }
         : { label: "Sign-ins", value: "1", unit: "demo sign-in" },
       { label: "Risk", value: risk.value, unit: "overall", color: risk.color },
-      { label: "Deposits", value: `${input.totals.depositedTotal.toLocaleString("en-US")} EUR`, unit: "30 days" },
-      { label: "Linked accounts", value: String(others), unit: "same device", color: others ? "no" : undefined },
+      {
+        label: "Deposits",
+        value: `${input.totals.depositedTotal.toLocaleString("en-US")} EUR`,
+        unit: "30 days",
+      },
+      {
+        label: "Linked accounts",
+        value: String(others),
+        unit: "same device",
+        color: others ? "no" : undefined,
+      },
     ],
     blocks: [
       checks.length
@@ -219,20 +287,44 @@ function personPage(input: AuroraConsoleInput): RecordPage | null {
             document: input.kyc?.documentType
               ? `${(input.kyc.documentCountry ?? "").toUpperCase()} · ${input.kyc.documentType.toUpperCase()}`
               : "AGE ESTIMATION",
-            selfie: input.kyc ? "Selfie · liveness passed" : "Selfie · deleted after the estimate",
+            selfie: input.kyc
+              ? "Selfie · liveness passed"
+              : "Selfie · deleted after the estimate",
             checks,
           }
-        : { kind: "note", tone: "info", text: `${name} has not finished a verification yet.` },
-      { kind: "timeline", title: "One timeline, every Didit product", link: "All events", items: timeline(input.events, input.now) },
+        : {
+            kind: "note",
+            tone: "info",
+            text: `${name} has not finished a verification yet.`,
+          },
+      {
+        kind: "timeline",
+        title: "One timeline, every Didit product",
+        link: "All events",
+        items: timeline(input.events, input.now),
+      },
     ],
     side: {
       title: "Details",
       pairs: [
         ["Email", player.email],
-        ["Sign-in", input.signIn ? `${input.signIn} · 1 device` : "Aurora Play sign-in"],
-        ...(input.device ? ([["Device", `${input.device.browser} on ${input.device.os}`]] as [string, string][]) : []),
+        [
+          "Sign-in",
+          input.signIn ? `${input.signIn} · 1 device` : "Aurora Play sign-in",
+        ],
+        ...(input.device
+          ? ([["Device", `${input.device.browser} on ${input.device.os}`]] as [
+              string,
+              string,
+            ][])
+          : []),
         ...(input.age?.ip
-          ? ([["Network", `${input.age.ip.isVpnOrTor ? "VPN" : input.age.ip.isDataCenter ? "Data centre" : "Residential"} · ${input.age.ip.country ?? "unknown"}`]] as [string, string][])
+          ? ([
+              [
+                "Network",
+                `${input.age.ip.isVpnOrTor ? "VPN" : input.age.ip.isDataCenter ? "Data centre" : "Residential"} · ${input.age.ip.country ?? "unknown"}`,
+              ],
+            ] as [string, string][])
           : []),
         ["Vendor data", player.playerId],
         ["First seen", day(player.createdAt)],
@@ -255,7 +347,10 @@ function transactionPage(input: AuroraConsoleInput): RecordPage | null {
   if (!focus || !record || !input.player) return null;
   const name = input.kyc?.fullName ?? input.player.name ?? input.player.email;
   const held = record.status === "AWAITING_USER";
-  const released = record.status === "APPROVED" && focus.kind === "deposit" && input.kyc?.status === "Approved";
+  const released =
+    record.status === "APPROVED" &&
+    focus.kind === "deposit" &&
+    input.kyc?.status === "Approved";
   const at = record.createdAt ? Date.parse(record.createdAt) : focus.at;
   const score = Math.round(record.score);
 
@@ -269,25 +364,58 @@ function transactionPage(input: AuroraConsoleInput): RecordPage | null {
       tag: statusTag(record.status),
       meta: [
         `${name} → Aurora Play`,
-        focus.kind === "deposit" || focus.kind === "withdrawal" ? "Visa ending 4417" : focus.detail ?? focus.kind,
+        focus.kind === "deposit" || focus.kind === "withdrawal"
+          ? "Visa ending 4417"
+          : (focus.detail ?? focus.kind),
         time(Number.isFinite(at) ? at : focus.at, input.now),
       ],
     },
     kpis: [
-      { label: "Risk score", value: `${score} / 100`, color: score >= 60 ? "no" : score >= 30 ? "rev" : "ok" },
+      {
+        label: "Risk score",
+        value: `${score} / 100`,
+        color: score >= 60 ? "no" : score >= 30 ? "rev" : "ok",
+      },
       { label: "Amount", value: formatMoney(record.amount || focus.amount) },
       { label: "Rules triggered", value: String(record.ruleHits.length) },
       record.action
-        ? { label: "Step-up", value: "ID check", unit: (record.action.status ?? "pending").toLowerCase().replace(/_/g, " "), color: input.kyc?.status === "Approved" ? "ok" : "rev" }
+        ? {
+            label: "Step-up",
+            value: "ID check",
+            unit: (record.action.status ?? "pending")
+              .toLowerCase()
+              .replace(/_/g, " "),
+            color: input.kyc?.status === "Approved" ? "ok" : "rev",
+          }
         : { label: "Step-up", value: "None", unit: "needed" },
     ],
     blocks: [
       ...(held
-        ? [{ kind: "note" as const, tone: "hold" as const, text: `Held because ${name}'s deposits reach ${KYC_THRESHOLD.toLocaleString("en-US")} EUR in 30 days. Didit asked for an ID check in the same cashier; the deposit is released as soon as it is approved.` }]
+        ? [
+            {
+              kind: "note" as const,
+              tone: "hold" as const,
+              text: `Held because ${name}'s deposits reach ${KYC_THRESHOLD.toLocaleString("en-US")} EUR in 30 days. Didit asked for an ID check in the same cashier; the deposit is released as soon as it is approved.`,
+            },
+          ]
         : released
-          ? [{ kind: "note" as const, tone: "info" as const, text: `Held at ${KYC_THRESHOLD.toLocaleString("en-US")} EUR in 30 days, then released automatically once ${name}'s ID check was approved. Nobody on your team had to look at it.` }]
+          ? [
+              {
+                kind: "note" as const,
+                tone: "info" as const,
+                text: `Held at ${KYC_THRESHOLD.toLocaleString("en-US")} EUR in 30 days, then released automatically once ${name}'s ID check was approved. Nobody on your team had to look at it.`,
+              },
+            ]
           : record.status === "IN_REVIEW" || record.status === "DECLINED"
-            ? [{ kind: "note" as const, tone: "stop" as const, text: record.tags.includes("BONUS_ABUSE") ? "The welcome offer was already claimed by another player on this device, so the claim did not go through." : `Didit ${record.status === "DECLINED" ? "declined" : "held"} this transaction: ${record.reason ?? `risk ${score} of 100`}.` }]
+            ? [
+                {
+                  kind: "note" as const,
+                  tone: "stop" as const,
+                  text: record.tags.includes("BONUS_ABUSE")
+                    ? "The welcome offer was already claimed by another player on this device, so the claim did not go through."
+                    : `Didit ${record.status === "DECLINED" ? "declined" : "held"} this transaction: ${record.reason ?? `risk ${score} of 100`}.`,
+                },
+              ]
             : []),
       {
         kind: "rules",
@@ -295,11 +423,22 @@ function transactionPage(input: AuroraConsoleInput): RecordPage | null {
         link: "iGaming ruleset",
         rows: record.ruleHits.length
           ? record.ruleHits.map((hit) => ({
-              state: hit.statusTarget === "DECLINED" ? ("declined" as const) : ("hit" as const),
+              state:
+                hit.statusTarget === "DECLINED"
+                  ? ("declined" as const)
+                  : ("hit" as const),
               title: ruleName(hit.title),
-              detail: hit.statusTarget ? `action: ${hit.statusTarget.toLowerCase().replace(/_/g, " ")}` : `+${hit.scoreDelta} risk`,
+              detail: hit.statusTarget
+                ? `action: ${hit.statusTarget.toLowerCase().replace(/_/g, " ")}`
+                : `+${hit.scoreDelta} risk`,
             }))
-          : [{ state: "passed" as const, title: "No rule matched", detail: "approved on its own" }],
+          : [
+              {
+                state: "passed" as const,
+                title: "No rule matched",
+                detail: "approved on its own",
+              },
+            ],
       },
       {
         kind: "pairs",
@@ -309,7 +448,12 @@ function transactionPage(input: AuroraConsoleInput): RecordPage | null {
           ["Didit ID", short(record.id)],
           ["Type", record.actionType.replace(/_/g, " ")],
           ["Category", record.category],
-          ["Device", record.device.fingerprint ? short(record.device.fingerprint) : "Attached by the SDK"],
+          [
+            "Device",
+            record.device.fingerprint
+              ? short(record.device.fingerprint)
+              : "Attached by the SDK",
+          ],
           ["IP country", record.device.ipCountry ?? "Unknown"],
         ],
       },
@@ -318,16 +462,39 @@ function transactionPage(input: AuroraConsoleInput): RecordPage | null {
       title: "Review",
       tag: statusTag(record.status),
       pairs: [
-        ["Decided by", record.action ? "Rule + ID check" : record.ruleHits.length ? "Rules" : "Automatic"],
-        ["Queue", record.status === "IN_REVIEW" ? "Manual review" : "None needed"],
+        [
+          "Decided by",
+          record.action
+            ? "Rule + ID check"
+            : record.ruleHits.length
+              ? "Rules"
+              : "Automatic",
+        ],
+        [
+          "Queue",
+          record.status === "IN_REVIEW" ? "Manual review" : "None needed",
+        ],
         ["Score", `${score} / 100`],
       ],
     },
     linked: linkedRecords(input).filter((item) => item.tone !== "txn"),
     nav: [
-      { label: "All transactions", count: input.activity.filter((item) => item.record).length },
-      { label: "On hold", count: input.activity.filter((item) => item.record?.status === "AWAITING_USER").length },
-      { label: "Declined", count: input.activity.filter((item) => item.record?.status === "DECLINED").length },
+      {
+        label: "All transactions",
+        count: input.activity.filter((item) => item.record).length,
+      },
+      {
+        label: "On hold",
+        count: input.activity.filter(
+          (item) => item.record?.status === "AWAITING_USER",
+        ).length,
+      },
+      {
+        label: "Declined",
+        count: input.activity.filter(
+          (item) => item.record?.status === "DECLINED",
+        ).length,
+      },
       { label: "Rules" },
     ],
   };
@@ -348,26 +515,50 @@ function verificationPage(input: AuroraConsoleInput): RecordPage | null {
       title: kyc ? "Core KYC" : "Age estimation",
       tag: statusTag(session.status),
       id: short(session.sessionId),
-      meta: [input.kyc?.fullName ?? input.player.email, kyc ? "ID, liveness and face match" : "Selfie age estimate"],
+      meta: [
+        input.kyc?.fullName ?? input.player.email,
+        kyc ? "ID, liveness and face match" : "Selfie age estimate",
+      ],
     },
     kpis: [],
     blocks: [
-      { kind: "checks", title: "Checks", checks: checks.length ? checks : [{ label: "Status", value: session.status, ok: null }] },
+      {
+        kind: "checks",
+        title: "Checks",
+        checks: checks.length
+          ? checks
+          : [{ label: "Status", value: session.status, ok: null }],
+      },
       ...(session.ip
-        ? [{
-            kind: "pairs" as const,
-            title: "IP analysis",
-            pairs: [
-              ["Country", session.ip.country ?? "Unknown"],
-              ["VPN or Tor", session.ip.isVpnOrTor ? "Yes" : "No"],
-              ["Data centre", session.ip.isDataCenter ? "Yes" : "No"],
-            ] as [string, string][],
-          }]
+        ? [
+            {
+              kind: "pairs" as const,
+              title: "IP analysis",
+              pairs: [
+                ["Country", session.ip.country ?? "Unknown"],
+                ["VPN or Tor", session.ip.isVpnOrTor ? "Yes" : "No"],
+                ["Data centre", session.ip.isDataCenter ? "Yes" : "No"],
+              ] as [string, string][],
+            },
+          ]
         : []),
     ],
-    side: { title: "Details", tag: statusTag(session.status), pairs: [["Workflow", kyc ? "Core KYC" : "Age estimation"], ["Vendor data", input.player.playerId]] },
+    side: {
+      title: "Details",
+      tag: statusTag(session.status),
+      pairs: [
+        ["Workflow", kyc ? "Core KYC" : "Age estimation"],
+        ["Vendor data", input.player.playerId],
+      ],
+    },
     linked: linkedRecords(input).filter((item) => item.tone !== "ver"),
-    nav: [{ label: "All verifications", count: [input.age, input.kyc].filter(Boolean).length }, { label: "Needs review" }],
+    nav: [
+      {
+        label: "All verifications",
+        count: [input.age, input.kyc].filter(Boolean).length,
+      },
+      { label: "Needs review" },
+    ],
   };
 }
 
@@ -383,13 +574,25 @@ function devicePage(input: AuroraConsoleInput): RecordPage | null {
     record: short(device.persistentId),
     head: {
       title: `${device.browser} on ${device.os}`,
-      tag: others > 1 ? { label: `${others} accounts`, tone: "rev" } : { label: "One account", tone: "ok" },
+      tag:
+        others > 1
+          ? { label: `${others} accounts`, tone: "rev" }
+          : { label: "One account", tone: "ok" },
       id: short(device.persistentId),
       meta: ["Didit signals fingerprint"],
     },
     kpis: [
-      { label: "Accounts", value: String(others), unit: "on this device", color: others > 1 ? "no" : undefined },
-      { label: "Bot score", value: device.botScore.toFixed(2), color: device.botScore < 0.5 ? "ok" : "no" },
+      {
+        label: "Accounts",
+        value: String(others),
+        unit: "on this device",
+        color: others > 1 ? "no" : undefined,
+      },
+      {
+        label: "Bot score",
+        value: device.botScore.toFixed(2),
+        color: device.botScore < 0.5 ? "ok" : "no",
+      },
     ],
     blocks: [
       {
@@ -398,12 +601,22 @@ function devicePage(input: AuroraConsoleInput): RecordPage | null {
         rows: input.accounts.map((account) => ({
           name: account.label,
           role: account.playerId,
-          status: account.playerId === input.player?.playerId ? { label: "Current", tone: "info" } : { label: "Same device", tone: "rev" },
+          status:
+            account.playerId === input.player?.playerId
+              ? { label: "Current", tone: "info" }
+              : { label: "Same device", tone: "rev" },
           date: day(account.createdAt),
         })),
       },
     ],
-    side: { title: "Details", pairs: [["Browser", device.browser], ["System", device.os], ["Persistent id", short(device.persistentId)]] },
+    side: {
+      title: "Details",
+      pairs: [
+        ["Browser", device.browser],
+        ["System", device.os],
+        ["Persistent id", short(device.persistentId)],
+      ],
+    },
     linked: [],
     nav: [{ label: "All devices", count: 1 }],
   };
@@ -419,7 +632,8 @@ export function auroraConsole(input: AuroraConsoleInput): ConsoleTab[] {
       tone: "auth",
       note: `This is your Didit console. Everything ${name} just did in Aurora Play is already here, for your team.`,
       page: personPage(input),
-      empty: "Sign up in Aurora Play first: the person appears here as soon as Didit knows them.",
+      empty:
+        "Sign up in Aurora Play first: the person appears here as soon as Didit knows them.",
     },
     {
       id: "transaction",

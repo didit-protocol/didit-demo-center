@@ -42,7 +42,8 @@ function TagChip({ tag }: { tag: Tag }) {
 }
 
 function OkIcon({ ok }: { ok: boolean | null }) {
-  if (ok === null) return <Timer aria-hidden className="text-[#9A5200]" size={18} />;
+  if (ok === null)
+    return <Timer aria-hidden className="text-[#9A5200]" size={18} />;
 
   return ok ? (
     <CircleCheck aria-hidden className="cs-ok" size={18} />
@@ -118,11 +119,23 @@ function BlockView({ block }: { block: Block }) {
         >
           <span className="flex gap-3">
             {block.tone === "hold" ? (
-              <Timer aria-hidden className="mt-0.5 flex-none text-[#D97706]" size={18} />
+              <Timer
+                aria-hidden
+                className="mt-0.5 flex-none text-[#D97706]"
+                size={18}
+              />
             ) : block.tone === "stop" ? (
-              <CircleSlash aria-hidden className="mt-0.5 flex-none text-[#E5484D]" size={18} />
+              <CircleSlash
+                aria-hidden
+                className="mt-0.5 flex-none text-[#E5484D]"
+                size={18}
+              />
             ) : (
-              <Eye aria-hidden className="mt-0.5 flex-none text-[#2567FF]" size={18} />
+              <Eye
+                aria-hidden
+                className="mt-0.5 flex-none text-[#2567FF]"
+                size={18}
+              />
             )}
             <span>{block.text}</span>
           </span>
@@ -140,7 +153,11 @@ function BlockView({ block }: { block: Block }) {
                 ) : row.state === "declined" ? (
                   <CircleSlash aria-hidden className="cs-bad" size={18} />
                 ) : (
-                  <AlertTriangle aria-hidden className="text-[#9A5200]" size={18} />
+                  <AlertTriangle
+                    aria-hidden
+                    className="text-[#9A5200]"
+                    size={18}
+                  />
                 )}
                 <span>
                   <b className="font-medium text-[#1A1A1A]">{row.title}</b>
@@ -171,13 +188,18 @@ function BlockView({ block }: { block: Block }) {
               <p className="cs-empty m-0">Nothing recorded yet.</p>
             ) : null}
             {block.items.map((item, index) => (
-              <div key={`${item.title}-${index}`} className={TONE_CLASS[item.tone]}>
+              <div
+                key={`${item.title}-${index}`}
+                className={TONE_CLASS[item.tone]}
+              >
                 <i className="cs-pi">
                   <ToneIcon size={14} tone={item.tone} />
                 </i>
                 <span>
                   <b>{item.title}</b>
-                  {item.detail ? <span className="d"> · {item.detail}</span> : null}
+                  {item.detail ? (
+                    <span className="d"> · {item.detail}</span>
+                  ) : null}
                 </span>
                 <time>{item.at}</time>
               </div>
@@ -191,9 +213,14 @@ function BlockView({ block }: { block: Block }) {
           <BoxHead link={block.link} title={block.title} />
           <dl className="cs-grid2 m-0 px-3.5 py-3">
             {block.pairs.map(([key, value]) => (
-              <div key={key} className="flex items-baseline justify-between gap-3 py-1 text-[12.5px]">
+              <div
+                key={key}
+                className="flex items-baseline justify-between gap-3 py-1 text-[12.5px]"
+              >
                 <dt className="text-[#6B6B6B]">{key}</dt>
-                <dd className="m-0 truncate text-right text-[#1A1A1A]">{value}</dd>
+                <dd className="m-0 truncate text-right text-[#1A1A1A]">
+                  {value}
+                </dd>
               </div>
             ))}
           </dl>
@@ -267,12 +294,16 @@ function Page({ page }: { page: RecordPage }) {
               <div className="flex flex-wrap items-center gap-2.5">
                 <h2>{page.head.title}</h2>
                 {page.head.aside ? (
-                  <span className="text-[13px] text-[#6B6B6B]">{page.head.aside}</span>
+                  <span className="text-[13px] text-[#6B6B6B]">
+                    {page.head.aside}
+                  </span>
                 ) : null}
                 {page.head.tag ? <TagChip tag={page.head.tag} /> : null}
               </div>
               <div className="cs-meta">
-                {page.head.id ? <span className="cs-id">{page.head.id}</span> : null}
+                {page.head.id ? (
+                  <span className="cs-id">{page.head.id}</span>
+                ) : null}
                 {page.head.meta.map((item) => (
                   <span key={item}>· {item}</span>
                 ))}
@@ -328,15 +359,25 @@ function Page({ page }: { page: RecordPage }) {
             <>
               <h4 className="mt-2">Linked records</h4>
               {page.linked.map((record) => (
-                <div key={record.title} className={`cs-link ${TONE_CLASS[record.tone]}`}>
-                  <span className="lv-ic" style={{ width: 28, height: 28, borderRadius: 8 }}>
+                <div
+                  key={record.title}
+                  className={`cs-link ${TONE_CLASS[record.tone]}`}
+                >
+                  <span
+                    className="lv-ic"
+                    style={{ width: 28, height: 28, borderRadius: 8 }}
+                  >
                     <ToneIcon size={15} tone={record.tone} />
                   </span>
                   <span className="x">
                     <b>{record.title}</b>
                     <span>{record.detail}</span>
                   </span>
-                  <ChevronRight aria-hidden className="text-[#8A8A8A]" size={16} />
+                  <ChevronRight
+                    aria-hidden
+                    className="text-[#8A8A8A]"
+                    size={16}
+                  />
                 </div>
               ))}
             </>
@@ -418,9 +459,7 @@ export function ConsoleView({
           <span className="cv-url">
             <Lock aria-hidden size={13} />
             console.didit.me /{" "}
-            <b>
-              {page ? `${page.section} / ${page.record}` : current.label}
-            </b>
+            <b>{page ? `${page.section} / ${page.record}` : current.label}</b>
           </span>
           <div className="cv-tabs" role="tablist">
             {tabs.map((item) => (
@@ -482,7 +521,10 @@ export function ConsoleView({
               const Icon = NAV_ICON[index % NAV_ICON.length];
 
               return (
-                <span key={item.label} className={`cs-item${index === 0 ? " is-on" : ""}`}>
+                <span
+                  key={item.label}
+                  className={`cs-item${index === 0 ? " is-on" : ""}`}
+                >
                   <Icon aria-hidden size={16} />
                   {item.label}
                   {item.count !== undefined ? <em>{item.count}</em> : null}

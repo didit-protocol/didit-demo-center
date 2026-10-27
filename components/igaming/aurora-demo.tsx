@@ -9,7 +9,12 @@ import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { Casino, type NavId } from "./casino";
-import { CashierModal, OfferModal, ResponsibleModal, SignUpModal } from "./modals";
+import {
+  CashierModal,
+  OfferModal,
+  ResponsibleModal,
+  SignUpModal,
+} from "./modals";
 import { type AuroraSignal, useAurora } from "./use-aurora";
 
 import { DemoShell } from "@/components/didit-live/demo-shell";
@@ -61,13 +66,21 @@ export function AuroraDemo() {
   const [offerKey, setOfferKey] = React.useState<string | null>(null);
   const [consoleOpen, setConsoleOpen] = React.useState(false);
   const [consoleTab, setConsoleTab] = React.useState("person");
-  const [toast, setToast] = React.useState<{ tone: "info" | "error"; text: string } | null>(null);
+  const [toast, setToast] = React.useState<{
+    tone: "info" | "error";
+    text: string;
+  } | null>(null);
   const [accounts, setAccounts] = React.useState<DeviceAccount[]>([]);
   const [seen, setSeen] = React.useState<Set<StepId>>(new Set());
   const [authBusy, setAuthBusy] = React.useState(false);
   const [authError, setAuthError] = React.useState<string | null>(null);
   const joining = React.useRef(false);
-  const contextRef = React.useRef({ person: "", depositedBefore: 0, previous: null as string | null, accounts: 1 });
+  const contextRef = React.useRef({
+    person: "",
+    depositedBefore: 0,
+    previous: null as string | null,
+    accounts: 1,
+  });
 
   const emit = React.useCallback(
     (signal: AuroraSignal) => {
@@ -86,14 +99,22 @@ export function AuroraDemo() {
                 })
               : recordEvents(
                   signal.record,
-                  { kind: signal.record.actionType as ActivityItem["kind"], amount: signal.record.amount },
+                  {
+                    kind: signal.record.actionType as ActivityItem["kind"],
+                    amount: signal.record.amount,
+                  },
                   {
                     person: context.person,
-                    depositedBefore: context.depositedBefore - signal.record.amount,
+                    depositedBefore:
+                      context.depositedBefore - signal.record.amount,
                     previous: context.previous,
                     accountsOnDevice: context.accounts,
                   },
-                ).filter((input) => !input.key?.endsWith("-next") && !input.key?.endsWith("-rule"));
+                ).filter(
+                  (input) =>
+                    !input.key?.endsWith("-next") &&
+                    !input.key?.endsWith("-rule"),
+                );
 
       // Oldest first, so the most important lands on top.
       for (const input of inputs) live.push(input);
@@ -107,8 +128,12 @@ export function AuroraDemo() {
   const authOn = didit.authEnabled;
   const ageStatus = state?.age?.summary?.status ?? null;
   const ageApproved = ageStatus === "Approved";
-  const person = state ? (state.kyc?.summary?.fullName ?? (state.name || state.email)) : (auth?.email ?? null);
-  const previous = accounts.find((account) => account.playerId !== state?.playerId)?.label ?? null;
+  const person = state
+    ? (state.kyc?.summary?.fullName ?? (state.name || state.email))
+    : (auth?.email ?? null);
+  const previous =
+    accounts.find((account) => account.playerId !== state?.playerId)?.label ??
+    null;
 
   contextRef.current = {
     person: person ?? "the player",
@@ -122,7 +147,9 @@ export function AuroraDemo() {
   React.useEffect(() => {
     setAccounts(readAccounts());
     try {
-      setSeen(new Set(JSON.parse(window.sessionStorage.getItem(SEEN_KEY) ?? "[]")));
+      setSeen(
+        new Set(JSON.parse(window.sessionStorage.getItem(SEEN_KEY) ?? "[]")),
+      );
     } catch {
       // Starts with no step seen.
     }
@@ -132,12 +159,19 @@ export function AuroraDemo() {
     if (!state) return;
     const label = state.kyc?.summary?.fullName ?? (state.name || state.email);
     const current = readAccounts();
-    const known = current.find((account) => account.playerId === state.playerId);
+    const known = current.find(
+      (account) => account.playerId === state.playerId,
+    );
 
     if (known?.label === label) return;
     const next = known
-      ? current.map((account) => (account.playerId === state.playerId ? { ...account, label } : account))
-      : [...current, { playerId: state.playerId, label, createdAt: state.createdAt }];
+      ? current.map((account) =>
+          account.playerId === state.playerId ? { ...account, label } : account,
+        )
+      : [
+          ...current,
+          { playerId: state.playerId, label, createdAt: state.createdAt },
+        ];
 
     window.localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(next));
     setAccounts(next);
@@ -164,7 +198,8 @@ export function AuroraDemo() {
 
   React.useEffect(() => {
     if (!auth?.sessionId || auth.status !== "signed-in") return;
-    if (live.events.some((event) => event.id === `auth-${auth.sessionId}`)) return;
+    if (live.events.some((event) => event.id === `auth-${auth.sessionId}`))
+      return;
     const signUp = window.sessionStorage.getItem(OWN_SIGNUP) === "1";
 
     window.sessionStorage.removeItem(OWN_SIGNUP);
@@ -174,13 +209,22 @@ export function AuroraDemo() {
         email: auth.email,
         methods: auth.methods,
         signUp,
-        device: didit.device ? `on this ${didit.device.os === "macOS" ? "Mac" : didit.device.os} device` : null,
+        device: didit.device
+          ? `on this ${didit.device.os === "macOS" ? "Mac" : didit.device.os} device`
+          : null,
       }),
     );
   }, [auth?.sessionId, auth?.status]);
 
   React.useEffect(() => {
-    if (!authOn || !hydrated || auth?.status !== "signed-in" || state || joining.current) return;
+    if (
+      !authOn ||
+      !hydrated ||
+      auth?.status !== "signed-in" ||
+      state ||
+      joining.current
+    )
+      return;
     joining.current = true;
     setModal(null);
     aurora.join("", auth.email ?? "").finally(() => {
@@ -191,7 +235,10 @@ export function AuroraDemo() {
   // Back from the hosted sign-out for a second account: straight to sign-up.
   React.useEffect(() => {
     if (!hydrated || state) return;
-    if (window.sessionStorage.getItem(SECOND_KEY) === "1" && auth?.status !== "signed-in") {
+    if (
+      window.sessionStorage.getItem(SECOND_KEY) === "1" &&
+      auth?.status !== "signed-in"
+    ) {
       setModal("signup");
     }
   }, [hydrated, state, auth?.status]);
@@ -202,9 +249,15 @@ export function AuroraDemo() {
     if (!state?.age?.summary || state.ageSeen) return;
     if (ageApproved) {
       aurora.enterLobby();
-      setToast({ tone: "info", text: "You're 18 or over. Welcome to Aurora Play." });
+      setToast({
+        tone: "info",
+        text: "You're 18 or over. Welcome to Aurora Play.",
+      });
     } else {
-      setToast({ tone: "error", text: sessionView("age", state.age.summary.status).message });
+      setToast({
+        tone: "error",
+        text: sessionView("age", state.age.summary.status).message,
+      });
     }
   }, [state?.age?.summary?.status, state?.ageSeen]);
 
@@ -237,7 +290,10 @@ export function AuroraDemo() {
     if (!ageApproved) {
       if (state.age && !state.age.summary) return aurora.resumeAge();
 
-      return setToast({ tone: "info", text: "Confirm your age first: it takes a selfie and a few seconds." });
+      return setToast({
+        tone: "info",
+        text: "Confirm your age first: it takes a selfie and a few seconds.",
+      });
     }
     then();
   };
@@ -258,11 +314,15 @@ export function AuroraDemo() {
       const result = await auth.emailCode.start(email);
 
       if (result.status === "code_sent") return true;
-      setAuthError("Didit's bot protection asks for one more proof. Use a passkey instead.");
+      setAuthError(
+        "Didit's bot protection asks for one more proof. Use a passkey instead.",
+      );
 
       return false;
     } catch (error) {
-      setAuthError(error instanceof Error ? error.message : "The code could not be sent.");
+      setAuthError(
+        error instanceof Error ? error.message : "The code could not be sent.",
+      );
 
       return false;
     } finally {
@@ -280,9 +340,12 @@ export function AuroraDemo() {
     try {
       const result = await auth.emailCode.verify(code);
 
-      if (result.status !== "signed_in") setAuthError("That code did not work. Check it and try again.");
+      if (result.status !== "signed_in")
+        setAuthError("That code did not work. Check it and try again.");
     } catch (error) {
-      setAuthError(error instanceof Error ? error.message : "That code did not work.");
+      setAuthError(
+        error instanceof Error ? error.message : "That code did not work.",
+      );
     } finally {
       setAuthBusy(false);
     }
@@ -293,7 +356,11 @@ export function AuroraDemo() {
     await aurora.join(name, email);
     setModal(null);
     didit.refreshToken(auroraPlay.id);
-    didit.track(auroraPlay.id, { category: "auth", actionType: "signup", payload: { method: "form" } });
+    didit.track(auroraPlay.id, {
+      category: "auth",
+      actionType: "signup",
+      payload: { method: "form" },
+    });
   };
 
   const deposit = async (amount: number) => {
@@ -310,12 +377,19 @@ export function AuroraDemo() {
 
   const claim = () =>
     requireAccount(async () => {
-      if (totals.bonusClaimed) return setToast({ tone: "info", text: "Your welcome offer is already in your balance." });
+      if (totals.bonusClaimed)
+        return setToast({
+          tone: "info",
+          text: "Your welcome offer is already in your balance.",
+        });
       const item = await aurora.claimBonus();
       const status = item?.record?.status;
 
       if (status === "APPROVED") {
-        setToast({ tone: "info", text: `Welcome offer added: ${formatMoney(WELCOME_BONUS)} in free spins.` });
+        setToast({
+          tone: "info",
+          text: `Welcome offer added: ${formatMoney(WELCOME_BONUS)} in free spins.`,
+        });
       } else if (item?.record) {
         setOfferKey(item.key);
         setModal("offer");
@@ -366,13 +440,20 @@ export function AuroraDemo() {
 
   const activity = state?.activity ?? [];
   const fraudCaught = activity.some(
-    (item) => item.kind === "bonus_claim" && ["IN_REVIEW", "DECLINED"].includes(item.record?.status ?? ""),
+    (item) =>
+      item.kind === "bonus_claim" &&
+      ["IN_REVIEW", "DECLINED"].includes(item.record?.status ?? ""),
   );
   const done = new Set<StepId>();
 
   if (state || auth?.status === "signed-in") done.add("signup");
   if (ageApproved) done.add("verify");
-  if (activity.some((item) => item.kind === "deposit" && item.record?.status === "APPROVED")) done.add("transact");
+  if (
+    activity.some(
+      (item) => item.kind === "deposit" && item.record?.status === "APPROVED",
+    )
+  )
+    done.add("transact");
   if (fraudCaught || seen.has("fraud")) done.add("fraud");
   if (seen.has("console")) done.add("console");
 
@@ -390,7 +471,9 @@ export function AuroraDemo() {
           ? previous && !state
             ? "fraud"
             : "signup"
-          : (["signup", "verify", "transact", "fraud", "console"] as StepId[]).find((id) => !done.has(id)) ?? "console";
+          : ((
+              ["signup", "verify", "transact", "fraud", "console"] as StepId[]
+            ).find((id) => !done.has(id)) ?? "console");
 
   const onStep = (target: StepId) => {
     switch (target) {
@@ -410,7 +493,10 @@ export function AuroraDemo() {
       case "fraud":
         if (!state) setModal("signup");
         else if (!totals.bonusClaimed && !state.secondAccount) {
-          setToast({ tone: "info", text: "Claim the welcome offer first, then open a second account on this device." });
+          setToast({
+            tone: "info",
+            text: "Claim the welcome offer first, then open a second account on this device.",
+          });
         } else void startSecondAccount();
         break;
       default:
@@ -438,7 +524,10 @@ export function AuroraDemo() {
       side: "right",
       title: `${didit.device.botScore < 0.5 ? "Human" : "Likely a bot"} · bot score ${didit.device.botScore.toFixed(2)}`,
     });
-  } else if (modal === "cashier" && cashierItem?.record?.status === "AWAITING_USER") {
+  } else if (
+    modal === "cashier" &&
+    cashierItem?.record?.status === "AWAITING_USER"
+  ) {
     const hit = cashierItem.record.ruleHits[0];
 
     callouts.push({
@@ -449,44 +538,102 @@ export function AuroraDemo() {
       title: hit ? `Rule hit: ${ruleName(hit.title)}` : "Held for an ID check",
     });
   } else if (modal === "offer" && previous) {
-    callouts.push({ id: "device", anchor: "account", tone: "sig", side: "left", title: `Same device as ${previous}` });
+    callouts.push({
+      id: "device",
+      anchor: "account",
+      tone: "sig",
+      side: "left",
+      title: `Same device as ${previous}`,
+    });
   } else if (!modal && state && ageApproved) {
-    callouts.push({ id: "monitored", anchor: "balance", tone: "txn", side: "left", title: "Every deposit is monitored" });
+    callouts.push({
+      id: "monitored",
+      anchor: "balance",
+      tone: "txn",
+      side: "left",
+      title: "Every deposit is monitored",
+    });
   }
 
-  const latest = (product: string) => live.events.find((event) => event.product === product);
-  const approved = activity.filter((item) => item.record?.status === "APPROVED").length;
+  const latest = (product: string) =>
+    live.events.find((event) => event.product === product);
+  const approved = activity.filter(
+    (item) => item.record?.status === "APPROVED",
+  ).length;
   const tiles: ProductTile[] | undefined =
     !modal && state && ageApproved
       ? [
           ...(authOn
-            ? [{ product: "authentication" as const, label: "Authentication", value: auth?.methods.includes("passkey") ? "Passkey" : auth?.methods.includes("code") ? "Email code" : "Signed in" }]
+            ? [
+                {
+                  product: "authentication" as const,
+                  label: "Authentication",
+                  value: auth?.methods.includes("passkey")
+                    ? "Passkey"
+                    : auth?.methods.includes("code")
+                      ? "Email code"
+                      : "Signed in",
+                },
+              ]
             : []),
-          { product: "signals", label: "Signals", value: didit.device?.firstVisit === false ? "Known device" : "New device" },
+          {
+            product: "signals",
+            label: "Signals",
+            value:
+              didit.device?.firstVisit === false
+                ? "Known device"
+                : "New device",
+          },
           {
             product: "verification",
             label: "Verification",
-            value: state.kyc?.summary?.status === "Approved"
-              ? "ID verified"
-              : state.age?.summary?.estimatedAge
-                ? `Age ${state.age.summary.estimatedAge}`
-                : "Age approved",
+            value:
+              state.kyc?.summary?.status === "Approved"
+                ? "ID verified"
+                : state.age?.summary?.estimatedAge
+                  ? `Age ${state.age.summary.estimatedAge}`
+                  : "Age approved",
           },
-          { product: "transactions", label: "Transactions", value: `${approved} approved` },
+          {
+            product: "transactions",
+            label: "Transactions",
+            value: `${approved} approved`,
+          },
         ]
       : undefined;
 
   const consoleTabs = auroraConsole({
     player: state
-      ? { playerId: state.playerId, name: state.kyc?.summary?.fullName ?? state.name, email: state.email, createdAt: state.createdAt }
+      ? {
+          playerId: state.playerId,
+          name: state.kyc?.summary?.fullName ?? state.name,
+          email: state.email,
+          createdAt: state.createdAt,
+        }
       : null,
     age: state?.age?.summary ?? null,
     kyc: state?.kyc?.summary ?? null,
     activity,
     events: live.events,
     device: didit.device,
-    accounts: accounts.length ? accounts : state ? [{ playerId: state.playerId, label: person ?? state.email, createdAt: state.createdAt }] : [],
-    signIn: authOn ? (auth?.methods.includes("passkey") ? "Passkey" : auth?.methods.includes("code") ? "Email code" : "Didit") : null,
+    accounts: accounts.length
+      ? accounts
+      : state
+        ? [
+            {
+              playerId: state.playerId,
+              label: person ?? state.email,
+              createdAt: state.createdAt,
+            },
+          ]
+        : [],
+    signIn: authOn
+      ? auth?.methods.includes("passkey")
+        ? "Passkey"
+        : auth?.methods.includes("code")
+          ? "Email code"
+          : "Didit"
+      : null,
     totals,
     now: Date.now(),
   });
@@ -519,7 +666,14 @@ export function AuroraDemo() {
       onStep={onStep}
     >
       <Casino
-        account={state && ageApproved ? { initial: (person ?? "A").charAt(0).toUpperCase(), balance: totals.balance } : null}
+        account={
+          state && ageApproved
+            ? {
+                initial: (person ?? "A").charAt(0).toUpperCase(),
+                balance: totals.balance,
+              }
+            : null
+        }
         toast={toast}
         onClaim={claim}
         onDeposit={() => setModal("cashier")}
@@ -529,9 +683,16 @@ export function AuroraDemo() {
           if (nav === "promotions") claim();
         }}
         onResponsible={() => requireAccount(() => setModal("responsible"))}
-        onSignIn={() => (authOn ? void auth?.signIn("/igaming") : setModal("signup"))}
+        onSignIn={() =>
+          authOn ? void auth?.signIn("/igaming") : setModal("signup")
+        }
         onSignUp={() => setModal("signup")}
-        onTerms={() => setToast({ tone: "info", text: "Welcome offer: 100 free spins and a 100% match up to 200 EUR on the first deposit. Wagering 30x. 18+." })}
+        onTerms={() =>
+          setToast({
+            tone: "info",
+            text: "Welcome offer: 100 free spins and a 100% match up to 200 EUR on the first deposit. Wagering 30x. 18+.",
+          })
+        }
       >
         {modal === "signup" ? (
           <SignUpModal

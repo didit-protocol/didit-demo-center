@@ -69,7 +69,9 @@ export default async function RootLayout({
 
   const content = (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <DiditClientProvider authEnabled={withAuth}>{children}</DiditClientProvider>
+      <DiditClientProvider authEnabled={withAuth}>
+        {children}
+      </DiditClientProvider>
     </NextIntlClientProvider>
   );
 

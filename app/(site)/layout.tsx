@@ -7,7 +7,11 @@ import { WebsiteHeader, WebsiteFooter } from "@/components/chrome";
  * catalogue and the industry demos that have not moved to the Demo Center
  * shell yet. The hub and the shell demos bring their own chrome.
  */
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default function SiteLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="min-h-screen bg-canvas font-sans">
       <WebsiteHeader />

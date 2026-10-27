@@ -3,7 +3,6 @@ import type { ConsoleContext } from "./policy";
 import { NextRequest, NextResponse } from "next/server";
 
 import { PLAYER_COOKIE, verifyPlayer } from "./player";
-
 import { PLAYER_PREFIX } from "./policy";
 
 import { siteConfig } from "@/config/site";

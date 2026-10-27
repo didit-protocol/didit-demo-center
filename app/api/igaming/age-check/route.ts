@@ -49,8 +49,8 @@ export async function POST(request: NextRequest) {
       callback: CALLBACK,
       email,
       metadata: {
-      operator: OPERATOR_NAME,
-      step: "registration",
+        operator: OPERATOR_NAME,
+        step: "registration",
         ...(fullName ? { full_name: fullName } : {}),
       },
     }),

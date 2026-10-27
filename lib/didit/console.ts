@@ -55,7 +55,14 @@ export interface PersonRow {
 
 /** One block of the page's main column. */
 export type Block =
-  | { kind: "identity"; title: string; link?: string; document: string; selfie: string; checks: Check[] }
+  | {
+      kind: "identity";
+      title: string;
+      link?: string;
+      document: string;
+      selfie: string;
+      checks: Check[];
+    }
   | { kind: "note"; tone: "hold" | "info" | "stop"; text: string }
   | { kind: "rules"; title: string; link?: string; rows: RuleRow[] }
   | { kind: "timeline"; title: string; link?: string; items: TimelineItem[] }
@@ -100,4 +107,3 @@ export interface ConsoleTab {
   /** Shown instead of a page that has no data yet. */
   empty?: string;
 }
-

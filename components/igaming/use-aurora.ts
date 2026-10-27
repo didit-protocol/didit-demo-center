@@ -20,7 +20,6 @@ import {
   diditErrorMessage,
   projectTransaction,
 } from "@/lib/igaming/records";
-
 import { openVerification, submitTransaction } from "@/lib/didit/browser";
 
 /** What just happened with Didit, for the live layer. */

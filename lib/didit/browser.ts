@@ -29,7 +29,9 @@ export function loadSdk(): Promise<Sdk> {
  * how it ended. The session is always created on the server for the
  * signed-in visitor; the browser only ever gets its URL.
  */
-export async function openVerification(url: string): Promise<VerificationResult> {
+export async function openVerification(
+  url: string,
+): Promise<VerificationResult> {
   const sdk = await loadSdk();
 
   return new Promise((resolve) => {
@@ -97,7 +99,9 @@ export async function submitTransaction({
 }
 
 /** The step-up a held transaction asks for, if any. */
-export function stepUpOf(result: Pick<SubmitTransactionResult, "actionRequired">) {
+export function stepUpOf(
+  result: Pick<SubmitTransactionResult, "actionRequired">,
+) {
   const action = result.actionRequired;
 
   return action?.url ? { url: action.url, type: action.type } : null;
@@ -125,7 +129,10 @@ export interface DeviceSummary {
 }
 
 /** "Chrome", "macOS": enough to name a device in the live layer. */
-export function describeAgent(userAgent: string): { browser: string; os: string } {
+export function describeAgent(userAgent: string): {
+  browser: string;
+  os: string;
+} {
   const browser = /Edg\//.test(userAgent)
     ? "Edge"
     : /Firefox\//.test(userAgent)
@@ -157,9 +164,8 @@ export function describeAgent(userAgent: string): { browser: string; os: string 
  */
 export async function readDevice(): Promise<DeviceSummary | null> {
   try {
-    const { getDeviceFingerprintPayload } = await import(
-      "@didit-protocol/signals"
-    );
+    const { getDeviceFingerprintPayload } =
+      await import("@didit-protocol/signals");
     const payload = await getDeviceFingerprintPayload();
 
     if (!payload) return null;

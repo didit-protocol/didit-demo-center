@@ -28,12 +28,48 @@ import { formatMoney } from "@/lib/igaming/policy";
  */
 
 export const GAMES = [
-  { id: "pharaoh", name: "Pharaoh's Gold", studio: "Aurora Originals", rtp: "96.5%", badge: "hot" },
-  { id: "aurora", name: "Aurora Crystals", studio: "Aurora Originals", rtp: "96.2%", badge: "jp" },
-  { id: "fruits", name: "Neon Fruits", studio: "Lumen Games", rtp: "96.8%", badge: null },
-  { id: "dragon", name: "Dragon Pearl", studio: "Jade Studio", rtp: "96.1%", badge: "new" },
-  { id: "viking", name: "Viking Storm", studio: "Northwind", rtp: "96.4%", badge: null },
-  { id: "reef", name: "Reef Riches", studio: "Lumen Games", rtp: "96.3%", badge: null },
+  {
+    id: "pharaoh",
+    name: "Pharaoh's Gold",
+    studio: "Aurora Originals",
+    rtp: "96.5%",
+    badge: "hot",
+  },
+  {
+    id: "aurora",
+    name: "Aurora Crystals",
+    studio: "Aurora Originals",
+    rtp: "96.2%",
+    badge: "jp",
+  },
+  {
+    id: "fruits",
+    name: "Neon Fruits",
+    studio: "Lumen Games",
+    rtp: "96.8%",
+    badge: null,
+  },
+  {
+    id: "dragon",
+    name: "Dragon Pearl",
+    studio: "Jade Studio",
+    rtp: "96.1%",
+    badge: "new",
+  },
+  {
+    id: "viking",
+    name: "Viking Storm",
+    studio: "Northwind",
+    rtp: "96.4%",
+    badge: null,
+  },
+  {
+    id: "reef",
+    name: "Reef Riches",
+    studio: "Lumen Games",
+    rtp: "96.3%",
+    badge: null,
+  },
 ] as const;
 
 const BADGE = { hot: "HOT", jp: "JACKPOT", new: "NEW" } as const;
@@ -168,10 +204,19 @@ function TopBar({
           </>
         ) : (
           <>
-            <button className="ap-btn is-ghost ap-desk-only" type="button" onClick={onSignIn}>
+            <button
+              className="ap-btn is-ghost ap-desk-only"
+              type="button"
+              onClick={onSignIn}
+            >
               Log in
             </button>
-            <button className="ap-btn is-grad" data-callout="signup" type="button" onClick={onSignUp}>
+            <button
+              className="ap-btn is-grad"
+              data-callout="signup"
+              type="button"
+              onClick={onSignUp}
+            >
               Sign up
             </button>
           </>
@@ -200,16 +245,26 @@ function Lobby({
           <h1>
             {signedIn ? (
               <>
-                <span className="ap-desk-only">Your 100 free spins are ready</span>
+                <span className="ap-desk-only">
+                  Your 100 free spins are ready
+                </span>
                 <span className="ap-phone-only">100 free spins ready</span>
               </>
             ) : (
               "100 free spins on your first deposit"
             )}
           </h1>
-          <p>Plus a 100% match up to 200 EUR. Wagering 30x. 18+, play responsibly.</p>
+          <p>
+            Plus a 100% match up to 200 EUR. Wagering 30x. 18+, play
+            responsibly.
+          </p>
           <span className="ap-hero-cta flex gap-2.5">
-            <button className="ap-btn is-gold" data-callout="claim" type="button" onClick={onClaim}>
+            <button
+              className="ap-btn is-gold"
+              data-callout="claim"
+              type="button"
+              onClick={onClaim}
+            >
               {signedIn ? "Claim now" : "Join and claim"}
             </button>
             <button className="ap-btn is-ghost" type="button" onClick={onTerms}>
@@ -256,10 +311,14 @@ function Lobby({
             >
               <span
                 className="ap-game-img"
-                style={{ backgroundImage: `url(/demos/aurora/ap-slot-${game.id}.webp)` }}
+                style={{
+                  backgroundImage: `url(/demos/aurora/ap-slot-${game.id}.webp)`,
+                }}
               >
                 {game.badge ? (
-                  <span className={`ap-badge is-${game.badge}`}>{BADGE[game.badge]}</span>
+                  <span className={`ap-badge is-${game.badge}`}>
+                    {BADGE[game.badge]}
+                  </span>
                 ) : null}
               </span>
               <b>{game.name}</b>
@@ -280,7 +339,9 @@ function Lobby({
             <div
               key={table.id}
               className="ap-live"
-              style={{ backgroundImage: `url(/demos/aurora/ap-live-${table.id}.webp)` }}
+              style={{
+                backgroundImage: `url(/demos/aurora/ap-live-${table.id}.webp)`,
+              }}
             >
               <span className="ap-onair">LIVE</span>
               <span className="ap-live-x">
@@ -301,7 +362,10 @@ function Lobby({
         </div>
         <div
           className="ap-live"
-          style={{ backgroundImage: "url(/demos/aurora/ap-sports.webp)", height: 160 }}
+          style={{
+            backgroundImage: "url(/demos/aurora/ap-sports.webp)",
+            height: 160,
+          }}
         >
           <span className="ap-live-x">
             <b>Live odds on 1,200 matches a day</b>

@@ -64,7 +64,9 @@ export async function currentVisitor(): Promise<Visitor | null> {
  * The `vendor_data` for the signed-in visitor in one demo: the demo's prefix
  * plus their Didit user id. Null when nobody is signed in.
  */
-export async function visitorVendorData(prefix: string): Promise<string | null> {
+export async function visitorVendorData(
+  prefix: string,
+): Promise<string | null> {
   const visitor = await currentVisitor();
 
   return visitor ? vendorDataFor(prefix, visitor.userId) : null;

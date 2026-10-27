@@ -85,36 +85,40 @@ export function LiveFeed({
 
   if (!expanded) {
     return (
-      <button
-        aria-label={`Didit live, ${events.length} checks. Open the feed`}
-        className="lv-pill"
-        data-testid="didit-live-pill"
-        type="button"
-        onClick={() => setOpen(true)}
-      >
-        <DiditRing />
-        Didit live
-        <em>
-          {events.length} {events.length === 1 ? "check" : "checks"}
-        </em>
-        <span aria-hidden className="lv-dots">
-          {(["authentication", "signals", "verification", "transactions"] as const)
-            .filter((product) => products.includes(product))
-            .map((product) => (
-              <i key={product} className={TONE_CLASS[PRODUCT_TONE[product]]} />
-            ))}
-        </span>
-        <span
-          className="lv-go"
-          role="link"
-          onClick={(event) => {
-            event.stopPropagation();
-            onConsole();
-          }}
+      <div className="lv-pill" data-testid="didit-live-pill" role="group">
+        <button
+          aria-label={`Didit live, ${events.length} checks. Open the feed`}
+          className="inline-flex items-center gap-2.5"
+          type="button"
+          onClick={() => setOpen(true)}
         >
+          <DiditRing />
+          Didit live
+          <em>
+            {events.length} {events.length === 1 ? "check" : "checks"}
+          </em>
+          <span aria-hidden className="lv-dots">
+            {(
+              [
+                "authentication",
+                "signals",
+                "verification",
+                "transactions",
+              ] as const
+            )
+              .filter((product) => products.includes(product))
+              .map((product) => (
+                <i
+                  key={product}
+                  className={TONE_CLASS[PRODUCT_TONE[product]]}
+                />
+              ))}
+          </span>
+        </button>
+        <button className="lv-go" type="button" onClick={onConsole}>
           Console <ArrowRight aria-hidden size={15} />
-        </span>
-      </button>
+        </button>
+      </div>
     );
   }
 
@@ -185,7 +189,10 @@ export function LiveFeed({
                   <code>{event.code}</code>
                 ) : null}
               </span>
-              <time className="lv-t" dateTime={new Date(event.at).toISOString()}>
+              <time
+                className="lv-t"
+                dateTime={new Date(event.at).toISOString()}
+              >
                 {ago(event.at, now)}
               </time>
             </li>

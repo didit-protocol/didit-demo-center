@@ -45,8 +45,18 @@ function Layer({
   return (
     <div className="ap-layer">
       <div aria-hidden className="ap-scrim" onMouseDown={onClose} />
-      <div aria-label={label} aria-modal="true" className={`ap-modal ${className}`} role="dialog">
-        <button aria-label="Close" className="ap-modal-x" type="button" onClick={onClose}>
+      <div
+        aria-label={label}
+        aria-modal="true"
+        className={`ap-modal ${className}`}
+        role="dialog"
+      >
+        <button
+          aria-label="Close"
+          className="ap-modal-x"
+          type="button"
+          onClick={onClose}
+        >
           <X aria-hidden size={16} />
         </button>
         {children}
@@ -67,10 +77,22 @@ function Secured({ children }: { children: React.ReactNode }) {
 function GoogleMark() {
   return (
     <svg aria-hidden height="16" viewBox="0 0 24 24" width="16">
-      <path d="M21.6 12.23c0-.68-.06-1.36-.18-2.02H12v3.82h5.4a4.62 4.62 0 0 1-2 3.03v2.5h3.24c1.9-1.75 2.96-4.33 2.96-7.33Z" fill="#4285F4" />
-      <path d="M12 22c2.7 0 4.98-.9 6.64-2.43l-3.24-2.5c-.9.6-2.05.95-3.4.95-2.6 0-4.81-1.76-5.6-4.12H3.06v2.58A10 10 0 0 0 12 22Z" fill="#34A853" />
-      <path d="M6.4 13.9a6 6 0 0 1 0-3.8V7.52H3.06a10 10 0 0 0 0 8.96L6.4 13.9Z" fill="#FBBC05" />
-      <path d="M12 5.98c1.47 0 2.79.5 3.83 1.5l2.87-2.87A9.6 9.6 0 0 0 12 2a10 10 0 0 0-8.94 5.52L6.4 10.1C7.19 7.74 9.4 5.98 12 5.98Z" fill="#EA4335" />
+      <path
+        d="M21.6 12.23c0-.68-.06-1.36-.18-2.02H12v3.82h5.4a4.62 4.62 0 0 1-2 3.03v2.5h3.24c1.9-1.75 2.96-4.33 2.96-7.33Z"
+        fill="#4285F4"
+      />
+      <path
+        d="M12 22c2.7 0 4.98-.9 6.64-2.43l-3.24-2.5c-.9.6-2.05.95-3.4.95-2.6 0-4.81-1.76-5.6-4.12H3.06v2.58A10 10 0 0 0 12 22Z"
+        fill="#34A853"
+      />
+      <path
+        d="M6.4 13.9a6 6 0 0 1 0-3.8V7.52H3.06a10 10 0 0 0 0 8.96L6.4 13.9Z"
+        fill="#FBBC05"
+      />
+      <path
+        d="M12 5.98c1.47 0 2.79.5 3.83 1.5l2.87-2.87A9.6 9.6 0 0 0 12 2a10 10 0 0 0-8.94 5.52L6.4 10.1C7.19 7.74 9.4 5.98 12 5.98Z"
+        fill="#EA4335"
+      />
     </svg>
   );
 }
@@ -184,11 +206,21 @@ export function SignUpModal({
               Create a passkey
             </button>
             <span className="ap-socs">
-              <button className="ap-soc" disabled={busy} type="button" onClick={onHosted}>
+              <button
+                className="ap-soc"
+                disabled={busy}
+                type="button"
+                onClick={onHosted}
+              >
                 <GoogleMark />
                 Google
               </button>
-              <button className="ap-soc" disabled={busy} type="button" onClick={onHosted}>
+              <button
+                className="ap-soc"
+                disabled={busy}
+                type="button"
+                onClick={onHosted}
+              >
                 <Apple aria-hidden fill="currentColor" size={16} />
                 Apple
               </button>
@@ -253,7 +285,11 @@ export function SignUpModal({
             </label>
           </>
         )}
-        {local || error ? <p className="ap-err" role="alert">{local ?? error}</p> : null}
+        {local || error ? (
+          <p className="ap-err" role="alert">
+            {local ?? error}
+          </p>
+        ) : null}
         <button
           className={`ap-btn ${authEnabled ? "is-ghost" : "is-grad"}`}
           disabled={busy}
@@ -268,8 +304,8 @@ export function SignUpModal({
               : "Email me a code"}
         </button>
         <p className="ap-fine">
-          By joining you confirm you are 18 or older and accept the Terms and the
-          Privacy policy.
+          By joining you confirm you are 18 or older and accept the Terms and
+          the Privacy policy.
         </p>
         {authEnabled ? <Secured>Sign-in secured by</Secured> : null}
       </form>
@@ -347,7 +383,11 @@ export function CashierModal({
             {preset.toLocaleString("en-US")}
           </button>
         ))}
-        <button className={other ? "is-on" : undefined} type="button" onClick={() => setOther(true)}>
+        <button
+          className={other ? "is-on" : undefined}
+          type="button"
+          onClick={() => setOther(true)}
+        >
           Other
         </button>
       </div>
@@ -373,7 +413,9 @@ export function CashierModal({
         <span className="ap-input">
           <CreditCard aria-hidden size={18} />
           Visa ending 4417
-          <span className="ml-auto text-[13px] text-[var(--ap-muted)]">Instant</span>
+          <span className="ml-auto text-[13px] text-[var(--ap-muted)]">
+            Instant
+          </span>
         </span>
       </div>
       {mode === "deposit" ? (
@@ -386,7 +428,11 @@ export function CashierModal({
             </b>
           </span>
           <span className="ap-meter">
-            <i style={{ width: `${Math.min(100, (shownTotal / KYC_THRESHOLD) * 100)}%` }} />
+            <i
+              style={{
+                width: `${Math.min(100, (shownTotal / KYC_THRESHOLD) * 100)}%`,
+              }}
+            />
           </span>
         </div>
       ) : (
@@ -405,12 +451,17 @@ export function CashierModal({
           </span>
           <p>
             Licensed casinos check your ID once deposits reach{" "}
-            {KYC_THRESHOLD.toLocaleString("en-US")} EUR in 30 days. It takes about
-            two minutes. Your {result?.amount.toLocaleString("en-US")} EUR goes
-            through as soon as it is approved.
+            {KYC_THRESHOLD.toLocaleString("en-US")} EUR in 30 days. It takes
+            about two minutes. Your {result?.amount.toLocaleString("en-US")} EUR
+            goes through as soon as it is approved.
           </p>
           <span className="flex gap-2.5">
-            <button className="ap-btn is-gold flex-1" disabled={busy} type="button" onClick={onVerify}>
+            <button
+              className="ap-btn is-gold flex-1"
+              disabled={busy}
+              type="button"
+              onClick={onVerify}
+            >
               <IdCard aria-hidden size={18} />
               Verify my ID
             </button>
@@ -426,9 +477,17 @@ export function CashierModal({
           role="status"
         >
           {view?.tone === "approved" ? (
-            <CircleCheck aria-hidden className="flex-none text-[#5EE7A0]" size={18} />
+            <CircleCheck
+              aria-hidden
+              className="flex-none text-[#5EE7A0]"
+              size={18}
+            />
           ) : (
-            <CircleSlash aria-hidden className="flex-none text-[#FF8A9C]" size={18} />
+            <CircleSlash
+              aria-hidden
+              className="flex-none text-[#FF8A9C]"
+              size={18}
+            />
           )}
           <span>
             <b>
@@ -444,7 +503,9 @@ export function CashierModal({
           className="ap-btn is-green h-12"
           disabled={busy || !(amount > 0)}
           type="button"
-          onClick={() => (mode === "deposit" ? onDeposit(amount) : onWithdraw(amount))}
+          onClick={() =>
+            mode === "deposit" ? onDeposit(amount) : onWithdraw(amount)
+          }
         >
           {busy
             ? "Sending…"
@@ -498,10 +559,16 @@ export function OfferModal({
             <b>{email}</b>
             <small>New account · {ago}</small>
           </span>
-          <span className="ap-pill is-no">{declined ? "Bonus declined" : "Bonus on hold"}</span>
+          <span className="ap-pill is-no">
+            {declined ? "Bonus declined" : "Bonus on hold"}
+          </span>
         </div>
         <span className="flex gap-2.5">
-          <button className="ap-btn is-green flex-1" type="button" onClick={onDeposit}>
+          <button
+            className="ap-btn is-green flex-1"
+            type="button"
+            onClick={onDeposit}
+          >
             Deposit without the bonus
           </button>
           <button className="ap-btn is-ghost" type="button" onClick={onClose}>

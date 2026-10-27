@@ -40,8 +40,5 @@ export const TONE_CLASS: Record<Tone, string> = {
 
 /** The Didit symbol, the gradient ring. */
 export function DiditRing({ className }: { className?: string }) {
-  return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img alt="" className={className} src="/brand/didit-symbol.svg" />
-  );
+  return <img alt="" className={className} src="/brand/didit-symbol.svg" />;
 }
