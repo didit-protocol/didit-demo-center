@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Fingerprint, SquareTerminal } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Fingerprint,
+  SquareTerminal,
+} from "lucide-react";
 
 import { DiditRing, ToneIcon } from "@/components/didit-live/icons";
 import { STEPS } from "@/lib/didit/config";
@@ -28,9 +33,12 @@ const PRODUCTS = [
 ] as const;
 
 const STEP_COPY: Record<string, string> = {
-  signup: "Didit Authentication on the customer's own page: a passkey, bot protection, no password.",
-  verify: "The redesigned verification flow in the web SDK modal, branded as the customer.",
-  transact: "Deposits, transfers, orders and withdrawals scored as they happen.",
+  signup:
+    "Didit Authentication on the customer's own page: a passkey, bot protection, no password.",
+  verify:
+    "The redesigned verification flow in the web SDK modal, branded as the customer.",
+  transact:
+    "Deposits, transfers, orders and withdrawals scored as they happen.",
   fraud: "One real attack per demo, caught by device signals and rules.",
   console: "The same story in the Didit console your team would use.",
 };
@@ -38,11 +46,22 @@ const STEP_COPY: Record<string, string> = {
 const host = siteConfig.url.replace(/^https:\/\//, "");
 
 function Lockup({ className }: { className?: string }) {
-  // eslint-disable-next-line jsx-a11y/alt-text
-  return <img alt="Didit" className={className} src="/brand/didit-lockup-white.png" />;
+  return (
+    <img
+      alt="Didit"
+      className={className}
+      src="/brand/didit-lockup-white.png"
+    />
+  );
 }
 
-function Chip({ tone, label }: { tone: (typeof PRODUCTS)[number]["tone"]; label: string }) {
+function Chip({
+  tone,
+  label,
+}: {
+  tone: (typeof PRODUCTS)[number]["tone"];
+  label: string;
+}) {
   return (
     <span className={`hub-chip p-${tone}`}>
       <i />
@@ -102,7 +121,9 @@ export function Hub() {
         </header>
         <div className="hub-hero">
           <div className="hub-hero-x">
-            <span className="hub-sandbox">Sandbox · no real money, no real people</span>
+            <span className="hub-sandbox">
+              Sandbox · no real money, no real people
+            </span>
             <h1>
               Four real products.
               <br />
@@ -110,9 +131,9 @@ export function Hub() {
             </h1>
             <p>
               Sign up, verify, move money and watch an attack get stopped, in a
-              casino, a bank, a marketplace and a crypto exchange. The Didit live
-              layer shows every check as it happens, and the console view shows
-              what your team sees.
+              casino, a bank, a marketplace and a crypto exchange. The Didit
+              live layer shows every check as it happens, and the console view
+              shows what your team sees.
             </p>
             <span className="hub-cta">
               <Link className="hub-btn is-white" href="/igaming">
@@ -124,13 +145,45 @@ export function Hub() {
             </span>
           </div>
           <div aria-hidden className="hub-collage">
-            <img alt="" className="hub-shot s1" src="/demos/shots/shot-kestrel-home.webp" />
-            <img alt="" className="hub-shot s2" src="/demos/shots/shot-alder-home.webp" />
-            <img alt="" className="hub-shot s3" src="/demos/shots/shot-aurora-home.webp" />
-            <HeroCard className="f1" label="Verification" title="Age 25+ approved" tone="ver" />
-            <HeroCard className="f2" label="Authentication" title="Passkey created" tone="auth" />
-            <HeroCard className="f3" label="Blocked" title="Sanctioned wallet declined" tone="stop" />
-            <HeroCard className="f4" label="Transactions" title="Deposit held: ID check" tone="hold" />
+            <img
+              alt=""
+              className="hub-shot s1"
+              src="/demos/shots/shot-kestrel-home.webp"
+            />
+            <img
+              alt=""
+              className="hub-shot s2"
+              src="/demos/shots/shot-alder-home.webp"
+            />
+            <img
+              alt=""
+              className="hub-shot s3"
+              src="/demos/shots/shot-aurora-home.webp"
+            />
+            <HeroCard
+              className="f1"
+              label="Verification"
+              title="Age 25+ approved"
+              tone="ver"
+            />
+            <HeroCard
+              className="f2"
+              label="Authentication"
+              title="Passkey created"
+              tone="auth"
+            />
+            <HeroCard
+              className="f3"
+              label="Blocked"
+              title="Sanctioned wallet declined"
+              tone="stop"
+            />
+            <HeroCard
+              className="f4"
+              label="Transactions"
+              title="Deposit held: ID check"
+              tone="hold"
+            />
           </div>
         </div>
       </section>
@@ -155,7 +208,10 @@ export function Hub() {
               </Link>
               <div className="hub-demo-x">
                 <div className="hub-demo-h">
-                  <span className="hub-mark" style={{ background: demo.brand.mark }}>
+                  <span
+                    className="hub-mark"
+                    style={{ background: demo.brand.mark }}
+                  >
                     {demo.brand.initial}
                   </span>
                   <span>
@@ -208,7 +264,10 @@ export function Hub() {
                       ["ver", "Age check approved", "Selfie age estimate"],
                       ["auth", "Signed in with the passkey", "No password"],
                     ].map(([tone, title, detail], index) => (
-                      <div key={title} className={`lv-ev p-${tone}${index === 0 ? " is-new" : ""}`}>
+                      <div
+                        key={title}
+                        className={`lv-ev p-${tone}${index === 0 ? " is-new" : ""}`}
+                      >
                         <span className="lv-ic">
                           <ToneIcon tone={tone as "txn"} />
                         </span>
@@ -279,8 +338,8 @@ export function Hub() {
             <h3>The console view</h3>
             <p>
               One tap opens a preview of the real Didit console with this
-              visitor&apos;s data: the person, the transaction, the business, and
-              why each decision was made.
+              visitor&apos;s data: the person, the transaction, the business,
+              and why each decision was made.
             </p>
           </article>
         </div>
@@ -312,22 +371,34 @@ export function Hub() {
               <a className="hub-btn is-blue" href={siteConfig.links.console}>
                 Start free
               </a>
-              <a className="hub-btn is-dark" href={siteConfig.links.docs} rel="noreferrer" target="_blank">
+              <a
+                className="hub-btn is-dark"
+                href={siteConfig.links.docs}
+                rel="noreferrer"
+                target="_blank"
+              >
                 Read the docs
               </a>
             </span>
           </div>
           <pre aria-label="Install the three packages" className="hub-code">
             <span className="c"># the same three packages every demo uses</span>
-            {"\n"}npm install <span className="s">@didit-protocol/auth-nextjs @didit-protocol/signals @didit-protocol/sdk-web</span>
+            {"\n"}npm install{" "}
+            <span className="s">
+              @didit-protocol/auth-nextjs @didit-protocol/signals
+              @didit-protocol/sdk-web
+            </span>
             {"\n\n"}
-            <span className="k">import</span> {"{ DiditAuth }"} <span className="k">from</span>{" "}
+            <span className="k">import</span> {"{ DiditAuth }"}{" "}
+            <span className="k">from</span>{" "}
             <span className="s">&quot;@didit-protocol/auth-nextjs&quot;</span>
             {"\n"}
-            <span className="k">import</span> {"{ configureEvents }"} <span className="k">from</span>{" "}
+            <span className="k">import</span> {"{ configureEvents }"}{" "}
+            <span className="k">from</span>{" "}
             <span className="s">&quot;@didit-protocol/signals&quot;</span>
             {"\n"}
-            <span className="k">import</span> {"{ startVerification }"} <span className="k">from</span>{" "}
+            <span className="k">import</span> {"{ startVerification }"}{" "}
+            <span className="k">from</span>{" "}
             <span className="s">&quot;@didit-protocol/sdk-web&quot;</span>
             <SquareTerminal aria-hidden className="hub-code-ic" size={16} />
           </pre>
