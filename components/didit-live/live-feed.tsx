@@ -75,16 +75,23 @@ export function LiveFeed({
 }) {
   const now = useNow();
   const phone = useIsPhone();
+  const [mounted, setMounted] = React.useState(false);
   const [open, setOpen] = React.useState<boolean | null>(null);
   const [code, setCode] = React.useState(false);
   const expanded = !(phone && quiet) && (open ?? !phone);
   const products = Array.from(new Set(events.map((event) => event.product)));
   const newest = events[0]?.id;
 
+  // The feed is the visitor's own session and depends on the viewport: it
+  // renders in the browser only, so a phone never flashes the desktop feed.
+  React.useEffect(() => setMounted(true), []);
+
   React.useEffect(() => {
     // A new event on a phone opens the feed once, like a notification.
     if (phone && newest && !quiet) setOpen(true);
   }, [newest, phone]);
+
+  if (!mounted) return null;
 
   if (!expanded) {
     return (
