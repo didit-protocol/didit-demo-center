@@ -40,21 +40,33 @@ async function deposit(page: Page, amount: string) {
   await cashier.getByRole("button", { name: /^Deposit \d/ }).click();
 }
 
-test("the lobby, the Demo Center bar and signals from the first load", async ({ page }) => {
+test("the lobby, the Demo Center bar and signals from the first load", async ({
+  page,
+}) => {
   await mockAurora(page);
   await page.goto("/igaming");
 
-  await expect(page.getByRole("button", { name: /Sign up$/ }).first()).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "Demo steps" })).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: /Sign up$/ }).first(),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("navigation", { name: "Demo steps" }),
+  ).toBeVisible();
   // Signals reads this device as soon as the page loads, before any sign-up.
   await openFeed(page);
-  await expect(live(page).getByText(/New device fingerprinted|Known device/)).toBeVisible();
+  await expect(
+    live(page).getByText(/New device fingerprinted|Known device/),
+  ).toBeVisible();
   // Without a publishable key there is no Didit sign-up in the modal.
   await app(page).getByRole("button", { name: "Sign up" }).click();
-  await expect(page.getByRole("button", { name: "Create a passkey" })).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Create a passkey" }),
+  ).toHaveCount(0);
 });
 
-test("sign up, age check, monitored deposits and the ID step-up at 2,000 EUR", async ({ page }) => {
+test("sign up, age check, monitored deposits and the ID step-up at 2,000 EUR", async ({
+  page,
+}) => {
   const mock = await mockAurora(page);
 
   await page.goto("/igaming");
@@ -66,7 +78,9 @@ test("sign up, age check, monitored deposits and the ID step-up at 2,000 EUR", a
   // Transact: a deposit Didit approves, from the browser with device data.
   await app(page).getByRole("button", { name: "Deposit" }).first().click();
   await deposit(page, "500");
-  await expect(page.getByTestId("aurora-cashier-result")).toContainText("Approved");
+  await expect(page.getByTestId("aurora-cashier-result")).toContainText(
+    "Approved",
+  );
   expect(mock.submitted).toEqual(["deposit-approved"]);
   expect(mock.headers[0]["x-transaction-token"]).toBe("e2e-token-0");
   expect(mock.headers[0]["x-didit-pid"]).toBeTruthy();
@@ -84,23 +98,38 @@ test("sign up, age check, monitored deposits and the ID step-up at 2,000 EUR", a
   }
   await hold.getByRole("button", { name: "Verify my ID" }).click();
   await completeHostedFlow(page);
-  await expect(page.getByTestId("aurora-cashier-result")).toContainText("Approved");
-  await expect(page.getByTestId("aurora-cashier-result")).toContainText("1,650.00 EUR");
-  await page.getByRole("dialog", { name: "Cashier" }).getByRole("button", { name: "Close" }).click();
-  await expect(app(page).getByTestId("aurora-balance")).toHaveText("2,150.00 EUR");
+  await expect(page.getByTestId("aurora-cashier-result")).toContainText(
+    "Approved",
+  );
+  await expect(page.getByTestId("aurora-cashier-result")).toContainText(
+    "1,650.00 EUR",
+  );
+  await page
+    .getByRole("dialog", { name: "Cashier" })
+    .getByRole("button", { name: "Close" })
+    .click();
+  await expect(app(page).getByTestId("aurora-balance")).toHaveText(
+    "2,150.00 EUR",
+  );
 
   // The console view: this visitor's own records, never canned ones.
   await page.getByRole("button", { name: "Console view" }).click();
   const consoleView = page.getByTestId("console-view");
 
-  await expect(consoleView.getByRole("heading", { name: "Sofia Marin" })).toBeVisible();
+  await expect(
+    consoleView.getByRole("heading", { name: "Sofia Marin" }),
+  ).toBeVisible();
   await expect(consoleView).toContainText("Passport · Malta");
   await consoleView.getByRole("tab", { name: "Transaction" }).click();
   await expect(consoleView).toContainText("1,650.00 EUR");
-  await expect(consoleView).toContainText("ID verification at 2,000 EUR deposited");
+  await expect(consoleView).toContainText(
+    "ID verification at 2,000 EUR deposited",
+  );
 });
 
-test("a second account on the same device cannot take the welcome offer again", async ({ page }) => {
+test("a second account on the same device cannot take the welcome offer again", async ({
+  page,
+}) => {
   const mock = await mockAurora(page);
 
   await page.goto("/igaming");
@@ -110,8 +139,15 @@ test("a second account on the same device cannot take the welcome offer again", 
   await expect(page.getByRole("status")).toContainText("Welcome offer added");
 
   // Stop fraud: a new account in the same browser claims it again.
-  await page.getByRole("navigation", { name: "Demo steps" }).getByRole("button", { name: /Stop fraud/ }).click();
-  await expect(page.getByText("This is a second account on the same device as Sofia Marin")).toBeVisible();
+  await page
+    .getByRole("navigation", { name: "Demo steps" })
+    .getByRole("button", { name: /Stop fraud/ })
+    .click();
+  await expect(
+    page.getByText(
+      "This is a second account on the same device as Sofia Marin",
+    ),
+  ).toBeVisible();
   await signUp(page, "Lucas Brandt", "lucas.b@example.com");
   await app(page).getByRole("button", { name: "Claim now" }).click();
 

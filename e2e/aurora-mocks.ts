@@ -39,10 +39,15 @@ const AGE_SESSIONS = [
   "8a1f6a52-2c39-4c25-9d7e-0f6f1b9d3e12",
 ];
 
-type Recording = { post: Record<string, unknown>; get: Record<string, unknown> };
+type Recording = {
+  post: Record<string, unknown>;
+  get: Record<string, unknown>;
+};
 
 export function recording(name: string): Recording {
-  return JSON.parse(fs.readFileSync(path.join(FIXTURES, `${name}.json`), "utf8"));
+  return JSON.parse(
+    fs.readFileSync(path.join(FIXTURES, `${name}.json`), "utf8"),
+  );
 }
 
 /** The KYC session the held deposit's `action_required` opens. */
@@ -58,10 +63,17 @@ function ageDecision(sessionId: string, vendor: string) {
     status: "Approved",
     vendor_data: vendor,
     workflow_id: null,
-    liveness_checks: [{ status: "Approved", age_estimation: 27.4, score: 99.4 }],
+    liveness_checks: [
+      { status: "Approved", age_estimation: 27.4, score: 99.4 },
+    ],
     id_verifications: [],
     ip_analyses: [
-      { ip_country: "Malta", ip_country_code: "MT", is_vpn_or_tor: false, is_data_center: false },
+      {
+        ip_country: "Malta",
+        ip_country_code: "MT",
+        is_vpn_or_tor: false,
+        is_data_center: false,
+      },
     ],
   };
 }
@@ -86,7 +98,12 @@ function kycDecision(vendor: string) {
     liveness_checks: [{ status: "Approved", score: 99.4 }],
     face_matches: [{ status: "Approved", score: 98.1 }],
     ip_analyses: [
-      { ip_country: "Malta", ip_country_code: "MT", is_vpn_or_tor: false, is_data_center: false },
+      {
+        ip_country: "Malta",
+        ip_country_code: "MT",
+        is_vpn_or_tor: false,
+        is_data_center: false,
+      },
     ],
   };
 }
@@ -140,7 +157,10 @@ export async function mockAurora(page: Page): Promise<AuroraMock> {
     const key = `${request.method()} ${url.pathname}`;
 
     if (key === "GET /api/igaming/player")
-      return json(route, { playerId: player >= 0 ? current() : null, authenticated: false });
+      return json(route, {
+        playerId: player >= 0 ? current() : null,
+        authenticated: false,
+      });
     if (key === "POST /api/igaming/player") {
       player += 1;
 
@@ -154,9 +174,15 @@ export async function mockAurora(page: Page): Promise<AuroraMock> {
       });
     if (key.startsWith("GET /api/igaming/sessions/")) {
       const id = url.pathname.split("/").pop() ?? "";
-      const decision = id === KYC_SESSION ? kycDecision(current()) : ageDecision(id, current());
+      const decision =
+        id === KYC_SESSION
+          ? kycDecision(current())
+          : ageDecision(id, current());
 
-      return json(route, { session: projectSession(decision, current()), didit: [] });
+      return json(route, {
+        session: projectSession(decision, current()),
+        didit: [],
+      });
     }
     if (key === "POST /api/igaming/token")
       return json(route, {
@@ -170,29 +196,43 @@ export async function mockAurora(page: Page): Promise<AuroraMock> {
 
       return json(route, { verified: true, didit: [] });
     }
-    if (key === "GET /api/igaming/operator") return json(route, { console: null, player: null, didit: [] });
+    if (key === "GET /api/igaming/operator")
+      return json(route, { console: null, player: null, didit: [] });
 
     return json(route, { error: "unmocked" }, 500);
   });
 
   // No monitoring token without Didit Authentication on a signed-out page.
   await page.route("**/api/didit/events-token", (route) =>
-    json(route, player >= 0 ? { token: "e2e-monitoring" } : { error: "Nobody is signed in." }, player >= 0 ? 200 : 401),
+    json(
+      route,
+      player >= 0
+        ? { token: "e2e-monitoring" }
+        : { error: "Nobody is signed in." },
+      player >= 0 ? 200 : 401,
+    ),
   );
-  await page.route(`${API}/v1/events/**`, (route) => json(route, { results: [] }, 202));
+  await page.route(`${API}/v1/events/**`, (route) =>
+    json(route, { results: [] }, 202),
+  );
 
   // What the web SDK's submitTransaction posts to, and the reads that follow.
   await page.route(`${API}/v1/transactions/**`, async (route) => {
     const request = route.request();
 
     if (request.method() === "GET") {
-      const id = new URL(request.url()).pathname.split("/").filter(Boolean).pop() ?? "";
+      const id =
+        new URL(request.url()).pathname.split("/").filter(Boolean).pop() ?? "";
       const stored = records.get(id);
 
       if (!stored) return json(route, { detail: "Not found." }, 404);
       // The held deposit is released once the ID check is approved.
       if (kycDone && stored.status === "AWAITING_USER")
-        return json(route, { ...stored, status: "APPROVED", action_required: null });
+        return json(route, {
+          ...stored,
+          status: "APPROVED",
+          action_required: null,
+        });
 
       return json(route, stored);
     }
@@ -217,16 +257,27 @@ export async function mockAurora(page: Page): Promise<AuroraMock> {
     const uuid = `00000000-0000-4000-8000-${String(count).padStart(12, "0")}`;
     const amountText = amount.toFixed(2);
 
-    records.set(uuid, { ...fixture.get, uuid, amount: amountText, txn_id: body.txnId, vendor_data: current() });
+    records.set(uuid, {
+      ...fixture.get,
+      uuid,
+      amount: amountText,
+      txn_id: body.txnId,
+      vendor_data: current(),
+    });
 
-    return json(route, { ...fixture.post, uuid, amount: amountText, txn_id: body.txnId }, 201);
+    return json(
+      route,
+      { ...fixture.post, uuid, amount: amountText, txn_id: body.txnId },
+      201,
+    );
   });
 
   // Didit's hosted verification flow inside the SDK modal.
   await page.route(`${VERIFY}/**`, (route) => {
     const url = route.request().url();
 
-    if (!url.includes("/session/")) return route.fulfill({ status: 204, body: "" });
+    if (!url.includes("/session/"))
+      return route.fulfill({ status: 204, body: "" });
     const kyc = !url.includes("e2e-age");
 
     return route.fulfill({
