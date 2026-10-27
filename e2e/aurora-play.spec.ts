@@ -133,9 +133,13 @@ test("sign up, age check, monitored deposits and the ID step-up at 2,000 EUR", a
   // The console view: this visitor's own records, never canned ones.
   if (isPhone(page)) {
     await openFeed(page);
-    await live(page).getByRole("button", { name: "Open the console view" }).click();
+    await live(page)
+      .getByRole("button", { name: "Open the console view" })
+      .click();
   } else {
-    await page.getByRole("button", { name: "Console view", exact: true }).click();
+    await page
+      .getByRole("button", { name: "Console view", exact: true })
+      .click();
   }
   const consoleView = page.getByTestId("console-view");
 
