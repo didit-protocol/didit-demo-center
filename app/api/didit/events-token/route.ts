@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { authEnabled, visitorVendorData } from "@/lib/didit/auth";
+import { apiKey } from "@/lib/didit/config";
 import { DEMOS } from "@/lib/didit/demos";
 import { didit, diditMessage } from "@/lib/didit/server";
-import { readCustomer } from "@/lib/fintech/server";
+import { CUSTOMER_COOKIE, verifyCustomer } from "@/lib/fintech/customer";
 import { readPlayer } from "@/lib/igaming/server";
 
 export const dynamic = "force-dynamic";
@@ -26,13 +27,18 @@ export async function POST(request: NextRequest) {
 
   if (!demo) return reply({ error: "Unknown demo." }, 400);
 
-  const vendorData = authEnabled()
-    ? await visitorVendorData(demo.vendorPrefix)
-    : demo.id === "aurora-play"
-      ? await readPlayer(request)
-      : demo.id === "alder"
-        ? await readCustomer(request)
-        : null;
+  let vendorData: string | null = null;
+
+  if (authEnabled()) {
+    vendorData = await visitorVendorData(demo.vendorPrefix);
+  } else if (demo.id === "aurora-play") {
+    vendorData = await readPlayer(request);
+  } else if (demo.id === "alder") {
+    vendorData = verifyCustomer(
+      request.cookies.get(CUSTOMER_COOKIE)?.value,
+      apiKey(),
+    );
+  }
 
   // No identity means there is nothing to attribute the events to. This is
   // not an error: a page load must not log a 401 while nobody is signed in.

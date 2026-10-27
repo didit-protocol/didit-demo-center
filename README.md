@@ -112,54 +112,57 @@ application are untouched. Thresholds, markets and rule definitions are in
 
 ## Industry demo: fintech (`/fintech`)
 
-Alder, a fictional neobank, runs Didit end to end on the Demo Center shell,
-the same way Aurora Play does. Every call is live against the environment
-`NEXT_PUBLIC_IS_STAGING` selects (the onboarding workflow is set per
-environment in [`lib/didit/demos.ts`](lib/didit/demos.ts)).
+Alder, a fictional neobank, opens an account and moves money on Didit. It runs
+on **staging only** (`NEXT_PUBLIC_IS_STAGING=true`): onboarding runs a real AML
+screening, so on any other build every `/api/fintech` route answers 503 and the
+page links the staging demo instead.
 
 | Step | Didit surface |
 | --- | --- |
-| Sign up | Didit Authentication on the bank's sign-up card (hosted passkey sign-up, or an email code); without a publishable key, the bank's own form |
-| Verify | KYC + AML onboarding before the IBAN: `didit.sessions.create`, the web SDK modal, `didit.sessions.decision` |
-| Transact | `didit.transactions.sdkToken` on the server, only after the customer's approved onboarding; `submitTransaction` in the browser. A transfer of 5,000 EUR or more to a new payee is held by a rule (`AWAITING_USER`) and Didit releases it once the customer passes the selfie step-up the rule opened |
-| Stop fraud | A sign-in that fails the passkey check is reported with `submitEvent` (category `security`) and an event rule declines it |
-| Console | The console view: Transaction, Person, Verification and Device, from this visitor's records |
+| Sign-up | The bank's own form; the customer id becomes `vendor_data` |
+| Identity verification | `POST /v3/session/` with the onboarding workflow (ID, active liveness, face match, AML screening, IP analysis), then the web SDK's `startVerification` |
+| Account decision | `GET /v3/session/{id}/decision/`, reduced to statuses on the server; In Review keeps polling until an analyst decides |
+| Add and send money | `POST /v3/transactions/`, only once the decision is `Approved` and never above the balance Didit's own records give |
+| Held transfer | A rule holds outbound EUR transfers of 5,000 or more `IN_REVIEW`; the app re-reads `GET /v3/transactions/{uuid}/` until the review ends |
+| Ongoing AML monitoring | Explained in the app; the operator view asks `POST /v3/users/aml-monitoring/` for an `estimate_only` preview, which enables and bills nothing |
+| Operator side | Raw statuses, risk score and matched rule, with Console deep links (ids from `GET /v3/transactions/?limit=1`) |
 
-Without Authentication the customer is a random `vendor_data` (`alder-…`) in
-a signed, httpOnly cookie; with it, `alder-` plus the Didit user id. The
-routes under `app/api/fintech` only ever return records that belong to that
-customer, cut down to what the page shows. The hosted flow's return URL is
-always this site's `/fintech`.
+The account lives in a signed, httpOnly cookie scoped to `/api/fintech`: the
+customer id, the session id and the payment uuids. The server reads only those
+records and returns statuses, never the person's document data. The hosted
+flow's return URL is always this site's `/fintech`. Copy is in
+`messages/fintech/<locale>.json`, one file per language of the site chrome.
 
-**One-time setup per environment.** The two rules live on the Didit
-application (idempotent, matched by title, scoped to `alder-` customers); the
-setup also switches off the rule the earlier `/fintech` used:
+**One-time setup on staging.** The review rule lives on the Didit application
+(idempotent, matched by title, scoped to `custom_properties.demo_app =
+"fintech"`):
 
 ```sh
-npm run fintech:setup -- --dry-run   # print the payloads
-npm run fintech:setup                # create or update them
+npm run fintech:setup -- --dry-run   # print the payload
+npm run fintech:setup                # create or update it
 ```
-
-The account-takeover rule needs event ingestion on in the application's
-transaction monitoring settings; without it Didit refuses the event, and the
-security centre says so instead of a decision.
 
 ## Industry demo: marketplace (`/marketplace`)
 
-Northmarket, a fictional resale marketplace, runs Didit end to end in five
-chapters. Every control is live against Didit staging and the demo
-organization; the routes answer 503 on any other environment.
+Northmarket, a fictional resale marketplace, runs the Demo Center's five
+steps through `lib/didit`, with the live layer and the console view. With
+Authentication on, the signed-in Didit user is the shop (`northmarket-<user id>`)
+and the buyer (`northmarket-<user id>-buyer`); without it the demo keeps a
+random identity per browser.
 
-| Chapter | Didit surface |
+| Step | Didit surface |
 | --- | --- |
-| Seller onboarding | A `seller_signup` sent to transaction monitoring from the browser with the web SDK, then the shop's KYB in the hosted flow (`POST /v3/session/`): company registry at the UBO tier (shareholders and UBOs), key people with their own ID check, company documents |
-| Buyer checkout | Every order monitored; orders of EUR 1,000 or more held by a rule (`AWAITING_USER`) until the buyer passes the adaptive age check that rule opens |
-| Payouts | Locked until `GET /v3/session/{id}/decision/` shows the KYB Approved (the server refuses the token), then monitored |
-| Fraud | A second shop opened from the same browser is held: both sign-ups carry the same persistent device id |
-| Operator view | The held transaction's rules, score, tags, notes, device and network, KYB review, and Console v2 deep links |
+| Sign up | A passkey sign-up in the shop's own form (`@didit-protocol/auth-nextjs`), then a `seller_signup` sent to transaction monitoring from the browser |
+| Verify | The shop's KYB in the web SDK modal: company registry at the UBO tier, key people with their own ID check, company documents. Payouts stay locked until `GET /v3/session/{id}/decision/` shows it Approved (the server refuses the payout token) |
+| Transact | A 1,497 EUR order from the browser, held by a rule (`AWAITING_USER`) until the buyer passes the age check that rule opens |
+| Stop fraud | A second shop opened on the same device is held for review and its payouts are paused: both sign-ups carry the same persistent device id |
+| Console | The console view's Business page: registry, key people and the linked shop, plus Transaction, Verification and Device |
 
-A "How this uses Didit" panel lists each chapter's modules and calls, linked
-to docs.didit.me (checked by `npm run check:docs-links`).
+Workflows come from the Northmarket config in `lib/didit/demos.ts`: the seller
+KYB `811d80dd-491e-4799-b905-2c8007c9df78` on production, and on staging the
+`NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID` variable; the buyer age check uses the
+shared age workflow. The old `/marketplace?chapter=` links redirect to the
+matching step.
 
 The browser never sees the API key. The server mints short-lived transaction
 tokens (`POST /v3/transactions/sdk-token/`) for identities it created, keeps
@@ -169,8 +172,9 @@ summaries (no session tokens, documents or dates of birth). See
 [`lib/marketplace/server.ts`](lib/marketplace/server.ts) and
 [`lib/marketplace/summaries.ts`](lib/marketplace/summaries.ts).
 
-**One-time setup on the staging application behind `API_KEY`.** The seller
-KYB workflow and three rules live on the Didit application, not in this repo:
+**One-time setup on the staging application behind `API_KEY`.** The staging
+seller KYB workflow and the three rules live on the Didit application, not in
+this repo:
 
 ```sh
 npm run marketplace:setup                # dry run: what exists
@@ -188,8 +192,8 @@ Put the id it prints in `.env` and in the hosting environment:
 NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID=<printed workflow_id>
 ```
 
-Without it the seller chapter says the KYB is not published on this
-environment, and everything else runs. The rules match only transactions
+Without it the hub says the KYB is not published on this environment, and
+everything else runs. The rules match only transactions
 carrying `custom_properties.demo_app = "marketplace"`, so other demos on the
 same application are untouched. Definitions are in
 [`lib/marketplace/setup.ts`](lib/marketplace/setup.ts).
@@ -303,17 +307,16 @@ than failing on a 400.
 npm test                     # node --test (unit tests, lib/didit, /api/igaming,
                              # /api/fintech, /api/crypto-exchange and
                              # /marketplace route tests)
-npm run test:e2e             # Playwright flows for /marketplace
-                             # against BASE_URL (E2E_LIVE=1 adds the live
-                             # staging flows)
+npm run test:e2e             # Playwright flows for /fintech against BASE_URL
+                             # (E2E_LIVE=1 adds the live staging flows)
 npm run build && npm run test:e2e:crypto-exchange
                              # Playwright flows for /crypto-exchange, desktop and
                              # phone, on recorded Didit responses
 npm run build && npm run test:e2e:aurora-play
                              # the same for /igaming (build without
                              # DIDIT_PUBLISHABLE_KEY)
-npm run build && npm run test:e2e:alder
-                             # the same for /fintech
+npm run build && npm run test:e2e:northmarket
+                             # the same for /marketplace
 npm run typecheck            # tsc --noEmit
 npm run lint                 # eslint (vendor/ is excluded - it is synced)
 npm run build                # next build
@@ -331,8 +334,8 @@ PROOF_SESSION_ID=<a real session id> npm run shots
 Writes the catalogue (`/modules`), both modal families and the 390px layouts to `proof/`.
 The catalogue is light-only, exactly like didit.me and help.didit.me - the
 design system ships no dark token set. The industry demos bring their own
-look: Aurora Play is a dark casino, Alder a light neobank, and `/marketplace`
-has a dark theme.
+look: Aurora Play is a dark casino, Northmarket a warm light marketplace, and
+`/fintech` has a dark theme.
 
 ## Technical documentation
 

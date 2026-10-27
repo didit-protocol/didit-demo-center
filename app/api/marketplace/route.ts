@@ -7,12 +7,12 @@ export const dynamic = "force-dynamic";
 
 /** Everything the marketplace page shows for this browser. */
 export async function GET(request: NextRequest) {
-  const env = marketEnv();
+  const env = await marketEnv();
 
   return respond(request, env, await handleState(env, readState(request, env)));
 }
 
 /** Start over: forget this browser's shops, buyer and transactions. */
 export async function DELETE(request: NextRequest) {
-  return respond(request, marketEnv(), handleReset());
+  return respond(request, await marketEnv(), handleReset());
 }

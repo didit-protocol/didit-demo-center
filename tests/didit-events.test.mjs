@@ -1,7 +1,7 @@
 // Signals and the monitoring-token route on a staging build without Didit
 // Authentication. Run with `npm test`.
 //
-// DID-8995: `lib/didit/provider.tsx` configured the events queue with the
+// `lib/didit/provider.tsx` configured the events queue with the
 // SDK's defaults, so a staging build posted page views and sign-ins to the
 // production API, and `app/api/didit/events-token` knew only Aurora Play's
 // player cookie, so Alder's own sign-up got a 401 for every event.
@@ -17,9 +17,8 @@ delete process.env.DIDIT_PUBLISHABLE_KEY;
 
 const config = await import("../lib/didit/config.ts");
 const { NextRequest } = await import("next/server");
-const { CUSTOMER_COOKIE, signCustomer } = await import(
-  "../lib/fintech/customer.ts"
-);
+const { CUSTOMER_COOKIE, signCustomer } =
+  await import("../lib/fintech/customer.ts");
 const { PLAYER_COOKIE, signPlayer } = await import("../lib/igaming/player.ts");
 const route = await import("../app/api/didit/events-token/route.ts");
 
@@ -59,13 +58,19 @@ function tokenRequest({ demo, cookie }) {
 test("a staging page points the events queue at the staging API, not the SDK default", async () => {
   const signals = await import("@didit-protocol/signals");
 
-  assert.equal(signals.DEFAULT_EVENTS_BASE_URL, "https://verification.didit.me");
+  assert.equal(
+    signals.DEFAULT_EVENTS_BASE_URL,
+    "https://verification.didit.me",
+  );
   assert.equal(config.diditUrls.api, "https://verification.staging.didit.me");
 
   const provider = source("lib/didit/provider.tsx");
   const configured = provider.match(/configureEvents\(\{([\s\S]*?)\}\)/);
 
-  assert.ok(configured, "lib/didit/provider.tsx no longer calls configureEvents");
+  assert.ok(
+    configured,
+    "lib/didit/provider.tsx no longer calls configureEvents",
+  );
   assert.match(
     configured[1],
     /baseUrl:\s*diditUrls\.api/,
@@ -120,5 +125,43 @@ test("nobody to mint for is a clean skip, never a 401 on the page", async () => 
     assert.equal(response.status, 200, demo);
     assert.equal((await response.json()).token, null, demo);
     assert.equal(calls.length, 0, demo);
+  }
+});
+
+test("a forged or wrong-demo cookie never mints an events token", async () => {
+  for (const [demo, cookie] of [
+    ["alder", `${CUSTOMER_COOKIE}=${signCustomer(CUSTOMER, "wrong-key")}`],
+    ["alder", `${CUSTOMER_COOKIE}=${signCustomer(PLAYER, "test-api-key")}`],
+    [
+      "aurora-play",
+      `${CUSTOMER_COOKIE}=${signCustomer(CUSTOMER, "test-api-key")}`,
+    ],
+    ["alder", `${PLAYER_COOKIE}=${signPlayer(PLAYER, "test-api-key")}`],
+  ]) {
+    calls = [];
+    const response = await route.POST(tokenRequest({ demo, cookie }));
+
+    assert.equal(response.status, 200);
+    assert.equal((await response.json()).token, null);
+    assert.equal(calls.length, 0);
+  }
+});
+
+test("Authentication enabled never falls back to a demo cookie without a session", async () => {
+  process.env.DIDIT_PUBLISHABLE_KEY = "pk_test_events_regression";
+  try {
+    calls = [];
+    const response = await route.POST(
+      tokenRequest({
+        demo: "alder",
+        cookie: `${CUSTOMER_COOKIE}=${signCustomer(CUSTOMER, "test-api-key")}`,
+      }),
+    );
+
+    assert.equal(response.status, 200);
+    assert.equal((await response.json()).token, null);
+    assert.equal(calls.length, 0);
+  } finally {
+    delete process.env.DIDIT_PUBLISHABLE_KEY;
   }
 });

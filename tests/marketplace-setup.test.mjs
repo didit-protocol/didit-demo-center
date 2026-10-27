@@ -198,22 +198,19 @@ test("the KYB workflow id comes from the environment", () => {
   assert.equal(marketWorkflows(undefined).age, STAGING_WORKFLOWS.age);
 });
 
-test("the routes read the KYB workflow id from NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID", async (t) => {
+test("the routes take their workflows from the Northmarket config", async () => {
   await import("./helpers/register.mjs");
   const { marketEnv } = await import("../lib/marketplace/route.ts");
-  const { availability } = await import("../lib/marketplace/server.ts");
-  const before = process.env.NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID;
+  const { northmarket } = await import("../lib/didit/demos.ts");
+  const env = await marketEnv();
 
-  t.after(() => {
-    if (before === undefined) delete process.env.NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID;
-    else process.env.NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID = before;
+  assert.deepEqual(env.workflows, {
+    kyb: northmarket.workflows.sellerKyb,
+    age: northmarket.workflows.buyerAge,
+    person: northmarket.workflows.person,
   });
-
-  process.env.NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID = "0f6c1a2e-1111-4222-8333-444455556666";
-  assert.equal(marketEnv().workflows.kyb, "0f6c1a2e-1111-4222-8333-444455556666");
-  assert.equal(marketEnv().workflows.person, STAGING_WORKFLOWS.person);
-
-  delete process.env.NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID;
-  assert.equal(marketEnv().workflows.kyb, "");
-  assert.equal(availability({ ...marketEnv(), isStaging: true, apiKey: "k" }).kyb, false);
+  // The suite runs as production: the production seller KYB.
+  assert.equal(env.workflows.kyb, "811d80dd-491e-4799-b905-2c8007c9df78");
+  // Authentication is off without a publishable key: cookie identities.
+  assert.equal(env.visitor, undefined);
 });

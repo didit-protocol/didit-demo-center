@@ -40,8 +40,8 @@ const kybWith = (status) => ({
 
 test.beforeEach(() => clearConsoleIdCache());
 
-test("off staging every route answers 503 and names where the demo runs", async () => {
-  const env = makeEnv({ isStaging: false });
+test("without an API key every route answers 503 and names where the demo runs", async () => {
+  const env = makeEnv({ apiKey: "" });
 
   assert.deepEqual(availability(env), { transactions: false, kyb: false });
 
@@ -51,9 +51,54 @@ test("off staging every route answers 503 and names where the demo runs", async 
     await handleClaim(env, null, { uuid: RECORDED.orderApproved }),
   ]) {
     assert.equal(reply.status, 503);
-    assert.equal(reply.body.code, "staging_only");
+    assert.equal(reply.body.code, "not_configured");
     assert.match(reply.body.error, /demos\.staging\.didit\.me\/marketplace/);
   }
+});
+
+test("production runs the demo too, with the production workflows", () => {
+  assert.deepEqual(availability(makeEnv({ isStaging: false })), {
+    transactions: true,
+    kyb: true,
+  });
+});
+
+test("with Authentication on, the signed-in Didit user is the shop and the buyer", async () => {
+  const visitor = "northmarket-user_2b8f0c1d9e";
+  const signedOut = makeEnv({ visitor: null });
+
+  for (const reply of [
+    await handleOpenShop(signedOut, null, { shop: "Ruiz Vintage" }),
+    await handleToken(signedOut, null, { purpose: "purchase" }),
+  ]) {
+    assert.equal(reply.status, 401);
+    assert.equal(reply.body.code, "signed_out");
+  }
+
+  const env = makeEnv({ visitor });
+  const opened = await handleOpenShop(env, null, { shop: "Ruiz Vintage" });
+
+  assert.equal(opened.status, 201);
+  assert.equal(opened.state.sellers[0].id, visitor);
+  // Without a legal name the KYB's registry search starts from the shop's.
+  assert.equal(opened.state.sellers[0].company, "Ruiz Vintage");
+  assert.equal(opened.state.sellers[0].country, "");
+
+  const again = await handleOpenShop(env, opened.state, { shop: "Ruiz Vintage Outlet" });
+
+  assert.equal(again.status, 409);
+  assert.equal(again.body.code, "shop_exists");
+
+  const api = fakeApi({
+    "POST /v3/transactions/sdk-token/": [201, { sdk_token: "minted-for-test" }],
+  });
+  const token = await handleToken(makeEnv({ visitor, fetch: api.fetch }), opened.state, {
+    purpose: "purchase",
+  });
+
+  assert.equal(token.status, 200);
+  assert.equal(token.state.buyer, `${visitor}-buyer`);
+  assert.equal(api.calls[0].body.vendor_data, `${visitor}-buyer`);
 });
 
 test("without the KYB workflow id only the business verification is off", async () => {
@@ -273,7 +318,7 @@ test("starting a KYB creates a business session with the shop's details", async 
   assert.deepEqual(api.calls[0].body, {
     workflow_id: env.workflows.kyb,
     vendor_data: RECORDED.firstShop,
-    callback: "https://demos.staging.didit.me/marketplace?chapter=seller",
+    callback: "https://demos.staging.didit.me/marketplace",
     callback_method: "both",
     language: "es",
     metadata: { demo_app: "marketplace", shop: "Atelier Nord" },
@@ -302,7 +347,7 @@ test("a foreign or plain-http origin falls back to the site's own callback", asy
   );
 
   assert.equal(reply.status, 201);
-  assert.equal(api.calls[0].body.callback, "https://demos.staging.didit.me/marketplace?chapter=seller");
+  assert.equal(api.calls[0].body.callback, "https://demos.staging.didit.me/marketplace");
 });
 
 test("an open KYB is resumed instead of starting a second one", async () => {

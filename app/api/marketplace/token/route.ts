@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 /** A short-lived transaction token for one of this browser's identities. */
 export async function POST(request: NextRequest) {
-  const env = marketEnv();
+  const env = await marketEnv();
 
   return respond(
     request,

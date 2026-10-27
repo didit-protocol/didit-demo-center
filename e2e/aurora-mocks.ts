@@ -202,15 +202,9 @@ export async function mockAurora(page: Page): Promise<AuroraMock> {
     return json(route, { error: "unmocked" }, 500);
   });
 
-  // No monitoring token without Didit Authentication on a signed-out page.
+  // Anonymous visits skip cleanly; cookie sign-up makes a token available.
   await page.route("**/api/didit/events-token", (route) =>
-    json(
-      route,
-      player >= 0
-        ? { token: "e2e-monitoring" }
-        : { error: "Nobody is signed in." },
-      player >= 0 ? 200 : 401,
-    ),
+    json(route, player >= 0 ? { token: "e2e-monitoring" } : { token: null }),
   );
   await page.route(`${API}/v1/events/**`, (route) =>
     json(route, { results: [] }, 202),
