@@ -190,7 +190,7 @@
 }
 @media (max-width: 767px) {
   .ap { grid-template-columns: minmax(0, 1fr); }
-  .ap-side, .ap-search, .ap-top .ap-chips, .ap-bell, .ap-top .ap-ava, .ap-desk-only, .ap-jack, .ap-lives-sec, .ap-hero-x p, .ap-hero-x .ap-hero-cta, .ap-hero-dots, .ap-row-h .ap-chips { display: none; }
+  .ap-side, .ap-search, .ap-top .ap-chips, .ap-bell, .ap-top .ap-ava, .ap-desk-only, .ap-jack, .ap-lives-sec, .ap-hero-x p, .ap-hero-cta .is-ghost, .ap-hero-dots, .ap-row-h .ap-chips { display: none; }
   .ap-phone-only { display: flex; }
   .ap-top { height: 76px; padding: 0 14px; }
   .ap-top .ap-brand { padding: 0; font-size: 20px; }

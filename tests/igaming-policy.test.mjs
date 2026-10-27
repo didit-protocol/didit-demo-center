@@ -352,6 +352,6 @@ test("only held and in-review transactions are re-read", () => {
 });
 
 test("money is formatted in euros", () => {
-  assert.equal(policy.formatMoney(2000), "€2,000");
-  assert.equal(policy.formatMoney(12.5), "€12.50");
+  assert.equal(policy.formatMoney(2000), "2,000.00 EUR");
+  assert.equal(policy.formatMoney(12.5), "12.50 EUR");
 });

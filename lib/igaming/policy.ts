@@ -605,17 +605,12 @@ export function payoutView(
   }
 }
 
-const formatter = (digits: number) =>
-  new Intl.NumberFormat("en-IE", {
-    style: "currency",
-    currency: CURRENCY,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
-  });
-const WHOLE = formatter(0);
-const CENTS = formatter(2);
+const MONEY = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
 
-/** "€2,000" for whole amounts, "€12.50" otherwise. */
+/** "2,000.00 EUR", the way the casino's cashier writes money. */
 export function formatMoney(amount: number): string {
-  return (Number.isInteger(amount) ? WHOLE : CENTS).format(amount);
+  return `${MONEY.format(amount)} ${CURRENCY}`;
 }
