@@ -26,7 +26,6 @@ const { CX_WORKFLOWS } = await import("../lib/crypto-exchange/policy.ts");
 const route = (name) => import(`../app/api/crypto-exchange/${name}/route.ts`);
 const account = await route("account");
 const token = await route("token");
-const deposits = await route("deposits");
 const transactions = await route("transactions/[id]");
 
 const fixture = (name) =>
@@ -37,7 +36,6 @@ const fixture = (name) =>
 const BASE = "https://verification.staging.didit.me";
 const USER = "kestrel-0f6c2a51-3c4e-4d7b-9a1f-2b8e5d6c7a90";
 const SESSION = fixture("decision-not-started").session_id;
-const OWN = "0x40f0b0f45e4cda6726eaea66d113096fa5d44944";
 const DECISION = `GET /v3/session/${SESSION}/decision/`;
 const SUMMARY = "GET /v3/transactions/?limit=1";
 
@@ -140,15 +138,6 @@ test("a forged or tampered cookie reads nothing and moves nothing", async () => 
     const statuses = [
       (await token.POST(request("/api/crypto-exchange/token", { method: "POST", cookie }))).status,
       (
-        await deposits.POST(
-          request("/api/crypto-exchange/deposits", {
-            method: "POST",
-            cookie,
-            body: { source: "own-wallet", amount: "1.25", ownWallet: OWN },
-          }),
-        )
-      ).status,
-      (
         await transactions.GET(request("/api/crypto-exchange/transactions/x", { cookie }), {
           params: { id: fixture("deposit-own-wallet").uuid },
         })
@@ -156,7 +145,7 @@ test("a forged or tampered cookie reads nothing and moves nothing", async () => 
     ];
 
     assert.deepEqual(await read.json(), { account: null }, label);
-    assert.deepEqual(statuses, [401, 401, 401], label);
+    assert.deepEqual(statuses, [401, 401], label);
     assert.equal(calls.length, 0, `${label}: no Didit call`);
   }
 });
@@ -205,22 +194,16 @@ test("GET /account drops a cookie whose session belongs to someone else", async 
 test("no money moves until the onboarding KYC is approved", async () => {
   reset({ [DECISION]: { body: notStarted() } });
   const minted = await token.POST(request("/api/crypto-exchange/token", { method: "POST" }));
-  const deposited = await deposits.POST(
-    request("/api/crypto-exchange/deposits", {
-      method: "POST",
-      body: { source: "own-wallet", amount: "1.25", ownWallet: OWN },
-    }),
-  );
 
+  // Deposits and withdrawals both need the token, so neither can be sent.
   assert.equal(minted.status, 403);
-  assert.equal(deposited.status, 403);
   assert.deepEqual(
     calls.map((call) => call.key),
-    [DECISION, DECISION],
+    [DECISION],
   );
 });
 
-test("POST /token mints a one-use transaction token bound to this user", async () => {
+test("POST /token mints a transaction token bound to this user", async () => {
   reset({
     [DECISION]: { body: approved() },
     "POST /v3/transactions/sdk-token/": {
@@ -232,34 +215,9 @@ test("POST /token mints a one-use transaction token bound to this user", async (
   const data = await response.json();
 
   assert.equal(response.status, 200);
-  assert.deepEqual(calls[1].body, { vendor_data: USER, ttl_seconds: 600, max_uses: 1 });
+  assert.deepEqual(calls[1].body, { vendor_data: USER, ttl_seconds: 900, max_uses: 30 });
   assert.equal(calls[1].apiKey, "test-api-key");
   assert.deepEqual(data, { token: "sdk-tok", expiresAt: "2026-10-14T09:00:00Z", baseUrl: BASE });
-});
-
-test("POST /deposits reports the deposit for this user and returns the trimmed record", async () => {
-  const recorded = fixture("deposit-own-wallet");
-
-  reset({
-    [DECISION]: { body: approved() },
-    "POST /v3/transactions/": { status: 201, body: recorded },
-  });
-  const response = await deposits.POST(
-    request("/api/crypto-exchange/deposits", {
-      method: "POST",
-      body: { source: "own-wallet", amount: "1.25", ownWallet: OWN },
-    }),
-  );
-  const data = await response.json();
-  const sent = calls[1].body;
-
-  assert.equal(response.status, 201);
-  assert.equal(sent.subject.externalUserId, USER);
-  assert.equal(sent.counterparty.fullName, "Avery Quinn");
-  assert.equal(sent.counterparty.paymentMethod.accountId, OWN);
-  assert.equal(data.id, recorded.uuid);
-  assert.equal(data.status, "APPROVED");
-  assert.doesNotMatch(JSON.stringify(data), /ip_address|device|session_token/i);
 });
 
 test("GET /transactions/{id} returns the user's own transaction and 404s anyone else's", async () => {

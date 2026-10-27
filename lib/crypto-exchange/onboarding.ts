@@ -19,6 +19,8 @@ export interface AccountView {
   /** The name on the verified document; the exchange uses it as the Travel
    * Rule originator and the transactions' subject. */
   fullName: string | null;
+  /** "Passport · Portugal": the verified document, for the live layer. */
+  document: string | null;
   checks: { label: string; status: string | null }[];
   amlHits: number | null;
 }
@@ -64,11 +66,23 @@ export function toAccountView(decision: Raw): AccountView {
       ? [firstName, lastName].filter(Boolean).join(" ")
       : null);
 
+  const documentType = text(id.document_type);
+  const country = text(id.issuing_state_name) ?? text(id.issuing_state);
+
   return {
     sessionId: String(decision.session_id ?? ""),
     status,
     stage: accountStage(status),
     fullName,
+    document: documentType
+      ? [
+          documentType.charAt(0).toUpperCase() +
+            documentType.slice(1).toLowerCase(),
+          country,
+        ]
+          .filter(Boolean)
+          .join(" · ")
+      : null,
     checks: [
       { label: "ID document", status: text(id.status) },
       {
