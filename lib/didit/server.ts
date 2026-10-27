@@ -210,11 +210,12 @@ export const didit = {
       input: { vendorData: string; categories?: string[] },
       env?: DiditEnv,
     ) {
-      return callDidit<{ sdk_token?: string; token?: string; expires_at?: string }>(
+      return callDidit<{ monitoring_token?: string; expires_at?: string }>(
         "POST",
         "/v3/events/sdk-token/",
         {
           vendor_data: input.vendorData,
+          ttl_seconds: 1800,
           allowed_event_categories: input.categories ?? [
             "auth",
             "session",
