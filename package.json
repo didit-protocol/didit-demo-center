@@ -13,6 +13,7 @@
     "test:e2e:crypto-exchange": "playwright test e2e/crypto-exchange.spec.ts",
     "test:e2e:aurora-play": "playwright test e2e/aurora-play.spec.ts",
     "test:e2e:alder": "playwright test e2e/alder.spec.ts",
+    "test:e2e:product-demos": "playwright test e2e/product-demos.spec.ts",
     "igaming:setup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/igaming-setup.mjs",
     "fintech:setup": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/fintech-setup.mjs",
     "sync:website-chrome": "node scripts/sync-website-chrome.mjs",

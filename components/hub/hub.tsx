@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 
 import { DiditRing, ToneIcon } from "@/components/didit-live/icons";
+import { ProductDemosSection } from "@/components/product-demos/product-demos-section";
 import { STEPS } from "@/lib/didit/config";
 import { DEMOS } from "@/lib/didit/demos";
 import { siteConfig } from "@/config/site";
@@ -241,6 +242,8 @@ export function Hub() {
           ))}
         </ul>
       </section>
+
+      <ProductDemosSection />
 
       <section className="hub-sec" id="how">
         <h2>See what Didit sees, without leaving the app</h2>
