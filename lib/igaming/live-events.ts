@@ -19,12 +19,12 @@ const NOUN: Record<string, string> = {
   deposit_limit: "Deposit limit",
 };
 
+const capital = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
+
 /** "Aurora Play demo: ID verification at 2,000 EUR deposited" → the rule. */
 export function ruleName(title: string): string {
-  return title.replace(/^Aurora Play demo:\s*/i, "");
+  return capital(title.replace(/^Aurora Play demo:\s*/i, ""));
 }
-
-const capital = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
 export function ageText(summary: SessionSummary): string {
   if (summary.estimatedAge !== null && summary.documentAge !== null)

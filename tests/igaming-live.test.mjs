@@ -161,7 +161,7 @@ test("the console view shows this visitor's records, and says so when there are 
   assert.equal(transaction.blocks[0].kind, "note");
   assert.deepEqual(
     transaction.blocks.find((block) => block.kind === "rules").rows.map((row) => row.title),
-    ["ID verification at 2,000 EUR deposited", "cashier used outside licensed markets"],
+    ["ID verification at 2,000 EUR deposited", "Cashier used outside licensed markets"],
   );
   assert.equal(tabs[3].page.kpis[0].value, "2");
 });
