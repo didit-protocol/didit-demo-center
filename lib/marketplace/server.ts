@@ -24,6 +24,8 @@ import type {
   TransactionSummary,
 } from "./summaries.ts";
 
+import { callDidit } from "../didit/server.ts";
+
 import { BRAND, isSellerCountry } from "./catalog.ts";
 import { consoleLink, type ConsoleLink } from "./console-links.ts";
 import { STAGING_DEMO_URL } from "./config.ts";
@@ -48,7 +50,6 @@ import {
   summarizeNotes,
   summarizeTransaction,
 } from "./summaries.ts";
-import { callDidit } from "../didit/server.ts";
 
 export interface MarketEnv {
   apiKey: string;

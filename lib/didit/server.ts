@@ -70,7 +70,12 @@ export async function callDidit<T = unknown>(
       call: { method, path, status: response.status },
     };
   } catch {
-    return { ok: false, status: 0, data: null, call: { method, path, status: 0 } };
+    return {
+      ok: false,
+      status: 0,
+      data: null,
+      call: { method, path, status: 0 },
+    };
   }
 }
 

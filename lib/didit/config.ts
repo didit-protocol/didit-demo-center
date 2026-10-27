@@ -27,7 +27,10 @@ export const diditUrls = {
   ),
   /** Where hosted verification sessions live. */
   verify: pick("https://verify.didit.me", "https://verify.staging.didit.me"),
-  console: pick("https://business.didit.me", "https://business.staging.didit.me"),
+  console: pick(
+    "https://business.didit.me",
+    "https://business.staging.didit.me",
+  ),
   site: pick("https://demos.didit.me", "https://demos.staging.didit.me"),
   docs: "https://docs.didit.me",
 };

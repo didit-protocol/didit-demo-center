@@ -12,11 +12,13 @@ import { siteConfig } from "@/config/site";
 export const dynamic = "force-dynamic";
 
 interface Params {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 /** The shop's business verification, trimmed to what the status card shows. */
-export async function GET(request: NextRequest, { params }: Params) {
+export async function GET(request: NextRequest, context: Params) {
+  const params = await context.params;
+
   const env = marketEnv();
 
   return respond(
@@ -27,7 +29,9 @@ export async function GET(request: NextRequest, { params }: Params) {
 }
 
 /** Start (or resume) the shop's KYB and hand back the hosted-flow URL. */
-export async function POST(request: NextRequest, { params }: Params) {
+export async function POST(request: NextRequest, context: Params) {
+  const params = await context.params;
+
   const env = marketEnv();
 
   return respond(

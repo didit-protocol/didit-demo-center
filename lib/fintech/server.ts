@@ -1,5 +1,7 @@
 import type { AccountState } from "./account-cookie";
 
+import { callDidit } from "../didit/server.ts";
+
 import {
   CUSTOMER_PREFIX,
   MAX_PAYMENTS,
@@ -20,7 +22,6 @@ import {
   type OnboardingView,
   type PaymentView,
 } from "./model";
-import { callDidit } from "../didit/server.ts";
 
 /**
  * The fintech demo's server side, one function per API route.

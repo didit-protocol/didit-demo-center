@@ -14,8 +14,9 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { sessionId: string } },
+  context: { params: Promise<{ sessionId: string }> },
 ) {
+  const params = await context.params;
   const playerId = readPlayer(request);
 
   if (!playerId) return noPlayer();

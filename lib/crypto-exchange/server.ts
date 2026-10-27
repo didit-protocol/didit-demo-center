@@ -146,7 +146,9 @@ export async function didit(
     ok: result.ok,
     status: result.status || 502,
     data:
-      data && typeof data === "object" ? (data as Record<string, unknown>) : null,
+      data && typeof data === "object"
+        ? (data as Record<string, unknown>)
+        : null,
   };
 }
 
