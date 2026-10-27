@@ -565,6 +565,22 @@ function devicePage(input: AlderConsoleInput): RecordPage | null {
   };
 }
 
+/** "why it was held and how it was released", as far as it has gone. */
+function heldNote(focus: ConsoleItem): string {
+  const record = focus.record;
+  const held = record?.ruleHits.some(
+    (hit) => hit.statusTarget === "AWAITING_USER",
+  );
+
+  if (!record || !held) return "why it was decided";
+
+  return record.status === "AWAITING_USER"
+    ? "why it is held"
+    : record.status === "APPROVED"
+      ? "why it was held and how it was released"
+      : "why it was held";
+}
+
 export function alderConsole(input: AlderConsoleInput): ConsoleTab[] {
   const name = nameOf(input);
   const focus = focusTransaction(input.activity);
@@ -583,7 +599,7 @@ export function alderConsole(input: AlderConsoleInput): ConsoleTab[] {
       label: "Transaction",
       tone: "txn",
       note: focus?.record
-        ? `This is your Didit console. The ${formatMoney(focus.record.amount || focus.amount)} ${focus.kind === "transfer" ? "transfer" : "payment"} ${name} just made is here, with why it was ${focus.record.action ? "held and how it was released" : "decided"}.`
+        ? `This is your Didit console. The ${formatMoney(focus.record.amount || focus.amount)} ${focus.kind === "transfer" ? "transfer" : "payment"} ${name} just made is here, with ${heldNote(focus)}.`
         : "Every payment goes through transaction monitoring. This is the one your team would open.",
       page: transactionPage(input),
       empty: "No payment yet. Send money from Payments.",

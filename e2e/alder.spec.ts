@@ -125,7 +125,7 @@ test("KYC and AML before the IBAN, monitored payments and the step-up on a 5,000
 
   await expect(consoleView).toContainText("5,000.00 EUR");
   await expect(consoleView).toContainText("5,000 EUR or more to a new payee");
-  await expect(consoleView).toContainText("released automatically");
+  await expect(consoleView).toContainText("Didit released it automatically");
   await consoleView.getByRole("tab", { name: "Verification" }).click();
   await expect(consoleView).toContainText("Identity Card · Germany");
   await expect(consoleView).toContainText("No matches");

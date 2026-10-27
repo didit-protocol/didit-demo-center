@@ -258,6 +258,7 @@ export async function mockAlder(page: Page): Promise<AlderMock> {
       uuid,
       amount: amount.toFixed(2),
       txn_id: body.txnId,
+      txn_date: new Date().toISOString(),
       action_type: info.type,
       vendor_data: CUSTOMER,
       parties: [
