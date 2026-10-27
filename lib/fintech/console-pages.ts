@@ -41,6 +41,8 @@ export interface AlderConsoleInput {
   } | null;
   onboarding: SessionSummary | null;
   stepUp: SessionSummary | null;
+  /** How Didit Authentication confirmed the step-up before the selfie. */
+  stepUpPasskey?: string | null;
   activity: ConsoleItem[];
   events: LiveEvent[];
   device: {
@@ -164,7 +166,7 @@ function linkedRecords(input: AlderConsoleInput): LinkedRecord[] {
   if (input.stepUp)
     linked.push({
       tone: "ver",
-      title: "Selfie step-up",
+      title: input.stepUpPasskey ? "Passkey + selfie step-up" : "Selfie step-up",
       detail: `${statusTag(input.stepUp.status).label} · ${short(input.stepUp.sessionId)}`,
     });
   if (input.onboarding)
@@ -193,6 +195,7 @@ function transactionPage(input: AlderConsoleInput): RecordPage | null {
   const stepUp = record.action !== null || focus.newPayee === true;
   const released =
     record.status === "APPROVED" && stepUp && input.stepUp !== null;
+  const passkey = input.stepUpPasskey === "passkey";
   const score = Math.round(record.score);
   const at = record.createdAt ? Date.parse(record.createdAt) : focus.at;
   const when = Number.isFinite(at) ? at : focus.at;
@@ -231,7 +234,7 @@ function transactionPage(input: AlderConsoleInput): RecordPage | null {
       stepUp
         ? {
             label: "Step-up",
-            value: "Selfie",
+            value: passkey ? "Passkey + selfie" : "Selfie",
             unit: released
               ? "confirmed"
               : held
@@ -255,7 +258,7 @@ function transactionPage(input: AlderConsoleInput): RecordPage | null {
               {
                 kind: "note" as const,
                 tone: "info" as const,
-                text: `Held at ${clock(when)} because it is a transfer of ${STEP_UP_AMOUNT.toLocaleString("en-US")} EUR or more to a new payee. ${name} confirmed it with a selfie${focus.releasedAt ? ` at ${clock(focus.releasedAt)}` : ""}, so Didit released it automatically. Nobody on your team had to look at it.`,
+                text: `Held at ${clock(when)} because it is a transfer of ${STEP_UP_AMOUNT.toLocaleString("en-US")} EUR or more to a new payee. ${name} confirmed it with ${passkey ? "the passkey and a selfie" : "a selfie"}${focus.releasedAt ? ` at ${clock(focus.releasedAt)}` : ""}, so Didit released it automatically. Nobody on your team had to look at it.`,
               },
             ]
           : record.status === "IN_REVIEW" || record.status === "DECLINED"
@@ -324,7 +327,7 @@ function transactionPage(input: AlderConsoleInput): RecordPage | null {
       pairs: [
         [
           "Decided by",
-          released ? "Rule + selfie" : hits.length ? "Rules" : "Automatic",
+          released ? (passkey ? "Rule + passkey + selfie" : "Rule + selfie") : hits.length ? "Rules" : "Automatic",
         ],
         [
           "Queue",

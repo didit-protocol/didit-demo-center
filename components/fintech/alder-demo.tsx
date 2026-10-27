@@ -31,6 +31,8 @@ import {
   onboardingDecided,
   onboardingStarted,
   paymentEvents,
+  passkeyConfirmed,
+  passkeyStarted,
   paymentRefused,
   stepUpDecided,
   stepUpStarted,
@@ -42,6 +44,8 @@ type Modal = "stepup" | "takeover" | null;
 const OWN_SIGNUP = "alder-demo:signup";
 const PHONE_KEY = "alder-demo:phone";
 const SEEN_KEY = "alder-demo:seen";
+/** Set before the passkey redirect: the held transfer and who asked. */
+const PASSKEY_KEY = "alder-demo:passkey";
 
 const firstName = (name: string) => name.trim().split(/\s+/)[0] ?? "";
 
@@ -51,7 +55,8 @@ const firstName = (name: string) => name.trim().split(/\s+/)[0] ?? "";
  * lib/didit: Authentication at sign-up, signals from the first load, KYC and
  * AML in the web SDK modal before the IBAN, every payment as a monitored
  * transaction from the browser, the step-up on a large transfer to a new
- * payee and a sign-in without the passkey blocked by a rule.
+ * payee (the passkey, then a selfie) and a sign-in without the passkey
+ * blocked by a rule.
  */
 export function AlderDemo() {
   const didit = useDidit();
@@ -151,6 +156,8 @@ export function AlderDemo() {
     if (!auth?.sessionId || auth.status !== "signed-in") return;
     if (live.events.some((event) => event.id === `auth-${auth.sessionId}`))
       return;
+    // Back from the passkey step-up: that effect below tells it.
+    if (window.sessionStorage.getItem(PASSKEY_KEY)) return;
     const signUp = window.sessionStorage.getItem(OWN_SIGNUP) === "1";
 
     window.sessionStorage.removeItem(OWN_SIGNUP);
@@ -189,6 +196,50 @@ export function AlderDemo() {
         opening.current = false;
       });
   }, [authOn, hydrated, auth?.status, state]);
+
+  /* ── Back from the passkey: the same person, then the selfie ── */
+
+  React.useEffect(() => {
+    if (!hydrated || auth?.status !== "signed-in" || !state?.stepUp) return;
+    const raw = window.sessionStorage.getItem(PASSKEY_KEY);
+
+    if (!raw) return;
+    window.sessionStorage.removeItem(PASSKEY_KEY);
+    let asked: { transactionId?: string; userId?: string | null } = {};
+
+    try {
+      asked = JSON.parse(raw);
+    } catch {
+      return;
+    }
+    const transactionId = state.stepUp.transactionId;
+
+    if (asked.transactionId !== transactionId) return;
+    if (asked.userId && asked.userId !== auth.userId) {
+      setToast({
+        tone: "error",
+        text: "Someone else signed in: the transfer stays on hold.",
+      });
+
+      return;
+    }
+    bank.passkeyConfirmed(
+      transactionId,
+      auth.methods.includes("passkey") ? "passkey" : (auth.methods[0] ?? ""),
+    );
+    for (const input of passkeyConfirmed({
+      methods: auth.methods,
+      email: auth.email,
+    }))
+      live.push(input);
+    const item = state.activity.find(
+      (entry) => entry.record?.id === transactionId,
+    );
+
+    if (item) setStepUpKey(item.key);
+    setView("payments");
+    setModal("stepup");
+  }, [hydrated, auth?.status, auth?.sessionId, state?.stepUp?.transactionId]);
 
   /* ── Notices ── */
 
@@ -353,6 +404,33 @@ export function AlderDemo() {
     }
   };
 
+  /** The passkey first: Didit Authentication signs the same person in again. */
+  const confirmPasskey = () => {
+    const stepUp = state?.stepUp;
+
+    if (!auth || !stepUp) return;
+    setAuthBusy(true);
+    window.sessionStorage.setItem(
+      PASSKEY_KEY,
+      JSON.stringify({
+        transactionId: stepUp.transactionId,
+        userId: auth.userId,
+      }),
+    );
+    for (const input of passkeyStarted()) live.push(input);
+    auth.reauthenticate("/fintech").catch((error: unknown) => {
+      window.sessionStorage.removeItem(PASSKEY_KEY);
+      setAuthBusy(false);
+      setToast({
+        tone: "error",
+        text:
+          error instanceof Error
+            ? error.message
+            : "Didit could not ask for your passkey.",
+      });
+    });
+  };
+
   const attack = async () => {
     await bank.attemptTakeover();
     setModal(null);
@@ -459,9 +537,7 @@ export function AlderDemo() {
       anchor: "stepup",
       tone: "hold",
       side: "left",
-      title: hit
-        ? `Rule hit: ${ruleName(hit.title)}`
-        : "Step-up on a new payee",
+      title: `${hit ? `Rule hit: ${ruleName(hit.title)}` : "Step-up on a new payee"} · ${authOn ? "passkey, then a selfie" : "a selfie"}`,
     });
   } else if (!modal && view === "security" && state?.takeover) {
     callouts.push({
@@ -522,6 +598,7 @@ export function AlderDemo() {
       : null,
     onboarding: onboarding?.summary ?? null,
     stepUp: state?.stepUp?.summary ?? null,
+    stepUpPasskey: state?.stepUp?.passkey?.method ?? null,
     activity,
     events: live.events,
     device: didit.device,
@@ -538,6 +615,9 @@ export function AlderDemo() {
     "configureEvents()                    // signals",
     "await startVerification({ url })     // sdk-web, KYC + AML",
     "const result = await submitTransaction({ transactionToken, transaction })",
+    ...(authOn
+      ? ["if (result.actionRequired) await reauthenticate()   // the passkey"]
+      : []),
     "if (result.actionRequired) await startVerification(result.actionRequired)",
     'submitEvent({ category: "security", actionType: "login_failed" })',
   ];
@@ -618,13 +698,22 @@ export function AlderDemo() {
           <>
             {modal === "stepup" && stepUpItem ? (
               <StepUpModal
-                busy={bank.busy === "stepUp"}
+                busy={bank.busy === "stepUp" || authBusy}
                 item={stepUpItem}
+                passkey={
+                  !authOn ||
+                  state.stepUp?.transactionId !== stepUpItem.record?.id
+                    ? null
+                    : state.stepUp?.passkey
+                      ? "done"
+                      : "ask"
+                }
                 onClose={() => {
                   setModal(null);
                   if (stepUpItem.record?.status === "APPROVED") setView("home");
                 }}
                 onConfirm={() => bank.confirmStepUp()}
+                onPasskey={confirmPasskey}
               />
             ) : null}
             {modal === "takeover" ? (
