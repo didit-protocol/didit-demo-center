@@ -95,7 +95,7 @@
 .hub-band-x .dd-h2 { max-width: 560px; }
 .hub-band-x .dd-lede { margin-top: 18px; max-width: 560px; }
 .hub-band-x .hub-cta { margin-top: 28px; }
-.hub-code { margin: 0; padding: 22px 20px; border-radius: 18px; background: var(--code-bg); color: var(--code-text); font-family: var(--dd-font); font-size: 13.5px; line-height: 21px;
+.hub-code { margin: 0; padding: 22px 18px; border-radius: 18px; background: var(--code-bg); color: var(--code-text); font-family: var(--dd-font); font-size: 13px; line-height: 21px;
             white-space: pre; overflow-x: auto; }
 .hub-code .c { color: var(--code-subtle); }
 .hub-code .k { color: var(--code-key); }
