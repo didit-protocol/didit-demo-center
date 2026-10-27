@@ -31,6 +31,14 @@ test("capture", async ({ page }) => {
   await mockNorthmarket(page);
   await page.goto("/marketplace");
   await page.getByRole("form", { name: "Open your shop" }).waitFor();
+  if (process.env.ONLY_SIGNUP) {
+    await page.getByRole("button", { name: "Create a passkey" }).waitFor();
+    await page.getByLabel("Email").fill("marta@ruizvintage.example");
+    await page.getByLabel("Email").blur();
+    await shot(page, "1-signup-auth");
+
+    return;
+  }
   await shot(page, "1-signup");
   await fold(page);
   await page.getByRole("button", { name: "Open my shop" }).click();

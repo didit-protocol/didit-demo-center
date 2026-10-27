@@ -168,7 +168,8 @@
   .nm-head-r { gap: 18px; }
   /* room to scroll every action clear of the open live feed */
   .nm-body { padding: 18px 16px 400px; overflow-y: auto; gap: 16px; }
-  .nm-signup { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .nm-signup { flex: none; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .nm-hero { min-height: auto; }
   .nm-hero h1 { font-size: 32px; line-height: 36px; letter-spacing: -0.8px; }
   .nm-hero p { font-size: 14.5px; line-height: 21px; }
   .nm-form { padding: 22px 18px 16px; }
@@ -187,7 +188,7 @@
   /* checkout: the product page first, edge to edge */
   .nm-body.is-checkout { padding-top: 0; }
   .nm-body.is-checkout > .nm-h1 { display: none; }
-  .nm-checkout { display: flex; flex-direction: column; gap: 16px; }
+  .nm-checkout { display: flex; flex-direction: column; align-items: stretch; gap: 16px; }
   .nm-checkout > .nm-summary { order: -1; background: none; border: 0; padding: 0; margin: 0 -16px; gap: 10px; }
   .nm-hero-photo { display: block; position: relative; height: 380px; background: #EFE8DD center/cover no-repeat; }
   .nm-hero-photo span { position: absolute; left: 14px; bottom: 14px; height: 28px; padding: 0 10px; border-radius: 999px; background: rgba(255, 255, 255, .94); display: inline-flex; align-items: center; font-weight: 700; font-size: 13px; }

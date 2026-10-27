@@ -248,7 +248,12 @@ function businessPage(input: NorthmarketConsoleInput): RecordPage | null {
               pairs: [
                 ["Legal name", registry.name ?? company],
                 ["Company number", registry.number ?? "Not given"],
-                ["Status", registry.registryStatus ?? "Unknown"],
+                [
+                  "Status",
+                  registry.registryStatus
+                    ? statusTag(registry.registryStatus).label
+                    : "Unknown",
+                ],
                 ["Legal form", registry.type ?? "Unknown"],
                 ["Incorporated", day(registry.incorporated) ?? "Unknown"],
                 ["Registered address", registry.address ?? "Unknown"],

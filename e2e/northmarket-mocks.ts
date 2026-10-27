@@ -283,6 +283,7 @@ export async function mockNorthmarket(page: Page): Promise<NorthmarketMock> {
     const stored: Json = {
       ...fixture,
       uuid,
+      txn_date: new Date().toISOString(),
       vendor_data: subject,
       parties: [{ role: "APPLICANT", vendor_data: subject }],
       ...(purchase
