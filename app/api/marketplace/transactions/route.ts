@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 /** Remember a transaction the web SDK just submitted for this browser. */
 export async function POST(request: NextRequest) {
-  const env = marketEnv();
+  const env = await marketEnv();
 
   return respond(
     request,
