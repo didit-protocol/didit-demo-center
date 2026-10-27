@@ -90,16 +90,13 @@ test("the feed: a hairline card on a computer, the collapsed pill on a phone", a
   const feed = page.getByTestId("didit-live");
   const pill = page.getByTestId("didit-live-pill");
 
-  // The root providers settle a moment after load; measure the shell once
-  // there is only one.
-  await expect(page.locator(".dx-app")).toHaveCount(1);
-
   if (isPhone(page)) {
     // It starts folded, so the lobby stays in view, and opens on a tap.
     await expect(pill).toBeVisible();
     await expect(feed).toHaveCount(0);
     const folded = await box(pill);
-    const app = await box(page.locator(".dx-app"));
+    // While the page streams, Next keeps a hidden copy of it: measure the shown one.
+    const app = await box(page.locator(".dx-app:visible"));
 
     expect(folded.x).toBe(app.x + 12);
     expect(folded.x + folded.width).toBe(app.x + app.width - 12);
@@ -118,7 +115,7 @@ test("the feed: a hairline card on a computer, the collapsed pill on a phone", a
   await expect(feed).toBeVisible();
   const card = await box(feed);
   // The page keeps a stable scrollbar gutter: measure from the app's edges.
-  const app = await box(page.locator(".dx-app"));
+  const app = await box(page.locator(".dx-app:visible"));
 
   expect(card.width).toBe(372);
   expect(app.x + app.width - (card.x + card.width)).toBe(20);
