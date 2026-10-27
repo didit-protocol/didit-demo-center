@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import "@/styles/demos/live.css";
 import "@/styles/demos/hub.css";
+import "@/styles/demos/product-demos.css";
 
 import { Hub } from "@/components/hub/hub";
 
