@@ -18,3 +18,4 @@
 [   25118ms] [INFO] [Welcome] Session update received: {current_step: LIVENESS, current_step_v2: LIVENESS, current_node_id: feature_liveness} @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
 [   25391ms] [INFO] speedMbpsFromVerificationApi: 0.49448692152917506 returning {photoMaxSizeKb: 200, videoMaxSizeKb: 500, loadDocumentModel: true, loadFaceModel: true} @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
 [   25391ms] [INFO] speedMbpsFromNextApi: 1.0457872340425531 returning {photoMaxSizeKb: 200, videoMaxSizeKb: 500, loadDocumentModel: true, loadFaceModel: true} @ https://verify.staging.didit.me/_next/static/chunks/373.45b2f3f20ab82946.js:8
+[   43680ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:3000/api/product-demos/core-kyc/session?sessionId=00000000-0000-4000-8000-000000000000:0
