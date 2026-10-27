@@ -1,0 +1,501 @@
+{
+  "translation_v1": {
+    "chrome": {
+      "header": {
+        "nav": {
+          "products": "Продукты",
+          "pricing": "Цены",
+          "image": {
+            "alt": {
+              "didit": "Didit"
+            }
+          },
+          "solutions": {
+            "cards": {
+              "verifyBusiness": {
+                "iconLabel": "Проверка бизнеса (KYB)"
+              }
+            }
+          },
+          "developers": {
+            "primary": {
+              "terminal": {
+                "readyOpenDashboard": "→ готово за 5 мин · открыть дашборд",
+                "integrateDidit": "> интегрировать верификацию Didit",
+                "sessionScaffolded": "✓ /v3/session/ создан",
+                "readingMcp": "↻ чтение mcp://didit.me",
+                "webhookReady": "✓ вебхук готов",
+                "mcpConnected": "✓ MCP сервер подключен",
+                "claude": "$ claude"
+              },
+              "quickstartIconLabel": "Быстрый старт"
+            }
+          },
+          "resources": {
+            "foundersCard": {
+              "imageAlt": "Алехандро Росас (слева) и Альберто Росас (справа), сооснователи Didit",
+              "iconLabel": "О Didit"
+            }
+          },
+          "labels": {
+            "solutions": "Решения",
+            "developers": "Разработчикам",
+            "resources": "Ресурсы",
+            "pricing": "Цены"
+          }
+        },
+        "developers": {
+          "primary": {
+            "mcpServer": "MCP Server",
+            "quickstart": "Быстрый старт",
+            "docs": "Документация",
+            "apiReference": "API Reference"
+          },
+          "quickstartCard": {
+            "description": "Интегрируйте Didit за 5 минут. Получите ключ для песочницы, отправьте первую сессию, проверьте вебхук, всё в одном curl-руководстве.",
+            "cta": "Читать руководство",
+            "eyebrow": "ИНТЕГРАЦИЯ ЗА 5 МИНУТ"
+          },
+          "buildLinks": {
+            "heading": "Разработка",
+            "sessionsApi": "Sessions API",
+            "webhooks": "Вебхуки",
+            "sdks": "SDK",
+            "openApi": "OpenAPI / Postman",
+            "agentSkills": "Навыки агента",
+            "codingAgentIntegration": "Интеграция с ИИ-агентом"
+          },
+          "ship": {
+            "integrationPrompt": "Подсказки для интеграции",
+            "heading": "Релизы",
+            "sandbox": "Песочница",
+            "changelog": "История изменений",
+            "status": "Статус сервисов"
+          },
+          "viewAll": "Для разработчиков"
+        },
+        "resources": {
+          "hero": {
+            "blog": "Блог",
+            "successStories": "Истории успеха",
+            "helpCenter": "Центр помощи",
+            "demoCenter": "Демо-центр",
+            "roiCalculator": "Калькулятор ROI",
+            "academy": "Academy"
+          },
+          "foundersCard": {
+            "title": "Познакомьтесь с основателями",
+            "description": "Алехандро и Альберто Росас, братья-близнецы из Барселоны, создающие инфраструктуру для идентификации и борьбы с мошенничеством.",
+            "cta": "Подробнее о Didit"
+          },
+          "read": {
+            "heading": "Читайте и исследуйте"
+          },
+          "company": {
+            "heading": "Компания",
+            "about": "О нас",
+            "careers": "Карьера",
+            "securityCompliance": "Безопасность и соответствие",
+            "contact": "Контакты"
+          },
+          "viewAll": "Все ресурсы"
+        },
+        "ctas": {
+          "signIn": "Войти",
+          "signUp": "Зарегистрироваться",
+          "startFree": "Начать бесплатно",
+          "talkToUs": "Связаться с нами",
+          "learnMore": "Узнать больше"
+        },
+        "localeSwitcherLabel": "Язык",
+        "solutions": {
+          "cards": {
+            "monitoring": {
+              "title": "Мониторинг",
+              "description": "Постоянный AML, правила транзакций, KYT кошельков"
+            },
+            "amlCompliance": {
+              "title": "AML и комплаенс",
+              "description": "Санкции, PEP, негативные новости, постоянный мониторинг"
+            },
+            "onboardCustomer": {
+              "title": "Верификация пользователей (KYC)",
+              "description": "Бесплатный KYC до 500 проверок в месяц, навсегда. ID, проверка на живость и сравнение лиц в одном пакете.",
+              "iconLabel": "Верификация пользователей (KYC)"
+            },
+            "verifyBusiness": {
+              "title": "Верификация бизнеса (KYB)",
+              "description": "Реестры, бенефициары, должностные лица и AML для компаний. Каждому бенефициару, связанная KYC-сессия «из коробки»."
+            },
+            "stopFraud": {
+              "title": "Мониторинг транзакций",
+              "description": "Система правил в реальном времени для фиата и крипты. Управление кейсами, рабочий процесс SAR и автоматическое устранение нарушений со связанным KYC.",
+              "iconLabel": "Борьба с мошенничеством"
+            },
+            "complyAml": {
+              "title": "Соответствие AML",
+              "description": "Проверка по 1300+ спискам санкций, PEP и негативных новостей. Ежедневный мониторинг за $0.07 в год на пользователя.",
+              "iconLabel": "Соответствие AML"
+            },
+            "authentication": {
+              "title": "Аутентификация",
+              "description": "Liveness, биометрическая аутентификация, IP и устройство"
+            },
+            "verification": {
+              "title": "Верификация",
+              "description": "KYC, KYB, проверка документов и реестров"
+            }
+          },
+          "byUseCase": {
+            "heading": "Сценарии использования",
+            "fullKycOnboarding": "Полный KYC-онбординг",
+            "ageVerification": "Проверка возраста",
+            "cryptoOnramp": "KYC + KYT для крипто-онбординга",
+            "accountTakeover": "Предотвращение захвата аккаунтов",
+            "multiAccountAbuse": "Блокировка мультиаккаунтов",
+            "proofOfHuman": "Подтверждение личности",
+            "gigWorker": "Онбординг самозанятых",
+            "botDetection": "Блокировка ботов",
+            "passwordRecovery": "Восстановление пароля",
+            "seeAll": "Все сценарии"
+          },
+          "byIndustry": {
+            "heading": "По отраслям",
+            "fintech": "Финтех",
+            "crypto": "Крипто",
+            "marketplaces": "Маркетплейсы",
+            "mobility": "Мобильность",
+            "seeAll": "Все отрасли",
+            "fintechDesc": "Необанки · платежи · кредитование · брокерские услуги",
+            "cryptoDesc": "Биржи · кошельки · ввод/вывод средств · VASP",
+            "marketplacesDesc": "Гиг-экономика · доставка · платформы для авторов · e-commerce",
+            "mobilityDesc": "Райдшеринг · автопарки · доставка последней мили",
+            "igaming": "iGaming",
+            "igamingDesc": "Букмекерские конторы · казино · лотереи · фэнтези-спорт"
+          },
+          "byModule": {
+            "heading": "По модулям",
+            "freeKyc": "Бесплатный KYC",
+            "governmentChecks": "Государственные проверки",
+            "biometricAuthentication": "Биометрическая аутентификация",
+            "walletScreening": "Проверка кошельков (KYT)",
+            "ageEstimation": "Определение возраста",
+            "ipAnalysis": "Анализ устройств и IP",
+            "idVerification": "Верификация личности",
+            "whiteLabel": "White Label",
+            "liveness": "Проверка на живость",
+            "faceMatch": "Сравнение лиц",
+            "seeAll": "Все 25+ модулей"
+          },
+          "viewAll": "Посмотреть весь каталог"
+        },
+        "products": {
+          "cards": {
+            "userVerification": {
+              "title": "Верификация пользователей",
+              "description": "Пакет KYC · $0.33"
+            },
+            "businessVerification": {
+              "title": "Верификация бизнеса",
+              "description": "KYB · от $2.00"
+            },
+            "transactionMonitoring": {
+              "title": "Мониторинг транзакций",
+              "description": "Правила в реальном времени · $0.02/транзакция"
+            },
+            "walletScreening": {
+              "title": "Проверка кошельков (KYT)",
+              "description": "Риски ончейн-кошельков · $0.15"
+            }
+          },
+          "modules": {
+            "headingDocuments": "Документы и контакты",
+            "headingBiometrics": "Биометрия и риски",
+            "idVerification": "Верификация ID",
+            "nfcVerification": "NFC-верификация",
+            "proofOfAddress": "Подтверждение адреса",
+            "databaseValidation": "Проверка по базам данных",
+            "questionnaires": "Настраиваемые анкеты",
+            "emailVerification": "Проверка email",
+            "phoneVerification": "Проверка телефона",
+            "liveness": "Проверка на живость (Liveness)",
+            "faceMatch": "Сравнение лиц 1:1",
+            "faceSearch": "Поиск лиц 1:N",
+            "biometricAuth": "Биометрическая аутентификация",
+            "ageEstimation": "Определение возраста",
+            "ipAnalysis": "Анализ устройств и IP",
+            "walletScreening": "Проверка кошельков (KYT)",
+            "seeAll": "Все 25+ модулей"
+          },
+          "viewAll": "Все продукты"
+        }
+      },
+      "announcementBar": {
+        "slot1": {
+          "text": "Didit привлёк <amt>$7,5 млн</amt> на инфраструктуру для идентификации и борьбы с мошенничеством",
+          "ctaLabel": "Читать анонс",
+          "href": "/blog/didit-7-5m-seed-infrastructure-identity-fraud-ru/"
+        },
+        "slot2": {
+          "text": "Финансовый регулятор Испании признал Didit более безопасным, чем личная проверка.",
+          "ctaLabel": "Читать отчёт",
+          "href": "/security-compliance#regulator"
+        },
+        "slot3": {
+          "text": "Проверка кошельков за $0.15, или подключите своего провайдера.",
+          "ctaLabel": "Проверка кошельков",
+          "href": "/products/wallet-screening"
+        },
+        "slot4": {
+          "text": "Цены на KYB и мониторинг транзакций уже на сайте.",
+          "ctaLabel": "Смотреть цены",
+          "href": "/pricing"
+        },
+        "slot5": {
+          "text": "Полный KYC за $0.33. 500 проверок бесплатно каждый месяц.",
+          "ctaLabel": "Начать бесплатно",
+          "href": "https://business.didit.me"
+        }
+      },
+      "footer": {
+        "cols": {
+          "solutions": {
+            "seeAll": "Все сценарии использования",
+            "heading": "Решения",
+            "fullKycOnboarding": "Полный KYC-онбординг",
+            "ageVerification": "Проверка возраста",
+            "cryptoOnramp": "KYC + KYT для крипто-онрэмпа",
+            "accountTakeover": "Защита от захвата аккаунтов",
+            "multiAccountAbuse": "Блокировка мультиаккаунтов",
+            "proofOfHuman": "Доказательство человечности",
+            "botDetection": "Блокировка ботов",
+            "gigWorkerVerification": "Верификация гиг-работников",
+            "igamingResponsibleGaming": "Ответственная игра в iGaming",
+            "micaCrypto": "Верификация криптопользователей MiCA",
+            "cryptoTravelRule": "Crypto Travel Rule",
+            "uboVerification": "Верификация бенефициаров (6AMLD)",
+            "bnplUnderwriting": "Андеррайтинг BNPL",
+            "psd3Sca": "PSD3 SCA",
+            "marketplaceSellerKyb": "KYB для продавцов на маркетплейсах",
+            "employeeOnboarding": "Онбординг сотрудников",
+            "nfcEpassport": "Онбординг по NFC ePassport",
+            "passwordRecovery": "Восстановление пароля"
+          },
+          "industries": {
+            "heading": "Отрасли",
+            "fintech": "Финтех",
+            "crypto": "Крипто / Web3",
+            "marketplaces": "Маркетплейсы",
+            "mobility": "Мобильность",
+            "gambling": "iGaming / Гемблинг",
+            "banking": "Банкинг",
+            "insurance": "Страхование",
+            "ecommerce": "Электронная коммерция",
+            "telecom": "Телеком",
+            "seeAll": "Все отрасли"
+          },
+          "developers": {
+            "heading": "Разработчикам",
+            "documentation": "Документация",
+            "apiReference": "API Reference",
+            "quickstart": "Быстрый старт, 5 мин",
+            "integrationPrompt": "Подсказки по интеграции",
+            "mcp": "MCP Server",
+            "agentSkills": "Навыки агента",
+            "sdks": "SDK",
+            "sandbox": "Песочница (бесплатно)",
+            "changelog": "История изменений",
+            "status": "Статус сервиса",
+            "demoCenter": "Демо-центр"
+          },
+          "comparePricing": {
+            "heading": "Цены и сравнение",
+            "pricing": "Цены",
+            "roiCalculator": "Калькулятор ROI",
+            "sumsub": "vs Sumsub",
+            "veriff": "vs Veriff",
+            "onfido": "vs Onfido",
+            "jumio": "vs Jumio",
+            "persona": "vs Persona",
+            "stripeIdentity": "vs Stripe Identity",
+            "allSwitch": "Все сравнения с конкурентами",
+            "countries": "Поддерживаемые страны",
+            "supportedDocuments": "Поддерживаемые документы"
+          },
+          "resources": {
+            "heading": "Ресурсы",
+            "securityCompliance": "Безопасность и соответствие",
+            "supportedDocuments": "Поддерживаемые документы",
+            "roiCalculator": "Калькулятор ROI",
+            "status": "Статус сервиса",
+            "demoCenter": "Демо-центр"
+          },
+          "products": {
+            "heading": "Продукты",
+            "userVerification": "Верификация пользователей (KYC)",
+            "businessVerification": "Верификация бизнеса (KYB)",
+            "transactionMonitoring": "Мониторинг транзакций",
+            "walletScreening": "Проверка кошельков (KYT)",
+            "amlScreening": "AML-проверка",
+            "idVerification": "Верификация личности",
+            "liveness": "Проверка на живость",
+            "faceMatch1to1": "Сравнение лиц 1:1",
+            "faceSearch1toN": "Поиск по лицу 1:N",
+            "biometricAuth": "Биометрическая аутентификация",
+            "ageEstimation": "Определение возраста",
+            "nfcReading": "Чтение NFC",
+            "databaseValidation": "Валидация по базам данных",
+            "ipAnalysis": "Анализ устройств и IP",
+            "emailVerification": "Проверка email",
+            "phoneVerification": "Проверка телефона",
+            "workflowOrchestrator": "Оркестратор рабочих процессов",
+            "whiteLabel": "White Label",
+            "seeAllModules": "Все продукты"
+          },
+          "company": {
+            "heading": "Компания",
+            "about": "О нас",
+            "blog": "Блог",
+            "successStories": "Истории успеха",
+            "securityCompliance": "Безопасность и соответствие",
+            "contact": "Контакты",
+            "getDemo": "Запросить демо",
+            "careers": "Карьера",
+            "brand": "Брендбук",
+            "support": "Поддержка",
+            "helpCenter": "Центр помощи"
+          },
+          "backedby": {
+            "investors": {
+              "name": {
+                "yCombinator": "Y Combinator"
+              }
+            }
+          }
+        },
+        "askAi": {
+          "eyebrow": "Попросите ИИ кратко изложить эту страницу",
+          "openIn": "Открыть эту страницу в {provider}"
+        },
+        "tagline": "Единый API для идентификации и борьбы с мошенничеством.",
+        "trustStrip": "SOC 2 · ISO 27001 · iBeta PAD L1 · GDPR · eIDAS 2.0 · MiCA · AMLD6 · DORA-aligned",
+        "regulatorMicroline": "Признано Tesoro, Banco de España и SEPBLAC в Испании как более безопасное, чем личная верификация.",
+        "regulatorReadReport": "Читать отчёт",
+        "backedBy": "При поддержке",
+        "hq": "Сан-Франциско, США · Штаб-квартира",
+        "legal": {
+          "copyright": "© 2026 Didit",
+          "privacy": "Конфиденциальность",
+          "cookies": "Cookies",
+          "businessTerms": "Условия для бизнеса",
+          "subProcessors": "Субпроцессоры",
+          "contact": "Контакты"
+        },
+        "social": {
+          "labels": {
+            "linkedin": "LinkedIn",
+            "x": "X (Twitter)",
+            "github": "GitHub"
+          },
+          "ariaLabel": "Didit в {network}"
+        },
+        "g2Aria": "Didit на G2: рейтинг 4.9 из 5",
+        "g2Tagline": "Инфраструктура для идентификации и борьбы с мошенничеством"
+      }
+    },
+    "localeswitcher": {
+      "ariaLabel": {
+        "languageColumn1": "Язык (колонка 1)",
+        "languageColumn2": "Язык (колонка 2)",
+        "language": "Язык",
+        "changeLanguage": "Изменить язык. Текущий язык: {current}."
+      },
+      "language": "Язык"
+    },
+    "ui": {
+      "navbar": {
+        "image": {
+          "sizes": {
+            "minWidth1024px480px": "(min-width: 1024px) 480px, 100vw"
+          },
+          "alt": {
+            "didit": "Didit"
+          }
+        },
+        "dropdownPanel": {
+          "subtleDarkening": {
+            "description": "Едва заметное затемнение только снизу, достаточное,\n                        чтобы закрепить текст, не затемняя верхнюю\n                        часть фотографии. h-[55%] начинается значительно\n                        ниже лиц основателей."
+          },
+          "accentVariant": {
+            "description": "Акцентный вариант, оберните ссылку в синюю плашку Didit, чтобы она\n            выглядела как заметный призыв к действию с высокой конверсией."
+          },
+          "heroStrip": {
+            "heading": "Герой-полоса, градиентные карточки в одном горизонтальном ряду."
+          },
+          "linkColumnsRow": {
+            "heading": "Ряд колонок ссылок, Модули · Сценарии использования · Отрасли."
+          },
+          "imageBackgroundVariant": {
+            "description": "Вариант с фоновым изображением, используется для карточки «Знакомство с основателями» в меню «Ресурсы».\n                  Next/Image заполняет карточку; блок текста с выравниванием по левому краю\n                  (заголовок + описание + призыв к действию) расположен в нижнем левом углу,\n                  чтобы фотография занимала около 80% карточки. Без темного градиентного наложения,\n                  читаемость текста обеспечивается плотной текстовой тенью на белом холсте.\n                  По словам Альберто: «убрать непрозрачность снизу и сделать как раньше\n                  с выравниванием по левому краю, просто убедиться, что начинается ниже, чем раньше»."
+          },
+          "titleRow": {
+            "description": "Строка заголовка, иконка ВЛЕВО от заголовка (без фоновой плашки,\n                    кольца, тени). Использует то же семейство иконок, что и `/pricing` через ConsoleModuleIcon\n                    (которое отражает реестр workflow-feature-icon в fe-application-console);\n                    возвращается к маске iconSrc, если `moduleKey` отсутствует."
+          },
+          "accentSideColumn": {
+            "description": "`accent` на ссылке боковой колонки отображает ее синим цветом Didit\n                  с конечной стрелкой, используется для записей типа «Посмотреть все 25+\n                  модулей», «Все 15 отраслей», «Просмотреть все…», чтобы они выглядели как\n                  призывы к действию для дальнейшего изучения, а не как обычные ссылки на модули."
+          }
+        },
+        "searchDidit": "Поиск Didit",
+        "closeSearch": "Закрыть поиск",
+        "openMenu": "Открыть меню",
+        "closeMenu": "Закрыть меню"
+      },
+      "topBar": {
+        "announcementAriaLabel": "Объявление",
+        "dismissAnnouncementAriaLabel": "Скрыть объявление"
+      },
+      "navTerminalCard": {
+        "diditZsh": "~/didit · zsh",
+        "navTerminalCard": {
+          "live": "В ЭФИРЕ"
+        }
+      },
+      "logoContextMenu": {
+        "aria": "Брендовые ресурсы Didit",
+        "eyebrow": "Бренд-кит",
+        "copyLogo": "Скопировать логотип в SVG",
+        "copied": "Скопировано",
+        "downloadSvg": "Скачать логотип (SVG)",
+        "downloadPng": "Скачать логотип (PNG)",
+        "downloadMark": "Скачать символ (SVG)",
+        "copyColor": "Скопировать цвет бренда",
+        "guidelines": "Рекомендации по бренду"
+      },
+      "footer": {
+        "legalTagline": "Инфраструктура идентификации для команд, которым нужно доверие."
+      },
+      "backedBy": {
+        "label": "При поддержке"
+      }
+    },
+    "blog": {
+      "archive": {
+        "eyebrow": "Архив блога",
+        "title": "Читайте все <blue>статьи Didit</blue>.",
+        "titleAccent": "статьи Didit",
+        "description": "Все опубликованные статьи об идентификации и мошенничестве разбиты на лёгкие страницы для быстрого просмотра.",
+        "browseAll": "Смотреть все статьи",
+        "navigationAria": "Страницы архива блога",
+        "pageOf": "Страница {page} из {total}",
+        "range": "Статьи {start}–{end}",
+        "articleCount": "{count} статей",
+        "metadata": {
+          "title": "Архив блога | Didit",
+          "pageTitle": "Архив блога, страница {page} | Didit",
+          "description": "Полный архив блога Didit: статьи о верификации, борьбе с мошенничеством, eIDAS 2.0, MiCA, AMLD6 и запуске новых продуктов.",
+          "pageDescription": "Откройте страницу {page} архива блога Didit: исследования по идентификации, борьбе с мошенничеством, eIDAS 2.0, MiCA, AMLD6 и обзоры новых функций."
+        }
+      }
+    }
+  }
+}
