@@ -610,13 +610,12 @@ export function Exchange({
         </span>
         <nav aria-label="Kestrel">
           {NAV.map((item) => (
-            <button
+            <span
               key={item}
               className={item === (signedIn ? "Trade" : "Markets") ? "is-on" : undefined}
-              type="button"
             >
               {item}
-            </button>
+            </span>
           ))}
         </nav>
         <span className="ks-nav-r">
