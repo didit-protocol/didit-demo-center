@@ -5,7 +5,7 @@
 .hub h1, .hub h2, .hub h3, .hub p { margin: 0; }
 .hub img { display: block; max-width: 100%; }
 .hub-dark { background: radial-gradient(900px 520px at 78% 40%, rgba(84, 62, 190, .22), transparent 70%), var(--lv-ink); color: #FFFFFF; overflow: hidden; }
-.hub-nav { max-width: 1248px; margin: 0 auto; height: 68px; padding: 0 24px; display: flex; align-items: center; gap: 44px; }
+.hub-nav { max-width: 1296px; margin: 0 auto; height: 68px; padding: 0 24px; display: flex; align-items: center; gap: 44px; }
 .hub-brand { display: inline-flex; align-items: center; gap: 16px; }
 .hub-brand b { font-size: 15px; font-weight: 600; }
 .hub-logo { height: 24px; width: auto; }
@@ -21,7 +21,7 @@
 .hub .hub-btn.is-dark { background: #161823; color: #FFFFFF; border: 1px solid #2A2D3B; }
 .hub .hub-btn.is-line { background: #FFFFFF; color: #1A1A1A; border: 1px solid #DCDCE0; }
 .hub .hub-btn.is-line:hover { background: #F7F7F8; filter: none; }
-.hub-hero { max-width: 1248px; margin: 0 auto; padding: 72px 24px 0; min-height: 652px; display: grid; grid-template-columns: minmax(0, 560px) minmax(0, 1fr); gap: 32px; }
+.hub-hero { max-width: 1296px; margin: 0 auto; padding: 72px 24px 0; min-height: 652px; display: grid; grid-template-columns: minmax(0, 560px) minmax(0, 1fr); gap: 32px; }
 .hub-hero-x { display: flex; flex-direction: column; gap: 22px; padding-top: 24px; }
 .hub-sandbox { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 14px; border-radius: 999px; background: #1C1E2A; border: 1px solid #2A2D3B; font-size: 12.5px; color: #C9CBDA; }
 .hub-sandbox::before { content: ""; width: 7px; height: 7px; border-radius: 999px; background: #FFC65C; }
@@ -39,7 +39,7 @@
 .hub-float.f2 { left: -72px; top: 158px; }
 .hub-float.f3 { left: -62px; top: 448px; }
 .hub-float.f4 { left: 408px; top: 488px; }
-.hub-sec { max-width: 1248px; margin: 0 auto; padding: 88px 24px 0; }
+.hub-sec { max-width: 1296px; margin: 0 auto; padding: 88px 24px 0; }
 .hub-sec:last-child { padding-bottom: 96px; }
 .hub-sec > h2 { font-size: 34px; line-height: 42px; font-weight: 600; letter-spacing: -0.8px; color: #1A1A1A; }
 .hub-lead { margin-top: 12px !important; font-size: 15.5px; color: #6B6B6B; max-width: 760px; }
