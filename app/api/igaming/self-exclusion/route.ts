@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
  * front end forgets to check.
  */
 export async function POST(request: NextRequest) {
-  const playerId = readPlayer(request);
+  const playerId = await readPlayer(request);
 
   if (!playerId) return noPlayer();
 

@@ -551,7 +551,7 @@ test("the theme switch darkens the demo area and is remembered", async ({
 });
 
 test("the catalogue links to the crypto exchange app", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/modules");
   const card = page.getByRole("link", { name: /Kestrel/ });
 
   await card.scrollIntoViewIfNeeded();

@@ -52,6 +52,17 @@ export interface SessionSummary {
   /** Age read from the document when the adaptive flow fell back to an ID. */
   documentAge: number | null;
   ip: IpSummary | null;
+  /**
+   * What the console view's Identity block shows the player about their own
+   * check: their name as read, the document type and country, and the scores.
+   * Never the images or the document's numbers.
+   */
+  fullName: string | null;
+  documentType: string | null;
+  documentCountry: string | null;
+  faceMatch: number | null;
+  liveness: number | null;
+  amlHits: number | null;
 }
 
 /** A `GET /v3/session/{id}/decision/` response, cut down for its owner. */
@@ -73,6 +84,15 @@ export function projectSession(
     .map((check) => asNumber(check.age))
     .find((age) => age !== null);
   const ip = asArray(record.ip_analyses)[0];
+  const id = asArray(record.id_verifications)[0];
+  const name = [asString(id?.first_name), asString(id?.last_name)]
+    .filter(Boolean)
+    .join(" ");
+  const score = (items: unknown) =>
+    asArray(items)
+      .map((check) => asNumber(check.score))
+      .find((value) => value !== null) ?? null;
+  const aml = asArray(record.aml_screenings)[0];
 
   return {
     sessionId,
@@ -89,6 +109,13 @@ export function projectSession(
           isDataCenter: ip.is_data_center === true,
         }
       : null,
+    fullName: name || null,
+    documentType: asString(id?.document_type),
+    documentCountry:
+      asString(id?.issuing_state_name) ?? asString(id?.issuing_state),
+    faceMatch: score(record.face_matches),
+    liveness: score(record.liveness_checks),
+    amlHits: aml ? asNumber(aml.total_hits) : null,
   };
 }
 

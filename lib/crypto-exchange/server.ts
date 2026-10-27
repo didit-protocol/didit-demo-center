@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 
 import { toAccountView, type AccountView } from "./onboarding";
 
-import { VERIFICATION_BASE_URL } from "@/lib/auth-service";
+import { callDidit } from "@/lib/didit/server";
 
 /**
  * Kestrel's backend: the four routes under /api/crypto-exchange share this.
@@ -17,8 +17,6 @@ import { VERIFICATION_BASE_URL } from "@/lib/auth-service";
  * KYC is not approved - which is also what keeps a public demo from being a
  * free way to run billable screenings.
  */
-
-export const DIDIT_V3 = `${VERIFICATION_BASE_URL}/v3`;
 
 /**
  * The visitor's Kestrel account: the `vendor_data` Kestrel gave them and their
@@ -139,29 +137,19 @@ export async function didit(
   path: string,
   body?: unknown,
 ): Promise<DiditResult> {
-  try {
-    const response = await fetch(`${DIDIT_V3}${path}`, {
-      method,
-      headers: {
-        "x-api-key": apiKey(),
-        "Content-Type": "application/json",
-      },
-      body: body === undefined ? undefined : JSON.stringify(body),
-      cache: "no-store",
-      signal: AbortSignal.timeout(30000),
-    });
-    const data = await response.json().catch(() => null);
+  const result = await callDidit(method, `/v3${path}`, body);
+  const data = result.data;
 
-    return {
-      ok: response.ok,
-      status: response.status,
-      data: data && typeof data === "object" ? data : null,
-    };
-  } catch (error) {
-    console.error(`Didit ${method} ${path} failed:`, error);
+  if (result.status === 0) console.error(`Didit ${method} ${path} failed`);
 
-    return { ok: false, status: 502, data: null };
-  }
+  return {
+    ok: result.ok,
+    status: result.status || 502,
+    data:
+      data && typeof data === "object"
+        ? (data as Record<string, unknown>)
+        : null,
+  };
 }
 
 /** The API's own reason for a failed call, for the screen that triggered it. */

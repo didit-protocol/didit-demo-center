@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 import clsx from "clsx";
-import { Suspense } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { DiditAuth } from "@didit-protocol/auth-nextjs";
 
 // Order matters: the vendored didit.me token sheet first, then the chrome's
 // behavioural sheet, then this app's own Tailwind build.
@@ -10,9 +10,16 @@ import "@website/styles/tokens.css";
 import "@/styles/website-chrome.css";
 import "@/styles/globals.css";
 
-import { WebsiteHeader, WebsiteFooter } from "@/components/chrome";
 import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
+import {
+  fontDidit,
+  fontDiditMono,
+  fontInter,
+  fontSans,
+  fontSora,
+} from "@/config/fonts";
+import { authEnabled, authEnv } from "@/lib/didit/auth";
+import { DiditClientProvider } from "@/lib/didit/provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -41,6 +48,12 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Every page: the chrome's labels (next-intl), Didit Authentication when a
+ * publishable key is configured, and signals from the first load. The
+ * website header and footer live in app/(site)/layout.tsx; the hub and the
+ * Demo Center shell bring their own.
+ */
 export default async function RootLayout({
   children,
 }: {
@@ -50,30 +63,37 @@ export default async function RootLayout({
   // header switches the chrome language in place (see i18n/request.ts).
   const locale = await getLocale();
   const messages = await getMessages();
+  const withAuth = authEnabled();
+
+  if (withAuth) authEnv();
+
+  const content = (
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <DiditClientProvider authEnabled={withAuth}>
+        {children}
+      </DiditClientProvider>
+    </NextIntlClientProvider>
+  );
 
   return (
     <html suppressHydrationWarning lang={locale}>
       <body
-        className={clsx("min-h-screen bg-canvas font-sans", fontSans.variable)}
+        className={clsx(
+          "min-h-screen bg-canvas font-sans",
+          fontSans.variable,
+          fontDidit.variable,
+          fontDiditMono.variable,
+          fontInter.variable,
+          fontSora.variable,
+        )}
       >
-        <NextIntlClientProvider locale={locale} messages={messages}>
-          <WebsiteHeader />
-          <main className="min-h-[60vh]">
-            <Suspense
-              fallback={
-                <div className="flex min-h-[60vh] items-center justify-center">
-                  <div className="flex flex-col items-center gap-3">
-                    <span className="size-8 animate-spin rounded-pill border-2 border-line border-t-blue" />
-                    <p className="text-sm text-muted">Loading…</p>
-                  </div>
-                </div>
-              }
-            >
-              {children}
-            </Suspense>
-          </main>
-          <WebsiteFooter />
-        </NextIntlClientProvider>
+        {withAuth ? (
+          <DiditAuth appearance={{ theme: "light" }} locale="en">
+            {content}
+          </DiditAuth>
+        ) : (
+          content
+        )}
       </body>
     </html>
   );

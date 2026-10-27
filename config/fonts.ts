@@ -1,4 +1,5 @@
-import { Inter } from "next/font/google";
+import { Inter, Sora } from "next/font/google";
+import localFont from "next/font/local";
 
 /**
  * Inter is the brand's only typeface. The design system uses it for body,
@@ -12,4 +13,38 @@ export const fontSans = Inter({
   variable: "--font-sans",
   display: "swap",
   weight: ["400", "500", "600"],
+});
+
+/**
+ * The industry demos' own type. Didit Grotesk (the design system's face, the
+ * same file didit.me serves) sets the Demo Center bar, the live layer and the
+ * hub; each customer app brings its own family, never Didit's.
+ */
+export const fontDidit = localFont({
+  src: "../styles/fonts/DiditGrotesk-Variable.woff2",
+  variable: "--font-didit",
+  display: "swap",
+  weight: "300 800",
+});
+
+export const fontDiditMono = localFont({
+  src: "../styles/fonts/DiditGroteskMono-Variable.woff2",
+  variable: "--font-didit-mono",
+  display: "swap",
+});
+
+/** The console view replicates the console, which is set in Inter. */
+export const fontInter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+  weight: ["400", "500", "600"],
+});
+
+/** Aurora Play, the casino. */
+export const fontSora = Sora({
+  subsets: ["latin"],
+  variable: "--font-sora",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
 });

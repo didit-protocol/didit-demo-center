@@ -7,12 +7,16 @@ import {
   signPlayer,
 } from "@/lib/igaming/player";
 import { apiKey, noStore, readPlayer } from "@/lib/igaming/server";
+import { authEnabled } from "@/lib/didit/auth";
 
 export const dynamic = "force-dynamic";
 
 /** The current demo player, if this browser has one. */
 export async function GET(request: NextRequest) {
-  return noStore({ playerId: readPlayer(request) });
+  return noStore({
+    playerId: await readPlayer(request),
+    authenticated: authEnabled(),
+  });
 }
 
 /**
@@ -22,6 +26,14 @@ export async function GET(request: NextRequest) {
  * what the shared-device bonus rule needs to see.
  */
 export async function POST(request: NextRequest) {
+  // With Didit Authentication on, the player is the signed-in Didit user.
+  if (authEnabled()) {
+    const playerId = await readPlayer(request);
+
+    return playerId
+      ? noStore({ playerId, authenticated: true })
+      : noStore({ error: "Sign up first." }, { status: 401 });
+  }
   if (!apiKey()) {
     return noStore(
       { error: "The server has no API_KEY configured." },

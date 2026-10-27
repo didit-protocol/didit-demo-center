@@ -93,12 +93,12 @@ test("POST /player issues a signed, httpOnly player cookie; GET reads it back", 
 
   const read = await player.GET(request("/api/igaming/player", { cookie: playerId }));
 
-  assert.deepEqual(await read.json(), { playerId });
+  assert.deepEqual(await read.json(), { playerId, authenticated: false });
   const forged = new NextRequest("http://localhost:3000/api/igaming/player", {
     headers: { cookie: `${PLAYER_COOKIE}=${playerId}.not-the-signature` },
   });
 
-  assert.deepEqual(await (await player.GET(forged)).json(), { playerId: null });
+  assert.deepEqual(await (await player.GET(forged)).json(), { playerId: null, authenticated: false });
 });
 
 test("every player route refuses a request without the cookie and calls nothing", async () => {

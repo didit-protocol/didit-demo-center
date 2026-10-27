@@ -7,23 +7,21 @@
  * server routes and `scripts/igaming-setup.mjs` all read it from here, so the
  * rule installed in the console and the copy on screen can never disagree.
  *
- * It deliberately has no runtime imports: `npm test` and the setup script load
- * it straight from Node, which strips the types but does not resolve paths.
+ * Its only import is the shared demo config, by relative path: `npm test` and
+ * the setup script load it straight from Node, which strips the types but does
+ * not resolve `@/` paths.
  */
 
-const isStaging = process.env.NEXT_PUBLIC_IS_STAGING === "true";
+import { auroraPlay } from "../didit/demos.ts";
 
-const pick = (production: string, staging: string) =>
-  isStaging ? staging : production;
-
-export const OPERATOR_NAME = "Aurora Play";
+export const OPERATOR_NAME = auroraPlay.brand.name;
 
 /**
  * Every player this demo creates has a `vendor_data` with this prefix. The
  * rules below only match it, so they never touch another demo's transactions
  * on the same application.
  */
-export const PLAYER_PREFIX = "aurora-play-";
+export const PLAYER_PREFIX = auroraPlay.vendorPrefix;
 
 export const CURRENCY = "EUR";
 
@@ -34,16 +32,10 @@ export const KYC_WINDOW = "30d";
 export const WELCOME_BONUS = 20;
 
 /** The same adaptive age workflow the catalogue's "Adaptive age check" runs. */
-export const AGE_WORKFLOW_ID = pick(
-  "0aa1d022-c1ee-47b0-8538-5c8c32515739",
-  "8482aee5-38b8-46fd-914b-e1bc6edcadca",
-);
+export const AGE_WORKFLOW_ID = auroraPlay.workflows.age;
 
 /** The catalogue's "Core KYC" workflow: ID, liveness, face match, IP. */
-export const KYC_WORKFLOW_ID = pick(
-  "7c1e467d-fe91-4ade-aa72-ec022fc67971",
-  "2db28cd2-7713-405f-89ad-144613b7086e",
-);
+export const KYC_WORKFLOW_ID = auroraPlay.workflows.kyc;
 
 export interface LicensedMarket {
   code: string;
@@ -78,7 +70,7 @@ export function licensedMarket(
 export function isPlayerId(value: unknown): value is string {
   return (
     typeof value === "string" &&
-    new RegExp(`^${PLAYER_PREFIX}[a-f0-9]{24}$`).test(value)
+    new RegExp(`^${PLAYER_PREFIX}[A-Za-z0-9_-]{6,80}$`).test(value)
   );
 }
 
@@ -613,17 +605,12 @@ export function payoutView(
   }
 }
 
-const formatter = (digits: number) =>
-  new Intl.NumberFormat("en-IE", {
-    style: "currency",
-    currency: CURRENCY,
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
-  });
-const WHOLE = formatter(0);
-const CENTS = formatter(2);
+const MONEY = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
 
-/** "€2,000" for whole amounts, "€12.50" otherwise. */
+/** "2,000.00 EUR", the way the casino's cashier writes money. */
 export function formatMoney(amount: number): string {
-  return (Number.isInteger(amount) ? WHOLE : CENTS).format(amount);
+  return `${MONEY.format(amount)} ${CURRENCY}`;
 }
