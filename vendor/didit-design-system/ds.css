@@ -1,0 +1,486 @@
+/* Didit design system v4: vendored by scripts/sync-design-system.mjs. Never edit by hand. */
+/* design-system/tokens.css: colour tokens, light and dark */
+:root, [data-theme="light"] {
+  --site-ground: #ffffff; /* Website page background. Cards sit on it with a c-line hairline. */
+  --site-band: #f7f7f8; /* Alternate section bands, media wells, stages behind product shots. */
+  --site-header: rgba(255,255,255,0.86); /* Sticky header glass (with backdrop blur). */
+  --site-ink: #0e0e10; /* The one dark band per page in light mode (developers, code). */
+  --site-on-ink: #f5f5f7; /* Text on site-ink. */
+  --site-dot: #e3e3e6; /* Dot grid on stages (12px pitch). */
+  --site-tide-dot: rgba(37,103,255,0.16); /* Dot Tide: 3px dots on a 4px pitch behind CTA and header bands only (console D48). */
+  --c-bg: #f6f6f6; /* Console app frame behind the sidebar and the main card. */
+  --c-surface: #ffffff; /* Cards, panels, menus, dialogs, inputs. */
+  --c-surface-2: #f8f8f8; /* Hover rows, header bands, quiet wells. */
+  --c-surface-3: #f2f2f2; /* Pressed state, active filter, Graphite product tiles. */
+  --c-hover: rgba(120,120,128,0.08); /* Hover on transparent controls. */
+  --c-active: #eaeaea; /* Active navigation row. */
+  --c-scrim: rgba(40,40,40,0.16); /* Behind dialogs and the command palette. */
+  --c-line: #ededed; /* Hairlines, card borders, table rules, the page frame. */
+  --c-line-soft: #f3f3f3; /* Row dividers inside cards. */
+  --c-line-strong: #e1e1e1; /* Control borders, dotted receipt leaders. */
+  --c-field-line: #e5e5ea; /* Input and secondary button borders. */
+  --c-field-line-hover: #c7c7cc; /* Input and secondary button borders on hover. */
+  --c-heading: #1a1a1a; /* Headings 18px and up, prices, active text. 17:1 on site-ground in both themes. */
+  --c-text: #333333; /* Body copy on site-ground, c-surface and site-band. 12.6:1 light, 14:1 dark. */
+  --c-text-subtle: #6b6b6b; /* Ledes, secondary text, captions on site-ground and c-surface. 5.3:1 light, 6.9:1 dark. (Console uses #777777 at 4.5:1 for dense UI; the site darkens it for long ledes.) */
+  --c-text-faint: #757575; /* Placeholders, meta, ids and captions (and the second clause of two-tone headings). DS 3.1 contrast pass: 4.6:1 on white, 5.0:1 on the dark ground, so every use passes 4.5:1. */
+  --c-on-accent: #ffffff; /* Text on c-accent fills (primary buttons, plan flags). 4.9:1 light; dark accent pairs at 3.4:1 for 15px 500 button labels, kept from the console. */
+  --c-inverse: #1a1a1a; /* Tooltips, toasts, the announcement bar, dark buttons. */
+  --c-on-inverse: #fefefe; /* Text on c-inverse. */
+  --c-accent: #2567ff; /* Didit blue. One primary button per view, links, eyebrows, the active tab rule, chart lines. */
+  --c-accent-hover: #1b4fe0; /* Hover of c-accent fills and links. */
+  --c-accent-soft: #eaf1ff; /* Selected fills, info tags, highlighted compare column. */
+  --c-accent-line: #c9d8ff; /* Borders of selected or info surfaces. */
+  --c-accent-text: #07479e; /* Blue text on c-accent-soft (chips, New badges). */
+  --c-focus: rgba(37,103,255,0.20); /* 3px focus halo on inputs. Keyboard focus elsewhere is a solid 2px c-accent outline. */
+  --c-success: #1b7a3a; /* Approved status text on c-success-bg. */
+  --c-success-bg: #e7f7ec; /* Approved status fill. */
+  --c-success-dot: #34c759; /* Approved dot, check icons in lists. */
+  --c-danger: #ff3b30; /* Declined status text on c-danger-bg. */
+  --c-danger-bg: #ffebe9; /* Declined status fill. */
+  --c-danger-dot: #ff3b30; /* Declined dot. Always paired with the word, never colour alone. */
+  --c-danger-text: #c4281c; /* Red words and icons: error messages, Declined, destructive menu items. AA on white and on c-danger-bg; c-danger stays for dots, borders and fills. */
+  --c-review: #9a5200; /* In review status text on c-review-bg. */
+  --c-review-bg: #fff1de; /* In review status fill. */
+  --c-review-dot: #ff9500; /* In review dot. */
+  --c-warning: #8a5f00; /* Money and limits (never verification status) on c-warning-bg. DS 3.1: darkened to #8A5F00 for 4.9:1 on c-warning-bg. */
+  --c-warning-bg: #fff7e0; /* Warning fill. */
+  --c-warning-dot: #f2a900; /* Warning dot. */
+  --c-info: #1b4fe0; /* In progress and Not started text on c-info-bg. */
+  --c-info-bg: #eaf1ff; /* In progress fill. */
+  --c-info-dot: #2567ff; /* In progress dot. */
+  --c-neutral: #636366; /* Expired and Abandoned text on c-neutral-bg. */
+  --c-neutral-bg: #f2f2f7; /* Neutral status fill. */
+  --c-neutral-dot: #aeaeb2; /* Neutral dot. */
+  --c-live-dot: #41d97f; /* Live environment dot, system operational. */
+  --c-sandbox-dot: #ff7426; /* Sandbox environment dot. */
+  --c-chart-line: #519dfa; /* Chart lines and sparklines. */
+  --c-chart-bar: #0077e6; /* Chart bars. */
+  --code-bg: #0f1115; /* Code panels are dark in both themes (Stripe-style developer band). */
+  --code-tab: #1d2027; /* Active language tab in a code panel. */
+  --code-line: #23262d; /* Rules inside code panels. */
+  --code-text: #e8e8ea; /* Code on code-bg. 15:1. */
+  --code-subtle: #8a8f98; /* Comments, labels and inactive tabs on code-bg. 5.8:1. */
+  --code-key: #8db4ff; /* Keys and keywords. */
+  --code-str: #5bd68f; /* Strings. */
+  --code-num: #ffb35c; /* Numbers and booleans. */
+  --code-punct: #a6a6ae; /* Punctuation. */
+  --brand-blue: #2567ff; /* Didit blue as a brand colour (logos, art). Same in both themes; the UI accent is c-accent. */
+  --brand-deep: #07479e; /* Deep brand blue for art and duotones. */
+  --brand-sky: #bfd4ff; /* Light brand blue for art strokes on blue. */
+  --brand-tint: #f7f9ff; /* Very soft blue section tint, used once per page at most. */
+  --c-plate: #f4f7ff; /* Ground of the soft card (DS 3.1): a white or very pale blue card with a hairline and a corner field of small dots. Replaces every full-blue card and panel; ink text sits on it (c-heading 15.9:1 light). */
+  --c-plate-line: #e2e8f8; /* The hairline around a soft card (c-plate). */
+  --c-plate-dot: rgba(37,103,255,0.42); /* The small dots of a soft card's corner field, before the corner fade; inside data-cat/data-sub they take the module colour (--cat). Decoration only, never behind text. */
+  --brand-halftone-ground: #1643c6; /* Ground of the halftone photos (sampled), shown while a halftone loads and behind the CTA band. */
+  --brand-ring-cyan: #8fe0fb; /* Capsule ring gradient, lower-left stop. */
+  --brand-ring-blue: #2567ff; /* Capsule ring gradient, middle stop. */
+  --brand-ring-indigo: #4f46e5; /* Capsule ring gradient, upper-right stop. */
+  --brand-lime: #ecf86e; /* One tiny highlight per illustration at most. Never text, never a fill behind text. */
+  --brand-feature: #9b26ff; /* AI moments only (the listening orb). Never elsewhere. */
+  --brand-feature-soft: #f3e8ff; /* Early access badge fill. */
+  --brand-feature-text: #6600bd; /* Early access badge text on brand-feature-soft. */
+  --cat-identity: #2567ff; /* Module colour. Category hue, Identity Verification (people): Didit blue. Decoration only: glows, dots, rules, icon tiles (data-cat="identity" sets --cat). */
+  --cat-identity-2: #22b8e6; /* Second stop of the identity glow mesh (--cat-2). */
+  --cat-identity-soft: #eef3ff; /* Tinted surface and pill ground for identity (--cat-soft). */
+  --cat-identity-ink: #1747c9; /* Text and glyphs in the identity hue; AA on c-surface and on its soft tint (--cat-ink). */
+  --cat-business: #e0791a; /* Module colour. Category hue, Business verification and registries: amber. Decoration only: glows, dots, rules, icon tiles (data-cat="business" sets --cat). */
+  --cat-business-2: #f2b33d; /* Second stop of the business glow mesh (--cat-2). */
+  --cat-business-soft: #fff3e6; /* Tinted surface and pill ground for business (--cat-soft). */
+  --cat-business-ink: #9a4706; /* Text and glyphs in the business hue; AA on c-surface and on its soft tint (--cat-ink). */
+  --cat-transactions: #0e9f8e; /* Module colour. Category hue, Transaction Monitoring and Travel Rule: teal. Decoration only: glows, dots, rules, icon tiles (data-cat="transactions" sets --cat). */
+  --cat-transactions-2: #2bb6d6; /* Second stop of the transactions glow mesh (--cat-2). */
+  --cat-transactions-soft: #e6f6f3; /* Tinted surface and pill ground for transactions (--cat-soft). */
+  --cat-transactions-ink: #09665b; /* Text and glyphs in the transactions hue; AA on c-surface and on its soft tint (--cat-ink). */
+  --cat-auth: #de4b80; /* Module colour. Category hue, reserved for a gated module: rose. Decoration only: glows, dots, rules, icon tiles (data-cat="auth" sets --cat). */
+  --cat-auth-2: #9b5cf6; /* Second stop of the auth glow mesh (--cat-2). */
+  --cat-auth-soft: #fdedf3; /* Tinted surface and pill ground for auth (--cat-soft). */
+  --cat-auth-ink: #a8264f; /* Text and glyphs in the auth hue; AA on c-surface and on its soft tint (--cat-ink). */
+  --cat-platform: #5b6478; /* Module colour. Category hue, Platform (console, cases, networks, workflows): slate. Decoration only: glows, dots, rules, icon tiles (data-cat="platform" sets --cat). */
+  --cat-platform-2: #2567ff; /* Second stop of the platform glow mesh (--cat-2). */
+  --cat-platform-soft: #eff1f5; /* Tinted surface and pill ground for platform (--cat-soft). */
+  --cat-platform-ink: #3a4252; /* Text and glyphs in the platform hue; AA on c-surface and on its soft tint (--cat-ink). */
+  --cat-ai: #8b3dff; /* Module colour. Category hue, AI (Ask Didit, Investigator, MCP): violet, the brand-feature family. Decoration only: glows, dots, rules, icon tiles (data-cat="ai" sets --cat). */
+  --cat-ai-2: #2567ff; /* Second stop of the ai glow mesh (--cat-2). */
+  --cat-ai-soft: #f4ecff; /* Tinted surface and pill ground for ai (--cat-soft). */
+  --cat-ai-ink: #6600bd; /* Text and glyphs in the ai hue; AA on c-surface and on its soft tint (--cat-ink). */
+  --sub-identity-documents: #1f62f9; /* Sub-module colour, Identity > Documents (ID document verification, NFC chip reading, Proof of address, Document AI). Set by data-sub="identity-documents" with data-cat="identity": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-identity-biometrics: #0176af; /* Sub-module colour, Identity > Biometrics (Passive and active liveness, Face match 1:1, Face search 1:N, Age estimation). Set by data-sub="identity-biometrics" with data-cat="identity": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-identity-flow: #0367b9; /* Sub-module colour, Identity > Flow and brand (Questionnaires, White label). Set by data-sub="identity-flow" with data-cat="identity": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-identity-data: #07799b; /* Sub-module colour, Identity > Data sources (Database validation, Phone, Email, Device and IP, Bank, Location). Set by data-sub="identity-data" with data-cat="identity": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-identity-digital: #5259fb; /* Sub-module colour, Identity > Digital identity (Digital ID (eID) wallets, EUDI Wallet, Reusable KYC, E-signatures). Set by data-sub="identity-digital" with data-cat="identity": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-business-kyb: #a95b03; /* Sub-module colour, Business verification > Company verification (Company registry checks, Shareholders and UBOs, Officers and directors, Company documents). Set by data-sub="business-kyb" with data-cat="business": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-business-screening: #be4828; /* Sub-module colour, Business verification > Company screening (Company and officer screening). Set by data-sub="business-screening" with data-cat="business": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-aml-screening: #2b7e44; /* Sub-module colour, AML and monitoring > Watchlist screening (Sanctions, PEP and adverse media screening). Set by data-sub="aml-screening" with data-cat="transactions": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-aml-monitoring: #55751d; /* Sub-module colour, AML and monitoring > Ongoing monitoring (Ongoing AML monitoring, daily re-screening). Set by data-sub="aml-monitoring" with data-cat="transactions": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-transactions-monitoring: #037d6f; /* Sub-module colour, Transactions > Transaction monitoring (Monitoring rules, Rule packs). Set by data-sub="transactions-monitoring" with data-cat="transactions": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-transactions-travel: #087380; /* Sub-module colour, Transactions > Travel Rule (Travel Rule). Set by data-sub="transactions-travel" with data-cat="transactions": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-transactions-wallets: #007f5d; /* Sub-module colour, Transactions > Wallet screening (Wallet screening). Set by data-sub="transactions-wallets" with data-cat="transactions": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-auth-signin: #c8366e; /* Sub-module colour, reserved for a gated module. Set by data-sub="auth-signin" with data-cat="auth": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-auth-bots: #bc388b; /* Sub-module colour, reserved for a gated module. Set by data-sub="auth-bots" with data-cat="auth": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-platform-cases: #58647e; /* Sub-module colour, Platform > Cases and networks (Case management, Networks). Set by data-sub="platform-cases" with data-cat="platform": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-platform-messages: #385b6d; /* Sub-module colour, Platform > Messages (Messages). Set by data-sub="platform-messages" with data-cat="platform": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-platform-workflows: #726a8a; /* Sub-module colour, Platform > Workflows and console (Workflows, The console, Marketplace). Set by data-sub="platform-workflows" with data-cat="platform": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-platform-apis: #284a4a; /* Sub-module colour, Platform > APIs (Standalone APIs). Set by data-sub="platform-apis" with data-cat="platform": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-ai-ask: #8b3dff; /* Sub-module colour, AI > Ask Didit (Ask Didit). Set by data-sub="ai-ask" with data-cat="ai": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-ai-investigator: #9806d7; /* Sub-module colour, AI > Investigator (Investigator (early access)). Set by data-sub="ai-investigator" with data-cat="ai": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --sub-ai-mcp: #c011cc; /* Sub-module colour, AI > MCP server (MCP server). Set by data-sub="ai-mcp" with data-cat="ai": the dot of a .dd-cat-pill, the glyph in a neutral tile, the label dot on a halftone, pixel dots and the Dot Tide of that product. Text and glyphs at >= 4.5:1 on c-surface, c-surface-2, site-band and c-bg in both themes. Never a fill, a button, a link or a status. */
+  --c-shadow-card: 0 1px 3px rgba(0,0,0,0.03); /* Resting cards (barely there; hairlines do the work). */
+  --c-shadow-pop: 0 16px 48px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05); /* Menus, the solid UI card on a halftone, receipts. */
+  --c-shadow-thumb: 0 1px 2px rgba(0,0,0,0.10); /* Selected segment in a tab group. */
+  --c-photo-ring: 0 0 0 0 rgba(0,0,0,0); /* Photos get a hairline only in dark so white paper does not glow. */
+  --site-shadow-window: 0 30px 80px -30px rgba(17,24,39,0.25), 0 0 0 1px rgba(0,0,0,0.02); /* Product windows and phones on the website. */
+  --site-shadow-hover: 0 12px 32px -12px rgba(17,24,39,0.16); /* Linked cards on hover, the featured plan. */
+  --focus-ring: 0 0 10px 0.5px rgba(37,103,255,0.145), inset 0 0 0 0.5px rgba(37,103,255,0.3); /* Focus and selection on every form control (A15, 22 Oct): the accent hairline, a soft 10px glow that fades to nothing and a faint inner line. Never a hard ring. Buttons and links keep the 2px outline. */
+  --focus-ring-danger: 0 0 10px 0.5px rgba(255,59,48,0.16), inset 0 0 0 0.5px rgba(255,59,48,0.32); /* Focus on a control that holds an error. */
+}
+[data-theme="dark"] {
+  --site-ground: #0b0b0d;
+  --site-band: #111113;
+  --site-header: rgba(11,11,13,0.82);
+  --site-ink: #151517;
+  --site-on-ink: #f5f5f7;
+  --site-dot: #2a2a2e;
+  --site-tide-dot: rgba(77,139,255,0.20);
+  --c-bg: #0e0e10;
+  --c-surface: #151517;
+  --c-surface-2: #1c1c1f;
+  --c-surface-3: #232327;
+  --c-hover: rgba(255,255,255,0.06);
+  --c-active: #26262a;
+  --c-scrim: rgba(0,0,0,0.55);
+  --c-line: #2a2a2e;
+  --c-line-soft: #222225;
+  --c-line-strong: #34343a;
+  --c-field-line: #34343a;
+  --c-field-line-hover: #4a4a52;
+  --c-heading: #f5f5f7;
+  --c-text: #e8e8ea;
+  --c-text-subtle: #9a9aa2;
+  --c-text-faint: #85858d;
+  --c-on-accent: #ffffff;
+  --c-inverse: #f5f5f7;
+  --c-on-inverse: #111113;
+  --c-accent: #4d8bff;
+  --c-accent-hover: #6a9dff;
+  --c-accent-soft: rgba(77,139,255,0.14);
+  --c-accent-line: rgba(77,139,255,0.38);
+  --c-accent-text: #8db4ff;
+  --c-focus: rgba(77,139,255,0.35);
+  --c-success: #5bd68f;
+  --c-success-bg: rgba(65,217,127,0.14);
+  --c-success-dot: #41d97f;
+  --c-danger: #ff453a;
+  --c-danger-bg: rgba(255,69,58,0.16);
+  --c-danger-dot: #ff453a;
+  --c-danger-text: #ff6961;
+  --c-review: #ffb35c;
+  --c-review-bg: rgba(255,116,38,0.14);
+  --c-review-dot: #ff8a3d;
+  --c-warning: #f5c451;
+  --c-warning-bg: rgba(245,196,81,0.12);
+  --c-warning-dot: #f5c451;
+  --c-info: #8db4ff;
+  --c-info-bg: rgba(77,139,255,0.16);
+  --c-info-dot: #4d8bff;
+  --c-neutral: #a6a6ae;
+  --c-neutral-bg: rgba(255,255,255,0.07);
+  --c-neutral-dot: #6b6b73;
+  --c-live-dot: #41d97f;
+  --c-sandbox-dot: #ff8a3d;
+  --c-chart-line: #6aaeff;
+  --c-chart-bar: #3b8ef0;
+  --code-bg: #101114;
+  --code-tab: #1d2027;
+  --code-line: #26292f;
+  --code-text: #e8e8ea;
+  --code-subtle: #8a8f98;
+  --code-key: #8db4ff;
+  --code-str: #5bd68f;
+  --code-num: #ffb35c;
+  --code-punct: #a6a6ae;
+  --brand-tint: #0f1524;
+  --c-plate: #0f1420;
+  --c-plate-line: #232a3a;
+  --c-plate-dot: rgba(77,139,255,0.46);
+  --brand-feature-soft: rgba(155,38,255,0.16);
+  --brand-feature-text: #cf9bff;
+  --cat-identity: #4d8bff;
+  --cat-identity-2: #3fc6f0;
+  --cat-identity-soft: rgba(77,139,255,0.16);
+  --cat-identity-ink: #9cbfff;
+  --cat-business: #f29a4a;
+  --cat-business-2: #f5c451;
+  --cat-business-soft: rgba(242,154,74,0.15);
+  --cat-business-ink: #ffc28f;
+  --cat-transactions: #2cc4b0;
+  --cat-transactions-2: #46c7e6;
+  --cat-transactions-soft: rgba(44,196,176,0.15);
+  --cat-transactions-ink: #82e3d5;
+  --cat-auth: #f0709b;
+  --cat-auth-2: #b28cff;
+  --cat-auth-soft: rgba(240,112,155,0.15);
+  --cat-auth-ink: #ffaec8;
+  --cat-platform: #8a93a6;
+  --cat-platform-2: #4d8bff;
+  --cat-platform-soft: rgba(138,147,166,0.16);
+  --cat-platform-ink: #c5cad5;
+  --cat-ai: #b07cff;
+  --cat-ai-2: #4d8bff;
+  --cat-ai-soft: rgba(176,124,255,0.16);
+  --cat-ai-ink: #d3a8ff;
+  --sub-identity-documents: #7ea9ff;
+  --sub-identity-biometrics: #5bbeff;
+  --sub-identity-flow: #379bfe;
+  --sub-identity-data: #06b5e6;
+  --sub-identity-digital: #a5b6fe;
+  --sub-business-kyb: #f19a54;
+  --sub-business-screening: #f0876b;
+  --sub-aml-screening: #71c083;
+  --sub-aml-monitoring: #7da04d;
+  --sub-transactions-monitoring: #3ac3b0;
+  --sub-transactions-travel: #0da1b2;
+  --sub-transactions-wallets: #5fcca3;
+  --sub-auth-signin: #f87da3;
+  --sub-auth-bots: #e173b3;
+  --sub-platform-cases: #9dabc8;
+  --sub-platform-messages: #7ca1b5;
+  --sub-platform-workflows: #bab1d4;
+  --sub-platform-apis: #6a8e8e;
+  --sub-ai-ask: #b296fe;
+  --sub-ai-investigator: #bd77ed;
+  --sub-ai-mcp: #ec88f2;
+  --c-shadow-card: none;
+  --c-shadow-pop: 0 16px 48px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.08);
+  --c-shadow-thumb: 0 1px 2px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.06);
+  --c-photo-ring: 0 0 0 1px #2a2a2e;
+  --site-shadow-window: 0 30px 80px -30px rgba(0,0,0,0.8);
+  --site-shadow-hover: 0 12px 32px -12px rgba(0,0,0,0.7);
+  --focus-ring: 0 0 10px 0.5px rgba(77,139,255,0.26), inset 0 0 0 0.5px rgba(77,139,255,0.4);
+  --focus-ring-danger: 0 0 10px 0.5px rgba(255,69,58,0.26), inset 0 0 0 0.5px rgba(255,69,58,0.42);
+}
+/* design-system/tokens.css: spacing, radius and type, scoped to .dd */
+.dd {
+  --space-1: 4px; /* Icon to label. */
+  --space-2: 8px; /* Tight gaps, chip rows. */
+  --space-3: 12px; /* Button groups, list gaps. */
+  --space-4: 16px; /* Console card side padding, card grid gaps, phone gutter. */
+  --space-5: 20px; /* Footer and dense card padding. */
+  --space-6: 24px; /* Marketing card padding, grid gap. */
+  --space-8: 32px; /* Desktop gutter, large card padding. */
+  --space-10: 40px; /* Stage padding. */
+  --space-12: 48px; /* Gap between a section header and its content. */
+  --space-16: 64px; /* Split layout column gap. */
+  --space-18: 72px; /* Small section padding, footer top. */
+  --space-28: 112px; /* Section padding on desktop (64px on phone). */
+  --container: 1200px; /* Max content width; the hairline frame sits on its edges. */
+  --header-h: 64px; /* Sticky header height (56px on phone). */
+  --radius-xs: 5px; /* Tags and New / Soon / Early access badges (console Pass Two). */
+  --radius-sm: 10px; /* Inputs inside UI cards, menu rows, small tiles. */
+  --radius-md: 14px; /* Console cards, wells, directory items. */
+  --radius-lg: 16px; /* Marketing cards, product windows, code panels, Graphite tiles at 52px. */
+  --radius-xl: 20px; /* Plan cards, feature tiles, story cards, estimator. */
+  --radius-2xl: 24px; /* Halftone panels and product cards. */
+  --radius-3xl: 28px; /* The closing CTA band. */
+  --radius-pill: 9999px; /* Buttons, status pills, filters, tabs. */
+  --control-dense: 32px; /* Console filters, segmented controls and table toolbars. */
+  --control-sm: 34px; /* Small buttons and inputs inside cards. */
+  --control-md: 44px; /* The default button and input. Also the minimum touch target. */
+  --control-lg: 52px; /* Hero buttons and the one important field of a page (email capture, OTP). */
+  --icon-sm: 14px; /* Icons in 13px text: hints, chips, table cells. */
+  --icon-md: 16px; /* Icons in buttons and inputs. */
+  --icon-lg: 20px; /* Standalone icons, list leaders. */
+  --field-max: 480px; /* The longest a single text field grows. Forms are one column up to this. */
+  --bp-sm: 640px; /* Phones end here: one column, stacked tables, 16px gutters. */
+  --bp-md: 768px; /* Tablets: two columns, the mega menu becomes a sheet. */
+  --bp-lg: 1024px; /* Laptops: the console sidebar stays open. */
+  --bp-xl: 1280px; /* Desktop: the 1200px container plus its gutters. */
+  --bp-2xl: 1440px; /* Wide: content stays at the container; only grounds bleed. */
+  --z-base: 0; /* Page content. */
+  --z-raised: 1; /* A card lifted over its neighbours on hover. */
+  --z-sticky: 40; /* Sticky table headers and section tabs. */
+  --z-header: 60; /* The site header and the console top bar. */
+  --z-overlay: 100; /* Scrims behind sheets, drawers and dialogs. */
+  --z-modal: 110; /* Dialogs, drawers and sheets. */
+  --z-popover: 120; /* Menus, combobox lists, date and colour pickers. */
+  --z-toast: 130; /* Toasts: above dialogs, so a save inside one still reports. */
+  --z-tooltip: 140; /* Tooltips: always on top. */
+  --duration-fast: 160ms; /* Press, small hovers, colour and background changes: buttons, tags, rows, icons. */
+  --duration-base: 200ms; /* Card and tile hovers: border, shadow, a 1-2 px lift. The default for UI transitions. */
+  --duration-slow: 320ms; /* Panels and reveals: accordions, tabs, menus, tooltips, a dot-hover settle. */
+  --duration-enter: 460ms; /* Overlays opening: sheets, lightboxes, the assistant bubble, a menu panel. */
+  --duration-long: 760ms; /* Sections and cards entering the view, a card expanding to a page, meters filling. */
+  --ease-standard: cubic-bezier(.2,.8,.2,1); /* Default for every UI transition (was --dd-ease). */
+  --ease-emphasized: cubic-bezier(.32,.72,0,1); /* Things the eye should follow: sheets, the selected tab, expand cards (was --dd-ease-emph). */
+  --ease-enter: cubic-bezier(.16,1,.3,1); /* Entering: fast start, long soft landing. Cards and sections coming into view. */
+  --ease-exit: cubic-bezier(.7,0,.84,0); /* Leaving: slow start, quick finish. Only for things that go away. */
+  --ease-spring: cubic-bezier(.34,1.56,.64,1); /* A small overshoot for one confirming moment (a check landing). Never on layout. */
+  --font-sans: "Didit Grotesk", -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Didit Grotesk Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --text-t-display: 500 80px/84px var(--font-sans); /* Home hero only. 64/68 at tablet, 44/48 at phone. Didit Grotesk 500 at -0.02em (Francesc). */
+  --text-t-h1: 500 64px/68px var(--font-sans); /* Every other page's H1 (console Pricing board scale). 52/56 tablet, 40/44 phone. */
+  --text-t-h2: 500 44px/50px var(--font-sans); /* Section headings. 36/42 tablet, 30/36 phone. */
+  --text-t-h3: 500 24px/30px var(--font-sans); /* Card and sub-section titles. */
+  --text-t-h4: 500 18px/24px var(--font-sans); /* Small card titles, plan names. */
+  --text-t-voice: italic 300 44px/50px var(--font-sans); /* The second voice: Didit Grotesk Light Italic (wght 300, slnt -9). ONE emphasised phrase per hero, cover or divider line, at the size of the line it sits in; never body copy, never a whole heading. bundle.css sets the real slant axis. */
+  --text-t-lede: 400 19px/30px var(--font-sans); /* The paragraph under an H1 or H2, in c-text-subtle with bold facts in c-heading. */
+  --text-t-body: 400 16px/26px var(--font-sans); /* Body copy. */
+  --text-t-small: 400 14px/22px var(--font-sans); /* Secondary copy, card descriptions. */
+  --text-t-caption: 400 13px/18px var(--font-sans); /* Captions, footnotes, CTA notes. */
+  --text-t-eyebrow: 450 13px/16px var(--font-mono); /* Section eyebrow, uppercase, c-accent. One per section. Set in Didit Grotesk Mono (MONO 100), uppercase, 0.08em. */
+  --text-t-mono-label: 450 12px/16px var(--font-mono); /* Mono micro-labels on receipts, mega menu column titles, dates. Uppercase. Didit Grotesk Mono (MONO 100). */
+  --text-t-code: 400 13px/21px var(--font-mono); /* Code panels and inline code. Didit Grotesk Mono (MONO 100): every glyph 0.6 em wide. */
+  --text-t-app-hero: 500 24px/30px var(--font-sans); /* The one hero number on console Home and Analytics. */
+  --text-t-app-metric: 500 18px/24px var(--font-sans); /* KPI numbers in console cards. */
+  --text-t-app-title: 500 15px/20px var(--font-sans); /* Console page header title (52px header). */
+  --text-t-app-body: 400 13.5px/20px var(--font-sans); /* Console body text and UI cards on the website. */
+  --text-t-app-filter: 450 13px/16px var(--font-sans); /* Filter chips and segmented controls. */
+  --text-t-app-label: 450 12px/16px var(--font-sans); /* Card titles, field labels, table headers. Sentence case, never uppercase. */
+}
+/* design-system/components/bundle.css: root, button, status, tag, tile, halftone, window, tabs, eyebrow */
+/* ---------- 1. Root ---------- */
+.dd { --dd-font: "Didit Grotesk", -apple-system, "Helvetica Neue", Arial, sans-serif; --dd-mono: "Didit Grotesk Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --dd-container: 1200px; --dd-gutter: 32px; --dd-section-y: 112px; --dd-header-h: 64px;
+  /* The frame lines sit this far outside the content, so nothing touches a border (Stripe-style margin). */
+  --dd-frame-inset: 24px; --dd-announce-h: 40px;
+  --dd-ease: var(--ease-standard, cubic-bezier(.2,.8,.2,1)); --dd-ease-emph: var(--ease-emphasized, cubic-bezier(.32,.72,0,1));
+  container-type: inline-size; container-name: dd;
+  background: var(--site-ground); color: var(--c-text); font-family: var(--dd-font); font-size: 16px; line-height: 26px;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; font-synthesis: none; text-rendering: optimizeLegibility; }
+:where(.dd) *, :where(.dd) *::before, :where(.dd) *::after { box-sizing: border-box; }
+:where(.dd) a { color: inherit; text-decoration: none; }
+:where(.dd) img { display: block; max-width: 100%; }
+.dd :focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
+:where(.dd) :where(h1, h2, h3, h4, h5, p, ul, ol, figure, blockquote, dl, dd) { margin: 0; }
+:where(.dd) :where(ul, ol) { padding: 0; list-style: none; }
+:where(.dd) button { font: inherit; color: inherit; }
+.dd ::selection { background: var(--c-accent-soft); }
+/* ==== DS4 BUTTON BEGIN (P1 Tuned pill, 23 Oct 2026) ==== */
+.dd-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: var(--radius-pill); border: 1px solid transparent; font-size: 15px; line-height: 20px; font-weight: 450; letter-spacing: -0.06px; white-space: nowrap; cursor: pointer; text-decoration: none;
+  transition: background-color 160ms cubic-bezier(.2,.8,.2,1), border-color 160ms cubic-bezier(.2,.8,.2,1), color 160ms cubic-bezier(.2,.8,.2,1), box-shadow 160ms cubic-bezier(.2,.8,.2,1), transform 220ms cubic-bezier(.2,.8,.2,1), filter 160ms cubic-bezier(.2,.8,.2,1); }
+.dd-btn:active:not(:disabled):not([aria-disabled="true"]) { transform: scale(.97); transition-duration: 160ms, 160ms, 160ms, 160ms, 120ms, 160ms; }
+.dd-btn .dd-i { width: 16px; height: 16px; }
+.dd-btn-primary { background: var(--c-accent-fill, var(--c-accent)); color: var(--c-on-accent); box-shadow: none; }   /* plain flat fill, no shine (designer, 23 Oct) */
+.dd-btn-primary:hover { background: color-mix(in srgb, var(--c-accent-fill, var(--c-accent)) 88%, #000); }
+.dd-btn-primary:active { background: var(--c-accent-hover); filter: brightness(.94); }
+.dd-btn-secondary { background: var(--c-surface); color: var(--c-heading); border-color: var(--c-field-line); box-shadow: 0 1px 1px rgba(0,0,0,.04); }
+.dd-btn-secondary:hover { border-color: var(--c-field-line-hover); background: var(--c-surface-2); }
+.dd-btn-secondary:active { background: var(--c-active); box-shadow: none; }
+.dd-btn-dark { background: var(--c-inverse); color: var(--c-on-inverse); }
+.dd-btn-dark:hover { background: color-mix(in srgb, var(--c-inverse) 88%, white); }
+/* ghost = frosted glass (designer, 23 Oct): a faint translucent surface that blurs and saturates what is behind it (dot fields, photos),
+   almost invisible on a plain ground; hover thickens the glass with a hairline edge and a light top highlight; press settles */
+.dd-btn-ghost { background: color-mix(in srgb, var(--c-surface) 22%, transparent); -webkit-backdrop-filter: blur(14px) saturate(1.7); backdrop-filter: blur(14px) saturate(1.7); color: var(--c-heading);
+  transition: background-color 220ms cubic-bezier(.2,.8,.2,1), box-shadow 220ms cubic-bezier(.2,.8,.2,1), transform 300ms cubic-bezier(.32,.72,0,1); }
+.dd-btn-ghost:hover { background: color-mix(in srgb, var(--c-surface) 66%, transparent); box-shadow: inset 0 0 0 .5px color-mix(in srgb, var(--c-heading) 11%, transparent), inset 0 1px 0 rgba(255,255,255,.75), 0 1px 2px rgba(0,0,0,.05), 0 4px 14px -6px rgba(0,0,0,.10); }
+.dd-btn-ghost:active { background: color-mix(in srgb, var(--c-surface-2) 70%, transparent); box-shadow: inset 0 0 0 .5px color-mix(in srgb, var(--c-heading) 12%, transparent), inset 0 1px 2px rgba(0,0,0,.06); }
+[data-theme="dark"] .dd-btn-ghost:hover { background: color-mix(in srgb, var(--c-surface-3) 60%, transparent); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.12), inset 0 1px 0 rgba(255,255,255,.08), 0 4px 14px -6px rgba(0,0,0,.5); }
+[data-theme="dark"] .dd-btn-ghost:active { background: color-mix(in srgb, var(--c-surface-3) 75%, transparent); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.1), inset 0 1px 2px rgba(0,0,0,.3); }
+.dd-btn-on-blue { background: #FFFFFF; color: #0B2A8A; }
+.dd-btn-on-blue:hover { background: #EAF1FF; }
+.dd-btn-outline-on-blue { background: rgba(255,255,255,.12); -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%); color: #FFFFFF; border-color: rgba(255,255,255,.45); }   /* frosted inside, so the label reads over a photo */
+.dd-btn-outline-on-blue:hover { background: rgba(255,255,255,.2); border-color: #FFFFFF; }
+.dd-btn-outline-on-blue:active { background: rgba(255,255,255,.26); }
+/* sizes on the 4px grid: xs 28 (inline in table cells), sm 32, md 36 (the console), default 44, lg 52 (= xl, marketing) */
+.dd-btn-xs { height: 28px; padding: 0 10px; gap: 6px; font-size: 12px; line-height: 16px; } .dd-btn-xs .dd-i { width: 14px; height: 14px; }
+.dd-btn-sm { height: 32px; padding: 0 12px; font-size: 13px; line-height: 16px; }
+.dd-btn-md { height: 36px; padding: 0 14px; font-size: 14px; line-height: 20px; }
+.dd-btn-lg, .dd-btn-xl { height: 52px; padding: 0 24px; font-size: 16px; line-height: 24px; }
+.dd-btn-block { width: 100%; }
+/* an arrow moves the way it points on hover (160ms); other icons stay still */
+:is(.dd-btn, .dd-link, .dd-cx-link, .dd-toast-act, a.dd-card, .dd-card.is-act):hover :is(.dd-i, .dd-svg) { transform: none; }
+:is(.dd-btn, .dd-link, .dd-cx-link, .dd-toast-act, a.dd-card, .dd-card.is-act) :is(.dd-i, .dd-svg)[data-i] { transition: transform 160ms cubic-bezier(.2,.8,.2,1); }
+:is(.dd-btn, .dd-link, .dd-cx-link, .dd-toast-act, a.dd-card, .dd-card.is-act):hover :is(.dd-i, .dd-svg):is([data-i="arrow-right"], [data-i="chevron-right"]) { transform: translateX(2px); }
+:is(.dd-btn, .dd-link, .dd-cx-link, .dd-toast-act, a.dd-card, .dd-card.is-act):hover :is(.dd-i, .dd-svg):is([data-i="arrow-left"], [data-i="chevron-left"]) { transform: translateX(-2px); }
+:is(.dd-btn, .dd-link, .dd-cx-link, .dd-toast-act, a.dd-card, .dd-card.is-act):hover :is(.dd-i, .dd-svg):is([data-i="arrow-up"], [data-i="upload"]) { transform: translateY(-2px); }
+:is(.dd-btn, .dd-link, .dd-cx-link, .dd-toast-act, a.dd-card, .dd-card.is-act):hover :is(.dd-i, .dd-svg):is([data-i="arrow-down"], [data-i="download"], [data-i="chevron-down"]) { transform: translateY(2px); }
+:is(.dd-btn, .dd-link, .dd-cx-link, .dd-toast-act, a.dd-card, .dd-card.is-act):hover :is(.dd-i, .dd-svg):is([data-i="arrow-up-right"], [data-i="external-link"], [data-i="external"]) { transform: translate(1.5px, -1.5px); }
+:is(.dd-btn, .dd-link, .dd-cx-link, .dd-toast-act, a.dd-card, .dd-card.is-act):hover :is(.dd-i, .dd-svg)[data-i="arrow-down-right"] { transform: translate(1.5px, 1.5px); }
+:is(.dd-btn, .dd-link, .dd-cx-link, .dd-toast-act, a.dd-card, .dd-card.is-act):hover :is(.dd-i, .dd-svg)[data-i="arrow-up-left"] { transform: translate(-1.5px, -1.5px); }
+:is(.dd-btn, .dd-link, .dd-cx-link, .dd-toast-act, a.dd-card, .dd-card.is-act):hover :is(.dd-i, .dd-svg)[data-i="arrow-down-left"] { transform: translate(-1.5px, 1.5px); }
+.dd .dd-btn-dark:focus-visible { border-color: var(--c-accent); }
+.dd .dd-btn-danger:focus-visible { border-color: var(--c-danger); box-shadow: var(--focus-ring-danger, var(--focus-ring)); }
+@media (prefers-reduced-motion: reduce) { .dd-btn:active:not(:disabled) { transform: none; } :is(.dd-btn, .dd-link, .dd-cx-link, .dd-toast-act, a.dd-card, .dd-card.is-act):hover :is(.dd-i, .dd-svg)[data-i] { transform: none; } }
+/* ==== DS4 BUTTON END ==== */
+.dd-status { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px 0 8px; border-radius: var(--radius-pill); font-size: 13px; line-height: 16px; font-weight: 450; white-space: nowrap; background: var(--c-neutral-bg); color: var(--c-neutral); }
+.dd-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--c-neutral-dot); }
+.dd-status-approved { background: var(--c-success-bg); color: var(--c-success); } .dd-status-approved::before { background: var(--c-success-dot); }
+.dd-status-declined { background: var(--c-danger-bg); color: var(--c-danger-text, var(--c-danger)); } .dd-status-declined::before { background: var(--c-danger-dot); }
+.dd-status-review { background: var(--c-review-bg); color: var(--c-review); } .dd-status-review::before { background: var(--c-review-dot); }
+.dd-status-warning { background: var(--c-warning-bg); color: var(--c-warning); } .dd-status-warning::before { background: var(--c-warning-dot); }
+.dd-status-progress { background: var(--c-info-bg); color: var(--c-info); } .dd-status-progress::before { background: var(--c-info-dot); }
+.dd-status-sm { height: 20px; font-size: 12px; padding: 0 8px 0 6px; }
+/* ==== DS4 TAG BEGIN (P1 Squared, tuned, 23 Oct 2026) ==== */
+.dd-tag { box-sizing: border-box; display: inline-flex; align-items: center; gap: 5px; max-width: 100%; height: 22px; padding: 0 8px; border: 0; border-radius: 6px; font: inherit; font-size: 12px; line-height: 16px; font-weight: 500; white-space: nowrap; vertical-align: middle; background: var(--c-surface-3); color: var(--c-text);
+  transition: filter 160ms cubic-bezier(.2,.8,.2,1), background-color 160ms cubic-bezier(.2,.8,.2,1), transform 120ms cubic-bezier(.2,.8,.2,1), max-width 220ms cubic-bezier(.32,.72,0,1), opacity 220ms cubic-bezier(.32,.72,0,1), padding 220ms cubic-bezier(.32,.72,0,1); }
+.dd-tag-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.dd-tag .dd-i { flex: none; width: 13px; height: 13px; opacity: .72; transform: translateY(.5px); }
+.dd-tag:has(> .dd-i:first-child) { padding-left: 6px; }
+.dd-tag-sm { height: 18px; padding: 0 6px; border-radius: 5px; font-size: 11px; line-height: 14px; letter-spacing: .1px; }
+.dd-tag-sm .dd-i { width: 11px; height: 11px; }
+.dd-tag-info { background: var(--c-accent-soft); color: var(--c-accent-text); }
+.dd-tag-success { background: var(--c-success-bg); color: var(--c-success-text, var(--c-success)); }
+.dd-tag-review { background: var(--c-review-bg); color: var(--c-review-text, var(--c-review)); }
+.dd-tag-danger { background: var(--c-danger-bg); color: var(--c-danger-text, var(--c-danger)); }
+.dd-tag-warning { background: var(--c-warning-bg); color: var(--c-warning-text, var(--c-warning)); }
+.dd-tag-feature { background: var(--brand-feature-soft); color: var(--brand-feature-text); }
+.dd-tag-outline { background: transparent; box-shadow: inset 0 0 0 1px var(--c-line-strong); color: var(--c-text-subtle); }
+.dd-tag-cat { background: var(--c-surface); color: var(--c-heading); box-shadow: inset 0 0 0 1px var(--c-line-strong); }
+.dd-tag-cat::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--cat, var(--c-text-faint)); box-shadow: 0 0 0 1px var(--c-surface); }
+/* squared labels frost what is under them (dot fields, photos, glass), so the word reads on any ground (designer, 23 Oct) */
+.dd-tag, .dd-ea, .dd-soon, .dd-new { -webkit-backdrop-filter: blur(8px) saturate(1.6); backdrop-filter: blur(8px) saturate(1.6); }
+button.dd-tag { cursor: pointer; } button.dd-tag:hover:not(:disabled) { filter: brightness(.97); }
+button.dd-tag:not([class*="dd-tag-"]):hover:not(:disabled), button.dd-tag.dd-tag-sm:not([class*="dd-tag-info"]):not([class*="dd-tag-success"]):not([class*="dd-tag-review"]):not([class*="dd-tag-danger"]):not([class*="dd-tag-warning"]):hover, button.dd-tag.dd-tag-outline:hover:not(:disabled), button.dd-tag.dd-tag-cat:hover:not(:disabled) { filter: none; background: var(--c-hover); }
+button.dd-tag:active:not(:disabled) { transform: scale(.97); }
+.dd button.dd-tag:focus-visible, .dd .dd-tag-x:focus-visible { outline: none; box-shadow: var(--focus-ring), inset 0 0 0 1px var(--c-accent); }
+.dd-tag.is-disabled { opacity: .5; cursor: not-allowed; }
+.dd-tag-x { display: inline-grid; place-items: center; flex: none; width: 16px; height: 16px; margin: 0 -4px 0 0; padding: 0; border: 0; border-radius: 50%; background: transparent; color: inherit; cursor: pointer; transition: background-color 160ms cubic-bezier(.2,.8,.2,1), color 160ms cubic-bezier(.2,.8,.2,1); }
+.dd-tag-x .dd-i { width: 11px; height: 11px; opacity: 1; transform: none; }
+.dd-tag-x:hover:not(:disabled) { background: var(--c-hover); color: var(--c-danger-text, var(--c-danger)); }
+.dd-tag.is-gone { max-width: 0 !important; padding-left: 0; padding-right: 0; opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .dd-tag { transition: none; } button.dd-tag:active { transform: none; } }
+/* ==== DS4 TAG END ==== */
+/* Graphite tile (console decision D46): the library glyph in heading ink on a --c-surface-3 superellipse */
+.dd-tile { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 52px; height: 52px; border-radius: var(--radius-lg); background: var(--c-surface-3); color: var(--c-heading); }
+.dd-tile .dd-i { width: 26px; height: 26px; }
+.dd-tile-40 { width: 40px; height: 40px; border-radius: 12px; } .dd-tile-40 .dd-i { width: 20px; height: 20px; }
+.dd-tile-32 { width: 32px; height: 32px; border-radius: var(--radius-sm); } .dd-tile-32 .dd-i { width: 16px; height: 16px; }
+.dd-tile-64 { width: 64px; height: 64px; border-radius: var(--radius-xl); } .dd-tile-64 .dd-i { width: 32px; height: 32px; }
+.dd-tile-blue { background: var(--c-accent-fill, var(--c-accent)); color: var(--c-on-accent); }
+.dd-tile-soft { background: var(--c-accent-soft); color: var(--c-accent-text); }
+.dd-tile-outline { background: var(--c-surface); box-shadow: inset 0 0 0 1px var(--c-line); }
+/* halftone panel: one photo as two-tone dots on Didit blue, with ONE solid card on top (console round 41e) */
+.dd-halftone { position: relative; border-radius: var(--radius-2xl); overflow: hidden; background-color: var(--brand-halftone-ground); background-position: center; background-size: cover; background-repeat: no-repeat; aspect-ratio: 900 / 1190; isolation: isolate; }
+.dd-halftone > img.dd-halftone-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -1; }
+.dd-halftone-wide { aspect-ratio: 16 / 11; }
+.dd-halftone-square { aspect-ratio: 1 / 1; }
+.dd-halftone-band { aspect-ratio: auto; min-height: 320px; }
+/* The label sits on a small dark chip so it reads on every halftone, light or dark. */
+.dd-halftone-label { position: absolute; left: 16px; top: 16px; font-family: var(--dd-mono); font-variation-settings: "MONO" 100, "ROND" 100; font-size: 11px; line-height: 14px; letter-spacing: 1.2px; text-transform: uppercase; color: #FFFFFF; background: rgba(10,14,28,.62); padding: 4px 8px; border-radius: 6px; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+/* console window: a real console v2 screen in a bordered frame */
+.dd-window { position: relative; border-radius: var(--radius-lg); border: 1px solid var(--c-line); background: var(--c-surface); box-shadow: var(--site-shadow-window); overflow: hidden; }
+.dd-window > img { width: 100%; height: auto; }
+.dd-window-bar { display: flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-bottom: 1px solid var(--c-line); background: var(--c-surface-2); }
+.dd-window-bar i { width: 10px; height: 10px; border-radius: 50%; background: var(--c-line-strong); }
+.dd-window-bar span { margin-left: 10px; font-family: var(--dd-mono); font-variation-settings: "MONO" 100, "ROND" 100; font-size: 11px; color: var(--c-text-faint); letter-spacing: 0.2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+/* The console is always shown whole (16:10 screenshots, sidebar and bottom included): .dd-window-crop no longer crops. */
+.dd-window-crop { aspect-ratio: auto; } .dd-window-crop > img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: left top; }
+/* ---------- 11. Tabs and segmented controls ---------- */
+.dd-tabs { display: flex; align-items: center; gap: 4px; padding: 4px; border-radius: var(--radius-pill); background: var(--c-surface-3); width: max-content; max-width: 100%; overflow-x: auto; }
+.dd-tab { display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 16px; border-radius: var(--radius-pill); border: 0; background: transparent; font-size: 14px; font-weight: 450; color: var(--c-text-subtle); cursor: pointer; white-space: nowrap; }
+.dd-tab .dd-i { width: 16px; height: 16px; }
+.dd-tab:hover { color: var(--c-heading); }
+.dd-tab.is-active, .dd-tab[aria-selected="true"] { background: var(--c-surface); color: var(--c-heading); box-shadow: var(--c-shadow-thumb); }
+/* ---- Eyebrow ---- */
+.dd-eb { display: inline-flex; align-items: center; gap: 8px; font-family: var(--dd-mono); font-variation-settings: "MONO" 100, "ROND" 100; font-weight: 450; text-transform: uppercase; white-space: nowrap; }
+.dd-eb-section { font-size: 13px; line-height: 16px; letter-spacing: 0.08em; color: var(--c-accent); }
+.dd-eb-section::before { content: ""; flex: none; width: 6px; height: 6px; border-radius: 1.5px; background: currentColor; }
+.dd-eb-kicker { font-size: 12px; line-height: 16px; letter-spacing: 0.06em; color: var(--c-text-subtle); gap: 6px; }
+.dd-eb-kicker b { font-weight: 450; color: var(--c-heading); }
+.dd-eb-slash { color: var(--c-text-faint); }
+.dd-eb-module { font-family: inherit; font-variation-settings: normal; text-transform: none; font-size: 14px; line-height: 20px; font-weight: 450; letter-spacing: 0; color: var(--c-heading); }
+.dd-eb-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--cat, var(--c-accent)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--cat, var(--c-accent)) 16%, transparent); }
+.dd-eb-date { display: flex; width: 100%; font-size: 11px; line-height: 16px; letter-spacing: 0.06em; color: var(--c-text-subtle); gap: 12px; }
+.dd-eb-date time { color: var(--c-heading); flex: none; }
+.dd-eb-note { flex: none; }
+.dd-eb-rule { flex: 1 1 auto; min-width: 24px; height: 1px; background: var(--c-line); }
