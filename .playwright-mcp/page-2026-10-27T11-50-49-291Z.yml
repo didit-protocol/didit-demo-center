@@ -1,0 +1,194 @@
+- generic [ref=f5e2]:
+  - generic [ref=f5e3]:
+    - generic [ref=f5e4]:
+      - link "Didit Demo Center" [ref=f5e5] [cursor=pointer]:
+        - /url: /
+        - img "Didit" [ref=f5e6]
+        - generic [ref=f5e8]: Demo Center
+      - navigation "Demo Center" [ref=f5e9]:
+        - link "Demos" [ref=f5e10] [cursor=pointer]:
+          - /url: "#demos"
+        - link "How it works" [ref=f5e11] [cursor=pointer]:
+          - /url: "#how"
+        - link "Integrate" [ref=f5e12] [cursor=pointer]:
+          - /url: "#integrate"
+        - link "Modules" [ref=f5e13] [cursor=pointer]:
+          - /url: /modules
+      - generic [ref=f5e14]:
+        - link "Docs" [ref=f5e15] [cursor=pointer]:
+          - /url: https://docs.didit.me
+        - link "Start free" [ref=f5e19] [cursor=pointer]:
+          - /url: https://business.staging.didit.me
+    - generic [ref=f5e20]:
+      - generic [ref=f5e21]:
+        - generic [ref=f5e22]: Sandbox · no real money, no real people
+        - heading [level=1] [ref=f5e23]:
+          - text: Four real products.
+          - emphasis [ref=f5e24]: Didit inside each one.
+        - paragraph [ref=f5e25]: Sign up, verify, move money and watch an attack get stopped, in a casino, a bank, a marketplace and a crypto exchange. The Didit live layer shows every check as it happens, and the console view shows what your team sees.
+        - generic [ref=f5e26]:
+          - link "Start with Aurora Play" [ref=f5e27] [cursor=pointer]:
+            - /url: /igaming
+          - link "How it works" [ref=f5e30] [cursor=pointer]:
+            - /url: "#how"
+      - generic [aria-hidden] [ref=f5e31]:
+        - generic [ref=f5e40]:
+          - generic [ref=f5e41]: Verification
+          - generic [ref=f5e42]: Age 25+ approved
+        - generic [ref=f5e48]:
+          - generic [ref=f5e49]: Authentication
+          - generic [ref=f5e50]: Passkey created
+        - generic [ref=f5e56]:
+          - generic [ref=f5e57]: Blocked
+          - generic [ref=f5e58]: Sanctioned wallet declined
+        - generic [ref=f5e64]:
+          - generic [ref=f5e65]: Transactions
+          - generic [ref=f5e66]: "Deposit held: ID check"
+  - generic [ref=f5e67]:
+    - heading "Pick an industry" [level=2] [ref=f5e68]
+    - paragraph [ref=f5e69]: Each demo is a complete product with its own brand. Every step runs on the Didit sandbox, live.
+    - list [ref=f5e70]:
+      - listitem [ref=f5e71]:
+        - link [aria-hidden] [ref=f5e72] [cursor=pointer]:
+          - /url: /igaming
+        - generic [ref=f5e73]:
+          - generic [ref=f5e74]:
+            - generic [ref=f5e75]: A
+            - generic [ref=f5e76]:
+              - heading "Aurora Play" [level=3] [ref=f5e77]
+              - generic [ref=f5e78]: iGaming · Casino and sportsbook
+          - paragraph [ref=f5e79]: A passkey sign-up, an age check before the first bet, deposits held for an ID check at 2,000 EUR, and bonus abuse caught by the device.
+          - generic [ref=f5e80]:
+            - generic [ref=f5e81]: Authentication
+            - generic [ref=f5e83]: Signals
+            - generic [ref=f5e85]: Verification
+            - generic [ref=f5e87]: Transactions
+          - generic [ref=f5e89]:
+            - link "Open the demo" [ref=f5e90] [cursor=pointer]:
+              - /url: /igaming
+            - generic [ref=f5e93]: demos.staging.didit.me/igaming
+      - listitem [ref=f5e94]:
+        - link [aria-hidden] [ref=f5e95] [cursor=pointer]:
+          - /url: /fintech
+        - generic [ref=f5e96]:
+          - generic [ref=f5e97]:
+            - generic [ref=f5e98]: A
+            - generic [ref=f5e99]:
+              - heading "Alder" [level=3] [ref=f5e100]
+              - generic [ref=f5e101]: Fintech · A neobank
+          - paragraph [ref=f5e102]: An account in five minutes with KYC and AML, a 5,000 EUR transfer confirmed with a passkey, and an account takeover blocked at sign-in.
+          - generic [ref=f5e103]:
+            - generic [ref=f5e104]: Authentication
+            - generic [ref=f5e106]: Signals
+            - generic [ref=f5e108]: Verification
+            - generic [ref=f5e110]: Transactions
+          - generic [ref=f5e112]:
+            - link "Open the demo" [ref=f5e113] [cursor=pointer]:
+              - /url: /fintech
+            - generic [ref=f5e116]: demos.staging.didit.me/fintech
+      - listitem [ref=f5e117]:
+        - link [aria-hidden] [ref=f5e118] [cursor=pointer]:
+          - /url: /marketplace
+        - generic [ref=f5e119]:
+          - generic [ref=f5e120]:
+            - generic [ref=f5e121]: "N"
+            - generic [ref=f5e122]:
+              - heading "Northmarket" [level=3] [ref=f5e123]
+              - generic [ref=f5e124]: Marketplace · Vintage and design resale
+          - paragraph [ref=f5e125]: Sellers pass KYB before their first payout, large orders wait for a quick age check, and a second shop on the same device is paused.
+          - generic [ref=f5e126]:
+            - generic [ref=f5e127]: Authentication
+            - generic [ref=f5e129]: Signals
+            - generic [ref=f5e131]: Verification
+            - generic [ref=f5e133]: Transactions
+          - generic [ref=f5e135]:
+            - link "Open the demo" [ref=f5e136] [cursor=pointer]:
+              - /url: /marketplace
+            - generic [ref=f5e139]: demos.staging.didit.me/marketplace
+      - listitem [ref=f5e140]:
+        - link [aria-hidden] [ref=f5e141] [cursor=pointer]:
+          - /url: /crypto-exchange
+        - generic [ref=f5e142]:
+          - generic [ref=f5e143]:
+            - generic [ref=f5e144]: K
+            - generic [ref=f5e145]:
+              - heading "Kestrel" [level=3] [ref=f5e146]
+              - generic [ref=f5e147]: Crypto exchange · Buy, hold and send crypto
+          - paragraph [ref=f5e148]: KYC and AML before the first deposit, deposits screened by wallet, a Travel Rule withdrawal with a selfie, and a sanctioned wallet declined.
+          - generic [ref=f5e149]:
+            - generic [ref=f5e150]: Authentication
+            - generic [ref=f5e152]: Signals
+            - generic [ref=f5e154]: Verification
+            - generic [ref=f5e156]: Transactions
+          - generic [ref=f5e158]:
+            - link "Open the demo" [ref=f5e159] [cursor=pointer]:
+              - /url: /crypto-exchange
+            - generic [ref=f5e162]: demos.staging.didit.me/crypto-exchange
+  - generic [ref=f5e163]:
+    - heading "See what Didit sees, without leaving the app" [level=2] [ref=f5e164]
+    - paragraph [ref=f5e165]: The Didit layer floats over each product. It never gets in the way of the demo, and it shows exactly what you would build.
+    - generic [ref=f5e166]:
+      - article [ref=f5e167]:
+        - generic [ref=f5e170]:
+          - generic [ref=f5e171]:
+            - generic [ref=f5e172]: Didit live
+            - generic [ref=f5e173]: Live
+          - generic [ref=f5e174]:
+            - generic [ref=f5e180]:
+              - generic [ref=f5e181]: Deposit approved
+              - generic [ref=f5e182]: Scored as it happens
+            - generic [ref=f5e191]:
+              - generic [ref=f5e192]: Age check approved
+              - generic [ref=f5e193]: Selfie age estimate
+            - generic [ref=f5e199]:
+              - generic [ref=f5e200]: Signed in with the passkey
+              - generic [ref=f5e201]: No password
+        - heading "Didit live" [level=3] [ref=f5e202]
+        - paragraph [ref=f5e203]: "Every event, the moment it happens: the passkey, the device, each check, every payment and every rule that fired, in the colour of its product. Tap Code to see the one call behind it."
+      - article [ref=f5e204]:
+        - generic [aria-hidden] [ref=f5e205]:
+          - generic:
+            - generic:
+              - generic:
+                - generic: Signals
+                - generic: Same device, 2 accounts
+        - heading "Pinned to the moment" [level=3] [ref=f5e206]
+        - paragraph [ref=f5e207]: "A callout marks the exact place in the app where Didit acted: the passkey button, the held deposit, the declined bonus."
+      - article [ref=f5e208]:
+        - generic [ref=f5e210]: Console view
+        - heading "The console view" [level=3] [ref=f5e226]
+        - paragraph [ref=f5e227]: "One tap opens a preview of the real Didit console with this visitor's data: the person, the transaction, the business, and why each decision was made."
+  - generic [ref=f5e228]:
+    - heading "The same five steps in every demo" [level=2] [ref=f5e229]
+    - list [ref=f5e230]:
+      - listitem [ref=f5e231]:
+        - generic [ref=f5e232]: "1"
+        - generic [ref=f5e233]: Sign up
+        - paragraph [ref=f5e234]: "Didit Authentication on the customer's own page: a passkey, bot protection, no password."
+      - listitem [ref=f5e235]:
+        - generic [ref=f5e236]: "2"
+        - generic [ref=f5e237]: Verify
+        - paragraph [ref=f5e238]: The redesigned verification flow in the web SDK modal, branded as the customer.
+      - listitem [ref=f5e239]:
+        - generic [ref=f5e240]: "3"
+        - generic [ref=f5e241]: Transact
+        - paragraph [ref=f5e242]: Deposits, transfers, orders and withdrawals scored as they happen.
+      - listitem [ref=f5e243]:
+        - generic [ref=f5e244]: "4"
+        - generic [ref=f5e245]: Stop fraud
+        - paragraph [ref=f5e246]: One real attack per demo, caught by device signals and rules.
+      - listitem [ref=f5e247]:
+        - generic [ref=f5e248]: "5"
+        - generic [ref=f5e249]: Console
+        - paragraph [ref=f5e250]: The same story in the Didit console your team would use.
+  - generic [ref=f5e252]:
+    - generic [ref=f5e253]:
+      - img "Didit" [ref=f5e254]
+      - heading "Build this into your product." [level=2] [ref=f5e255]
+      - paragraph [ref=f5e256]: Three packages, one publishable key. Every demo here uses exactly what you would ship.
+      - generic [ref=f5e257]:
+        - link "Start free" [ref=f5e258] [cursor=pointer]:
+          - /url: https://business.staging.didit.me
+        - link "Read the docs" [ref=f5e259] [cursor=pointer]:
+          - /url: https://docs.didit.me
+    - generic "Install the three packages" [ref=f5e260]: "# the same three packages every demo uses npm install @didit-protocol/auth-nextjs @didit-protocol/signals @didit-protocol/sdk-web import { DiditAuth } from \"@didit-protocol/auth-nextjs\" import { configureEvents } from \"@didit-protocol/signals\" import { startVerification } from \"@didit-protocol/sdk-web\""
