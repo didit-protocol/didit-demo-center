@@ -8,7 +8,11 @@ import { ArrowRight } from "lucide-react";
 
 import { Glyph } from "./parts";
 
-import { FAMILIES, familyCounts, productDemoRoute } from "@/lib/product-demos/define";
+import {
+  FAMILIES,
+  familyCounts,
+  productDemoRoute,
+} from "@/lib/product-demos/define";
 import { PRODUCT_DEMOS } from "@/lib/product-demos/demos";
 
 /*

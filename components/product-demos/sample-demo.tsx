@@ -1,7 +1,17 @@
-import type { RuleState, SampleDemo as Sample, Verdict } from "@/lib/product-demos/define";
+import type {
+  RuleState,
+  SampleDemo as Sample,
+  Verdict,
+} from "@/lib/product-demos/define";
 
 import Link from "next/link";
-import { AlertTriangle, ArrowRight, CircleCheck, CircleSlash, SquareTerminal } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowRight,
+  CircleCheck,
+  CircleSlash,
+  SquareTerminal,
+} from "lucide-react";
 
 import { Code, Crumbs, Eyebrow, Status, Steps, Tags } from "./parts";
 
@@ -101,7 +111,10 @@ export function SampleDemo({ demo }: { demo: Sample }) {
                   <b>{rule.title}</b>
                   <span> · {rule.detail}</span>
                 </span>
-                <Status kind={RULE[rule.state].kind} label={RULE[rule.state].label} />
+                <Status
+                  kind={RULE[rule.state].kind}
+                  label={RULE[rule.state].label}
+                />
               </li>
             ))}
           </ul>

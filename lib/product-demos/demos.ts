@@ -9,7 +9,10 @@
  * No `@/` imports: `npm test` loads it straight from Node.
  */
 
-import { ACCS_ESTIMATION_WORKFLOW_ID, ACCS_VERIFICATION_WORKFLOW_ID } from "../accs-workflows";
+import {
+  ACCS_ESTIMATION_WORKFLOW_ID,
+  ACCS_VERIFICATION_WORKFLOW_ID,
+} from "../accs-workflows";
 import { pick } from "../didit/config";
 import { alder, auroraPlay, kestrel } from "../didit/demos";
 
@@ -30,17 +33,34 @@ export const coreKyc = defineProductDemo({
   time: { short: "1 min", long: "About a minute" },
   check: "Core KYC",
   steps: [
-    { title: "Start the demo", body: "We create a real session on the Didit sandbox." },
-    { title: "Scan your ID and take a selfie", body: "On this computer, or scan the code with your phone." },
-    { title: "See the decision", body: "The document, the checks and the console view." },
+    {
+      title: "Start the demo",
+      body: "We create a real session on the Didit sandbox.",
+    },
+    {
+      title: "Scan your ID and take a selfie",
+      body: "On this computer, or scan the code with your phone.",
+    },
+    {
+      title: "See the decision",
+      body: "The document, the checks and the console view.",
+    },
   ],
-  tags: ["ID verification", "Passive liveness", "Face match 1:1", "IP analysis"],
+  tags: [
+    "ID verification",
+    "Passive liveness",
+    "Face match 1:1",
+    "IP analysis",
+  ],
   preview: {
     title: "Verify your identity",
     body: "Scan an ID document, then take a selfie so we can check it is you.",
     duration: "About 2 minutes",
     items: [
-      { title: "Your ID document", detail: "Passport, ID card or driving licence" },
+      {
+        title: "Your ID document",
+        detail: "Passport, ID card or driving licence",
+      },
       { title: "One selfie", detail: "Passive: no gestures, no head turns" },
     ],
   },
@@ -63,9 +83,18 @@ export const kycAndAml = defineProductDemo({
   time: { short: "2 min", long: "About 2 minutes" },
   check: "KYC and AML",
   steps: [
-    { title: "Start the demo", body: "We create a real session on the Didit sandbox." },
-    { title: "Scan your ID and take a selfie", body: "AML screening runs on the name from the document." },
-    { title: "See the decision", body: "The checks, the screening and the console view." },
+    {
+      title: "Start the demo",
+      body: "We create a real session on the Didit sandbox.",
+    },
+    {
+      title: "Scan your ID and take a selfie",
+      body: "AML screening runs on the name from the document.",
+    },
+    {
+      title: "See the decision",
+      body: "The checks, the screening and the console view.",
+    },
   ],
   tags: ["ID verification", "Liveness", "Face match 1:1", "AML screening"],
   preview: {
@@ -73,8 +102,14 @@ export const kycAndAml = defineProductDemo({
     body: "Scan an ID document, then take a selfie so we can check it is you.",
     duration: "About 2 minutes",
     items: [
-      { title: "Your ID document", detail: "Passport, ID card or driving licence" },
-      { title: "One selfie", detail: "We check it is you and that you are present" },
+      {
+        title: "Your ID document",
+        detail: "Passport, ID card or driving licence",
+      },
+      {
+        title: "One selfie",
+        detail: "We check it is you and that you are present",
+      },
     ],
   },
   docsPath: "core-technology/aml-screening/overview",
@@ -91,20 +126,34 @@ export const liveness = defineProductDemo({
   lede: "A selfie and nothing else: passive liveness tells a real, present person from a photo, a screen, a mask or an injected video, in about two seconds.",
   icon: "liveness",
   glyph: "data",
-  workflow: pick("b5d5523f-bd45-4aa3-9ec5-0490172a22c1", "8aa86809-5156-4a73-8b09-cb3d6f882d27"),
+  workflow: pick(
+    "b5d5523f-bd45-4aa3-9ec5-0490172a22c1",
+    "8aa86809-5156-4a73-8b09-cb3d6f882d27",
+  ),
   time: { short: "30 s", long: "About 30 seconds" },
   check: "Liveness",
   steps: [
-    { title: "Start the demo", body: "We create a real session on the Didit sandbox." },
-    { title: "Take a selfie", body: "On this computer, or scan the code with your phone." },
-    { title: "See the decision", body: "The score, the checks and the console view." },
+    {
+      title: "Start the demo",
+      body: "We create a real session on the Didit sandbox.",
+    },
+    {
+      title: "Take a selfie",
+      body: "On this computer, or scan the code with your phone.",
+    },
+    {
+      title: "See the decision",
+      body: "The score, the checks and the console view.",
+    },
   ],
   tags: ["Passive liveness", "IP analysis"],
   preview: {
     title: "Take a selfie",
     body: "Look at the camera for a moment. We check it is a real, live person.",
     duration: "About 2 minutes",
-    items: [{ title: "One selfie", detail: "Passive: no gestures, no head turns" }],
+    items: [
+      { title: "One selfie", detail: "Passive: no gestures, no head turns" },
+    ],
   },
   docsPath: "core-technology/liveness/overview",
 });
@@ -124,9 +173,18 @@ export const adaptiveAge = defineProductDemo({
   time: { short: "1 min", long: "About a minute" },
   check: "Age check",
   steps: [
-    { title: "Start the demo", body: "We create a real session on the Didit sandbox." },
-    { title: "Take a selfie", body: "An ID scan follows only if the estimate is close to the line." },
-    { title: "See the decision", body: "The estimate, the branch it took and the console view." },
+    {
+      title: "Start the demo",
+      body: "We create a real session on the Didit sandbox.",
+    },
+    {
+      title: "Take a selfie",
+      body: "An ID scan follows only if the estimate is close to the line.",
+    },
+    {
+      title: "See the decision",
+      body: "The estimate, the branch it took and the console view.",
+    },
   ],
   tags: ["Age estimation", "ID verification", "IP analysis"],
   preview: {
@@ -134,8 +192,14 @@ export const adaptiveAge = defineProductDemo({
     body: "Take a selfie and we estimate your age. We only ask for an ID if we need to.",
     duration: "About a minute",
     items: [
-      { title: "One selfie", detail: "Your age is estimated, not stored as a birthday" },
-      { title: "An ID, only if needed", detail: "When the estimate is close to the limit" },
+      {
+        title: "One selfie",
+        detail: "Your age is estimated, not stored as a birthday",
+      },
+      {
+        title: "An ID, only if needed",
+        detail: "When the estimate is close to the limit",
+      },
     ],
   },
   docsPath: "core-technology/age-estimation/overview",
@@ -156,9 +220,18 @@ export const ageEstimation = defineProductDemo({
   time: { short: "30 s", long: "About 30 seconds" },
   check: "Age estimation",
   steps: [
-    { title: "Start the demo", body: "We create a real session on the Didit sandbox." },
-    { title: "Take a selfie", body: "On this computer, or scan the code with your phone." },
-    { title: "See the decision", body: "The age band, liveness and the console view." },
+    {
+      title: "Start the demo",
+      body: "We create a real session on the Didit sandbox.",
+    },
+    {
+      title: "Take a selfie",
+      body: "On this computer, or scan the code with your phone.",
+    },
+    {
+      title: "See the decision",
+      body: "The age band, liveness and the console view.",
+    },
   ],
   tags: ["Age estimation", "Passive liveness"],
   preview: {
@@ -185,9 +258,18 @@ export const ageVerification = defineProductDemo({
   time: { short: "1 min", long: "About a minute" },
   check: "Age verification",
   steps: [
-    { title: "Start the demo", body: "We create a real session on the Didit sandbox." },
-    { title: "Scan your ID and take a selfie", body: "On this computer, or scan the code with your phone." },
-    { title: "See the decision", body: "Over the limit or not, and the console view." },
+    {
+      title: "Start the demo",
+      body: "We create a real session on the Didit sandbox.",
+    },
+    {
+      title: "Scan your ID and take a selfie",
+      body: "On this computer, or scan the code with your phone.",
+    },
+    {
+      title: "See the decision",
+      body: "Over the limit or not, and the console view.",
+    },
   ],
   tags: ["ID verification", "Passive liveness", "Face match 1:1"],
   preview: {
@@ -213,20 +295,37 @@ export const proofOfAddress = defineProductDemo({
   lede: "Upload a utility bill or bank statement: the address, the issuer and the date are read from it, and the document is checked for edits.",
   icon: "proof-of-address",
   glyph: "identity",
-  workflow: pick("94f9c776-4362-488e-93ff-9dd2921af3f2", "016aa374-1672-4f57-a227-3fa750a6977c"),
+  workflow: pick(
+    "94f9c776-4362-488e-93ff-9dd2921af3f2",
+    "016aa374-1672-4f57-a227-3fa750a6977c",
+  ),
   time: { short: "1 min", long: "About a minute" },
   check: "Proof of address",
   steps: [
-    { title: "Start the demo", body: "We create a real session on the Didit sandbox." },
-    { title: "Upload a document", body: "A recent bill or statement, as a photo or a PDF." },
-    { title: "See the decision", body: "The parsed address, the checks and the console view." },
+    {
+      title: "Start the demo",
+      body: "We create a real session on the Didit sandbox.",
+    },
+    {
+      title: "Upload a document",
+      body: "A recent bill or statement, as a photo or a PDF.",
+    },
+    {
+      title: "See the decision",
+      body: "The parsed address, the checks and the console view.",
+    },
   ],
   tags: ["Proof of address", "IP analysis"],
   preview: {
     title: "Confirm your address",
     body: "Upload a recent utility bill or bank statement with your name and address.",
     duration: "About a minute",
-    items: [{ title: "One document", detail: "Photo or PDF, from the last three months" }],
+    items: [
+      {
+        title: "One document",
+        detail: "Photo or PDF, from the last three months",
+      },
+    ],
   },
   docsPath: "core-technology/proof-of-address/overview",
 });
@@ -247,16 +346,27 @@ export const questionnaires = defineProductDemo({
   time: { short: "2 min", long: "About 2 minutes" },
   check: "Questionnaire",
   steps: [
-    { title: "Start the demo", body: "We create a real session on the Didit sandbox." },
-    { title: "Answer the questions", body: "They branch on your earlier answers." },
-    { title: "See the decision", body: "Your answers with the decision, and the console view." },
+    {
+      title: "Start the demo",
+      body: "We create a real session on the Didit sandbox.",
+    },
+    {
+      title: "Answer the questions",
+      body: "They branch on your earlier answers.",
+    },
+    {
+      title: "See the decision",
+      body: "Your answers with the decision, and the console view.",
+    },
   ],
   tags: ["Questionnaires", "ID verification"],
   preview: {
     title: "A few questions",
     body: "Tell us where your funds come from and whether you hold a public role.",
     duration: "About 2 minutes",
-    items: [{ title: "Short questionnaire", detail: "Single choice and free text" }],
+    items: [
+      { title: "Short questionnaire", detail: "Single choice and free text" },
+    ],
   },
   docsPath: "core-technology/questionnaires/overview",
 });
@@ -274,7 +384,10 @@ export const faceSearch = defineProductDemo({
   glyph: "data",
   industry: null,
   steps: [
-    { title: "Read the request", body: "A selfie searched against your blocklist first." },
+    {
+      title: "Read the request",
+      body: "A selfie searched against your blocklist first.",
+    },
     { title: "See the matches", body: "The closest face is on the blocklist." },
     { title: "Build it", body: "One call, with the selfie as a file." },
   ],
@@ -285,16 +398,25 @@ export const faceSearch = defineProductDemo({
     verdict: "declined",
     score: { label: "Top similarity", value: "97.8 / 100" },
     rules: [
-      { state: "declined", title: "Blocklisted face", detail: "similarity 97.8" },
+      {
+        state: "declined",
+        title: "Blocklisted face",
+        detail: "similarity 97.8",
+      },
       { state: "passed", title: "Approved users", detail: "no other account" },
-      { state: "passed", title: "Liveness of the selfie", detail: "passive, passed" },
+      {
+        state: "passed",
+        title: "Liveness of the selfie",
+        detail: "passive, passed",
+      },
     ],
     request: {
       method: "POST",
       path: "/v3/face-search/",
       body: "user_image=@selfie.jpg  search_type=blocklisted_or_approved  vendor_data=user-8821",
     },
-    response: '{ "status": "Declined", "total_matches": 1, "matches": [{ "similarity_percentage": 97.8, "is_blocklisted": true }] }',
+    response:
+      '{ "status": "Declined", "total_matches": 1, "matches": [{ "similarity_percentage": 97.8, "is_blocklisted": true }] }',
   },
   docsPath: "core-technology/face-search/overview",
 });
@@ -317,8 +439,14 @@ export const ipAndDevice = defineProductDemo({
   },
   steps: [
     { title: "Read the request", body: "The decision of a finished session." },
-    { title: "See the signals", body: "A data centre range far from the document's country." },
-    { title: "Run it live", body: "The Aurora Play casino demo reads the device live." },
+    {
+      title: "See the signals",
+      body: "A data centre range far from the document's country.",
+    },
+    {
+      title: "Run it live",
+      body: "The Aurora Play casino demo reads the device live.",
+    },
   ],
   tags: ["IP analysis", "Device signals"],
   fixture: {
@@ -327,12 +455,17 @@ export const ipAndDevice = defineProductDemo({
     verdict: "review",
     rules: [
       { state: "hit", title: "Data centre IP", detail: "hosting range" },
-      { state: "hit", title: "Distance from the document", detail: "outside the issuing country" },
+      {
+        state: "hit",
+        title: "Distance from the document",
+        detail: "outside the issuing country",
+      },
       { state: "passed", title: "VPN or Tor", detail: "not detected" },
       { state: "passed", title: "Device", detail: "first seen today" },
     ],
     request: { method: "GET", path: "/v3/session/{session_id}/decision/" },
-    response: '{ "status": "In Review", "ip_analyses": [{ "is_data_center": true, "is_vpn_or_tor": false, "ip_country_code": "DE" }] }',
+    response:
+      '{ "status": "In Review", "ip_analyses": [{ "is_data_center": true, "is_vpn_or_tor": false, "ip_country_code": "DE" }] }',
   },
   docsPath: "core-technology/ip-analysis/overview",
 });
@@ -354,16 +487,27 @@ export const biometricAuth = defineProductDemo({
   time: { short: "30 s", long: "About 30 seconds" },
   check: "Face match",
   steps: [
-    { title: "Choose a reference photo", body: "It stands in for the portrait you verified before." },
-    { title: "Take a selfie", body: "Liveness first, then the match to that photo." },
-    { title: "See the decision", body: "The match score and the console view." },
+    {
+      title: "Choose a reference photo",
+      body: "It stands in for the portrait you verified before.",
+    },
+    {
+      title: "Take a selfie",
+      body: "Liveness first, then the match to that photo.",
+    },
+    {
+      title: "See the decision",
+      body: "The match score and the console view.",
+    },
   ],
   tags: ["Passive liveness", "Face match 1:1"],
   preview: {
     title: "Confirm it is you",
     body: "Take a selfie. We match it to the photo on your account.",
     duration: "About 30 seconds",
-    items: [{ title: "One selfie", detail: "Matched to your verified portrait" }],
+    items: [
+      { title: "One selfie", detail: "Matched to your verified portrait" },
+    ],
   },
   docsPath: "core-technology/biometric-auth/overview",
 });
@@ -379,12 +523,21 @@ export const multiFactor = defineProductDemo({
   lede: "Two factors in one session: a live selfie, then a code sent to a phone number the person controls.",
   icon: "phone-verification",
   glyph: "auth",
-  workflow: pick("dbdb51a9-3763-4dcf-a32d-8fe5f40a699d", "e4cecdd1-fb1d-4992-8fba-4175aaa2ba76"),
+  workflow: pick(
+    "dbdb51a9-3763-4dcf-a32d-8fe5f40a699d",
+    "e4cecdd1-fb1d-4992-8fba-4175aaa2ba76",
+  ),
   time: { short: "1 min", long: "About a minute" },
   check: "Multi-factor",
   steps: [
-    { title: "Start the demo", body: "We create a real session on the Didit sandbox." },
-    { title: "Take a selfie, then enter a code", body: "The code goes to the phone number you give." },
+    {
+      title: "Start the demo",
+      body: "We create a real session on the Didit sandbox.",
+    },
+    {
+      title: "Take a selfie, then enter a code",
+      body: "The code goes to the phone number you give.",
+    },
     { title: "See the decision", body: "Both factors and the console view." },
   ],
   tags: ["Passive liveness", "Phone verification"],
@@ -417,9 +570,15 @@ export const captcha = defineProductDemo({
     note: "The Aurora Play sign-up has bot protection on the form.",
   },
   steps: [
-    { title: "Read the request", body: "Your server checks the token from the widget." },
+    {
+      title: "Read the request",
+      body: "Your server checks the token from the widget.",
+    },
     { title: "See the checks", body: "A live person on a known browser." },
-    { title: "Run it live", body: "The Aurora Play sign-up has bot protection on the form." },
+    {
+      title: "Run it live",
+      body: "The Aurora Play sign-up has bot protection on the form.",
+    },
   ],
   tags: ["Passive liveness", "Bot protection"],
   fixture: {
@@ -431,8 +590,13 @@ export const captcha = defineProductDemo({
       { state: "passed", title: "Automation", detail: "no headless browser" },
       { state: "passed", title: "Token", detail: "single use, not expired" },
     ],
-    request: { method: "POST", path: "/api/didit-captcha/verify", body: '{ "token": "<from the widget>" }' },
-    response: '{ "success": true, "status": "Approved", "liveness": { "status": "Approved", "method": "PASSIVE" } }',
+    request: {
+      method: "POST",
+      path: "/api/didit-captcha/verify",
+      body: '{ "token": "<from the widget>" }',
+    },
+    response:
+      '{ "success": true, "status": "Approved", "liveness": { "status": "Approved", "method": "PASSIVE" } }',
   },
   docsPath: "core-technology/liveness/overview",
 });
@@ -454,9 +618,18 @@ export const businessVerification = defineProductDemo({
     note: "The Northmarket marketplace demo verifies sellers live.",
   },
   steps: [
-    { title: "Read the request", body: "A company by name, country and number." },
-    { title: "See the checks", body: "The registry, the documents and the score." },
-    { title: "Run it live", body: "The Northmarket marketplace demo verifies sellers live." },
+    {
+      title: "Read the request",
+      body: "A company by name, country and number.",
+    },
+    {
+      title: "See the checks",
+      body: "The registry, the documents and the score.",
+    },
+    {
+      title: "Run it live",
+      body: "The Northmarket marketplace demo verifies sellers live.",
+    },
   ],
   tags: ["Business verification", "Documents", "AML screening"],
   fixture: {
@@ -465,8 +638,16 @@ export const businessVerification = defineProductDemo({
     verdict: "approved",
     score: { label: "Risk", value: "Low" },
     rules: [
-      { state: "passed", title: "Registry", detail: "active, name and number match" },
-      { state: "passed", title: "Company documents", detail: "certificate of incorporation" },
+      {
+        state: "passed",
+        title: "Registry",
+        detail: "active, name and number match",
+      },
+      {
+        state: "passed",
+        title: "Company documents",
+        detail: "certificate of incorporation",
+      },
       { state: "passed", title: "Sanctions screening", detail: "no matches" },
     ],
     request: {
@@ -474,7 +655,8 @@ export const businessVerification = defineProductDemo({
       path: "/v3/session/",
       body: '{ "workflow_id": "<your KYB workflow>", "vendor_data": "northwind", "expected_details": { "company_name": "Northwind Trading B.V.", "registry_country": "NL" } }',
     },
-    response: '{ "session_kind": "business", "status": "Approved", "registry": { "status": "Active" } }',
+    response:
+      '{ "session_kind": "business", "status": "Approved", "registry": { "status": "Active" } }',
   },
   docsPath: "business-verification/overview",
 });
@@ -497,8 +679,14 @@ export const keyPeople = defineProductDemo({
   },
   steps: [
     { title: "Read the request", body: "The decision of a business session." },
-    { title: "See the people", body: "Two owners found; one still has to verify." },
-    { title: "Run it live", body: "The Northmarket marketplace demo verifies a seller and its owners." },
+    {
+      title: "See the people",
+      body: "Two owners found; one still has to verify.",
+    },
+    {
+      title: "Run it live",
+      body: "The Northmarket marketplace demo verifies a seller and its owners.",
+    },
   ],
   tags: ["Key people", "ID verification", "AML screening"],
   fixture: {
@@ -507,11 +695,16 @@ export const keyPeople = defineProductDemo({
     verdict: "review",
     rules: [
       { state: "passed", title: "Owner, 60%", detail: "KYC approved" },
-      { state: "hit", title: "Owner, 40%", detail: "KYC link sent, not finished" },
+      {
+        state: "hit",
+        title: "Owner, 40%",
+        detail: "KYC link sent, not finished",
+      },
       { state: "passed", title: "Director", detail: "KYC approved" },
     ],
     request: { method: "GET", path: "/v3/session/{session_id}/decision/" },
-    response: '{ "session_kind": "business", "status": "In Review", "key_people": [{ "role": "UBO", "ownership": 60, "kyc_status": "Approved" }, { "role": "UBO", "ownership": 40, "kyc_status": "Not Started" }] }',
+    response:
+      '{ "session_kind": "business", "status": "In Review", "key_people": [{ "role": "UBO", "ownership": 60, "kyc_status": "Approved" }, { "role": "UBO", "ownership": 40, "kyc_status": "Not Started" }] }',
   },
   docsPath: "business-verification/key-people",
 });
@@ -534,8 +727,14 @@ export const transactionMonitoring = defineProductDemo({
   },
   steps: [
     { title: "Read the request", body: "A 5,000 EUR transfer to a new payee." },
-    { title: "See what the rules did", body: "One rule held it; the others passed." },
-    { title: "Run it live", body: "The Alder fintech demo sends real transactions." },
+    {
+      title: "See what the rules did",
+      body: "One rule held it; the others passed.",
+    },
+    {
+      title: "Run it live",
+      body: "The Alder fintech demo sends real transactions.",
+    },
   ],
   tags: ["Transaction monitoring", "AML screening", "Device signals"],
   fixture: {
@@ -545,16 +744,29 @@ export const transactionMonitoring = defineProductDemo({
     score: { label: "Risk score", value: "38 / 100" },
     rules: [
       { state: "passed", title: "Velocity", detail: "3 payments in 24 hours" },
-      { state: "hit", title: "New payee, 5,000 EUR or more", detail: "action: hold for review" },
-      { state: "passed", title: "Sanctions screening of the payee", detail: "no matches" },
-      { state: "passed", title: "Device and network", detail: "known device, residential" },
+      {
+        state: "hit",
+        title: "New payee, 5,000 EUR or more",
+        detail: "action: hold for review",
+      },
+      {
+        state: "passed",
+        title: "Sanctions screening of the payee",
+        detail: "no matches",
+      },
+      {
+        state: "passed",
+        title: "Device and network",
+        detail: "known device, residential",
+      },
     ],
     request: {
       method: "POST",
       path: "/v3/transactions/",
       body: '{ "type": "outgoing_transfer", "amount": 5000, "currency": "EUR", "counterparty": { "name": "Jonas Koch" } }',
     },
-    response: '{ "status": "IN_REVIEW", "risk_score": 38, "rules_hit": ["new_payee_over_5000"] }',
+    response:
+      '{ "status": "IN_REVIEW", "risk_score": 38, "rules_hit": ["new_payee_over_5000"] }',
   },
   docsPath: "transaction-monitoring/overview",
 });
@@ -576,9 +788,18 @@ export const walletScreening = defineProductDemo({
     note: "The Kestrel crypto exchange demo screens every deposit live.",
   },
   steps: [
-    { title: "Read the request", body: "An incoming deposit's sending address." },
-    { title: "See the exposure", body: "Indirect exposure two hops away held it." },
-    { title: "Run it live", body: "The Kestrel crypto exchange demo screens every deposit." },
+    {
+      title: "Read the request",
+      body: "An incoming deposit's sending address.",
+    },
+    {
+      title: "See the exposure",
+      body: "Indirect exposure two hops away held it.",
+    },
+    {
+      title: "Run it live",
+      body: "The Kestrel crypto exchange demo screens every deposit.",
+    },
   ],
   tags: ["Wallet screening", "Transaction monitoring"],
   fixture: {
@@ -589,14 +810,19 @@ export const walletScreening = defineProductDemo({
     rules: [
       { state: "passed", title: "Direct sanctions exposure", detail: "none" },
       { state: "hit", title: "Indirect mixer exposure", detail: "2 hops away" },
-      { state: "passed", title: "Address age", detail: "active for over a year" },
+      {
+        state: "passed",
+        title: "Address age",
+        detail: "active for over a year",
+      },
     ],
     request: {
       method: "POST",
       path: "/v3/wallet-screening/",
       body: '{ "wallet_address": "bc1q…7f4d29", "blockchain": "BTC", "direction": "inbound" }',
     },
-    response: '{ "status": "IN_REVIEW", "risk_score": 64, "exposure": { "indirect": [{ "category": "mixer", "hops": 2 }] } }',
+    response:
+      '{ "status": "IN_REVIEW", "risk_score": 64, "exposure": { "indirect": [{ "category": "mixer", "hops": 2 }] } }',
   },
   docsPath: "transaction-monitoring/wallet-screening",
 });
@@ -618,9 +844,15 @@ export const amlScreening = defineProductDemo({
     note: "The Kestrel crypto exchange demo screens every new customer live.",
   },
   steps: [
-    { title: "Read the request", body: "A name, a date of birth and a nationality." },
+    {
+      title: "Read the request",
+      body: "A name, a date of birth and a nationality.",
+    },
     { title: "See the hits", body: "Two possible matches to review." },
-    { title: "Run it live", body: "The Kestrel crypto exchange demo screens every new customer." },
+    {
+      title: "Run it live",
+      body: "The Kestrel crypto exchange demo screens every new customer.",
+    },
   ],
   tags: ["AML screening", "Ongoing monitoring"],
   fixture: {
@@ -629,7 +861,11 @@ export const amlScreening = defineProductDemo({
     verdict: "review",
     score: { label: "Hits", value: "2" },
     rules: [
-      { state: "hit", title: "Sanctions list", detail: "name and year of birth match" },
+      {
+        state: "hit",
+        title: "Sanctions list",
+        detail: "name and year of birth match",
+      },
       { state: "hit", title: "Adverse media", detail: "one article to review" },
       { state: "passed", title: "PEP", detail: "no matches" },
     ],
@@ -638,7 +874,8 @@ export const amlScreening = defineProductDemo({
       path: "/v3/aml/",
       body: '{ "full_name": "Ivan Petrov", "entity_type": "person", "date_of_birth": "1979-04-12", "nationality": "RU" }',
     },
-    response: '{ "status": "In Review", "total_hits": 2, "hits": [{ "match_score": 92, "datasets": ["sanctions"] }, { "datasets": ["adverse_media"] }] }',
+    response:
+      '{ "status": "In Review", "total_hits": 2, "hits": [{ "match_score": 92, "datasets": ["sanctions"] }, { "datasets": ["adverse_media"] }] }',
   },
   docsPath: "standalone-apis/aml-screening",
 });
@@ -665,12 +902,16 @@ export const PRODUCT_DEMOS: ProductDemo[] = [
   amlScreening,
 ];
 
-export function getProductDemo(id: string | null | undefined): ProductDemo | null {
+export function getProductDemo(
+  id: string | null | undefined,
+): ProductDemo | null {
   return PRODUCT_DEMOS.find((demo) => demo.id === id) ?? null;
 }
 
 /** The new route for an old catalogue id (`/?demo=<legacyId>`). */
-export function routeForLegacy(legacyId: string | null | undefined): string | null {
+export function routeForLegacy(
+  legacyId: string | null | undefined,
+): string | null {
   const demo = PRODUCT_DEMOS.find((item) => item.legacyId === legacyId);
 
   return demo ? `/product-demos/${demo.id}` : null;

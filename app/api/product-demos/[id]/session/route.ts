@@ -36,7 +36,9 @@ async function liveDemo({ params }: Params) {
 
 /** The signed-in Didit user, else the cookie's visitor id. */
 async function visitor(request: NextRequest) {
-  const signedIn = authEnabled() ? await visitorVendorData(VENDOR_PREFIX) : null;
+  const signedIn = authEnabled()
+    ? await visitorVendorData(VENDOR_PREFIX)
+    : null;
 
   if (signedIn) return { vendorData: signedIn, cookie: null };
   const existing = request.cookies.get(VISITOR_COOKIE)?.value;
@@ -78,7 +80,8 @@ export async function GET(request: NextRequest, context: Params) {
   const sessionId = request.nextUrl.searchParams.get("sessionId") ?? "";
   const who = await visitor(request);
 
-  if (who.cookie) return reply({ error: "No session of yours has that id." }, 404);
+  if (who.cookie)
+    return reply({ error: "No session of yours has that id." }, 404);
   const answer = await readSession(sessionId, who.vendorData);
 
   return reply(answer.body, answer.status);

@@ -148,7 +148,7 @@ export function Code({
   lines: string[];
 }) {
   return (
-    <pre aria-label={label} className="pd-code" id={id} tabIndex={0}>
+    <pre aria-label={label} className="pd-code" id={id}>
       {lines.map((line, index) => (
         <span
           key={`${index}-${line}`}

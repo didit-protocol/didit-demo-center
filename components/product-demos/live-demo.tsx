@@ -67,7 +67,8 @@ export function LiveDemo({ demo }: { demo: Live }) {
   } | null>(null);
   const [consoleOpen, setConsoleOpen] = React.useState(false);
   const [tab, setTab] = React.useState("person");
-  const busy = phase === "starting" || phase === "verifying" || phase === "reading";
+  const busy =
+    phase === "starting" || phase === "verifying" || phase === "reading";
   const blocked = !demo.workflow || (demo.requiresPortrait && !portrait);
 
   /** Reads the decision, waiting a little while Didit finishes it. */
@@ -145,7 +146,8 @@ export function LiveDemo({ demo }: { demo: Live }) {
     setPhase("verifying");
     const result = await openVerification(body.url);
 
-    if (result.type === "completed") return finish(result.session?.sessionId ?? sessionId);
+    if (result.type === "completed")
+      return finish(result.session?.sessionId ?? sessionId);
     setPhase("intro");
     setError(
       result.type === "cancelled"
@@ -241,7 +243,12 @@ export function LiveDemo({ demo }: { demo: Live }) {
               kpis: [
                 { label: "Bot score", value: String(device.botScore) },
                 ...(session.view.network
-                  ? [{ label: "Network", value: session.view.network.label.split(" · ")[0] }]
+                  ? [
+                      {
+                        label: "Network",
+                        value: session.view.network.label.split(" · ")[0],
+                      },
+                    ]
                   : []),
               ],
               blocks: [],
@@ -265,7 +272,12 @@ export function LiveDemo({ demo }: { demo: Live }) {
   const view = phase === "result" ? session?.view : null;
 
   return (
-    <div className="pd-grid" data-mode="live" data-phase={phase} data-testid="product-demo">
+    <div
+      className="pd-grid"
+      data-mode="live"
+      data-phase={phase}
+      data-testid="product-demo"
+    >
       <div className="pd-left">
         <Crumbs demo={demo} />
         <Eyebrow demo={demo} />
@@ -287,17 +299,28 @@ export function LiveDemo({ demo }: { demo: Live }) {
 
         {view && session ? (
           <>
-            <section aria-label="Decision" className="pd-card pd-decision" data-testid="decision">
+            <section
+              aria-label="Decision"
+              className="pd-card pd-decision"
+              data-testid="decision"
+            >
               <header className="pd-card-h">
                 <span className="pd-tile">
                   <Glyph demo={demo} size={20} />
                 </span>
                 <b>Decision</b>
-                <Status kind={STATUS_KIND[view.status]} label={view.statusLabel} />
+                <Status
+                  kind={STATUS_KIND[view.status]}
+                  label={view.statusLabel}
+                />
               </header>
               <div className="pd-decision-b">
                 {view.portrait ? (
-                  <img alt="Your selfie from this session" className="pd-portrait" src={view.portrait} />
+                  <img
+                    alt="Your selfie from this session"
+                    className="pd-portrait"
+                    src={view.portrait}
+                  />
                 ) : null}
                 <dl>
                   {view.rows.map(([label, value]) => (
@@ -310,7 +333,11 @@ export function LiveDemo({ demo }: { demo: Live }) {
               </div>
             </section>
             <div className="pd-cta">
-              <button className="pd-btn is-pri" type="button" onClick={() => setConsoleOpen(true)}>
+              <button
+                className="pd-btn is-pri"
+                type="button"
+                onClick={() => setConsoleOpen(true)}
+              >
                 <DiditRing className="pd-ring" />
                 Open the console view
               </button>
@@ -329,8 +356,8 @@ export function LiveDemo({ demo }: { demo: Live }) {
                 <span>
                   <b>{portrait ? portrait.name : "Choose a reference photo"}</b>
                   <small>
-                    A clear photo of your face, up to 2 MB. It is sent as the session&apos;s
-                    portrait_image and never stored by this site.
+                    A clear photo of your face, up to 2 MB. It is sent as the
+                    session&apos;s portrait_image and never stored by this site.
                   </small>
                 </span>
                 <input
@@ -348,8 +375,12 @@ export function LiveDemo({ demo }: { demo: Live }) {
                 type="button"
                 onClick={start}
               >
-                {busy ? <Loader2 aria-hidden className="animate-spin" size={18} /> : null}
-                {phase === "reading" ? "Reading the decision" : "Start the demo"}
+                {busy ? (
+                  <Loader2 aria-hidden className="animate-spin" size={18} />
+                ) : null}
+                {phase === "reading"
+                  ? "Reading the decision"
+                  : "Start the demo"}
                 {busy ? null : <ArrowRight aria-hidden size={18} />}
               </button>
               <a className="pd-btn is-sec" href="#api-call">

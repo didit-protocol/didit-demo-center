@@ -14,7 +14,12 @@
 
 import type { LiveDemo } from "./define";
 
-import { type DiditCall, type DiditEnv, didit, diditMessage } from "../didit/server";
+import {
+  type DiditCall,
+  type DiditEnv,
+  didit,
+  diditMessage,
+} from "../didit/server";
 import { diditUrls, vendorDataFor } from "../didit/config";
 
 export const VISITOR_COOKIE = "didit-demo-visitor";
@@ -48,15 +53,23 @@ export async function startSession(
   if (!demo.workflow)
     return {
       status: 409,
-      body: { error: "This demo's workflow is not published on this environment yet." },
+      body: {
+        error: "This demo's workflow is not published on this environment yet.",
+      },
     };
   let portrait: string | undefined;
 
   if (demo.requiresPortrait) {
     if (typeof input.portrait !== "string" || !PORTRAIT.test(input.portrait))
-      return { status: 400, body: { error: "Choose a JPEG, PNG or WebP photo first." } };
+      return {
+        status: 400,
+        body: { error: "Choose a JPEG, PNG or WebP photo first." },
+      };
     if (input.portrait.length > MAX_PORTRAIT)
-      return { status: 400, body: { error: "The photo must be 2 MB or smaller." } };
+      return {
+        status: 400,
+        body: { error: "The photo must be 2 MB or smaller." },
+      };
     portrait = input.portrait.slice(input.portrait.indexOf(",") + 1);
   }
 
@@ -74,7 +87,8 @@ export async function startSession(
 
   if (!result.ok || !result.data?.url)
     return {
-      status: result.status === 0 ? 502 : result.status >= 400 ? result.status : 502,
+      status:
+        result.status === 0 ? 502 : result.status >= 400 ? result.status : 502,
       body: {
         error: diditMessage(result, "The session could not be created."),
         didit: calls,
@@ -104,7 +118,10 @@ export async function readSession(
   if (!result.ok || !result.data)
     return {
       status: result.status === 404 ? 404 : 502,
-      body: { error: diditMessage(result, "The decision could not be read."), didit: calls },
+      body: {
+        error: diditMessage(result, "The decision could not be read."),
+        didit: calls,
+      },
     };
   // Only the visitor who ran the session may read it.
   if (result.data.vendor_data !== vendorData)

@@ -117,7 +117,10 @@ export function readDecision(decision: Json): DecisionView {
       .filter(Boolean)
       .join(" · ");
 
-    rows.push(["Document", [outcome(id.status), document].filter(Boolean).join(" · ")]);
+    rows.push([
+      "Document",
+      [outcome(id.status), document].filter(Boolean).join(" · "),
+    ]);
     if (num(id.age) !== null) rows.push(["Age", String(id.age)]);
   }
   if (liveness) {
@@ -174,7 +177,10 @@ export function readDecision(decision: Json): DecisionView {
 
     rows.push([
       "Questionnaire",
-      [outcome(questionnaire.status), answers === null ? null : `${answers} answers`]
+      [
+        outcome(questionnaire.status),
+        answers === null ? null : `${answers} answers`,
+      ]
         .filter(Boolean)
         .join(" · "),
     ]);
@@ -248,7 +254,10 @@ export function decisionEvents(
       tone: "sig",
       product: "signals",
       title: "IP analysis",
-      detail: [view.network.label.replace(" · ", " network · "), view.network.country]
+      detail: [
+        view.network.label.replace(" · ", " network · "),
+        view.network.country,
+      ]
         .filter(Boolean)
         .join(" · "),
     });
@@ -292,7 +301,16 @@ const TAG: Record<DecisionStatus, Tag> = {
 export function consolePage(
   demo: LiveDemo,
   view: DecisionView,
-  input: { vendorData: string; device: string | null; timeline: { title: string; detail?: string; at: string; tone: "ver" | "sig" | "hold" | "stop" }[] },
+  input: {
+    vendorData: string;
+    device: string | null;
+    timeline: {
+      title: string;
+      detail?: string;
+      at: string;
+      tone: "ver" | "sig" | "hold" | "stop";
+    }[];
+  },
 ): RecordPage {
   const tag = TAG[view.status];
   const main = view.rows[0];
@@ -320,7 +338,9 @@ export function consolePage(
             {
               label: main[0],
               value: main[1].split(" · ").pop() ?? main[1],
-              unit: main[1].includes(" · ") ? main[1].split(" · ")[0].toLowerCase() : undefined,
+              unit: main[1].includes(" · ")
+                ? main[1].split(" · ")[0].toLowerCase()
+                : undefined,
               color:
                 view.status === "approved"
                   ? ("ok" as const)
@@ -359,7 +379,9 @@ export function consolePage(
         ["Vendor data", input.vendorData],
         ["Workflow", demo.title],
         ["Session", view.session],
-        ...(input.device ? ([["Device", input.device]] as [string, string][]) : []),
+        ...(input.device
+          ? ([["Device", input.device]] as [string, string][])
+          : []),
         ["Environment", "Sandbox"],
       ],
     },
