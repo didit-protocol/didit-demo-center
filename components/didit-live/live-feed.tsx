@@ -34,11 +34,14 @@ function useNow(interval = 15_000) {
   return now;
 }
 
+/** Under 640 px the feed starts folded: open, it would cover the app. */
+export const PHONE_QUERY = "(max-width: 639px)";
+
 function useIsPhone() {
   const [phone, setPhone] = React.useState(false);
 
   React.useEffect(() => {
-    const query = window.matchMedia("(max-width: 767px)");
+    const query = window.matchMedia(PHONE_QUERY);
     const update = () => setPhone(query.matches);
 
     update();
@@ -51,9 +54,11 @@ function useIsPhone() {
 }
 
 /**
- * The Didit live feed: floats bottom right over the customer app, newest
- * event on top in its product colour with the call behind it. Closed (and by
- * default on a phone) it folds into one pill with the product dots.
+ * The Didit live feed: a hairline DS v4 card floating bottom right over the
+ * customer app, newest event on top, each with its product glyph in a neutral
+ * tile, a module dot before the product name and the call behind it. Closed,
+ * and from the start on a phone until the visitor taps it, it folds into one
+ * pill with the product dots.
  */
 export function LiveFeed({
   events,
@@ -85,11 +90,6 @@ export function LiveFeed({
   // The feed is the visitor's own session and depends on the viewport: it
   // renders in the browser only, so a phone never flashes the desktop feed.
   React.useEffect(() => setMounted(true), []);
-
-  React.useEffect(() => {
-    // A new event on a phone opens the feed once, like a notification.
-    if (phone && newest && !quiet) setOpen(true);
-  }, [newest, phone]);
 
   if (!mounted) return null;
 
@@ -126,23 +126,29 @@ export function LiveFeed({
           </span>
         </button>
         <button className="lv-go" type="button" onClick={onConsole}>
-          Console <ArrowRight aria-hidden size={15} />
+          Console <ArrowRight aria-hidden size={16} />
         </button>
       </div>
     );
   }
 
   return (
-    <section aria-label="Didit live" className="lv" data-testid="didit-live">
+    <section
+      aria-label="Didit live"
+      className="lv dd"
+      data-testid="didit-live"
+    >
       <div className="lv-in">
         <div className="lv-head">
           <DiditRing />
           <b>Didit live</b>
-          <span className="lv-live">Live</span>
+          <span className="dd-status dd-status-approved dd-status-sm">
+            Live
+          </span>
           <span className="lv-who">{person ?? "No one signed in yet"}</span>
           <button
             aria-label="Fold the feed"
-            className="lv-close"
+            className="lv-close dd-btn dd-btn-ghost dd-btn-xs dd-btn-icon"
             type="button"
             onClick={() => setOpen(false)}
           >
@@ -188,7 +194,7 @@ export function LiveFeed({
               key={event.id}
               className={`lv-ev ${TONE_CLASS[event.tone]}${event.id === newest ? " is-new" : ""}`}
             >
-              <span className="lv-ic">
+              <span className="lv-ic dd-tile dd-tile-32">
                 <ToneIcon tone={event.tone} />
               </span>
               <span className="lv-x">
@@ -209,13 +215,16 @@ export function LiveFeed({
           ))}
         </ol>
         <div className="lv-foot">
-          <button className="is-pri" type="button" onClick={onConsole}>
-            <DiditRing />
+          <button
+            className="dd-btn dd-btn-primary dd-btn-sm"
+            type="button"
+            onClick={onConsole}
+          >
             Open the console view
           </button>
           <button
             aria-pressed={code}
-            className="is-sec"
+            className="dd-btn dd-btn-secondary dd-btn-sm"
             type="button"
             onClick={() => setCode((shown) => !shown)}
           >
