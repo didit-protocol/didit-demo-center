@@ -3,8 +3,9 @@ import { defineConfig, devices } from "@playwright/test";
 /**
  * End-to-end tests for the crypto exchange (`npm run test:e2e:crypto-exchange`),
  * Aurora Play (`npm run test:e2e:aurora-play`), Alder
- * (`npm run test:e2e:alder`), Northmarket (`npm run test:e2e:northmarket`)
- * and the product demos (`npm run test:e2e:product-demos`).
+ * (`npm run test:e2e:alder`), Northmarket (`npm run test:e2e:northmarket`),
+ * the Demo Center chrome (`npm run test:e2e:demo-center`) and the product
+ * demos (`npm run test:e2e:product-demos`).
  *
  * They run against the production build, so build first:
  *   npm run build && npm run test:e2e:crypto-exchange
