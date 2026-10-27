@@ -81,8 +81,8 @@ test("KYC and AML before the IBAN, monitored payments and the step-up on a 5,000
   await page.goto("/fintech");
   await openAccount(page);
   await openFeed(page);
-  await expect(live(page).getByText("KYC and AML approved")).toBeVisible();
   // The first week: six real transactions from the browser, with device data.
+  await expect(live(page).getByText("Salary received")).toBeVisible();
   expect(mock.submitted).toHaveLength(6);
   expect(mock.headers[0]["x-transaction-token"]).toBe("e2e-token");
   expect(mock.headers[0]["x-didit-pid"]).toBeTruthy();
@@ -126,6 +126,9 @@ test("KYC and AML before the IBAN, monitored payments and the step-up on a 5,000
   await expect(consoleView).toContainText("5,000.00 EUR");
   await expect(consoleView).toContainText("5,000 EUR or more to a new payee");
   await expect(consoleView).toContainText("released automatically");
+  await consoleView.getByRole("tab", { name: "Verification" }).click();
+  await expect(consoleView).toContainText("Identity Card · Germany");
+  await expect(consoleView).toContainText("No matches");
 });
 
 test("a sign-in without the passkey is blocked and nothing moves", async ({

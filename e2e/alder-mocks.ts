@@ -179,7 +179,7 @@ export async function mockAlder(page: Page): Promise<AlderMock> {
         didit: [],
       });
     if (key === "POST /api/fintech/monitoring-token")
-      return json(route, { token: "e2e-monitoring", didit: [] });
+      return json(route, { token: "e2e-monitoring", baseUrl: API, didit: [] });
 
     return json(route, { error: "unmocked" }, 500);
   });

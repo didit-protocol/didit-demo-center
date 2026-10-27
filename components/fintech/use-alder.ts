@@ -607,13 +607,13 @@ export function useAlder(
     let result: TakeoverResult = { status: null, score: null, error: null };
 
     try {
-      const { token } = await route<{ token: string }>(
-        "/api/fintech/monitoring-token",
-        { method: "POST" },
-      );
+      const { token, baseUrl } = await route<{
+        token: string;
+        baseUrl: string;
+      }>("/api/fintech/monitoring-token", { method: "POST" });
       const { flush, submitEvent } = await import("@didit-protocol/signals");
       const event = takeoverEvent(Date.now());
-      const eventId = submitEvent({ monitoringToken: token, event });
+      const eventId = submitEvent({ monitoringToken: token, event, baseUrl });
       const flushed = await flush();
       const answer = flushed.results.find((item) => item.eventId === eventId);
 
