@@ -325,3 +325,5 @@
 }
 .lv-pill button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; white-space: nowrap; }
 .lv-pill .lv-go { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: #FFFFFF; }
+.cv-backdrop { position: absolute; inset: 0; }
+.cv { position: relative; }

@@ -440,12 +440,8 @@ export function ConsoleView({
   const page = current.page;
 
   return (
-    <div
-      className="cv-scrim"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
+    <div className="cv-scrim">
+      <div aria-hidden className="cv-backdrop" onMouseDown={onClose} />
       <div
         aria-label="Console view"
         aria-modal="true"
