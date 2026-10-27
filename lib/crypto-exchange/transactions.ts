@@ -2,19 +2,17 @@
  * Kestrel's money movement, expressed as Didit transactions.
  *
  * Kestrel is the fictional crypto exchange at /crypto-exchange. Every deposit
- * and withdrawal it shows is a real transaction on the Didit transactions API:
+ * and withdrawal it shows is a real transaction on the Didit transactions API,
+ * submitted from the user's browser with the web SDK
+ * (`submitTransaction`, `POST /v1/transactions/`) and a token Kestrel's
+ * server minted for that user, so the signals device data rides along and
+ * the subject is bound to the token server-side:
  *
- * - A deposit is reported by the exchange's BACKEND once the chain confirms it
- *   (`POST /v3/transactions/`, API key). No end user is present for that, so the
- *   SDK path would be the wrong integration.
- * - A withdrawal is requested by the user on their device, so it goes through
- *   the web SDK (`DiditSdk.shared.submitTransaction`, `POST /v1/transactions/`)
- *   with a token the backend minted for that user. Device intelligence comes
- *   along for free and the subject is bound to the token server-side.
+ * - A deposit names the sending wallet, which Didit screens.
+ * - A withdrawal is a Travel Rule transfer to the destination wallet.
  *
- * Both end up as the same camelCase wire payload and the same transaction
- * record. The module is self-contained (no local imports) so the unit tests
- * can load it with plain `node --test`.
+ * The module is self-contained (no local imports) so the unit tests can load
+ * it with plain `node --test`.
  *
  * https://docs.didit.me/transaction-monitoring/sdk-transaction-submission
  */
@@ -25,13 +23,21 @@ import type { DiditTransactionPayload } from "@didit-protocol/sdk-web";
  * (see lib/crypto-exchange/policy.ts) can never touch another demo's traffic. */
 export const CX_DEMO_APP = "crypto-exchange";
 
-export const CX_ASSET = "ETH";
-export const CX_CHAIN = "ETH";
+/** The two assets Kestrel moves, each on its own chain. */
+export const ASSETS = {
+  BTC: { name: "Bitcoin", chain: "BTC", network: "Bitcoin" },
+  ETH: { name: "Ethereum", chain: "ETH", network: "Ethereum" },
+} as const;
+
+export type Asset = keyof typeof ASSETS;
+
+export const isAsset = (value: unknown): value is Asset =>
+  value === "BTC" || value === "ETH";
 
 /**
  * A wallet OFAC lists under the Lazarus Group (the 2022 Ronin bridge theft).
- * Public sanctions data, so it is safe to ship: on the staging application Merkle
- * Science scores it 95 / CRITICAL with a direct sanctions attribution.
+ * Public sanctions data, so it is safe to ship: on the staging application
+ * wallet screening scores it 95 / CRITICAL with a direct sanctions attribution.
  */
 export const SANCTIONED_WALLET = "0x098B716B8Aaf21512996dC57EB0615e2383E2f96";
 
@@ -39,14 +45,10 @@ export const AMOUNT_MIN = 0.01;
 export const AMOUNT_MAX = 5;
 
 export type DepositSource = "own-wallet" | "unknown-sender";
-export type WithdrawalDestination = "own-wallet" | "exchange" | "address";
+export type WithdrawalDestination = "own-wallet" | "address";
 
-export interface CxWallets {
-  /** The user's own self-hosted wallet (MetaMask in the story). */
-  ownWallet: string;
-  /** The user's deposit address at another exchange. */
-  exchangeDeposit: string;
-}
+/** The user's own self-hosted wallets, one per asset. */
+export type CxWallets = Record<Asset, string>;
 
 /** A fresh 20-byte address: never seen on chain, so it screens as no risk. */
 export function randomEvmAddress(randomBytes: (size: number) => Uint8Array) {
@@ -55,8 +57,73 @@ export function randomEvmAddress(randomBytes: (size: number) => Uint8Array) {
   return `0x${Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("")}`;
 }
 
+const BECH32 = "qpzry9x8gf2tvdw0s3jn54khce6mua7l";
+const BECH32_GEN = [0x3b6a57b2, 0x26508e6d, 0x1ea119fa, 0x3d4233dd, 0x2a1462b3];
+
+function bech32Polymod(values: number[]): number {
+  let check = 1;
+
+  for (const value of values) {
+    const top = check >>> 25;
+
+    check = ((check & 0x1ffffff) << 5) ^ value;
+    for (let bit = 0; bit < 5; bit++) {
+      if ((top >>> bit) & 1) check ^= BECH32_GEN[bit];
+    }
+  }
+
+  return check;
+}
+
+/**
+ * A fresh native SegWit (P2WPKH, `bc1q…`) address from 20 random bytes, with
+ * a valid bech32 checksum: never seen on chain, so it screens as no risk.
+ */
+export function randomBtcAddress(randomBytes: (size: number) => Uint8Array) {
+  const words: number[] = [0];
+  let accumulator = 0;
+  let bits = 0;
+
+  for (const byte of Array.from(randomBytes(20))) {
+    accumulator = (accumulator << 8) | byte;
+    bits += 8;
+    while (bits >= 5) {
+      bits -= 5;
+      words.push((accumulator >> bits) & 31);
+    }
+  }
+  if (bits > 0) words.push((accumulator << (5 - bits)) & 31);
+  const prefix = [3, 3, 0, 2, 3]; // "bc" expanded for the checksum
+  const mod = bech32Polymod([...prefix, ...words, 0, 0, 0, 0, 0, 0]) ^ 1;
+  const checksum = [0, 1, 2, 3, 4, 5].map(
+    (index) => (mod >> (5 * (5 - index))) & 31,
+  );
+
+  return `bc1${[...words, ...checksum].map((word) => BECH32[word]).join("")}`;
+}
+
+export function randomWallets(
+  randomBytes: (size: number) => Uint8Array,
+): CxWallets {
+  return {
+    BTC: randomBtcAddress(randomBytes),
+    ETH: randomEvmAddress(randomBytes),
+  };
+}
+
 export function isEvmAddress(value: string): boolean {
   return /^0x[0-9a-fA-F]{40}$/.test(value.trim());
+}
+
+export function isBtcAddress(value: string): boolean {
+  return /^(bc1[02-9ac-hj-np-z]{11,71}|[13][1-9A-HJ-NP-Za-km-z]{25,34})$/.test(
+    value.trim(),
+  );
+}
+
+/** Whether an address belongs on the asset's chain. */
+export function isAddressFor(asset: Asset, value: string): boolean {
+  return asset === "BTC" ? isBtcAddress(value) : isEvmAddress(value);
 }
 
 /** Normalises user input into an amount string, or null when out of range. */
@@ -79,68 +146,40 @@ export function newTxnId(kind: "dep" | "wd", uuid: string): string {
 
 /* ── Payloads ───────────────────────────────────────────────────────────── */
 
-/** The camelCase wire payload `POST /v3/transactions/` and `/v1/` accept. */
-export interface WireParticipant {
-  type?: string;
-  externalUserId?: string;
-  fullName?: string;
-  paymentMethod?: { type: string; accountId: string };
-}
-
-export interface WirePayload {
-  txnId: string;
-  type: string;
-  info: {
-    direction: "in" | "out";
-    amount: string;
-    currency: string;
-    currencyType: "crypto";
-    type: "deposit" | "withdrawal";
-    cryptoParams: { crypto_chain: string };
-    paymentDetails?: string;
-  };
-  subject: WireParticipant;
-  counterparty?: WireParticipant;
-  props: Record<string, string>;
-  includeCryptoScreening: true;
-}
-
 /**
- * The deposit the exchange's backend reports once the chain confirms it.
+ * A deposit, in the web SDK's payload shape.
  *
  * The sending wallet is the counterparty's payment method, which is the
- * address Didit screens on an inbound crypto transfer. `unknown-sender` is the
- * sanctioned wallet above; the sender's name is unknown, as it would be.
+ * address Didit screens on an inbound crypto transfer. `unknown-sender` is
+ * the sanctioned wallet above (an ETH address, so ETH only); the sender's
+ * name is unknown, as it would be. The subject's identity is not in the
+ * payload: the SDK token binds it.
  */
 export function buildDepositPayload(input: {
   txnId: string;
-  vendorData: string;
   fullName: string;
+  asset: Asset;
   amount: string;
   source: DepositSource;
   ownWallet: string;
-}): WirePayload {
-  const own = input.source === "own-wallet";
+}): DiditTransactionPayload {
+  const own = input.source === "own-wallet" || input.asset !== "ETH";
 
   return {
     txnId: input.txnId,
-    type: "finance",
-    info: {
+    category: "finance",
+    details: {
       direction: "in",
       amount: input.amount,
-      currency: CX_ASSET,
+      currency: input.asset,
       currencyType: "crypto",
-      type: "deposit",
-      cryptoParams: { crypto_chain: CX_CHAIN },
+      actionType: "deposit",
+      cryptoParams: { crypto_chain: ASSETS[input.asset].chain },
       paymentDetails: own
         ? "Deposit from own wallet"
         : "Deposit from unknown sender",
     },
-    subject: {
-      type: "individual",
-      externalUserId: input.vendorData,
-      fullName: input.fullName,
-    },
+    subject: { type: "individual", fullName: input.fullName },
     counterparty: {
       type: "individual",
       ...(own ? { fullName: input.fullName } : {}),
@@ -149,29 +188,31 @@ export function buildDepositPayload(input: {
         accountId: own ? input.ownWallet : SANCTIONED_WALLET,
       },
     },
-    props: { demo_app: CX_DEMO_APP, deposit_source: input.source },
+    customProperties: {
+      demo_app: CX_DEMO_APP,
+      deposit_source: own ? "own-wallet" : "unknown-sender",
+    },
     includeCryptoScreening: true,
   };
 }
 
 /**
  * The withdrawal the user requests on their device, as a Travel Rule transfer,
- * in the web SDK's own payload shape (`submitTransaction` maps it onto the wire
- * format above).
+ * in the web SDK's own payload shape.
  *
  * - `own-wallet` declares the destination self-hosted (`unhosted_wallet`), so
  *   Didit skips VASP routing and asks for proof that the wallet is the user's.
- * - `exchange` is the user's account at another exchange: Didit walks the
- *   Travel Rule rails to find that exchange. The beneficiary VASP is deliberately
- *   NOT named here - a name or LEI resolved in the directory can select the email
- *   rail, and a demo must never email a real exchange's compliance team.
- * - `address` is any address the user pastes, owned by `beneficiaryName`.
+ * - `address` is any address the user pastes. The beneficiary VASP is
+ *   deliberately never named: a name or LEI resolved in the directory can
+ *   select the email rail, and a demo must never email a real exchange's
+ *   compliance team.
  *
  * The subject's identity is not in the payload: the SDK token binds it.
  */
 export function buildWithdrawalPayload(input: {
   txnId: string;
   fullName: string;
+  asset: Asset;
   amount: string;
   destination: WithdrawalDestination;
   address: string;
@@ -186,10 +227,10 @@ export function buildWithdrawalPayload(input: {
     details: {
       direction: "out",
       amount: input.amount,
-      currency: CX_ASSET,
+      currency: input.asset,
       currencyType: "crypto",
       actionType: "withdrawal",
-      cryptoParams: { crypto_chain: CX_CHAIN },
+      cryptoParams: { crypto_chain: ASSETS[input.asset].chain },
     },
     subject: { type: "individual", fullName: input.fullName },
     counterparty: {
@@ -509,19 +550,6 @@ export function riskBand(score: number | null): { label: string; tone: Tone } {
   if (score >= 40) return { label: "Elevated risk", tone: "review" };
 
   return { label: "Low risk", tone: "approved" };
-}
-
-/** The wallet screening providers Didit can route to, by their API id. */
-const PROVIDER_NAME: Record<string, string> = {
-  merklescience: "Merkle Science",
-  chainalysis: "Chainalysis",
-  elliptic: "Elliptic",
-  crystal: "Crystal",
-  trmlabs: "TRM Labs",
-};
-
-export function providerName(provider: string): string {
-  return PROVIDER_NAME[provider] ?? provider;
 }
 
 export const TRAVEL_RULE_LABEL: Record<string, string> = {
