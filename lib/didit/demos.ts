@@ -54,9 +54,16 @@ export const alder = defineDemo({
       "205ef0c6-8efd-49a2-b99e-af9d5d5ecb23",
       "c076a8bb-b0a1-482a-a257-c296391fac2f",
     ),
+    // The selfie re-authentication a held transfer opens without a passkey.
+    stepUp: pick(
+      "d1972e27-eeb8-4543-918b-6ac0846b7cc5",
+      "9b610989-c77e-48ad-9c27-0668c6edd2be",
+    ),
   },
   rules: {
-    newPayee: "Large transfers to a new payee need a passkey",
+    kycBeforePayments: "No payments before an approved KYC",
+    newPayee: "5,000 EUR or more to a new payee needs a passkey",
+    takeover: "A sign-in without the passkey is blocked",
   },
   copy: {
     tagline: "A neobank",
