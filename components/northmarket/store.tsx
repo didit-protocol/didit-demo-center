@@ -368,6 +368,8 @@ export interface HubProps {
   /** The KYB's status, null before it starts. */
   kyb: string | null;
   canContinue: boolean;
+  /** The next key person whose own ID check is still open. */
+  owner: string | null;
   busy: boolean;
   payoutDay: string;
   onVerify(): void;
@@ -379,6 +381,7 @@ export function HubScreen({
   company,
   kyb,
   canContinue,
+  owner,
   busy,
   payoutDay,
   onVerify,
@@ -433,15 +436,19 @@ export function HubScreen({
             <b>
               {declined
                 ? "Your business was not verified"
-                : kyb
-                  ? "Your business check is not finished"
-                  : "Verify your business to get paid"}
+                : owner
+                  ? `${company} is in the registry. ${owner} confirms their ID next`
+                  : kyb
+                    ? "Your business check is not finished"
+                    : "Verify your business to get paid"}
             </b>
             {declined
               ? "Payouts stay off for this shop."
-              : `We check ${company} in the company registry, then each owner confirms their ID. Payouts start once it is approved.`}
+              : owner
+                ? "Each owner gets their own link. Payouts start once every check is approved."
+                : `We check ${company} in the company registry, then each owner confirms their ID. Payouts start once it is approved.`}
           </span>
-          {!declined && (!kyb || canContinue) ? (
+          {!declined && (!kyb || canContinue || owner) ? (
             <button
               className="nm-btn is-ink"
               data-callout="verify"
@@ -451,9 +458,11 @@ export function HubScreen({
             >
               {busy
                 ? "Opening…"
-                : kyb
-                  ? "Continue the check"
-                  : "Verify my business"}
+                : owner
+                  ? "Check my ID"
+                  : kyb
+                    ? "Continue the check"
+                    : "Verify my business"}
             </button>
           ) : null}
         </div>

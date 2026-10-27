@@ -297,11 +297,16 @@ export function NorthmarketDemo() {
     });
   };
 
+  const owner = kyb?.people.find((person) => person.kycUrl) ?? null;
+
   const verifyBusiness = async () => {
     if (!first) return;
-    const result = await market.verifyBusiness(first.id, () =>
-      push(kybStarted(first.shop)),
-    );
+    const result =
+      owner?.kycUrl && !kyb?.url
+        ? await market.checkOwner(first.id, owner.kycUrl)
+        : await market.verifyBusiness(first.id, () =>
+            push(kybStarted(first.shop)),
+          );
 
     if (!result.ok) setToast({ tone: "error", text: result.error });
     else if (result.data) push(kybDecided(result.data, first.company));
@@ -613,6 +618,7 @@ export function NorthmarketDemo() {
           <HubScreen
             busy={market.busy === "kyb"}
             canContinue={Boolean(kyb?.url)}
+            owner={kyb?.url ? null : (owner?.name ?? null)}
             company={company ?? first.company}
             kyb={kyb?.status ?? null}
             payoutDay={nextPayoutDay(Date.now())}
