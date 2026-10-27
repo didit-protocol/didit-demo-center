@@ -13,21 +13,21 @@
 
 import { kestrel } from "../didit/demos.ts";
 
-const isStaging = process.env.NEXT_PUBLIC_IS_STAGING === "true";
-
 /**
- * The workflows Kestrel runs. `null` means "not published on this environment":
- * the page then says so instead of failing. The production ids are in
- * lib/didit/demos.ts, but the demo stays on staging until its rules are
- * installed on production too.
+ * The workflows Kestrel runs, for the environment `NEXT_PUBLIC_IS_STAGING`
+ * selects (the ids live in lib/didit/demos.ts). `null` means "not published
+ * on this environment": the page then says so instead of failing.
  */
-export const CX_WORKFLOWS = {
-  /** "2. KYC ACTIVE LIVENESS": ID + liveness + face match + AML + IP analysis. */
-  onboarding: isStaging ? kestrel.workflows.onboarding : null,
-  /** "4. BIOMETRIC AUTHENTICATION": liveness + face match against the
+export const CX_WORKFLOWS: {
+  onboarding: string | null;
+  stepUp: string | null;
+} = {
+  /** KYC + AML: ID, liveness, face match, AML screening and IP analysis. */
+  onboarding: kestrel.workflows.onboarding || null,
+  /** Face authentication: liveness and a face match against the
    * onboarding selfie. The withdrawal step-up. */
-  stepUp: isStaging ? kestrel.workflows.stepUp : null,
-} as const;
+  stepUp: kestrel.workflows.stepUp || null,
+};
 
 const DEMO_SCOPE = {
   field: "custom_values.demo_app",
