@@ -337,7 +337,7 @@
   --text-t-app-filter: 450 13px/16px var(--font-sans); /* Filter chips and segmented controls. */
   --text-t-app-label: 450 12px/16px var(--font-sans); /* Card titles, field labels, table headers. Sentence case, never uppercase. */
 }
-/* design-system/components/bundle.css: root, button, button-icon, status, tag, tile, halftone, window, tabs, eyebrow */
+/* design-system/components/bundle.css: root, button, button-icon, status, tag, tile, halftone, window, tabs, wash, eyebrow */
 /* ---------- 1. Root ---------- */
 .dd { --dd-font: "Didit Grotesk", -apple-system, "Helvetica Neue", Arial, sans-serif; --dd-mono: "Didit Grotesk Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --dd-container: 1200px; --dd-gutter: 32px; --dd-section-y: 112px; --dd-header-h: 64px;
@@ -474,6 +474,15 @@ button.dd-tag:active:not(:disabled) { transform: scale(.97); }
 .dd-tab .dd-i { width: 16px; height: 16px; }
 .dd-tab:hover { color: var(--c-heading); }
 .dd-tab.is-active, .dd-tab[aria-selected="true"] { background: var(--c-surface); color: var(--c-heading); box-shadow: var(--c-shadow-thumb); }
+/* Colour fields: the product sits on Didit blue, the way Stripe sets its UI on colour */
+.dd-wash, .dd-stage, .dd-tile-card-media, .dd-card-scene { --field-a: color-mix(in srgb, var(--cat, var(--c-accent)) 20%, transparent); --field-b: color-mix(in srgb, var(--cat-2, var(--c-accent)) 9%, transparent);
+  background: radial-gradient(85% 120% at 100% 0%, var(--field-a), transparent 62%), radial-gradient(70% 100% at 0% 100%, var(--field-b), transparent 66%), var(--site-band); }
+.dd-wash { position: relative; border-radius: var(--radius-2xl); border: 1px solid var(--c-line); padding: 32px; overflow: hidden; }
+.dd-wash, .dd-stage { isolation: isolate; }
+.dd-wash::before, .dd-stage::before, .dd-card-scene::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--cat, var(--c-accent)) 34%, transparent) 1px, transparent 1.3px); background-size: 9px 9px;
+  -webkit-mask-image: radial-gradient(70% 90% at 100% 0%, #000, transparent 70%); mask-image: radial-gradient(70% 90% at 100% 0%, #000, transparent 70%); }
+[data-theme="dark"] .dd-wash, [data-theme="dark"] .dd-stage, [data-theme="dark"] .dd-tile-card-media, [data-theme="dark"] .dd-card-scene { --field-a: color-mix(in srgb, var(--cat, var(--c-accent)) 26%, transparent); --field-b: color-mix(in srgb, var(--cat-2, var(--c-accent)) 12%, transparent); }
 /* ---- Eyebrow ---- */
 .dd-eb { display: inline-flex; align-items: center; gap: 8px; font-family: var(--dd-mono); font-variation-settings: "MONO" 100, "ROND" 100; font-weight: 450; text-transform: uppercase; white-space: nowrap; }
 .dd-eb-section { font-size: 13px; line-height: 16px; letter-spacing: 0.08em; color: var(--c-accent); }

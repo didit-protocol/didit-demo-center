@@ -38,6 +38,7 @@ export const BLOCKS = [
   ["halftone", "/* halftone panel", ".dd-float {"],
   ["window", "/* console window", ".dd-bleed-right {"],
   ["tabs", "/* ---------- 11. Tabs and segmented controls", ".dd-utabs {"],
+  ["wash", "/* Colour fields: the product sits on Didit blue", "/* In a product family"],
   ["eyebrow", "/* ---- Eyebrow ---- */", "/* ---- ImageGrid ---- */"],
 ];
 
