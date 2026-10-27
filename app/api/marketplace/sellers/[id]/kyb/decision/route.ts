@@ -16,7 +16,7 @@ export async function POST(
   context: { params: Promise<{ id: string }> },
 ) {
   const params = await context.params;
-  const env = marketEnv();
+  const env = await marketEnv();
 
   return respond(
     request,

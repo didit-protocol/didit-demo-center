@@ -18,8 +18,7 @@ interface Params {
 /** The shop's business verification, trimmed to what the status card shows. */
 export async function GET(request: NextRequest, context: Params) {
   const params = await context.params;
-
-  const env = marketEnv();
+  const env = await marketEnv();
 
   return respond(
     request,
@@ -31,8 +30,7 @@ export async function GET(request: NextRequest, context: Params) {
 /** Start (or resume) the shop's KYB and hand back the hosted-flow URL. */
 export async function POST(request: NextRequest, context: Params) {
   const params = await context.params;
-
-  const env = marketEnv();
+  const env = await marketEnv();
 
   return respond(
     request,
