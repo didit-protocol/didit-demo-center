@@ -39,7 +39,8 @@ function place(
 
   if (rect.width === 0 && rect.height === 0) return null;
   const midY = rect.top - box.top + rect.height / 2;
-  const reach = 9 + (spec.line ?? 40) + 16;
+  // The dot is 14 px: its centre sits on the element's edge.
+  const reach = 7 + (spec.line ?? 40) + 16;
   // The card wraps rather than run off the screen.
   const room = (space: number) =>
     ({
@@ -48,13 +49,13 @@ function place(
 
   if (spec.side === "right")
     return {
-      left: rect.right - box.left - 9,
+      left: rect.right - box.left - 7,
       top: midY,
       ...room(box.right - rect.right),
     };
   if (spec.side === "left")
     return {
-      right: box.right - rect.left - 9,
+      right: box.right - rect.left - 7,
       top: midY,
       ...room(rect.left - box.left),
     };
@@ -63,8 +64,8 @@ function place(
 }
 
 /**
- * Didit pinned to the moment: a pulsing dot on the element Didit acted on, a
- * line and a card in the product colour. They never take clicks, so they can
+ * Didit pinned to the moment: a pulsing dot on the element Didit acted on and
+ * a line in the product colour, and a hairline card naming it. They never take clicks, so they can
  * never cover the action the visitor needs; on a phone they are hidden.
  */
 export function Callouts({

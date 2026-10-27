@@ -451,7 +451,7 @@ export function ConsoleView({
         data-testid="console-view"
         role="dialog"
       >
-        <div className="cv-top">
+        <div className="cv-top dd">
           <DiditRing />
           <b>Console view</b>
           <span className="cv-url">
@@ -477,7 +477,7 @@ export function ConsoleView({
           <button
             ref={closeRef}
             aria-label="Close the console view"
-            className="cv-x"
+            className="cv-x dd-btn dd-btn-ghost dd-btn-sm dd-btn-icon"
             type="button"
             onClick={onClose}
           >
