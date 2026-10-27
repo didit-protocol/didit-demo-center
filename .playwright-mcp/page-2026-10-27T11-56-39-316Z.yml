@@ -1,0 +1,137 @@
+- generic [ref=f8e2]:
+  - banner [ref=f8e3]:
+    - link "Didit Demo Center" [ref=f8e4] [cursor=pointer]:
+      - /url: /
+      - img "Didit" [ref=f8e5]
+    - link "Demo Center" [ref=f8e7] [cursor=pointer]:
+      - /url: /
+    - button "A Aurora Play iGaming" [ref=f8e9] [cursor=pointer]:
+      - generic [ref=f8e10]: A
+      - text: Aurora Play
+      - emphasis [ref=f8e11]: iGaming
+    - navigation "Demo steps" [ref=f8e14]:
+      - button "1 Sign up" [ref=f8e15] [cursor=pointer]:
+        - generic [ref=f8e16]: "1"
+        - generic [ref=f8e17]: Sign up
+      - button "2 Verify" [ref=f8e19] [cursor=pointer]:
+        - generic [ref=f8e20]: "2"
+        - generic [ref=f8e21]: Verify
+      - button "3 Transact" [ref=f8e23] [cursor=pointer]:
+        - generic [ref=f8e24]: "3"
+        - generic [ref=f8e25]: Transact
+      - button "4 Stop fraud" [ref=f8e27] [cursor=pointer]:
+        - generic [ref=f8e28]: "4"
+        - generic [ref=f8e29]: Stop fraud
+      - button "5 Console" [ref=f8e31] [cursor=pointer]:
+        - generic [ref=f8e32]: "5"
+        - generic [ref=f8e33]: Console
+    - generic [ref=f8e34]:
+      - generic [ref=f8e35]: Sandbox
+      - button "Console view" [ref=f8e36] [cursor=pointer]
+      - button "Restart the demo" [ref=f8e37] [cursor=pointer]
+  - generic [ref=f8e42]:
+    - complementary [ref=f8e43]:
+      - generic [ref=f8e48]:
+        - text: Aurora
+        - emphasis [ref=f8e49]: Play
+      - button "Lobby" [ref=f8e50] [cursor=pointer]
+      - button "Slots" [ref=f8e55] [cursor=pointer]
+      - button "Live casino" [ref=f8e59] [cursor=pointer]
+      - button "Table games" [ref=f8e68] [cursor=pointer]
+      - button "Jackpots" [ref=f8e74] [cursor=pointer]
+      - button "Sports" [ref=f8e82] [cursor=pointer]
+      - button "Promotions 3" [ref=f8e87] [cursor=pointer]:
+        - generic [ref=f8e92]: Promotions
+        - generic [ref=f8e93]: "3"
+      - button "VIP club" [ref=f8e94] [cursor=pointer]
+      - generic [ref=f8e98]: Your account
+      - button "Cashier" [ref=f8e99] [cursor=pointer]
+      - button "History" [ref=f8e104] [cursor=pointer]
+      - button "Play responsibly Set deposit limits or take a break any time. 18+ only." [ref=f8e110] [cursor=pointer]:
+        - generic [ref=f8e111]: Play responsibly
+        - text: Set deposit limits or take a break any time. 18+ only.
+    - generic [ref=f8e112]:
+      - generic [ref=f8e113]:
+        - textbox "Search games" [ref=f8e118]:
+          - /placeholder: Search 2,400 games
+        - generic [ref=f8e119]:
+          - generic [ref=f8e120] [cursor=pointer]: Casino
+          - generic [ref=f8e121] [cursor=pointer]: Sports
+        - generic [ref=f8e122]:
+          - button "Log in" [ref=f8e123] [cursor=pointer]
+          - button "Sign up" [ref=f8e124] [cursor=pointer]
+      - generic [ref=f8e125]:
+        - generic [ref=f8e127]:
+          - generic [ref=f8e128]: Welcome offer
+          - heading "100 free spins on your first deposit" [level=1] [ref=f8e129]
+          - paragraph [ref=f8e130]: Plus a 100% match up to 200 EUR. Wagering 30x. 18+, play responsibly.
+          - generic [ref=f8e131]:
+            - button "Join and claim" [ref=f8e132] [cursor=pointer]
+            - button "Terms" [ref=f8e133] [cursor=pointer]
+        - generic [ref=f8e138]:
+          - generic [ref=f8e145]:
+            - generic [ref=f8e146]: Aurora mega jackpot
+            - generic [ref=f8e147]: 1,284,551.20 EUR
+          - generic [ref=f8e148]:
+            - text: Last win
+            - emphasis [ref=f8e149]: 48,210 EUR
+            - text: on Aurora Crystals
+        - generic [ref=f8e150]:
+          - generic [ref=f8e151]:
+            - heading "Popular slots" [level=2] [ref=f8e152]
+            - generic [ref=f8e153]:
+              - generic [ref=f8e154] [cursor=pointer]: All
+              - generic [ref=f8e155] [cursor=pointer]: New
+              - generic [ref=f8e156] [cursor=pointer]: Jackpots
+              - generic [ref=f8e157] [cursor=pointer]: Megaways
+          - generic [ref=f8e158]:
+            - button "HOT Pharaoh's Gold Aurora Originals · 96.5%" [ref=f8e159] [cursor=pointer]:
+              - generic [ref=f8e160]: HOT
+              - generic [ref=f8e162]: Pharaoh's Gold
+              - generic [ref=f8e163]: Aurora Originals · 96.5%
+            - button "JACKPOT Aurora Crystals Aurora Originals · 96.2%" [ref=f8e164] [cursor=pointer]:
+              - generic [ref=f8e165]: JACKPOT
+              - generic [ref=f8e167]: Aurora Crystals
+              - generic [ref=f8e168]: Aurora Originals · 96.2%
+            - button "Neon Fruits Lumen Games · 96.8%" [ref=f8e169] [cursor=pointer]:
+              - generic [ref=f8e171]: Neon Fruits
+              - generic [ref=f8e172]: Lumen Games · 96.8%
+            - button "NEW Dragon Pearl Jade Studio · 96.1%" [ref=f8e173] [cursor=pointer]:
+              - generic [ref=f8e174]: NEW
+              - generic [ref=f8e176]: Dragon Pearl
+              - generic [ref=f8e177]: Jade Studio · 96.1%
+            - button "Viking Storm Northwind · 96.4%" [ref=f8e178] [cursor=pointer]:
+              - generic [ref=f8e180]: Viking Storm
+              - generic [ref=f8e181]: Northwind · 96.4%
+            - button "Reef Riches Lumen Games · 96.3%" [ref=f8e182] [cursor=pointer]:
+              - generic [ref=f8e184]: Reef Riches
+              - generic [ref=f8e185]: Lumen Games · 96.3%
+        - generic [ref=f8e186]:
+          - generic [ref=f8e187]:
+            - heading "Live casino" [level=2] [ref=f8e188]
+            - link "See all" [ref=f8e189] [cursor=pointer]:
+              - /url: "#live"
+          - generic [ref=f8e190]:
+            - generic [ref=f8e191]:
+              - generic [ref=f8e192]: LIVE
+              - generic [ref=f8e193]:
+                - generic [ref=f8e194]: Aurora Roulette
+                - generic [ref=f8e195]: 1 to 5,000 EUR
+            - generic [ref=f8e196]:
+              - generic [ref=f8e197]: LIVE
+              - generic [ref=f8e198]:
+                - generic [ref=f8e199]: Blackjack VIP
+                - generic [ref=f8e200]: 25 to 10,000 EUR
+            - generic [ref=f8e201]:
+              - generic [ref=f8e202]: LIVE
+              - generic [ref=f8e203]:
+                - generic [ref=f8e204]: Baccarat Royale
+                - generic [ref=f8e205]: 5 to 7,500 EUR
+        - generic [ref=f8e206]:
+          - generic [ref=f8e207]:
+            - heading "Sportsbook" [level=2] [ref=f8e208]
+            - link "Today" [ref=f8e209] [cursor=pointer]:
+              - /url: "#sports"
+          - generic [ref=f8e215]:
+            - generic [ref=f8e216]: Live odds on 1,200 matches a day
+            - generic [ref=f8e217]: Football, tennis, basketball and esports
