@@ -1,8 +1,52 @@
 # Didit Demo Center
 
-The catalogue behind [demos.didit.me](https://demos.didit.me): every Didit
-module, runnable. 18 pre-built workflows across KYC, KYB, monitoring and fraud,
-each with the request that created it.
+[demos.didit.me](https://demos.didit.me): four industry demos with Didit
+inside each one (a casino, a bank, a marketplace and a crypto exchange), and
+the module catalogue at `/modules`: every Didit module, runnable, with the
+request that created it.
+
+## The Demo Center
+
+The front page (`/`) lists the four industry demos. Each demo walks the same
+five steps (sign up, verify, transact, stop fraud, console) inside its own
+brand, under the Demo Center bar, with the Didit live layer floating over it.
+Aurora Play (`/igaming`) is the first demo on this shell; the other three keep
+their current screens until they move to it.
+
+### One shared Didit client: `lib/didit/`
+
+| File | What it does |
+| --- | --- |
+| `config.ts` | The environment (`NEXT_PUBLIC_IS_STAGING`), base URLs, the API key, the publishable key, `pick(production, staging)` and `defineDemo` |
+| `demos.ts` | One `defineDemo` per demo: brand, workflows per environment, rules and copy |
+| `server.ts` | Every call that needs the API key: `didit.sessions.create`, `.sessions.decision`, `.transactions.sdkToken`, `.events.sdkToken`, `.users.get`. The four demos' own helpers delegate to `callDidit` |
+| `auth.ts` | Didit Authentication on the server: whether it is on, and the signed-in visitor's `vendor_data` |
+| `browser.ts` | The web SDK modal (`openVerification`), `submitTransaction` from the browser (the SDK attaches the signals device data), `applyStepUp` for `action_required`, and the device read-out |
+| `provider.tsx` | `configureEvents` on every page from the first load, page and sign-in events with a monitoring token, and the Authentication bridge |
+| `live.ts`, `use-live.ts` | The live layer's feed: the visitor's own events, newest first |
+| `console.ts` | The console view's page model (Person, Transaction, Business, Verification, Device) |
+
+The live layer, the callouts, the console view and the Demo Center bar are in
+`components/didit-live/`.
+
+### Authentication and signals
+
+Didit Authentication (`@didit-protocol/auth-nextjs`) is on when
+`DIDIT_PUBLISHABLE_KEY` holds the demo application's publishable key: the root
+layout renders `<DiditAuth>`, `middleware.ts` serves `/auth/*` and the Didit
+user id (with the demo's prefix) becomes the `vendor_data` of every session,
+transaction and event. `DIDIT_REDIRECT_URI` defaults to this site's
+`/auth/callback`; set it to `http://localhost:3000/auth/callback` locally.
+Without a key every demo keeps its own sign-in and the Authentication parts
+stay hidden.
+
+The Authentication packages, `@didit-protocol/signals` 0.1.0 and
+`@didit-protocol/sdk-web` 0.5.0 are not on npm yet, so `vendor/didit-sdk/`
+holds their `npm pack` builds from the didit-protocol/sdk-web repository
+(commit `35dd5ac`, "Prepare the 0.5.0 release"). Once they are published,
+switch each `file:vendor/didit-sdk/…` entry in `package.json` to its version
+(and drop the `overrides` and `pnpm.overrides` that point at the same files),
+then delete `vendor/didit-sdk/`.
 
 ## Two kinds of demo
 
@@ -33,27 +77,26 @@ session. It forwards straight to the catalogue, which opens the same modal.
 
 ## Industry demo: iGaming (`/igaming`)
 
-Aurora Play, a fictional casino and sportsbook, runs Didit end to end. Every
-call is live against the environment `NEXT_PUBLIC_IS_STAGING` selects; nothing
-on the page is a fixture.
+Aurora Play, a fictional casino and sportsbook, runs Didit end to end on the
+Demo Center shell. Every call is live against the environment
+`NEXT_PUBLIC_IS_STAGING` selects; the live layer only ever shows what this
+visitor's own calls returned.
 
 | Step | Didit surface |
 | --- | --- |
-| Registration | Adaptive age workflow: `POST /v3/session/`, the web SDK's `startVerification`, `GET /v3/session/{id}/decision/` |
-| Licensed markets | The session's IP analysis, a country list and a transaction rule |
-| Deposits, bets, withdrawals, bonus, limits | `POST /v3/transactions/sdk-token/` on the server, only after `GET /v3/session/{id}/decision/` shows the player's approved age check; `submitTransaction` and `GET /v1/transactions/{id}/` in the browser |
-| ID check at 2,000 EUR | A rule moves the deposit to `AWAITING_USER`; the page opens the returned verification session |
-| Bonus abuse | A rule counting players per device fingerprint |
-| Self-exclusion | The balance is paid back as a monitored withdrawal, then `PATCH /v3/users/{vendor_data}/update-status/` to `BLOCKED`: Didit then refuses the player's transactions |
-| Operator side | Console deep links for the session, each transaction and the player |
+| Sign up | Didit Authentication in the casino's own modal (hosted passkey sign-up, or an email code); without a publishable key, the casino's own form |
+| Verify | Adaptive age workflow: `didit.sessions.create`, the web SDK modal, `didit.sessions.decision` |
+| Transact | `didit.transactions.sdkToken` on the server, only after the player's approved age check; `submitTransaction` in the browser. A rule holds the deposit that brings 30 days to 2,000 EUR (`AWAITING_USER`) and the cashier opens its ID check |
+| Stop fraud | A second account in the same browser claims the welcome offer: a rule counting players per device fingerprint holds it for review |
+| Console | The console view: Person, Transaction, Verification and Device, from this visitor's records |
 
-The player is a random `vendor_data` (`aurora-play-…`) in a signed, httpOnly
-cookie. The server routes under `app/api/igaming` only ever return records
-that belong to that player, cut down to what the page shows. The 18+ gate is
-the server's, not the page's: the token route mints nothing until Didit's own
-decision for the player's age check is `Approved`. The hosted flow's return
-URL is always this site's `/igaming` (`siteConfig.url`), never one the
-request supplies.
+Without Authentication the player is a random `vendor_data` (`aurora-play-…`)
+in a signed, httpOnly cookie; with it, `aurora-play-` plus the Didit user id.
+The server routes under `app/api/igaming` only ever return records that belong
+to that player, cut down to what the page shows. The 18+ gate is the
+server's: the token route mints nothing until Didit's decision for the
+player's age check is `Approved`. The hosted flow's return URL is always this
+site's `/igaming`, never one the request supplies.
 
 **One-time setup per environment.** The rules and lists live on the Didit
 application, not in this repo. Install them (idempotent, matched by name):
@@ -66,10 +109,6 @@ npm run igaming:setup                # create or update them
 Every rule matches only `aurora-play-` players, so other demos on the same
 application are untouched. Thresholds, markets and rule definitions are in
 [`lib/igaming/policy.ts`](lib/igaming/policy.ts).
-
-The demo area has a light and a dark theme (Console v2 dark palette, scoped to
-the page in [`styles/igaming.css`](styles/igaming.css)); the didit.me chrome
-around it stays light.
 
 ## Industry demo: fintech (`/fintech`)
 
@@ -259,15 +298,18 @@ than failing on a 400.
 ## Checks
 
 ```sh
-npm test                     # node --test (unit tests, /api/igaming,
+npm test                     # node --test (unit tests, lib/didit, /api/igaming,
                              # /api/fintech, /api/crypto-exchange and
                              # /marketplace route tests)
-npm run test:e2e             # Playwright flows for /igaming, /fintech and
-                             # /marketplace against BASE_URL (E2E_LIVE=1 adds
-                             # the live staging flows)
+npm run test:e2e             # Playwright flows for /fintech and /marketplace
+                             # against BASE_URL (E2E_LIVE=1 adds the live
+                             # staging flows)
 npm run build && npm run test:e2e:crypto-exchange
                              # Playwright flows for /crypto-exchange, desktop and
                              # phone, on recorded Didit responses
+npm run build && npm run test:e2e:aurora-play
+                             # the same for /igaming (build without
+                             # DIDIT_PUBLISHABLE_KEY)
 npm run typecheck            # tsc --noEmit
 npm run lint                 # eslint (vendor/ is excluded - it is synced)
 npm run build                # next build
@@ -282,10 +324,11 @@ npm run build && npm run start &
 PROOF_SESSION_ID=<a real session id> npm run shots
 ```
 
-Writes the catalogue, both modal families and the 390px layouts to `proof/`.
+Writes the catalogue (`/modules`), both modal families and the 390px layouts to `proof/`.
 The catalogue is light-only, exactly like didit.me and help.didit.me - the
-design system ships no dark token set. Only the industry demos (`/igaming`,
-`/fintech`, `/marketplace`) have a dark theme.
+design system ships no dark token set. The industry demos bring their own
+look: Aurora Play is a dark casino, and `/fintech` and `/marketplace` have a
+dark theme.
 
 ## Technical documentation
 
