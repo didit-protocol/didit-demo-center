@@ -1,18 +1,16 @@
 {
-  "recorded": "2026-10-13, verification.staging.didit.me, demo organization",
-  "source": "real response; hosted-flow links and tokens redacted",
   "status": 200,
-  "response": {
+  "body": {
     "biometric_retention": {
       "jurisdictions": [],
       "deletes_at": null
     },
-    "session_id": "95b6c3a1-fca4-4006-bd90-933bd22b9ef0",
+    "session_id": "c5c01e9c-461c-4726-b288-c16fb8ec41b1",
     "session_kind": "user",
     "shared_from_session": null,
     "shared_from_session_number": null,
-    "session_number": 8065,
-    "session_url": "<redacted>",
+    "session_number": 10041,
+    "session_url": "https://verify.staging.didit.me/session/ncr1sVpt6LVp",
     "status": "Not Started",
     "status_override": null,
     "decision_trace": {
@@ -39,7 +37,7 @@
       },
       "earlier_verifications": {
         "count": 0,
-        "vendor_user_id": "90162d96-66a7-4bf0-89f3-b353b569d1d1"
+        "vendor_user_id": "6d64a8df-59bf-413f-b5ae-deaaeac4636b"
       },
       "networks": {
         "count": 0,
@@ -56,11 +54,9 @@
       "AML",
       "IP_ANALYSIS"
     ],
-    "vendor_data": "fintech-demo-rec-1791926220",
-    "metadata": {
-      "demo_app": "fintech"
-    },
-    "callback": "http://localhost:3000/fintech",
+    "vendor_data": "alder-e2e-mvqpw1il",
+    "metadata": null,
+    "callback": "https://demos.staging.didit.me/fintech",
     "id_verifications": null,
     "nfc_verifications": null,
     "nfc_skip_reason": null,
@@ -95,7 +91,7 @@
     "biometric_consent": null,
     "environment": "live",
     "sandbox_scenario": null,
-    "created_at": "2026-10-13T21:17:28.082876Z",
-    "expires_at": "2026-10-20T21:17:28.070205Z"
+    "created_at": "2026-10-27T13:24:28.943417Z",
+    "expires_at": "2026-11-03T13:24:28.929746Z"
   }
 }

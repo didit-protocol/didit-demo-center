@@ -1,0 +1,348 @@
+{
+  "post": {
+    "uuid": "8b303386-ff19-43c0-8d78-3f4d3f0f414a",
+    "environment": "live",
+    "transaction_number": 212,
+    "txn_id": "al-incoming-transfer-mvqpw1il-mvqpw2nc",
+    "txn_date": "2026-10-27T13:24:30.065185Z",
+    "zone_id": null,
+    "transaction_type": "finance",
+    "action_type": "incoming_transfer",
+    "direction": "INBOUND",
+    "status": "APPROVED",
+    "source": "LIVE",
+    "amount": "3200",
+    "currency": "EUR",
+    "currency_type": "fiat",
+    "amount_in_default_currency": null,
+    "default_currency_code": null,
+    "preferred_currency_amount": "3581.602481029762646532",
+    "preferred_currency_code": "USD",
+    "payment_details": "Salary",
+    "payment_txn_id": null,
+    "score": 0,
+    "severity": null,
+    "decision_reason_code": null,
+    "decision_reason_label": null,
+    "vendor_data": "alder-e2e-mvqpw1il",
+    "metadata": {
+      "subject": {
+        "full_name": "Lena Fischer",
+        "vendor_data": "alder-e2e-mvqpw1il",
+        "device_context": {
+          "metadata": {
+            "accept_language": "*",
+            "composite_server_id": "0fd0ad7093e60298674cc6c60617e0d4"
+          },
+          "platform": "desktop",
+          "os_family": "Mac OS X",
+          "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+          "device_brand": "Apple",
+          "device_model": "Mac",
+          "browser_family": "Safari",
+          "accept_language": "*",
+          "network_context": {
+            "ip_address": "203.0.113.7"
+          }
+        }
+      },
+      "counterparty": {
+        "full_name": "Nordwerk GmbH",
+        "entity_type": "company"
+      }
+    },
+    "props": {
+      "bank": "Alder",
+      "demo_app": "fintech",
+      "new_payee": false,
+      "is_data_center": true
+    },
+    "tags": [],
+    "parties": [
+      {
+        "uuid": "8ad5aba0-e496-46cf-ac2a-9b7f90c8c979",
+        "role": "COUNTERPARTY",
+        "entity_type": "company",
+        "kind": "EXTERNAL",
+        "vendor_data": null,
+        "full_name": "Nordwerk GmbH",
+        "first_name": null,
+        "last_name": null,
+        "country_code": null,
+        "dob": null,
+        "address": {},
+        "institution_info": {},
+        "device": {},
+        "external_party_snapshot": {
+          "address": {},
+          "country": null,
+          "full_name": "Nordwerk GmbH",
+          "last_name": null,
+          "first_name": null,
+          "entity_type": "company",
+          "vendor_data": null,
+          "date_of_birth": null,
+          "device_context": {},
+          "institution_details": {}
+        }
+      },
+      {
+        "uuid": "d8ecea88-aace-437e-a021-bbc1441bdbc7",
+        "role": "APPLICANT",
+        "entity_type": "individual",
+        "kind": "USER",
+        "vendor_data": "alder-e2e-mvqpw1il",
+        "full_name": "Lena Fischer",
+        "first_name": null,
+        "last_name": null,
+        "country_code": null,
+        "dob": null,
+        "address": {},
+        "institution_info": {},
+        "device": {
+          "metadata": {
+            "accept_language": "*",
+            "composite_server_id": "0fd0ad7093e60298674cc6c60617e0d4"
+          },
+          "platform": "desktop",
+          "os_family": "Mac OS X",
+          "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+          "device_brand": "Apple",
+          "device_model": "Mac",
+          "browser_family": "Safari",
+          "accept_language": "*",
+          "network_context": {
+            "isp": "Google LLC",
+            "ip_city": "The Dalles",
+            "ip_state": "Oregon",
+            "latitude": 45.59455871582031,
+            "longitude": -121.17868041992188,
+            "time_zone": "America/Los_Angeles",
+            "asn_number": 396982,
+            "ip_address": "203.0.113.7",
+            "ip_country": "United States",
+            "organization": "Google LLC",
+            "is_vpn_or_tor": false,
+            "is_data_center": true,
+            "ip_country_code": "US",
+            "asn_organization": "Google LLC",
+            "time_zone_offset": "-0700"
+          }
+        },
+        "external_party_snapshot": null
+      }
+    ],
+    "payment_methods": [],
+    "documents": [],
+    "activities": [
+      {
+        "uuid": "a0f6bf00-8955-4267-a101-6e6a08f32312",
+        "activity_type": "TRANSACTION_CREATED",
+        "source": "TRANSACTION",
+        "status": "APPROVED",
+        "title": "incoming_transfer",
+        "description": null,
+        "metadata": {
+          "amount": "3200.000000000000000000",
+          "currency": "EUR",
+          "direction": "INBOUND",
+          "action_type": "incoming_transfer"
+        },
+        "occurred_at": "2026-10-27T13:24:30.071367Z"
+      }
+    ],
+    "alerts": [],
+    "rule_runs": [],
+    "provider_results": [],
+    "travel_rule": null,
+    "network_snapshot": null,
+    "remediation": null,
+    "action_required": null,
+    "cost_breakdown": {
+      "total_price": 0.02,
+      "items": [
+        {
+          "usage_type": "transaction_monitoring",
+          "price": 0.02,
+          "details": {
+            "product": "transactions"
+          },
+          "created_at": "2026-10-27T13:24:30.407438Z"
+        }
+      ]
+    }
+  },
+  "get": {
+    "uuid": "8b303386-ff19-43c0-8d78-3f4d3f0f414a",
+    "environment": "live",
+    "transaction_number": 212,
+    "txn_id": "al-incoming-transfer-mvqpw1il-mvqpw2nc",
+    "txn_date": "2026-10-27T13:24:30.065185Z",
+    "zone_id": null,
+    "transaction_type": "finance",
+    "action_type": "incoming_transfer",
+    "direction": "INBOUND",
+    "status": "APPROVED",
+    "source": "LIVE",
+    "amount": "3200",
+    "currency": "EUR",
+    "currency_type": "fiat",
+    "amount_in_default_currency": null,
+    "default_currency_code": null,
+    "preferred_currency_amount": "3581.602481029762646532",
+    "preferred_currency_code": "USD",
+    "payment_details": "Salary",
+    "payment_txn_id": null,
+    "score": 0,
+    "severity": null,
+    "decision_reason_code": null,
+    "decision_reason_label": null,
+    "vendor_data": "alder-e2e-mvqpw1il",
+    "metadata": {
+      "subject": {
+        "full_name": "Lena Fischer",
+        "vendor_data": "alder-e2e-mvqpw1il",
+        "device_context": {
+          "metadata": {
+            "accept_language": "*",
+            "composite_server_id": "0fd0ad7093e60298674cc6c60617e0d4"
+          },
+          "platform": "desktop",
+          "os_family": "Mac OS X",
+          "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+          "device_brand": "Apple",
+          "device_model": "Mac",
+          "browser_family": "Safari",
+          "accept_language": "*",
+          "network_context": {
+            "ip_address": "203.0.113.7"
+          }
+        }
+      },
+      "counterparty": {
+        "full_name": "Nordwerk GmbH",
+        "entity_type": "company"
+      }
+    },
+    "props": {
+      "bank": "Alder",
+      "demo_app": "fintech",
+      "new_payee": false,
+      "is_data_center": true
+    },
+    "tags": [],
+    "parties": [
+      {
+        "uuid": "8ad5aba0-e496-46cf-ac2a-9b7f90c8c979",
+        "role": "COUNTERPARTY",
+        "entity_type": "company",
+        "kind": "EXTERNAL",
+        "vendor_data": null,
+        "full_name": "Nordwerk GmbH",
+        "first_name": null,
+        "last_name": null,
+        "country_code": null,
+        "dob": null,
+        "address": {},
+        "institution_info": {},
+        "device": {},
+        "external_party_snapshot": {
+          "address": {},
+          "country": null,
+          "full_name": "Nordwerk GmbH",
+          "last_name": null,
+          "first_name": null,
+          "entity_type": "company",
+          "vendor_data": null,
+          "date_of_birth": null,
+          "device_context": {},
+          "institution_details": {}
+        }
+      },
+      {
+        "uuid": "d8ecea88-aace-437e-a021-bbc1441bdbc7",
+        "role": "APPLICANT",
+        "entity_type": "individual",
+        "kind": "USER",
+        "vendor_data": "alder-e2e-mvqpw1il",
+        "full_name": "Lena Fischer",
+        "first_name": null,
+        "last_name": null,
+        "country_code": null,
+        "dob": null,
+        "address": {},
+        "institution_info": {},
+        "device": {
+          "metadata": {
+            "accept_language": "*",
+            "composite_server_id": "0fd0ad7093e60298674cc6c60617e0d4"
+          },
+          "platform": "desktop",
+          "os_family": "Mac OS X",
+          "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+          "device_brand": "Apple",
+          "device_model": "Mac",
+          "browser_family": "Safari",
+          "accept_language": "*",
+          "network_context": {
+            "isp": "Google LLC",
+            "ip_city": "The Dalles",
+            "ip_state": "Oregon",
+            "latitude": 45.59455871582031,
+            "longitude": -121.17868041992188,
+            "time_zone": "America/Los_Angeles",
+            "asn_number": 396982,
+            "ip_address": "203.0.113.7",
+            "ip_country": "United States",
+            "organization": "Google LLC",
+            "is_vpn_or_tor": false,
+            "is_data_center": true,
+            "ip_country_code": "US",
+            "asn_organization": "Google LLC",
+            "time_zone_offset": "-0700"
+          }
+        },
+        "external_party_snapshot": null
+      }
+    ],
+    "payment_methods": [],
+    "documents": [],
+    "activities": [
+      {
+        "uuid": "a0f6bf00-8955-4267-a101-6e6a08f32312",
+        "activity_type": "TRANSACTION_CREATED",
+        "source": "TRANSACTION",
+        "status": "APPROVED",
+        "title": "incoming_transfer",
+        "description": null,
+        "metadata": {
+          "amount": "3200.000000000000000000",
+          "currency": "EUR",
+          "direction": "INBOUND",
+          "action_type": "incoming_transfer"
+        },
+        "occurred_at": "2026-10-27T13:24:30.071367Z"
+      }
+    ],
+    "alerts": [],
+    "rule_runs": [],
+    "provider_results": [],
+    "travel_rule": null,
+    "network_snapshot": null,
+    "remediation": null,
+    "action_required": null,
+    "cost_breakdown": {
+      "total_price": 0.02,
+      "items": [
+        {
+          "usage_type": "transaction_monitoring",
+          "price": 0.02,
+          "details": {
+            "product": "transactions"
+          },
+          "created_at": "2026-10-27T13:24:30.407438Z"
+        }
+      ]
+    }
+  }
+}
