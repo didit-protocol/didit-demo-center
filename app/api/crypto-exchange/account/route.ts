@@ -3,6 +3,8 @@ import type { NextRequest } from "next/server";
 import { randomUUID } from "node:crypto";
 
 import { CX_WORKFLOWS } from "@/lib/crypto-exchange/policy";
+import { visitorVendorData } from "@/lib/didit/auth";
+import { kestrel } from "@/lib/didit/demos";
 import {
   clearAccountCookie,
   consoleContext,
@@ -37,9 +39,13 @@ export async function POST() {
     return failure("Kestrel is not configured on this environment.", 503);
   }
 
-  // The user's id at the exchange. Every Didit record of this person -
-  // the onboarding session, each transaction, the selfie step-up - carries it.
-  const vendorData = `kestrel-${randomUUID()}`;
+  // The user's id at the exchange. Every Didit record of this person (the
+  // onboarding session, each transaction, the selfie step-up) carries it:
+  // the signed-in Didit user with Kestrel's prefix, or, with Authentication
+  // off, a fresh id.
+  const vendorData =
+    (await visitorVendorData(kestrel.vendorPrefix)) ??
+    `${kestrel.vendorPrefix}${randomUUID()}`;
   const result = await didit("POST", "/session/", {
     workflow_id: CX_WORKFLOWS.onboarding,
     vendor_data: vendorData,
