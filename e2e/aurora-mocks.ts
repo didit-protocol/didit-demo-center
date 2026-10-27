@@ -21,7 +21,8 @@ import { projectSession } from "../lib/igaming/records";
  */
 
 const FIXTURES = path.join(__dirname, "..", "tests", "fixtures", "igaming");
-const STAGING = process.env.NEXT_PUBLIC_IS_STAGING === "true";
+// The app builds for staging from .env; set NEXT_PUBLIC_IS_STAGING=false for a production build.
+const STAGING = process.env.NEXT_PUBLIC_IS_STAGING !== "false";
 const API = STAGING
   ? "https://verification.staging.didit.me"
   : "https://verification.didit.me";
