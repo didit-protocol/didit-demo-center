@@ -21,7 +21,7 @@ async function step(page: Page, label: string) {
   }
 }
 
-test.use({ viewport: { width: 1440, height: 900 } });
+test.use(process.env.PHONE ? {} : { viewport: { width: 1440, height: 900 } });
 
 test("shots", async ({ page }) => {
   void SHA;

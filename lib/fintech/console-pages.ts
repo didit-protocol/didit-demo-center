@@ -331,7 +331,7 @@ function transactionPage(input: AlderConsoleInput): RecordPage | null {
           record.status === "IN_REVIEW" ? "Manual review" : "None needed",
         ],
         ...(heldFor !== null
-          ? ([["Time held", `${heldFor} seconds`]] as [string, string][])
+          ? ([["Time held", `${heldFor} second${heldFor === 1 ? "" : "s"}`]] as [string, string][])
           : []),
       ],
     },

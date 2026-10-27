@@ -109,9 +109,10 @@
 .al-bal small .al-chip { height: 24px; }
 .al-bal-row { display: flex; align-items: center; gap: 16px; }
 .al-bal-row > span { display: inline-block; }
+.al-bal-anchor { padding-right: 26px; }
 .al-bcard { display: flex; flex-direction: column; justify-content: space-between; }
 .al-bcard-top { display: flex; align-items: center; justify-content: space-between; }
-.al-bcard-top small { font-size: 12px; font-weight: 700; letter-spacing: .8px; opacity: .85; color: var(--al-green); position: relative; z-index: 2; }
+.al-bcard-top small { font-size: 12px; font-weight: 700; letter-spacing: .8px; opacity: .85; color: #FFFFFF; position: relative; z-index: 2; }
 .al-bcard-brand { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; font-size: 20px; letter-spacing: -0.4px; }
 .al-bcard-mid { display: flex; align-items: center; gap: 12px; }
 .al-nfc { font-size: 12px; font-weight: 700; opacity: .8; }

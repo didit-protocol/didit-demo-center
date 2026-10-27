@@ -409,7 +409,7 @@ export function HomeView({
             <span className="al-chip is-neu">DE89 •••• 4021</span>
           </small>
           <span className="al-bal-row">
-            <span data-callout="balance">
+            <span className="al-bal-anchor" data-callout="balance">
               <Balance amount={balance} />
             </span>
           </span>
@@ -601,7 +601,7 @@ export function SecurityView({
       {attempt ? (
         <div className="al-card al-blocked" data-testid="alder-blocked">
           <div className="al-blocked-h">
-            <span aria-hidden className="al-blocked-ic" data-callout="blocked">
+            <span aria-hidden className="al-blocked-ic">
               <ShieldBan size={24} />
             </span>
             <span>
@@ -610,7 +610,9 @@ export function SecurityView({
                 Today at {at(attempt.at)}. Nobody got in, and no money moved.
               </p>
             </span>
-            <span className="al-chip is-no">Blocked</span>
+            <span className="al-chip is-no" data-callout="blocked">
+              Blocked
+            </span>
           </div>
           <div className="al-tiles">
             <span>

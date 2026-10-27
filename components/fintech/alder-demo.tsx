@@ -468,7 +468,7 @@ export function AlderDemo() {
       id: "blocked",
       anchor: "blocked",
       tone: "stop",
-      side: "right",
+      side: "left",
       title: "No passkey, no access",
     });
   } else if (!modal && view === "home" && approved && state?.seeded) {
