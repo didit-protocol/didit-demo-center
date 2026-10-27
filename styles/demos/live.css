@@ -1,4 +1,4 @@
-/* Didit industry demos v2 (Alex, 27 Oct 2026): the Demo Center chrome, the Didit live layer that floats over each customer
+/* Didit industry demos v2: the Demo Center chrome, the Didit live layer that floats over each customer
    app (event feed, callouts, phone pill) and the console view modal (a faithful preview of the Didit console).
    The customer apps have their own stylesheets (aurora.css, alder.css, northmarket.css, kestrel.css). */
 
@@ -10,7 +10,7 @@
       --lv-hold: #D97706; --lv-hold-soft: #FFF4E0; --lv-hold-text: #9A5200;
       --lv-ring: conic-gradient(from 210deg, #8AD8FF, #2567FF 30%, #3B3FE0 55%, #7A5AF8 72%, #8AD8FF);
       --lv-ink: #0B0C12; --lv-ink-2: #161823; --lv-ink-line: #262938; }
-.dx { width: 1440px; height: 900px; box-sizing: border-box; position: relative; overflow: hidden; display: flex; flex-direction: column;
+.dx { width: 100%; height: 100vh; height: 100dvh; box-sizing: border-box; position: relative; overflow: hidden; display: flex; flex-direction: column;
       font-family: var(--font-sans); background: var(--lv-ink); }
 .dx *, .dx *::before, .dx *::after { box-sizing: border-box; }
 
@@ -238,5 +238,88 @@
 .dxp .lv-pill .lv-go { margin-left: auto; color: #FFFFFF; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
 
 /* ---------- hub (Demo Center pages) ---------- */
-.hub { width: 1440px; box-sizing: border-box; background: #FFFFFF; color: #1A1A1A; font-family: var(--font-sans); overflow: hidden; }
+.hub { width: 100%; box-sizing: border-box; background: #FFFFFF; color: #1A1A1A; font-family: var(--font-sans); overflow: hidden; }
 .hub *, .hub *::before, .hub *::after { box-sizing: border-box; }
+
+/* ---------- the live page (the rules above are the boards' own) ---------- */
+.dx, .dxp, .hub { --font-sans: var(--font-didit), "Inter", ui-sans-serif, system-ui, sans-serif; --dd-mono: var(--font-didit-mono), ui-monospace, "SF Mono", Menlo, monospace; }
+.dx button, .dx a { font: inherit; color: inherit; cursor: pointer; }
+.dx button { background: none; border: 0; padding: 0; }
+.dx a { text-decoration: none; }
+.dx :focus-visible { outline: 2px solid #7A5AF8; outline-offset: 2px; }
+.dx-switch { position: relative; }
+.dx-switch svg { color: #8D90A6; }
+.dx-menu { position: absolute; left: 0; top: 38px; z-index: 20; width: 260px; padding: 6px; border-radius: 12px; background: var(--lv-ink-2); border: 1px solid var(--lv-ink-line);
+           box-shadow: 0 20px 50px -10px rgba(0, 0, 0, .6); display: flex; flex-direction: column; gap: 2px; }
+.dx-menu a { display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 8px; border-radius: 8px; font-size: 13px; color: #E9EAF2; }
+.dx-menu a:hover, .dx-menu a[aria-current="page"] { background: #20232F; }
+.dx-menu a em { font-style: normal; color: #8D90A6; margin-left: auto; }
+.dx-menu .dx-bm { width: 22px; height: 22px; border-radius: 6px; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #FFFFFF; }
+.dx-step { transition: background-color .15s ease, color .15s ease; }
+.dx-step:not(.is-on):hover { color: #E9EAF2; }
+.dx-btn.is-pri img { width: 12px; height: 18px; }
+.lv-foot button { flex: 1; height: 36px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-size: 13px; font-weight: 600; }
+.lv-foot button.is-pri { background: var(--lv-ink); color: #FFFFFF; }
+.lv-foot button.is-sec { flex: none; padding: 0 12px; background: #F4F4F6; color: #1A1A1A; }
+.lv-foot img { width: 10px; height: 15px; }
+.lv-list { max-height: min(380px, calc(100dvh - 330px)); overflow-y: auto; }
+.lv-empty { padding: 14px; font-size: 12.5px; line-height: 18px; color: #6B6B6B; background: #FFFFFF; }
+.lv-x code { white-space: nowrap; }
+.lv-close { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; color: #8A8A93; }
+.lv-close:hover { background: #F4F4F6; color: #1A1A1A; }
+.lv-pill { cursor: pointer; }
+.lv-code { padding: 10px 14px 0; }
+.lv-code pre { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--lv-ink); color: #E9EAF2; font-family: var(--dd-mono); font-size: 11.5px; line-height: 17px; overflow-x: auto; }
+.lv-code pre .c { color: #8D90A6; }
+.co { transition: opacity .2s ease; }
+@keyframes co-pulse { 0%, 100% { box-shadow: 0 0 0 5px color-mix(in srgb, var(--c) 28%, transparent), 0 0 0 11px color-mix(in srgb, var(--c) 12%, transparent); }
+                      50% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--c) 22%, transparent), 0 0 0 15px color-mix(in srgb, var(--c) 6%, transparent); } }
+.co-dot { animation: co-pulse 2.2s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .co-dot { animation: none; } }
+.cv-scrim { position: fixed; z-index: 60; }
+.cv { width: min(1320px, calc(100vw - 40px)); height: min(796px, calc(100dvh - 40px)); }
+.cv-tabs button { height: 26px; padding: 0 12px; border-radius: 7px; display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-sans); font-size: 12.5px; color: #A9ACC0; white-space: nowrap; }
+.cv-tabs button.is-on { background: #FFFFFF; color: var(--lv-ink); font-weight: 600; }
+.cv-x { color: #E9EAF2; }
+.cv, .cv * { box-sizing: border-box; }
+.cv { font-family: var(--font-inter), "Inter", var(--font-sans); }
+.cs-page, .cs-side { overflow-y: auto; }
+.cs-empty { padding: 14px; font-size: 12.5px; color: #6B6B6B; }
+.cs-ava.is-ini { font-family: var(--font-sans); font-size: 20px; font-weight: 600; color: #FFFFFF; background: linear-gradient(135deg, #8B5CFF, #E047C8); }
+.cs-doc .cs-face { position: absolute; left: 10px; top: 26px; width: 58px; height: 74px; border-radius: 4px; background: linear-gradient(180deg, #C9D6CE, #AFC2B6); display: grid; place-items: center; color: #5D7A68; }
+.cs-checks dd small { color: #6B6B6B; }
+
+@media (max-width: 1100px) {
+  .dx-steps .dx-step:not(.is-on) span.l, .dx-step-line { display: none; }
+  .dx-center, .dx-sep { display: none; }
+}
+@media (max-width: 860px) {
+  .cv-body { grid-template-columns: minmax(0, 1fr); padding: 8px; }
+  .cs-rail, .cs-nav { display: none; }
+  .cs-main { grid-template-columns: minmax(0, 1fr); }
+  .cs-side { border-left: 0; border-top: 1px solid #EDEDED; }
+  .cs-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cs-id-doc { grid-template-columns: minmax(0, 1fr); }
+  .cv-url, .cv-note em { display: none; }
+  .cv-tabs { overflow-x: auto; max-width: calc(100vw - 150px); }
+  .cv-top b { display: none; }
+}
+/* the phone: the bar keeps the lockup and the current step; the feed folds into the pill */
+@media (max-width: 767px) {
+  .dx-bar { height: 44px; padding: 0 12px; gap: 10px; }
+  .dx-logo { height: 18px; }
+  .dx-center, .dx-sep { display: inline-block; }
+  .dx-switch, .dx-sandbox, .dx-r .dx-btn, .dx-r .dx-iconbtn, .dx-step-line { display: none; }
+  .dx-steps { justify-content: flex-end; }
+  .dx-steps .dx-step:not(.is-on) { display: none; }
+  .dx-step.is-on { height: 30px; font-size: 13px; padding: 0 14px 0 4px; }
+  .dx-step.is-on .n { width: 22px; height: 22px; }
+  .lv { left: 12px; right: 12px; bottom: 76px; width: auto; }
+  .lv-prods { display: none; }
+  .lv-list { max-height: 34dvh; }
+  .lv-pill { left: 12px; right: 12px; bottom: 16px; justify-content: flex-start; height: 50px; font-size: 15px; }
+  .lv-pill .lv-go { margin-left: auto; color: #FFFFFF; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+  .co { display: none; }
+  .cv { width: 100vw; height: 100dvh; border-radius: 0; }
+  .cv-scrim { place-items: stretch; }
+}
