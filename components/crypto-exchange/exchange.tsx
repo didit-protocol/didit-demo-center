@@ -361,8 +361,9 @@ export interface TradeProps {
 function KycBar({
   banner,
   busy,
+  phone = false,
   onVerify,
-}: Pick<TradeProps, "banner" | "busy" | "onVerify">) {
+}: Pick<TradeProps, "banner" | "busy" | "onVerify"> & { phone?: boolean }) {
   if (!banner) return null;
   const copy = {
     verify: [
@@ -384,7 +385,7 @@ function KycBar({
   }[banner.kind];
 
   return (
-    <div className="ks-banner" role="status">
+    <div className={`ks-banner${phone ? " is-phone" : ""}`} role="status">
       <ShieldCheck aria-hidden className="ks-up" size={18} />
       <b>{copy[0]}</b>
       <span>{copy[1]}</span>
@@ -607,15 +608,12 @@ function PhoneHome(props: TradeProps) {
 
   return (
     <div className="ks-phone">
-      {props.banner ? (
-        <div className="ks-pf">
-          <KycBar
-            banner={props.banner}
-            busy={props.busy}
-            onVerify={props.onVerify}
-          />
-        </div>
-      ) : null}
+      <KycBar
+        phone
+        banner={props.banner}
+        busy={props.busy}
+        onVerify={props.onVerify}
+      />
       <div className="ks-pf">
         <small>Portfolio</small>
         <span className="v ks-mono" data-testid="kestrel-portfolio">

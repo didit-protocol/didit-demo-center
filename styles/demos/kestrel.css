@@ -196,7 +196,9 @@
 @media (max-width: 767px) {
   .ks { font-size: 14px; overflow-y: auto; display: block; }
   .ks-nav { height: 56px; padding: 0 16px; position: sticky; top: 0; z-index: 2; }
-  .ks-nav .ks-hide-phone, .ks-tick, .ks-trade, .ks-banner { display: none !important; }
+  .ks-nav .ks-hide-phone, .ks-tick, .ks-trade, .ks-banner:not(.is-phone) { display: none !important; }
+  .ks-banner.is-phone { flex-wrap: wrap; padding: 14px 16px; }
+  .ks-banner.is-phone .ks-btn { margin-left: 0; width: 100%; }
   .ks-phone { display: flex; flex-direction: column; padding: 0 0 96px; }
   .ks-land { padding: 24px 16px 96px; gap: 24px; overflow: visible; }
   .ks-hero h1 { font-size: 34px; line-height: 40px; }
