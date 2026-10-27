@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@didit-protocol/auth-nextjs";
 
 import { readDevice } from "./browser";
+import { diditUrls } from "./config";
 import { DEMOS } from "./demos";
 
 /**
@@ -118,6 +119,7 @@ export function DiditClientProvider({
 
     import("@didit-protocol/signals").then(({ configureEvents }) => {
       configureEvents({
+        baseUrl: diditUrls.api,
         onError: (error) => console.warn("Didit signals:", error.type),
       });
     });
@@ -177,13 +179,18 @@ export function DiditClientProvider({
   const demo = demoOf(pathname);
   const signedIn = auth?.status === "signed-in";
 
-  // A token as soon as someone is signed in on a demo page.
+  // Cookie identities already exist on a returning visitor's first request.
+  // Ask on page entry when Authentication is off; anonymous visitors get a
+  // clean skip and the demo refreshes again after its cookie sign-up.
   React.useEffect(() => {
-    if (!demo || !signedIn || asked.current.has(`${demo}:${auth?.userId}`))
-      return;
-    asked.current.add(`${demo}:${auth?.userId}`);
+    if (!demo || (authEnabled && !signedIn)) return;
+    const identity = authEnabled ? auth?.userId : "cookie";
+    const key = `${demo}:${identity}`;
+
+    if (asked.current.has(key)) return;
+    asked.current.add(key);
     refreshToken(demo);
-  }, [demo, signedIn, auth?.userId, refreshToken]);
+  }, [demo, authEnabled, signedIn, auth?.userId, refreshToken]);
 
   // Every page view on a demo, from the first load.
   React.useEffect(() => {
