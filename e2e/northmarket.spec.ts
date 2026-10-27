@@ -79,6 +79,7 @@ test("a shop, its KYB before payouts, the 1,497 EUR order held for an age check,
   await page.goto("/marketplace");
 
   // 1. Sign up: the shop opens and its sign-up is monitored from this device.
+  await foldFeed(page);
   await page.getByRole("button", { name: "Open my shop" }).click();
   await expect(
     app(page).getByRole("heading", { name: "Ruiz Vintage" }),
@@ -136,6 +137,7 @@ test("a shop, its KYB before payouts, the 1,497 EUR order held for an age check,
     page.getByText("This is a second shop on the same device as Ruiz Vintage"),
   ).toBeVisible();
   await expect(page.getByLabel("Shop name")).toHaveValue("Ruiz Vintage Outlet");
+  await foldFeed(page);
   await page.getByRole("button", { name: "Open my shop" }).click();
   await expect(page.getByTestId("nm-paused")).toContainText(
     "Payouts are paused for this shop",

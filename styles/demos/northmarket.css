@@ -165,7 +165,6 @@
   .nm-head-r { gap: 18px; }
   /* room to scroll every action clear of the open live feed */
   .nm-body { padding: 18px 16px 400px; overflow-y: auto; gap: 16px; }
-  .nm-body.is-signup { padding-bottom: 96px; }
   .nm-signup { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .nm-hero h1 { font-size: 32px; line-height: 36px; letter-spacing: -0.8px; }
   .nm-hero p { font-size: 14.5px; line-height: 21px; }

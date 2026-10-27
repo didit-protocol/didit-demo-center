@@ -577,9 +577,7 @@ export function NorthmarketDemo() {
       events={live.events}
       integration={integration}
       person={person}
-      quiet={
-        current === "signup" || market.busy === "kyb" || market.busy === "age"
-      }
+      quiet={market.busy === "kyb" || market.busy === "age"}
       step={step}
       tiles={tiles}
       onConsole={openConsole}
