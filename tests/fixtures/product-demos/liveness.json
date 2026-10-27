@@ -1,0 +1,399 @@
+{
+  "_note": "Recorded on the staging demo application on 27 Oct 2026: the session create answer and the decision of the new session (Not Started). The sandbox cannot pass a liveness check, so `approved` is that recorded decision with the liveness and IP fields docs.didit.me documents filled in.",
+  "create": {
+    "sessionId": "a0e275a2-353a-494a-9752-54ed74314e67",
+    "url": "https://verify.staging.didit.me/session/e2e-liveness",
+    "didit": [
+      {
+        "method": "POST",
+        "path": "/v3/session/",
+        "status": 201
+      }
+    ]
+  },
+  "started": {
+    "biometric_retention": {
+      "jurisdictions": [
+        "US"
+      ],
+      "deletes_at": "2027-09-27T13:20:35.948773Z"
+    },
+    "session_id": "a0e275a2-353a-494a-9752-54ed74314e67",
+    "session_kind": "user",
+    "shared_from_session": null,
+    "shared_from_session_number": null,
+    "session_number": 10040,
+    "session_url": "https://verify.staging.didit.me/session/e2e-liveness",
+    "status": "Not Started",
+    "status_override": null,
+    "decision_trace": {
+      "status": "Not Started",
+      "decided_by": null,
+      "decided_at": null,
+      "automatic_status": null,
+      "terminal_node_id": null,
+      "actor": null,
+      "warning_counts": {
+        "error": 0,
+        "warning": 0,
+        "information": 0,
+        "total": 0
+      },
+      "status_warnings": []
+    },
+    "investigator": null,
+    "fraud_check": null,
+    "linked_records": {
+      "same_face": {
+        "count": 0,
+        "best_match": null
+      },
+      "earlier_verifications": {
+        "count": 0,
+        "vendor_user_id": "4e73b389-03cc-4e8c-a278-2d76e0e3eedb"
+      },
+      "networks": {
+        "count": 0,
+        "open": 0,
+        "dismissed": 0,
+        "items": []
+      }
+    },
+    "workflow_id": "8aa86809-5156-4a73-8b09-cb3d6f882d27",
+    "features": [
+      "LIVENESS",
+      "IP_ANALYSIS"
+    ],
+    "vendor_data": "product-demo-e2e0visitor0liveness",
+    "metadata": {
+      "demo": "liveness"
+    },
+    "callback": "https://demos.staging.didit.me/product-demos/liveness",
+    "id_verifications": null,
+    "nfc_verifications": null,
+    "nfc_skip_reason": null,
+    "liveness_checks": null,
+    "face_matches": null,
+    "poa_verifications": null,
+    "phone_verifications": null,
+    "email_verifications": null,
+    "aml_screenings": null,
+    "ip_analyses": [
+      {
+        "status": "Approved",
+        "node_id": "feature_ip_analysis",
+        "device_brand": null,
+        "device_model": null,
+        "browser_family": "Chrome",
+        "browser_version": "155.0.0",
+        "os_family": "Linux",
+        "os_version": null,
+        "platform": "Linux x86_64",
+        "device_fingerprint": "gBfsE3q733XCqxM08HRgTg",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+        "accept_language": "en-US,en;q=0.9",
+        "session_identifier": null,
+        "session_age_ms": null,
+        "coords_accuracy": null,
+        "raw_device_data": {
+          "screen": {
+            "width": 1280,
+            "height": 800,
+            "availWidth": 1280,
+            "colorDepth": 24,
+            "pixelDepth": 24,
+            "availHeight": 800
+          },
+          "uaData": {
+            "model": "",
+            "brands": [
+              {
+                "brand": "Chromium",
+                "version": "155"
+              },
+              {
+                "brand": "Not(A:Brand",
+                "version": "24"
+              }
+            ],
+            "mobile": false,
+            "platform": "Linux",
+            "architecture": "x86",
+            "uaFullVersion": "155.0.8059.79",
+            "platformVersion": ""
+          },
+          "battery": {
+            "level": 1,
+            "charging": true,
+            "chargingTime": 0,
+            "dischargingTime": null
+          },
+          "language": "en-US",
+          "platform": "Linux x86_64",
+          "integrity": {
+            "capture": {
+              "externalDevice": null,
+              "matchedPatterns": [],
+              "videoInputCount": 0,
+              "defaultDeviceIsVirtual": null,
+              "virtualCameraSuspected": null
+            },
+            "platform": "web",
+            "security": {},
+            "environment": {
+              "emulator": null,
+              "virtualMachine": null,
+              "automationDetected": false,
+              "emulatorSignatures": [],
+              "screenCaptureActive": null
+            },
+            "collected_at": "2026-10-27T13:20:38.997Z",
+            "schema_version": 1
+          },
+          "languages": [
+            "en-US",
+            "en"
+          ],
+          "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/155.0.0.0 Safari/537.36",
+          "deviceMemory": 8,
+          "touchSupport": false,
+          "maxTouchPoints": 0,
+          "devicePixelRatio": 1,
+          "hardwareConcurrency": 4
+        },
+        "ip_country": "United States",
+        "ip_country_code": "US",
+        "ip_state": "Oregon",
+        "ip_city": "The Dalles",
+        "latitude": 45.59455871582031,
+        "longitude": -121.17868041992188,
+        "ip_address": "136.117.45.225",
+        "isp": "Google LLC",
+        "organization": "Google LLC",
+        "is_vpn_or_tor": false,
+        "is_data_center": true,
+        "time_zone": "America/Los_Angeles",
+        "time_zone_offset": "-0700",
+        "ip": {
+          "location": {
+            "latitude": 45.59455871582031,
+            "longitude": -121.17868041992188
+          },
+          "distance_from_id_document": null,
+          "distance_from_poa_document": null
+        },
+        "id_document": {
+          "location": null,
+          "distance_from_ip": null,
+          "distance_from_poa_document": null
+        },
+        "poa_document": {
+          "location": null,
+          "distance_from_ip": null,
+          "distance_from_id_document": null
+        },
+        "warnings": [],
+        "matches": []
+      }
+    ],
+    "geolocation_checks": null,
+    "geolocation_attempts": null,
+    "database_validations": null,
+    "database_validation_not_performed_reason": {
+      "code": "country_not_configured",
+      "issuing_state": null,
+      "configured_countries": [
+        "BRA",
+        "DOM"
+      ],
+      "message": "Database validation did not run: the workflow selects no database service for any country."
+    },
+    "bank_verifications": null,
+    "questionnaire_responses": null,
+    "document_ai_documents": null,
+    "reviews": [],
+    "assignee": null,
+    "waiting_since": null,
+    "sla_due_at": null,
+    "contact_details": null,
+    "expected_details": null,
+    "biometric_consent": {
+      "required": true,
+      "trigger": "ip_unknown",
+      "status": "pending",
+      "given_at": null,
+      "declined_at": null,
+      "text_version": null,
+      "text_hash": null,
+      "locale": null,
+      "policy_url": null,
+      "step": null,
+      "node_id": null,
+      "ip_address": null,
+      "ip_country_code": null,
+      "ip_state": null,
+      "ip_city": null,
+      "user_agent": null,
+      "detected_ip_address": "136.117.45.225",
+      "detected_country_code": "US",
+      "detected_state": null,
+      "detected_city": null,
+      "declared_state": null,
+      "document_state": null,
+      "jurisdictions": [
+        "US"
+      ],
+      "retention_months": 12,
+      "reason": null,
+      "decline_reason": null,
+      "face_data_deleted_at": null
+    },
+    "environment": "live",
+    "sandbox_scenario": null,
+    "created_at": "2026-10-27T13:20:35.948773Z",
+    "expires_at": "2026-11-03T13:20:35.935297Z"
+  },
+  "approved": {
+    "biometric_retention": {
+      "jurisdictions": [
+        "US"
+      ],
+      "deletes_at": "2027-09-27T13:20:35.948773Z"
+    },
+    "session_id": "a0e275a2-353a-494a-9752-54ed74314e67",
+    "session_kind": "user",
+    "shared_from_session": null,
+    "shared_from_session_number": null,
+    "session_number": 10040,
+    "session_url": "https://verify.staging.didit.me/session/e2e-liveness",
+    "status": "Approved",
+    "status_override": null,
+    "decision_trace": {
+      "status": "Not Started",
+      "decided_by": null,
+      "decided_at": null,
+      "automatic_status": null,
+      "terminal_node_id": null,
+      "actor": null,
+      "warning_counts": {
+        "error": 0,
+        "warning": 0,
+        "information": 0,
+        "total": 0
+      },
+      "status_warnings": []
+    },
+    "investigator": null,
+    "fraud_check": null,
+    "linked_records": {
+      "same_face": {
+        "count": 0,
+        "best_match": null
+      },
+      "earlier_verifications": {
+        "count": 0,
+        "vendor_user_id": "4e73b389-03cc-4e8c-a278-2d76e0e3eedb"
+      },
+      "networks": {
+        "count": 0,
+        "open": 0,
+        "dismissed": 0,
+        "items": []
+      }
+    },
+    "workflow_id": "8aa86809-5156-4a73-8b09-cb3d6f882d27",
+    "features": [
+      "LIVENESS",
+      "IP_ANALYSIS"
+    ],
+    "vendor_data": "product-demo-e2e0visitor0liveness",
+    "metadata": {
+      "demo": "liveness"
+    },
+    "callback": "https://demos.staging.didit.me/product-demos/liveness",
+    "id_verifications": null,
+    "nfc_verifications": null,
+    "nfc_skip_reason": null,
+    "liveness_checks": [
+      {
+        "status": "Approved",
+        "method": "PASSIVE",
+        "score": 99.4,
+        "reference_image": null,
+        "age_estimation": null,
+        "warnings": []
+      }
+    ],
+    "face_matches": null,
+    "poa_verifications": null,
+    "phone_verifications": null,
+    "email_verifications": null,
+    "aml_screenings": null,
+    "ip_analyses": [
+      {
+        "status": "Approved",
+        "ip_country": "Malta",
+        "ip_country_code": "MT",
+        "is_vpn_or_tor": false,
+        "is_data_center": false,
+        "warnings": []
+      }
+    ],
+    "geolocation_checks": null,
+    "geolocation_attempts": null,
+    "database_validations": null,
+    "database_validation_not_performed_reason": {
+      "code": "country_not_configured",
+      "issuing_state": null,
+      "configured_countries": [
+        "BRA",
+        "DOM"
+      ],
+      "message": "Database validation did not run: the workflow selects no database service for any country."
+    },
+    "bank_verifications": null,
+    "questionnaire_responses": null,
+    "document_ai_documents": null,
+    "reviews": [],
+    "assignee": null,
+    "waiting_since": null,
+    "sla_due_at": null,
+    "contact_details": null,
+    "expected_details": null,
+    "biometric_consent": {
+      "required": true,
+      "trigger": "ip_unknown",
+      "status": "pending",
+      "given_at": null,
+      "declined_at": null,
+      "text_version": null,
+      "text_hash": null,
+      "locale": null,
+      "policy_url": null,
+      "step": null,
+      "node_id": null,
+      "ip_address": null,
+      "ip_country_code": null,
+      "ip_state": null,
+      "ip_city": null,
+      "user_agent": null,
+      "detected_ip_address": "136.117.45.225",
+      "detected_country_code": "US",
+      "detected_state": null,
+      "detected_city": null,
+      "declared_state": null,
+      "document_state": null,
+      "jurisdictions": [
+        "US"
+      ],
+      "retention_months": 12,
+      "reason": null,
+      "decline_reason": null,
+      "face_data_deleted_at": null
+    },
+    "environment": "live",
+    "sandbox_scenario": null,
+    "created_at": "2026-10-27T13:20:35.948773Z",
+    "expires_at": "2026-11-03T13:20:35.935297Z"
+  }
+}

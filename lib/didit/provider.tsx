@@ -36,6 +36,8 @@ export interface AuthView {
   signUp(redirectUrl?: string): Promise<void>;
   signIn(redirectUrl?: string): Promise<void>;
   signOut(redirectUrl?: string): Promise<void>;
+  /** Signs the same person in again on the hosted page (their passkey). */
+  reauthenticate(redirectUrl?: string): Promise<void>;
   emailCode: {
     start(email: string): Promise<HeadlessResult>;
     verify(code: string): Promise<HeadlessResult>;
@@ -88,6 +90,7 @@ function AuthBridge({ onChange }: { onChange: (view: AuthView) => void }) {
       signUp: (redirectUrl) => auth.signUp({ redirectUrl }),
       signIn: (redirectUrl) => auth.signIn({ redirectUrl }),
       signOut: (redirectUrl) => auth.signOut({ redirectUrl }),
+      reauthenticate: (redirectUrl) => auth.reauthenticate({ redirectUrl }),
       emailCode: {
         start: (email) => auth.emailCode.start({ email }),
         verify: (code) => auth.emailCode.verify({ code }),

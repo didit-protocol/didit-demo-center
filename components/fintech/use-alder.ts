@@ -50,6 +50,8 @@ export interface CheckState {
 
 export interface StepUpState extends CheckState {
   transactionId: string;
+  /** The Didit Authentication passkey asked before the selfie, once given. */
+  passkey?: { at: number; method: string } | null;
 }
 
 export interface CustomerState {
@@ -385,6 +387,7 @@ export function useAlder(
                 url: action.url,
                 transactionId: item.record.id,
                 summary: null,
+                passkey: null,
               },
             }
           : {}),
@@ -689,6 +692,19 @@ export function useAlder(
     pay,
     confirmStepUp: () =>
       state?.stepUp && openHosted("stepUp", state.stepUp.url),
+    /** Didit Authentication signed the same person in again for this transfer. */
+    passkeyConfirmed: (transactionId: string, method: string) =>
+      update((current) =>
+        current.stepUp?.transactionId === transactionId
+          ? {
+              ...current,
+              stepUp: {
+                ...current.stepUp,
+                passkey: { at: Date.now(), method },
+              },
+            }
+          : current,
+      ),
     attemptTakeover,
     resumeFromRedirect,
     reset,
