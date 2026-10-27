@@ -1,29 +1,28 @@
-import Link from "next/link";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Fingerprint,
-  SquareTerminal,
-} from "lucide-react";
+import type { Tone } from "@/lib/didit/live";
 
-import { DiditRing, ToneIcon } from "@/components/didit-live/icons";
+import Link from "next/link";
+import { ArrowRight, ArrowUpRight, Fingerprint } from "lucide-react";
+
+import { DiditRing, TONE_CLASS, ToneIcon } from "@/components/didit-live/icons";
 import { ProductDemosSection } from "@/components/product-demos/product-demos-section";
-import { STEPS } from "@/lib/didit/config";
+import { TONE_LABEL } from "@/lib/didit/live";
 import { DEMOS } from "@/lib/didit/demos";
 import { siteConfig } from "@/config/site";
 
 /*
- * The Demo Center's front page (the Main board): what the four demos are, how
- * the Didit layer shows itself over them and the five steps every demo
- * walks. The pictures are screenshots of the demos; nothing here is a
- * visitor's data, which only ever appears inside a demo.
+ * The Demo Center's front page (the Main board), on design system v4: the
+ * light hero, the four industry demos on their halftone plates, how the Didit
+ * layer shows itself over them and the install band. The pictures are
+ * screenshots of the demos; nothing here is a visitor's data, which only ever
+ * appears inside a demo. The product demos section has its own owner and sits
+ * between the industry demos and how it works.
  */
 
-const SHOT: Record<string, { file: string; bg: string }> = {
-  "aurora-play": { file: "shot-aurora-home", bg: "#1A1236" },
-  alder: { file: "shot-alder-home", bg: "#13493A" },
-  northmarket: { file: "shot-northmarket-home", bg: "#F3E3D3" },
-  kestrel: { file: "shot-kestrel-home", bg: "#0B1D1E" },
+const SHOT: Record<string, string> = {
+  "aurora-play": "shot-aurora-home",
+  alder: "shot-alder-home",
+  northmarket: "shot-northmarket-home",
+  kestrel: "shot-kestrel-home",
 };
 
 const PRODUCTS = [
@@ -33,378 +32,425 @@ const PRODUCTS = [
   { tone: "txn", label: "Transactions" },
 ] as const;
 
-const STEP_COPY: Record<string, string> = {
-  signup:
-    "Didit Authentication on the customer's own page: a passkey, bot protection, no password.",
-  verify:
-    "The redesigned verification flow in the web SDK modal, branded as the customer.",
-  transact:
-    "Deposits, transfers, orders and withdrawals scored as they happen.",
-  fraud: "One real attack per demo, caught by device signals and rules.",
-  console: "The same story in the Didit console your team would use.",
-};
+const STATS = [
+  ["4", "industry demos"],
+  ["18", "product demos"],
+  ["220+", "countries"],
+  ["0 EUR", "no real money moves"],
+] as const;
 
 const host = siteConfig.url.replace(/^https:\/\//, "");
 
-function Lockup({ className }: { className?: string }) {
-  return (
-    <img
-      alt="Didit"
-      className={className}
-      src="/brand/didit-lockup-white.png"
-    />
-  );
-}
-
-function Chip({
-  tone,
-  label,
-}: {
-  tone: (typeof PRODUCTS)[number]["tone"];
-  label: string;
-}) {
-  return (
-    <span className={`hub-chip p-${tone}`}>
-      <i />
-      {label}
-    </span>
-  );
-}
-
-function HeroCard({
-  tone,
-  label,
-  title,
-  className,
-}: {
-  tone: "auth" | "ver" | "stop" | "hold";
-  label: string;
+interface FeedEvent {
+  tone: Tone;
   title: string;
-  className: string;
+  detail: string;
+  at: string;
+}
+
+/** A still of the Didit live feed, as the demos show it. */
+function FeedStill({
+  events,
+  person,
+  foot = false,
+}: {
+  events: FeedEvent[];
+  person: string;
+  foot?: boolean;
 }) {
   return (
-    <span aria-hidden className={`hub-float co-card p-${tone} ${className}`}>
-      <span className="co-ic">
-        <ToneIcon tone={tone} />
-      </span>
-      <span>
-        <small>{label}</small>
-        <b>{title}</b>
-      </span>
-    </span>
+    <div aria-hidden className="lv dd hub-feed">
+      <div className="lv-head">
+        <DiditRing />
+        <b>Didit live</b>
+        <span className="dd-status dd-status-approved dd-status-sm">Live</span>
+        <span className="lv-who">{person}</span>
+      </div>
+      <div className="lv-list">
+        {events.map((event, index) => (
+          <div
+            key={event.title}
+            className={`lv-ev ${TONE_CLASS[event.tone]}${index === 0 ? " is-new" : ""}`}
+          >
+            <span className="lv-ic dd-tile dd-tile-32">
+              <ToneIcon tone={event.tone} />
+            </span>
+            <span className="lv-x">
+              <small>{TONE_LABEL[event.tone]}</small>
+              <b>{event.title}</b>
+              <span>{event.detail}</span>
+            </span>
+            <span className="lv-t">{event.at}</span>
+          </div>
+        ))}
+      </div>
+      {foot ? (
+        <div className="lv-foot">
+          <span className="dd-btn dd-btn-primary dd-btn-sm">
+            Open the console view
+          </span>
+          <span className="dd-btn dd-btn-secondary dd-btn-sm">Code</span>
+        </div>
+      ) : null}
+    </div>
   );
+}
+
+/** A screenshot in a browser frame (the DS v4 window). */
+function Window({ shot, className }: { shot: string; className?: string }) {
+  return (
+    <div aria-hidden className={`dd-window hub-window ${className ?? ""}`}>
+      <div className="dd-window-bar">
+        <i />
+        <i />
+        <i />
+      </div>
+      <img alt="" src={`/demos/shots/${shot}.webp`} />
+    </div>
+  );
+}
+
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return <p className="dd-eb dd-eb-section">{children}</p>;
 }
 
 export function Hub() {
   return (
-    <div className="hub" data-testid="hub">
-      <section className="hub-dark">
-        <header className="hub-nav">
+    <div className="hub dd" data-testid="hub">
+      <header className="hub-nav">
+        <div className="hub-in hub-nav-in">
           <Link aria-label="Didit Demo Center" className="hub-brand" href="/">
-            <Lockup className="hub-logo" />
+            <img
+              alt="Didit"
+              className="hub-logo"
+              src="/brand/didit-lockup-colour.png"
+            />
             <span aria-hidden className="hub-sep" />
             <b>Demo Center</b>
           </Link>
           <nav aria-label="Demo Center" className="hub-links">
-            <a href="#demos">Demos</a>
-            <a href="#how">How it works</a>
-            <a href="#integrate">Integrate</a>
-            <Link href="/modules">Modules</Link>
+            <a aria-current="page" href="#demos">
+              Industry demos
+            </a>
+            <Link href="/modules">Product demos</Link>
+            <a href="#integrate">Build your flow</a>
           </nav>
           <span className="hub-nav-r">
-            <a href={siteConfig.links.docs} rel="noreferrer" target="_blank">
+            <a
+              className="hub-docs"
+              href={siteConfig.links.docs}
+              rel="noreferrer"
+              target="_blank"
+            >
               Docs <ArrowUpRight aria-hidden size={14} />
             </a>
-            <a className="hub-btn is-blue" href={siteConfig.links.console}>
+            <a
+              className="dd-btn dd-btn-secondary dd-btn-md"
+              href={siteConfig.links.console}
+            >
+              Sign in
+            </a>
+            <a
+              className="dd-btn dd-btn-primary dd-btn-md"
+              href={siteConfig.links.console}
+            >
               Start free
             </a>
           </span>
-        </header>
-        <div className="hub-hero">
+        </div>
+      </header>
+
+      <section className="hub-hero dd-wash">
+        <div className="hub-in hub-hero-in">
           <div className="hub-hero-x">
-            <span className="hub-sandbox">
-              Sandbox · no real money, no real people
-            </span>
-            <h1>
-              Four real products.
-              <br />
-              <em>Didit inside each one.</em>
+            <p className="dd-eb dd-eb-section">
+              Demo Center <span className="dd-eb-slash">·</span> Sandbox
+            </p>
+            <h1 className="dd-h1">
+              Try every Didit product, <em>live.</em>
             </h1>
-            <p>
-              Sign up, verify, move money and watch an attack get stopped, in a
-              casino, a bank, a marketplace and a crypto exchange. The Didit
-              live layer shows every check as it happens, and the console view
-              shows what your team sees.
+            <p className="dd-lede">
+              Four complete products and eighteen product demos, all on the
+              Didit sandbox. Sign up, verify, move money, stop an attack, and
+              see what your team sees in the console.
             </p>
             <span className="hub-cta">
-              <Link className="hub-btn is-white" href="/igaming">
-                Start with Aurora Play <ArrowRight aria-hidden size={16} />
-              </Link>
-              <a className="hub-btn is-dark" href="#how">
-                How it works
+              <a className="dd-btn dd-btn-primary dd-btn-lg" href="#demos">
+                Open an industry demo <ArrowRight aria-hidden size={18} />
               </a>
+              <Link
+                className="dd-btn dd-btn-secondary dd-btn-lg"
+                href="/modules"
+              >
+                Browse product demos
+              </Link>
             </span>
+            <dl className="hub-stats">
+              {STATS.map(([value, label]) => (
+                <div key={label}>
+                  <dt>{value}</dt>
+                  <dd>{label}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
           <div aria-hidden className="hub-collage">
-            <img
-              alt=""
-              className="hub-shot s1"
-              src="/demos/shots/shot-kestrel-home.webp"
-            />
-            <img
-              alt=""
-              className="hub-shot s2"
-              src="/demos/shots/shot-alder-home.webp"
-            />
-            <img
-              alt=""
-              className="hub-shot s3"
-              src="/demos/shots/shot-aurora-home.webp"
-            />
-            <HeroCard
-              className="f1"
-              label="Verification"
-              title="Age 25+ approved"
-              tone="ver"
-            />
-            <HeroCard
-              className="f2"
-              label="Authentication"
-              title="Passkey created"
-              tone="auth"
-            />
-            <HeroCard
-              className="f3"
-              label="Blocked"
-              title="Sanctioned wallet declined"
-              tone="stop"
-            />
-            <HeroCard
-              className="f4"
-              label="Transactions"
-              title="Deposit held: ID check"
-              tone="hold"
+            <Window className="w1" shot="shot-kestrel-home" />
+            <Window className="w2" shot="shot-aurora-home" />
+            <FeedStill
+              foot
+              events={[
+                {
+                  tone: "hold",
+                  title: "Deposit held for an ID check",
+                  detail: "1,500 EUR · 30-day total 2,150 EUR",
+                  at: "now",
+                },
+                {
+                  tone: "ver",
+                  title: "Age check approved",
+                  detail: "Estimated 25 or older",
+                  at: "2 min",
+                },
+                {
+                  tone: "auth",
+                  title: "Signed in with the passkey",
+                  detail: "No password",
+                  at: "4 min",
+                },
+              ]}
+              person="Sofia Marin"
             />
           </div>
         </div>
       </section>
 
       <section className="hub-sec" id="demos">
-        <h2>Pick an industry</h2>
-        <p className="hub-lead">
-          Each demo is a complete product with its own brand. Every step runs on
-          the Didit sandbox, live.
-        </p>
-        <ul className="hub-demos">
-          {DEMOS.map((demo) => (
-            <li key={demo.id} className="hub-demo">
-              <Link
-                aria-hidden
-                className="hub-demo-art"
-                href={demo.route}
-                style={{ background: SHOT[demo.id].bg }}
-                tabIndex={-1}
-              >
-                <img alt="" src={`/demos/shots/${SHOT[demo.id].file}.webp`} />
-              </Link>
-              <div className="hub-demo-x">
-                <div className="hub-demo-h">
-                  <span
-                    className="hub-mark"
-                    style={{ background: demo.brand.mark }}
-                  >
-                    {demo.brand.initial}
+        <div className="hub-in">
+          <Eyebrow>Industry demos</Eyebrow>
+          <h2 className="dd-h2">A real product, start to finish.</h2>
+          <p className="dd-lede hub-lead">
+            Each demo is a complete product with its own brand: sign up, verify,
+            transact, stop an attack, then open the console view.
+          </p>
+          <ul className="hub-demos">
+            {DEMOS.map((demo) => (
+              <li key={demo.id} className="hub-demo">
+                <Link
+                  aria-hidden
+                  className="dd-halftone hub-plate"
+                  href={demo.route}
+                  style={{
+                    backgroundImage: `url(/demos/halftone/${demo.id}.webp)`,
+                  }}
+                  tabIndex={-1}
+                >
+                  <Window shot={SHOT[demo.id]} />
+                </Link>
+                <div className="hub-demo-x">
+                  <div className="hub-demo-h">
+                    <span
+                      className="hub-mark"
+                      style={{ background: demo.brand.mark }}
+                    >
+                      {demo.brand.initial}
+                    </span>
+                    <span>
+                      <h3>{demo.brand.name}</h3>
+                      <small>
+                        {demo.industry} · {demo.copy.tagline}
+                      </small>
+                    </span>
+                  </div>
+                  <p>{demo.copy.story}</p>
+                  <span className="hub-tags">
+                    {PRODUCTS.map((product) => (
+                      <span
+                        key={product.tone}
+                        className={`dd-tag dd-tag-cat ${TONE_CLASS[product.tone]}`}
+                      >
+                        {product.label}
+                      </span>
+                    ))}
                   </span>
-                  <span>
-                    <h3>{demo.brand.name}</h3>
-                    <small>
-                      {demo.industry} · {demo.copy.tagline}
-                    </small>
+                  <span className="hub-open">
+                    <Link
+                      className="dd-btn dd-btn-secondary dd-btn-md"
+                      href={demo.route}
+                    >
+                      Open the demo <ArrowRight aria-hidden size={16} />
+                    </Link>
+                    <span>
+                      {host}
+                      {demo.route}
+                    </span>
+                    <em>5 steps</em>
                   </span>
                 </div>
-                <p>{demo.copy.story}</p>
-                <span className="hub-chips">
-                  {PRODUCTS.map((product) => (
-                    <Chip key={product.tone} {...product} />
-                  ))}
-                </span>
-                <span className="hub-open">
-                  <Link className="hub-btn is-line" href={demo.route}>
-                    Open the demo <ArrowRight aria-hidden size={16} />
-                  </Link>
-                  <span>
-                    {host}
-                    {demo.route}
-                  </span>
-                </span>
-              </div>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <ProductDemosSection />
 
       <section className="hub-sec" id="how">
-        <h2>See what Didit sees, without leaving the app</h2>
-        <p className="hub-lead">
-          The Didit layer floats over each product. It never gets in the way of
-          the demo, and it shows exactly what you would build.
-        </p>
-        <div className="hub-layer">
-          <article className="hub-tile">
-            <div aria-hidden className="hub-tile-art is-feed">
-              <div className="lv">
-                <div className="lv-in">
-                  <div className="lv-head">
-                    <DiditRing />
-                    <b>Didit live</b>
-                    <span className="lv-live">Live</span>
-                  </div>
-                  <div className="lv-list">
-                    {[
-                      ["txn", "Deposit approved", "Scored as it happens"],
-                      ["ver", "Age check approved", "Selfie age estimate"],
-                      ["auth", "Signed in with the passkey", "No password"],
-                    ].map(([tone, title, detail], index) => (
-                      <div
-                        key={title}
-                        className={`lv-ev p-${tone}${index === 0 ? " is-new" : ""}`}
-                      >
-                        <span className="lv-ic">
-                          <ToneIcon tone={tone as "txn"} />
-                        </span>
-                        <span className="lv-x">
-                          <b>{title}</b>
-                          <span>{detail}</span>
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+        <div className="hub-in">
+          <Eyebrow>How it works</Eyebrow>
+          <h2 className="dd-h2">
+            See what Didit sees, without leaving the app.
+          </h2>
+          <div className="hub-layer">
+            <article className="hub-tile">
+              <div aria-hidden className="hub-tile-art is-feed">
+                <FeedStill
+                  events={[
+                    {
+                      tone: "txn",
+                      title: "Deposit approved",
+                      detail: "500 EUR · risk 4 of 100",
+                      at: "now",
+                    },
+                    {
+                      tone: "ver",
+                      title: "Age check approved",
+                      detail: "25 or older",
+                      at: "2 min",
+                    },
+                    {
+                      tone: "auth",
+                      title: "Signed in with the passkey",
+                      detail: "No password",
+                      at: "4 min",
+                    },
+                  ]}
+                  person="Sofia Marin"
+                />
               </div>
-            </div>
-            <h3>Didit live</h3>
-            <p>
-              Every event, the moment it happens: the passkey, the device, each
-              check, every payment and every rule that fired, in the colour of
-              its product. Tap Code to see the one call behind it.
-            </p>
-          </article>
-          <article className="hub-tile">
-            <div aria-hidden className="hub-tile-art is-pin">
-              <img alt="" src="/demos/shots/shot-aurora-home.webp" />
-              <span className="co p-sig">
-                <span className="co-dot" />
-                <span className="co-line" style={{ width: 40 }} />
-                <span className="co-card">
-                  <span className="co-ic">
-                    <Fingerprint size={16} />
-                  </span>
-                  <span>
-                    <small>Signals</small>
-                    <b>Same device, 2 accounts</b>
+              <h3>Didit live</h3>
+              <p>
+                Every event as it happens: the passkey, the device, each check,
+                every payment and the rule that fired, with the call behind it.
+              </p>
+            </article>
+            <article className="hub-tile">
+              <div aria-hidden className="hub-tile-art is-pin">
+                <img alt="" src="/demos/shots/shot-aurora-home.webp" />
+                <span className="co p-sig">
+                  <span className="co-dot" />
+                  <span className="co-line" style={{ width: 48 }} />
+                  <span className="co-card">
+                    <span className="co-ic">
+                      <Fingerprint aria-hidden size={16} />
+                    </span>
+                    <span>
+                      <small>Signals</small>
+                      <b>Same device as Sofia M.</b>
+                    </span>
                   </span>
                 </span>
-              </span>
-            </div>
-            <h3>Pinned to the moment</h3>
-            <p>
-              A callout marks the exact place in the app where Didit acted: the
-              passkey button, the held deposit, the declined bonus.
-            </p>
-          </article>
-          <article className="hub-tile">
-            <div aria-hidden className="hub-tile-art is-console">
-              <div className="hub-mini">
-                <div className="hub-mini-top">
-                  <DiditRing />
-                  <b>Console view</b>
-                  <i />
-                </div>
-                <div className="hub-mini-note" />
-                <div className="hub-mini-body">
-                  <span className="r" />
-                  <span className="n" />
-                  <span className="c">
-                    <i className="h" />
-                    <i className="k" />
-                    <i className="k" />
-                    <i className="k" />
-                    <i className="k" />
-                    <i className="b" />
-                    <i className="b" />
-                  </span>
+              </div>
+              <h3>Pinned to the moment</h3>
+              <p>
+                A callout marks the place in the app where Didit acted: the
+                passkey button, the held deposit, the declined bonus.
+              </p>
+            </article>
+            <article className="hub-tile">
+              <div aria-hidden className="hub-tile-art is-console">
+                <div className="dd-window hub-mini">
+                  <div className="dd-window-bar">
+                    <i />
+                    <i />
+                    <i />
+                  </div>
+                  <div className="hub-mini-top">
+                    <DiditRing />
+                    <b>Console view</b>
+                    <span>console.didit.me / Transactions</span>
+                  </div>
+                  <div className="hub-mini-note" />
+                  <div className="hub-mini-body">
+                    <span className="n">
+                      <i />
+                      <i />
+                      <i />
+                      <i />
+                      <i />
+                    </span>
+                    <span className="c">
+                      <i className="h" />
+                      <i className="k" />
+                      <i className="k" />
+                      <i className="k" />
+                      <i className="k" />
+                      <i className="b" />
+                      <i className="b" />
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <h3>The console view</h3>
-            <p>
-              One tap opens a preview of the real Didit console with this
-              visitor&apos;s data: the person, the transaction, the business,
-              and why each decision was made.
-            </p>
-          </article>
+              <h3>The console view</h3>
+              <p>
+                One tap opens a preview of the Didit console with this
+                visitor&apos;s data: the person, the transaction, the business.
+              </p>
+            </article>
+          </div>
         </div>
       </section>
 
-      <section className="hub-sec">
-        <h2>The same five steps in every demo</h2>
-        <ol className="hub-steps">
-          {STEPS.map((step, index) => (
-            <li key={step.id}>
-              <span className="hub-n">{index + 1}</span>
-              <b>{step.label}</b>
-              <p>{STEP_COPY[step.id]}</p>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className="hub-sec" id="integrate">
-        <div className="hub-band">
-          <div>
-            <Lockup className="hub-band-logo" />
-            <h2>Build this into your product.</h2>
-            <p>
-              Three packages, one publishable key. Every demo here uses exactly
-              what you would ship.
-            </p>
-            <span className="hub-cta">
-              <a className="hub-btn is-blue" href={siteConfig.links.console}>
-                Start free
-              </a>
-              <a
-                className="hub-btn is-dark"
-                href={siteConfig.links.docs}
-                rel="noreferrer"
-                target="_blank"
-              >
-                Read the docs
-              </a>
-            </span>
+      <section className="hub-sec hub-sec-last" id="integrate">
+        <div className="hub-in">
+          <div className="hub-band">
+            <div className="hub-band-x">
+              <Eyebrow>Build your own</Eyebrow>
+              <h2 className="dd-h2">
+                Compose any flow, then ship it with three packages.
+              </h2>
+              <p className="dd-lede">
+                Start from any demo&apos;s workflow in the console, change the
+                steps without code, and add the same packages these demos use.
+              </p>
+              <span className="hub-cta">
+                <a
+                  className="dd-btn dd-btn-primary dd-btn-lg"
+                  href={siteConfig.links.console}
+                >
+                  Start free
+                </a>
+                <a
+                  className="dd-btn dd-btn-secondary dd-btn-lg"
+                  href={siteConfig.links.docs}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  Read the docs
+                </a>
+              </span>
+            </div>
+            <pre aria-label="Install the three packages" className="hub-code">
+              <span className="c"># what every demo here runs on</span>
+              {"\n"}npm install{" "}
+              <span className="s">
+                @didit-protocol/auth-nextjs @didit-protocol/signals
+                @didit-protocol/sdk-web
+              </span>
+              {"\n\n"}
+              <span className="k">import</span> {"{ DiditAuth }"}{" "}
+              <span className="k">from</span>{" "}
+              <span className="s">&quot;@didit-protocol/auth-nextjs&quot;</span>
+              {"\n"}
+              <span className="k">import</span> {"{ configureEvents }"}{" "}
+              <span className="k">from</span>{" "}
+              <span className="s">&quot;@didit-protocol/signals&quot;</span>
+              {"\n"}
+              <span className="k">import</span> {"{ startVerification }"}{" "}
+              <span className="k">from</span>{" "}
+              <span className="s">&quot;@didit-protocol/sdk-web&quot;</span>
+            </pre>
           </div>
-          <pre aria-label="Install the three packages" className="hub-code">
-            <span className="c"># the same three packages every demo uses</span>
-            {"\n"}npm install{" "}
-            <span className="s">
-              @didit-protocol/auth-nextjs @didit-protocol/signals
-              @didit-protocol/sdk-web
-            </span>
-            {"\n\n"}
-            <span className="k">import</span> {"{ DiditAuth }"}{" "}
-            <span className="k">from</span>{" "}
-            <span className="s">&quot;@didit-protocol/auth-nextjs&quot;</span>
-            {"\n"}
-            <span className="k">import</span> {"{ configureEvents }"}{" "}
-            <span className="k">from</span>{" "}
-            <span className="s">&quot;@didit-protocol/signals&quot;</span>
-            {"\n"}
-            <span className="k">import</span> {"{ startVerification }"}{" "}
-            <span className="k">from</span>{" "}
-            <span className="s">&quot;@didit-protocol/sdk-web&quot;</span>
-            <SquareTerminal aria-hidden className="hub-code-ic" size={16} />
-          </pre>
         </div>
       </section>
     </div>

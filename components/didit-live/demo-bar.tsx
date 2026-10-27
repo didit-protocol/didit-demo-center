@@ -21,9 +21,10 @@ export interface DemoBarProps {
 }
 
 /**
- * The Demo Center bar above every demo: the Didit lockup, the demo switcher,
- * the five steps (the current one white, the finished ones ticked),
- * "Sandbox", "Console view" and restart.
+ * The Demo Center bar above every demo, on design system v4: the colour
+ * Didit lockup, the demo switcher, the five steps as a segmented control (the
+ * current one raised, the finished ones ticked), the Sandbox status, the
+ * "Console view" button and restart.
  */
 export function DemoBar({
   demo,
@@ -63,12 +64,12 @@ export function DemoBar({
   }, [stepsMenu]);
 
   return (
-    <header className="dx-bar">
+    <header className="dx-bar dd">
       <Link aria-label="Didit Demo Center" href="/">
         <img
           alt="Didit"
           className="dx-logo"
-          src="/brand/didit-lockup-white.png"
+          src="/brand/didit-lockup-colour.png"
         />
       </Link>
       <span aria-hidden className="dx-sep" />
@@ -79,7 +80,6 @@ export function DemoBar({
         <button
           aria-expanded={menu}
           aria-haspopup="menu"
-          className="inline-flex items-center gap-2"
           type="button"
           onClick={() => setMenu((open) => !open)}
         >
@@ -109,14 +109,14 @@ export function DemoBar({
         ) : null}
       </div>
       <nav aria-label="Demo steps" className="dx-steps">
-        {STEPS.map((item, index) => {
-          const on = item.id === step;
-          const finished = !on && done.has(item.id);
+        <span className="dx-track">
+          {STEPS.map((item, index) => {
+            const on = item.id === step;
+            const finished = !on && done.has(item.id);
 
-          return (
-            <React.Fragment key={item.id}>
-              {index > 0 ? <span aria-hidden className="dx-step-line" /> : null}
+            return (
               <button
+                key={item.id}
                 aria-current={on ? "step" : undefined}
                 className={`dx-step${on ? " is-on" : ""}${finished ? " is-done" : ""}`}
                 type="button"
@@ -131,9 +131,9 @@ export function DemoBar({
                 </span>
                 <span className="l">{item.label}</span>
               </button>
-            </React.Fragment>
-          );
-        })}
+            );
+          })}
+        </span>
       </nav>
       {/* A phone has room for the current step only; it opens the other four. */}
       <div ref={stepsRef} className="dx-steps-phone">
@@ -161,14 +161,9 @@ export function DemoBar({
                 }}
               >
                 <span
-                  className="dx-bm"
-                  style={{
-                    background: done.has(item.id)
-                      ? "#1E3A2F"
-                      : "var(--lv-ring)",
-                  }}
+                  className={`n${item.id === step ? " is-on" : done.has(item.id) ? " is-done" : ""}`}
                 >
-                  {done.has(item.id) ? (
+                  {item.id !== step && done.has(item.id) ? (
                     <Check aria-hidden size={12} />
                   ) : (
                     number + 1
@@ -181,19 +176,23 @@ export function DemoBar({
         ) : null}
       </div>
       <div className="dx-r">
-        <span className="dx-sandbox">Sandbox</span>
-        <button className="dx-btn is-pri" type="button" onClick={onConsole}>
+        <span className="dd-status dd-status-warning">Sandbox</span>
+        <button
+          className="dd-btn dd-btn-secondary dd-btn-sm"
+          type="button"
+          onClick={onConsole}
+        >
           <DiditRing />
           Console view
         </button>
         <button
           aria-label="Restart the demo"
-          className="dx-iconbtn"
+          className="dd-btn dd-btn-ghost dd-btn-sm dd-btn-icon"
           title="Restart the demo"
           type="button"
           onClick={onRestart}
         >
-          <RotateCw aria-hidden size={15} />
+          <RotateCw aria-hidden size={16} />
         </button>
       </div>
     </header>
