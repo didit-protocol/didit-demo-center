@@ -1,0 +1,214 @@
+{
+  "recorded": "2026-10-13, verification.staging.didit.me, demo organization",
+  "source": "real response; hosted-flow links and tokens redacted",
+  "request": {
+    "transaction_id": "fintech-demo-probe-1791926213-1",
+    "transaction_category": "finance",
+    "transaction_details": {
+      "direction": "outbound",
+      "amount": "6000.00",
+      "currency": "EUR",
+      "currency_kind": "fiat",
+      "action_type": "transfer"
+    },
+    "subject": {
+      "entity_type": "individual",
+      "vendor_data": "fintech-demo-probe-1791926213",
+      "full_name": "Lena Fischer",
+      "address": {
+        "country": "DEU"
+      }
+    },
+    "counterparty": {
+      "entity_type": "individual",
+      "full_name": "Marta Ruiz"
+    },
+    "custom_properties": {
+      "demo_app": "fintech"
+    }
+  },
+  "status": 201,
+  "response": {
+    "uuid": "2c312e0e-d2b1-4072-b48c-5a7bd166b021",
+    "environment": "live",
+    "transaction_number": 5,
+    "txn_id": "fintech-demo-probe-1791926213-1",
+    "txn_date": "2026-10-13T21:16:53.794073Z",
+    "zone_id": null,
+    "transaction_type": "finance",
+    "action_type": "transfer",
+    "direction": "OUTBOUND",
+    "status": "APPROVED",
+    "source": "LIVE",
+    "amount": "6000",
+    "currency": "EUR",
+    "currency_type": "fiat",
+    "amount_in_default_currency": null,
+    "default_currency_code": null,
+    "preferred_currency_amount": "6714.822989655859949922",
+    "preferred_currency_code": "USD",
+    "payment_details": null,
+    "payment_txn_id": null,
+    "score": 0,
+    "severity": null,
+    "decision_reason_code": null,
+    "decision_reason_label": null,
+    "vendor_data": "fintech-demo-probe-1791926213",
+    "metadata": {
+      "subject": {
+        "address": {
+          "country": "DEU"
+        },
+        "full_name": "Lena Fischer",
+        "entity_type": "individual",
+        "vendor_data": "fintech-demo-probe-1791926213"
+      },
+      "counterparty": {
+        "full_name": "Marta Ruiz",
+        "entity_type": "individual"
+      }
+    },
+    "props": {
+      "demo_app": "fintech"
+    },
+    "tags": [],
+    "parties": [
+      {
+        "uuid": "34415c22-6226-4597-8f4b-c8f2407acc39",
+        "role": "APPLICANT",
+        "entity_type": "individual",
+        "kind": "USER",
+        "vendor_data": "fintech-demo-probe-1791926213",
+        "full_name": "Lena Fischer",
+        "first_name": null,
+        "last_name": null,
+        "country_code": "DEU",
+        "dob": null,
+        "address": {
+          "country": "DEU"
+        },
+        "institution_info": {},
+        "device": {},
+        "external_party_snapshot": null
+      },
+      {
+        "uuid": "478dc8fb-f260-4309-bc6a-b8ca3b9b901b",
+        "role": "COUNTERPARTY",
+        "entity_type": "individual",
+        "kind": "EXTERNAL",
+        "vendor_data": null,
+        "full_name": "Marta Ruiz",
+        "first_name": null,
+        "last_name": null,
+        "country_code": null,
+        "dob": null,
+        "address": {},
+        "institution_info": {},
+        "device": {},
+        "external_party_snapshot": {
+          "address": {},
+          "country": null,
+          "full_name": "Marta Ruiz",
+          "last_name": null,
+          "first_name": null,
+          "entity_type": "individual",
+          "vendor_data": null,
+          "date_of_birth": null,
+          "device_context": {},
+          "institution_details": {}
+        }
+      }
+    ],
+    "payment_methods": [],
+    "documents": [],
+    "activities": [
+      {
+        "uuid": "0de9b943-b34c-41d0-8da8-32889052e9ca",
+        "activity_type": "TRANSACTION_CREATED",
+        "source": "TRANSACTION",
+        "status": "APPROVED",
+        "title": "transfer",
+        "description": null,
+        "metadata": {
+          "amount": "6000.000000000000000000",
+          "currency": "EUR",
+          "direction": "OUTBOUND",
+          "action_type": "transfer"
+        },
+        "occurred_at": "2026-10-13T21:16:53.802468Z"
+      }
+    ],
+    "alerts": [],
+    "rule_runs": [
+      {
+        "uuid": "dc8217a9-220b-433a-ba6c-4d14cbdc86a3",
+        "rule": "ecb0ef05-fee3-4177-bf39-bcff75462ab8",
+        "rule_title": "High-value outbound transfer (fintech demo)",
+        "rule_description": "Outbound EUR transfers of 5,000 or more from the demos.didit.me fintech demo are held for manual review.",
+        "rule_category": "finance",
+        "matched": true,
+        "is_test": true,
+        "mode": "TEST",
+        "severity": null,
+        "score_delta": 0,
+        "status_target": null,
+        "action_summary": null,
+        "metadata": {
+          "conditions": [
+            {
+              "field": "currency",
+              "matched": true,
+              "operator": "eq",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "EUR",
+              "expected_value": "EUR"
+            },
+            {
+              "field": "amount",
+              "matched": true,
+              "operator": "gte",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "6000.000000000000000000",
+              "expected_value": 5000
+            },
+            {
+              "field": "custom_values.demo_app",
+              "matched": true,
+              "operator": "eq",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "fintech",
+              "expected_value": "fintech"
+            }
+          ],
+          "scope_match": true,
+          "aggregations": []
+        },
+        "created_at": "2026-10-13T21:16:53.894955Z"
+      }
+    ],
+    "provider_results": [],
+    "travel_rule": null,
+    "network_snapshot": null,
+    "remediation": null,
+    "action_required": null,
+    "cost_breakdown": {
+      "total_price": 0.02,
+      "items": [
+        {
+          "usage_type": "transaction_monitoring",
+          "price": 0.02,
+          "details": {
+            "product": "transactions"
+          },
+          "created_at": "2026-10-13T21:16:53.920431Z"
+        }
+      ]
+    }
+  }
+}
