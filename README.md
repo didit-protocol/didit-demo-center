@@ -146,20 +146,25 @@ security centre says so instead of a decision.
 
 ## Industry demo: marketplace (`/marketplace`)
 
-Northmarket, a fictional resale marketplace, runs Didit end to end in five
-chapters. Every control is live against Didit staging and the demo
-organization; the routes answer 503 on any other environment.
+Northmarket, a fictional resale marketplace, runs the Demo Center's five
+steps through `lib/didit`, with the live layer and the console view. With
+Authentication on, the signed-in Didit user is the shop (`northmarket-<user id>`)
+and the buyer (`northmarket-<user id>-buyer`); without it the demo keeps a
+random identity per browser.
 
-| Chapter | Didit surface |
+| Step | Didit surface |
 | --- | --- |
-| Seller onboarding | A `seller_signup` sent to transaction monitoring from the browser with the web SDK, then the shop's KYB in the hosted flow (`POST /v3/session/`): company registry at the UBO tier (shareholders and UBOs), key people with their own ID check, company documents |
-| Buyer checkout | Every order monitored; orders of EUR 1,000 or more held by a rule (`AWAITING_USER`) until the buyer passes the adaptive age check that rule opens |
-| Payouts | Locked until `GET /v3/session/{id}/decision/` shows the KYB Approved (the server refuses the token), then monitored |
-| Fraud | A second shop opened from the same browser is held: both sign-ups carry the same persistent device id |
-| Operator view | The held transaction's rules, score, tags, notes, device and network, KYB review, and Console v2 deep links |
+| Sign up | A passkey sign-up in the shop's own form (`@didit-protocol/auth-nextjs`), then a `seller_signup` sent to transaction monitoring from the browser |
+| Verify | The shop's KYB in the web SDK modal: company registry at the UBO tier, key people with their own ID check, company documents. Payouts stay locked until `GET /v3/session/{id}/decision/` shows it Approved (the server refuses the payout token) |
+| Transact | A 1,497 EUR order from the browser, held by a rule (`AWAITING_USER`) until the buyer passes the age check that rule opens |
+| Stop fraud | A second shop opened on the same device is held for review and its payouts are paused: both sign-ups carry the same persistent device id |
+| Console | The console view's Business page: registry, key people and the linked shop, plus Transaction, Verification and Device |
 
-A "How this uses Didit" panel lists each chapter's modules and calls, linked
-to docs.didit.me (checked by `npm run check:docs-links`).
+Workflows come from the Northmarket config in `lib/didit/demos.ts`: the seller
+KYB `811d80dd-491e-4799-b905-2c8007c9df78` on production, and on staging the
+`NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID` variable; the buyer age check uses the
+shared age workflow. The old `/marketplace?chapter=` links redirect to the
+matching step.
 
 The browser never sees the API key. The server mints short-lived transaction
 tokens (`POST /v3/transactions/sdk-token/`) for identities it created, keeps
@@ -169,8 +174,9 @@ summaries (no session tokens, documents or dates of birth). See
 [`lib/marketplace/server.ts`](lib/marketplace/server.ts) and
 [`lib/marketplace/summaries.ts`](lib/marketplace/summaries.ts).
 
-**One-time setup on the staging application behind `API_KEY`.** The seller
-KYB workflow and three rules live on the Didit application, not in this repo:
+**One-time setup on the staging application behind `API_KEY`.** The staging
+seller KYB workflow and the three rules live on the Didit application, not in
+this repo:
 
 ```sh
 npm run marketplace:setup                # dry run: what exists
@@ -188,8 +194,8 @@ Put the id it prints in `.env` and in the hosting environment:
 NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID=<printed workflow_id>
 ```
 
-Without it the seller chapter says the KYB is not published on this
-environment, and everything else runs. The rules match only transactions
+Without it the hub says the KYB is not published on this environment, and
+everything else runs. The rules match only transactions
 carrying `custom_properties.demo_app = "marketplace"`, so other demos on the
 same application are untouched. Definitions are in
 [`lib/marketplace/setup.ts`](lib/marketplace/setup.ts).
@@ -303,17 +309,27 @@ than failing on a 400.
 npm test                     # node --test (unit tests, lib/didit, /api/igaming,
                              # /api/fintech, /api/crypto-exchange and
                              # /marketplace route tests)
+<<<<<<< HEAD
 npm run test:e2e             # Playwright flows for /marketplace
                              # against BASE_URL (E2E_LIVE=1 adds the live
                              # staging flows)
+=======
+npm run test:e2e             # Playwright flows for /fintech against BASE_URL
+                             # (E2E_LIVE=1 adds the live staging flows)
+>>>>>>> origin/main
 npm run build && npm run test:e2e:crypto-exchange
                              # Playwright flows for /crypto-exchange, desktop and
                              # phone, on recorded Didit responses
 npm run build && npm run test:e2e:aurora-play
                              # the same for /igaming (build without
                              # DIDIT_PUBLISHABLE_KEY)
+<<<<<<< HEAD
 npm run build && npm run test:e2e:alder
                              # the same for /fintech
+=======
+npm run build && npm run test:e2e:northmarket
+                             # the same for /marketplace
+>>>>>>> origin/main
 npm run typecheck            # tsc --noEmit
 npm run lint                 # eslint (vendor/ is excluded - it is synced)
 npm run build                # next build
@@ -331,8 +347,13 @@ PROOF_SESSION_ID=<a real session id> npm run shots
 Writes the catalogue (`/modules`), both modal families and the 390px layouts to `proof/`.
 The catalogue is light-only, exactly like didit.me and help.didit.me - the
 design system ships no dark token set. The industry demos bring their own
+<<<<<<< HEAD
 look: Aurora Play is a dark casino, Alder a light neobank, and `/marketplace`
 has a dark theme.
+=======
+look: Aurora Play is a dark casino, Northmarket a warm light marketplace, and
+`/fintech` has a dark theme.
+>>>>>>> origin/main
 
 ## Technical documentation
 

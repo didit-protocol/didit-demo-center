@@ -57,6 +57,13 @@ export interface MarketEnv {
   apiBase: string;
   isStaging: boolean;
   workflows: MarketWorkflows;
+  /**
+   * With Didit Authentication on: the signed-in visitor's `vendor_data`
+   * (`northmarket-<user id>`), or null when nobody is signed in. Their shop
+   * and their buyer take it instead of a random cookie id. Undefined when
+   * Authentication is off.
+   */
+  visitor?: string | null;
   console: ConsoleTarget;
   fetch: (input: string, init?: RequestInit) => Promise<Response>;
   now: () => number;
@@ -89,14 +96,14 @@ const fail = (status: number, error: string, code?: string): Reply => ({
 /* ── Availability ────────────────────────────────────────────────── */
 
 export interface Availability {
-  /** Orders, payouts and sign-ups: staging plus an API key. */
+  /** Orders, payouts and sign-ups: an API key. */
   transactions: boolean;
   /** Seller KYB: additionally the KYB workflow id. */
   kyb: boolean;
 }
 
 export function availability(env: MarketEnv): Availability {
-  const transactions = env.isStaging && Boolean(env.apiKey);
+  const transactions = Boolean(env.apiKey);
 
   return { transactions, kyb: transactions && Boolean(env.workflows.kyb) };
 }
@@ -107,10 +114,22 @@ function notLive(env: MarketEnv): Reply | null {
   return {
     status: 503,
     body: {
-      error: `The marketplace demo runs on staging, against the demo organization: ${STAGING_DEMO_URL}`,
-      code: "staging_only",
+      error: `The marketplace demo has no Didit API key on this server. Try it on ${STAGING_DEMO_URL}`,
+      code: "not_configured",
     },
   };
+}
+
+/** Authentication is on and nobody is signed in. */
+function signedOut(env: MarketEnv): Reply | null {
+  if (env.visitor !== null) return null;
+
+  return fail(401, "Sign in to Northmarket first.", "signed_out");
+}
+
+/** The buyer `vendor_data` for the signed-in visitor. */
+export function buyerOf(visitor: string): string {
+  return `${visitor}-buyer`;
 }
 
 function kybNotLive(env: MarketEnv): Reply | null {
@@ -314,22 +333,35 @@ export async function handleOpenShop(
   state: MarketState | null,
   input: unknown,
 ): Promise<Reply> {
-  const blocked = notLive(env);
+  const blocked = notLive(env) ?? signedOut(env);
 
   if (blocked) return blocked;
 
   const body = isRecord(input) ? input : {};
   const shop = clean(body.shop, 40);
-  const company = clean(body.company, 80);
+  // The legal name and registry country help the registry search; the
+  // seller can also find the company inside the KYB itself.
+  const company =
+    body.company === undefined || body.company === ""
+      ? shop
+      : clean(body.company, 80);
   const country = typeof body.country === "string" ? body.country : "";
 
   if (!shop) return fail(400, "Give the shop a name of 2 to 40 characters.");
   if (!company)
     return fail(400, "Enter the company's legal name (2 to 80 characters).");
-  if (!isSellerCountry(country))
+  if (country && !isSellerCountry(country))
     return fail(400, "Pick one of the registry countries in the list.");
 
   const current = state ?? emptyState(env.now());
+
+  if (env.visitor && current.sellers.some((s) => s.id === env.visitor)) {
+    return fail(
+      409,
+      "This account already runs a shop. Sign up again to open another one.",
+      "shop_exists",
+    );
+  }
 
   if (current.sellers.length >= MAX_SELLERS) {
     return fail(
@@ -340,7 +372,7 @@ export async function handleOpenShop(
   }
 
   const seller: SellerRecord = {
-    id: vendorId("seller", env.newId()),
+    id: env.visitor ?? vendorId("seller", env.newId()),
     shop,
     company,
     country,
@@ -376,7 +408,7 @@ export async function handleToken(
   state: MarketState | null,
   input: unknown,
 ): Promise<Reply> {
-  const blocked = notLive(env);
+  const blocked = notLive(env) ?? signedOut(env);
 
   if (blocked) return blocked;
 
@@ -386,9 +418,11 @@ export async function handleToken(
   let subject: TokenGrant["subject"];
 
   if (purpose === "purchase") {
-    if (!current.buyer) {
-      current = { ...current, buyer: vendorId("buyer", env.newId()) };
-    }
+    const buyer = env.visitor
+      ? buyerOf(env.visitor)
+      : (current.buyer ?? vendorId("buyer", env.newId()));
+
+    if (current.buyer !== buyer) current = { ...current, buyer };
     subject = {
       vendorData: current.buyer as string,
       name: `${BRAND.name} buyer`,
@@ -593,13 +627,13 @@ export async function handleStartKyb(
   const created = await didit(env, "POST", "/v3/session/", {
     workflow_id: env.workflows.kyb,
     vendor_data: seller.id,
-    callback: `${origin}/marketplace?chapter=seller`,
+    callback: `${origin}/marketplace`,
     callback_method: "both",
     language: options.language,
     metadata: { demo_app: DEMO_APP, shop: seller.shop },
     expected_details: {
       company_name: seller.company,
-      registry_country: seller.country,
+      ...(seller.country ? { registry_country: seller.country } : {}),
     },
   });
 
