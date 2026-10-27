@@ -166,8 +166,8 @@
 /* the public site and the sign-up card */
 .al-site-nav .al-login { margin-left: auto; height: 46px; }
 .al-site-nav nav span { cursor: default; }
-.al-site-body { flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 430px); gap: 48px; align-items: start;
-                padding: 24px 56px 120px; max-width: 1240px; width: 100%; }
+.al-site-body { flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: minmax(0, 500px) minmax(0, 430px); gap: 34px; align-items: start;
+                justify-content: start; padding: 24px 56px 120px; width: 100%; }
 .al-hero { display: flex; flex-direction: column; gap: 18px; padding-top: 16px; }
 .al-hero-chip { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; height: 32px; padding: 0 14px; border-radius: 999px; background: var(--al-soft);
                 color: var(--al-green); font-weight: 700; font-size: 13px; }
@@ -223,7 +223,7 @@
   .al { grid-template-columns: 72px minmax(0, 1fr); }
   .al-side .al-nav span, .al-side .al-sec, .al-side .al-invite, .al-side .al-brand, .al-nav b { display: none; }
   .al-home { grid-template-columns: minmax(0, 1fr); }
-  .al-site-body { grid-template-columns: minmax(0, 1fr); padding: 16px 24px 120px; }
+  .al-site-body { grid-template-columns: minmax(0, 1fr); justify-content: stretch; padding: 16px 24px 120px; }
   .al-hero-art { display: none; }
 }
 /* the phone: one column, the card first, the brand and the avatar on top */
