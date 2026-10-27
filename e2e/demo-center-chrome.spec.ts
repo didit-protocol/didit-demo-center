@@ -90,13 +90,14 @@ test("the feed: a hairline card on a computer, the collapsed pill on a phone", a
   const feed = page.getByTestId("didit-live");
   const pill = page.getByTestId("didit-live-pill");
 
+  // The root providers settle a moment after load; measure the shell once
+  // there is only one.
+  await expect(page.locator(".dx-app")).toHaveCount(1);
+
   if (isPhone(page)) {
     // It starts folded, so the lobby stays in view, and opens on a tap.
     await expect(pill).toBeVisible();
     await expect(feed).toHaveCount(0);
-    // The root providers settle a moment after load; measure the shell
-    // once there is only one.
-    await expect(page.locator(".dx-app")).toHaveCount(1);
     const folded = await box(pill);
     const app = await box(page.locator(".dx-app"));
 
