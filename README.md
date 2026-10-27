@@ -10,8 +10,8 @@ request that created it.
 The front page (`/`) lists the four industry demos. Each demo walks the same
 five steps (sign up, verify, transact, stop fraud, console) inside its own
 brand, under the Demo Center bar, with the Didit live layer floating over it.
-Aurora Play (`/igaming`) is the first demo on this shell; the other three keep
-their current screens until they move to it.
+Aurora Play (`/igaming`) and Kestrel (`/crypto-exchange`) are on this shell;
+the other two keep their current screens until they move to it.
 
 ### One shared Didit client: `lib/didit/`
 
@@ -204,32 +204,32 @@ the Console v2 links.
 
 ## Industry demo: crypto exchange (`/crypto-exchange`)
 
-Kestrel, a fictional crypto exchange, runs Didit end to end. Every call is
-live against the environment `NEXT_PUBLIC_IS_STAGING` selects; nothing on the
-page is a fixture.
+Kestrel, a fictional crypto exchange, runs Didit end to end on the Demo
+Center shell, through `lib/didit`. Every call is live against the
+environment `NEXT_PUBLIC_IS_STAGING` selects; the live layer and the console
+view only ever show what this visitor's own calls returned.
 
 | Step | Didit surface |
 | --- | --- |
-| Sign-up | KYC + AML workflow: `POST /v3/session/`, the web SDK's `startVerification`, `GET /v3/session/{id}/decision/` |
-| Deposit | The exchange's backend reports it with `POST /v3/transactions/`; Didit screens the sending wallet and runs the rules |
-| Withdrawal | `POST /v3/transactions/sdk-token/` on the server, only once the KYC is approved; `submitTransaction` in the browser as a Travel Rule transfer |
-| Wallet proof and selfie step-up | Come back as the transaction's `action_required`; the page opens them in the web SDK |
-| Risky wallet | A demo rule holds a deposit or withdrawal whose wallet scores 75 or above; a sanctioned wallet is declined |
-| Operator side | `GET /v3/transactions/{id}/`, trimmed, plus Console deep links for the session and each transaction |
+| Sign up | Didit Authentication in Kestrel's own card (passkey, Google, Apple or an email code); without a publishable key, Kestrel's own form |
+| Verify | KYC + AML before the first deposit: `didit.sessions.create`, the web SDK modal, `GET /v3/session/{id}/decision/` |
+| Transact | `didit.transactions.sdkToken` on the server, only once the KYC is approved; every deposit and withdrawal goes through `submitTransaction` in the browser. Deposits are screened by the sending wallet; a withdrawal to the user's own wallet is a Travel Rule transfer whose wallet proof and selfie step-up come back as `action_required` |
+| Stop fraud | A withdrawal to a wallet on a sanctions list is declined by a demo rule; nothing leaves the account |
+| Console | The console view: the declined withdrawal's Transaction page with the wallet risk and the rules, plus Person, Verification and Device |
 
-The account is a random `vendor_data` (`kestrel-…`) and its onboarding
-session in a signed, httpOnly cookie. The server routes under
-`app/api/crypto-exchange` only ever return records that carry that
-`vendor_data`, and refuse to move money until Didit's decision for the
-onboarding session is `Approved`. The Console ids for the deep links come
-from the API itself, so there is nothing to configure. The hosted flow's
-return URL is always this site's `/crypto-exchange` (`siteConfig.url`).
+The account is the onboarding session and its `vendor_data` in a signed,
+httpOnly cookie: `kestrel-` plus the Didit user id with Authentication on, a
+random id without it. The server routes under `app/api/crypto-exchange` only
+ever return records that carry that `vendor_data`, and refuse to mint a
+transaction token until Didit's decision for the onboarding session is
+`Approved`. The hosted flow's return URL is always this site's
+`/crypto-exchange` (`siteConfig.url`). Kestrel moves BTC and ETH; its market
+screen (prices, candles, order book) is scenery and never reaches Didit.
 
-**One-time setup per environment.** The workflows are in
-[`lib/crypto-exchange/policy.ts`](lib/crypto-exchange/policy.ts) (staging
-only for now: the onboarding workflow runs a paid AML screening). Install the
-three demo rules and the application's Travel Rule settings (idempotent,
-matched by title):
+**One-time setup per environment.** The workflows are Kestrel's in
+[`lib/didit/demos.ts`](lib/didit/demos.ts) (crypto onboarding and the
+face-authentication step-up, per environment). Install the three demo rules
+and the application's Travel Rule settings (idempotent, matched by title):
 
 ```sh
 npm run crypto-exchange:setup -- --dry-run   # print what would change
@@ -237,9 +237,9 @@ npm run crypto-exchange:setup                # create or update them
 ```
 
 Every rule matches only transactions with `custom_values.demo_app ==
-"crypto-exchange"`, so other demos on the same application are untouched. The
-light and dark themes are scoped to the demo area in
-[`styles/crypto-exchange.css`](styles/crypto-exchange.css).
+"crypto-exchange"`, so other demos on the same application are untouched.
+Kestrel's own brand (dark, Space Grotesk and IBM Plex Mono, teal) is
+[`styles/demos/kestrel.css`](styles/demos/kestrel.css).
 
 ## Site chrome
 

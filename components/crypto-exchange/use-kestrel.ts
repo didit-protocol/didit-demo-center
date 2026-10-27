@@ -6,18 +6,25 @@ import type { AccountView } from "@/lib/crypto-exchange/onboarding";
 import * as React from "react";
 
 import {
-  buildWithdrawalPayload,
-  newTxnId,
-  randomEvmAddress,
-  withdrawalHoldsFunds,
-  withdrawalStage,
+  type ActivityItem,
+  type Asset,
   type CxWallets,
   type DepositSource,
   type TransactionView,
   type WithdrawalDestination,
+  SANCTIONED_WALLET,
+  balancesOf,
+  buildDepositPayload,
+  buildWithdrawalPayload,
+  isSettled,
+  newTxnId,
+  randomWallets,
 } from "@/lib/crypto-exchange/transactions";
-
-type SdkModule = typeof import("@didit-protocol/sdk-web").DiditSdk;
+import {
+  type TransactionToken,
+  openVerification,
+  submitTransaction,
+} from "@/lib/didit/browser";
 
 export type KestrelAccount = AccountView & {
   userId: string;
@@ -25,52 +32,61 @@ export type KestrelAccount = AccountView & {
   console: ConsoleContext | null;
 };
 
-export interface ActivityItem {
-  id: string;
-  kind: "deposit" | "withdrawal";
-  /** Where the money came from or went, in the user's words. */
-  label: string;
-  createdAt: string;
-  view: TransactionView;
+/** Kestrel's own sign-up, when Didit Authentication is off. */
+export interface Profile {
+  email: string;
+  country: string;
 }
 
 interface StoredState {
+  version: 2;
+  profile: Profile | null;
   wallets: CxWallets;
   activity: ActivityItem[];
   sessionUrl: string | null;
 }
 
-export type AccountStatus = "loading" | "none" | "ready" | "error";
+/** What just happened with Didit, for the live layer. */
+export type KestrelSignal =
+  | { type: "verify-started" }
+  | { type: "verify-decided"; account: KestrelAccount }
+  | { type: "transaction"; item: ActivityItem };
 
-/** Which hosted flow the SDK modal is showing, so onComplete knows what finished. */
-type Flow =
-  | { kind: "onboarding" }
-  | { kind: "action"; itemId: string; action: string; status: string };
+export type Busy = "verify" | "deposit" | "withdraw" | "action" | null;
 
-const STORAGE_KEY = "kestrel-demo:v1";
+const STORAGE_KEY = "kestrel-demo:v2";
 
-function freshWallets(): CxWallets {
-  const random = (size: number) => crypto.getRandomValues(new Uint8Array(size));
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+function fresh(): StoredState {
   return {
-    ownWallet: randomEvmAddress(random),
-    exchangeDeposit: randomEvmAddress(random),
+    version: 2,
+    profile: null,
+    wallets: randomWallets((size) =>
+      crypto.getRandomValues(new Uint8Array(size)),
+    ),
+    activity: [],
+    sessionUrl: null,
   };
 }
 
-function loadState(): StoredState {
+function load(): StoredState {
   try {
     const parsed = JSON.parse(
       window.localStorage.getItem(STORAGE_KEY) ?? "null",
-    );
+    ) as StoredState | null;
 
-    if (parsed?.wallets?.ownWallet && Array.isArray(parsed.activity))
+    if (
+      parsed?.version === 2 &&
+      parsed.wallets?.BTC &&
+      Array.isArray(parsed.activity)
+    )
       return parsed;
   } catch {
     // Unreadable storage: start a fresh demo.
   }
 
-  return { wallets: freshWallets(), activity: [], sessionUrl: null };
+  return fresh();
 }
 
 async function api<T>(
@@ -87,14 +103,13 @@ async function api<T>(
     });
     const data = await response.json().catch(() => null);
 
-    if (!response.ok) {
+    if (!response.ok)
       return {
         ok: false,
         status: response.status,
         error:
           data?.error ?? "Something went wrong talking to Kestrel's server.",
       };
-    }
 
     return { ok: true, data: data as T };
   } catch {
@@ -106,84 +121,33 @@ async function api<T>(
   }
 }
 
-const sum = (values: number[]) =>
-  Math.round(values.reduce((total, value) => total + value, 0) * 1e8) / 1e8;
-
-export function balancesOf(activity: ActivityItem[]) {
-  const amount = (item: ActivityItem) => Number(item.view.amount) || 0;
-  const deposits = activity.filter((item) => item.kind === "deposit");
-  const withdrawals = activity.filter((item) => item.kind === "withdrawal");
-  const credited = sum(
-    deposits.filter((item) => item.view.status === "APPROVED").map(amount),
-  );
-  const holding = withdrawals.filter((item) =>
-    withdrawalHoldsFunds(withdrawalStage(item.view)),
-  );
-  const sent = sum(
-    holding
-      .filter((item) => withdrawalStage(item.view) === "ready")
-      .map(amount),
-  );
-  const held = sum(
-    holding
-      .filter((item) => withdrawalStage(item.view) !== "ready")
-      .map(amount),
-  );
-
-  return {
-    total: sum([credited, -sent]),
-    available: sum([credited, -sent, -held]),
-    held,
-    inReview: sum(
-      deposits.filter((item) => item.view.status === "IN_REVIEW").map(amount),
-    ),
-    frozen: sum(
-      deposits.filter((item) => item.view.status === "DECLINED").map(amount),
-    ),
-  };
-}
-
-export const DEPOSIT_LABEL: Record<DepositSource, string> = {
-  "own-wallet": "From your wallet",
-  "unknown-sender": "From an unknown sender",
-};
-
-export const WITHDRAWAL_LABEL: Record<WithdrawalDestination, string> = {
-  "own-wallet": "To your wallet",
-  exchange: "To your account at another exchange",
-  address: "To an external address",
-};
-
-/** A transfer is final once Didit and the Travel Rule have nothing left to say. */
-function isSettled(item: ActivityItem): boolean {
-  if (item.kind === "deposit")
-    return ["APPROVED", "DECLINED"].includes(item.view.status);
-
-  return ["ready", "blocked"].includes(withdrawalStage(item.view));
-}
+const errorText = (error: unknown, fallback: string) =>
+  error instanceof Error && error.message ? error.message : fallback;
 
 /**
- * Everything Kestrel does on the client: the account, the activity ledger, and
- * the Didit web SDK. Balances are derived from Didit's decisions alone - a
- * deposit counts once Didit approves it, a withdrawal holds its funds until
- * Didit blocks it.
+ * Everything Kestrel does in the browser: the account (its KYC session lives
+ * in Kestrel's signed cookie), the activity ledger and the Didit web SDK.
+ * Balances come from Didit's decisions alone: a deposit counts once Didit
+ * approves it, a withdrawal holds its funds until Didit blocks it.
  */
-export function useKestrel() {
-  const sdkRef = React.useRef<SdkModule | null>(null);
-  const flowRef = React.useRef<Flow | null>(null);
+export function useKestrel(
+  emit: (signal: KestrelSignal) => void = () => undefined,
+) {
   const [state, setState] = React.useState<StoredState | null>(null);
   const [account, setAccount] = React.useState<KestrelAccount | null>(null);
-  const [accountStatus, setAccountStatus] =
-    React.useState<AccountStatus>("loading");
-  const [accountError, setAccountError] = React.useState<string | null>(null);
-  const [signingUp, setSigningUp] = React.useState(false);
-  const [busyItem, setBusyItem] = React.useState<string | null>(null);
-  const [sdkError, setSdkError] = React.useState<string | null>(null);
-  const [sdkReady, setSdkReady] = React.useState(false);
-
+  const [accountLoaded, setAccountLoaded] = React.useState(false);
+  const [busy, setBusy] = React.useState<Busy>(null);
+  const [error, setError] = React.useState<string | null>(null);
   const stateRef = React.useRef(state);
+  const accountRef = React.useRef(account);
+  const tokenRef = React.useRef<
+    (TransactionToken & { expiresAt: number }) | null
+  >(null);
+  const emitRef = React.useRef(emit);
 
   stateRef.current = state;
+  accountRef.current = account;
+  emitRef.current = emit;
 
   const update = React.useCallback(
     (next: (current: StoredState) => StoredState) => {
@@ -192,6 +156,7 @@ export function useKestrel() {
         const value = next(current);
 
         window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+        stateRef.current = value;
 
         return value;
       });
@@ -199,7 +164,7 @@ export function useKestrel() {
     [],
   );
 
-  const upsertItem = React.useCallback(
+  const upsert = React.useCallback(
     (item: ActivityItem) =>
       update((current) => ({
         ...current,
@@ -214,326 +179,311 @@ export function useKestrel() {
   const refreshAccount = React.useCallback(async () => {
     const result = await api<{ account: KestrelAccount | null }>("/account");
 
-    if (result.ok) {
-      setAccount(result.data.account);
-      setAccountStatus(result.data.account ? "ready" : "none");
-      setAccountError(null);
+    setAccountLoaded(true);
+    if (!result.ok) {
+      setError(result.error);
 
-      return result.data.account;
+      return accountRef.current;
     }
-    setAccountStatus((current) => (current === "ready" ? current : "error"));
-    setAccountError(result.error);
+    setAccount(result.data.account);
+    accountRef.current = result.data.account;
 
-    return null;
+    return result.data.account;
   }, []);
 
   const refreshItem = React.useCallback(
     async (id: string) => {
-      const result = await api<TransactionView>(`/transactions/${id}`);
       const existing = stateRef.current?.activity.find(
         (item) => item.id === id,
       );
+      const result = await api<TransactionView>(`/transactions/${id}`);
 
       if (!result.ok || !existing) return existing ?? null;
       const item = { ...existing, view: result.data };
 
-      upsertItem(item);
+      upsert(item);
 
       return item;
     },
-    [upsertItem],
+    [upsert],
   );
 
-  /** Polls one transfer until Didit moves it on, or the attempts run out. */
-  const pollItem = React.useCallback(
+  // Hydrate from storage, read the account, then refresh unsettled transfers.
+  React.useEffect(() => {
+    const stored = load();
+
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
+    stateRef.current = stored;
+    setState(stored);
+    refreshAccount().then((current) => {
+      if (current?.stage !== "approved") return;
+      for (const item of stored.activity)
+        if (!isSettled(item)) void refreshItem(item.id);
+    });
+  }, []);
+
+  /* ── Sign-up and the KYC ── */
+
+  const join = React.useCallback(
+    (profile: Profile) => update((current) => ({ ...current, profile })),
+    [update],
+  );
+
+  /** The decision can trail the flow by a few seconds. */
+  const settleAccount = React.useCallback(async () => {
+    let current = await refreshAccount();
+
+    for (
+      let attempt = 0;
+      attempt < 6 && current?.stage === "processing";
+      attempt++
+    ) {
+      await sleep(2500);
+      current = await refreshAccount();
+    }
+    if (current && current.stage !== "processing")
+      emitRef.current({ type: "verify-decided", account: current });
+
+    return current;
+  }, [refreshAccount]);
+
+  const verify = React.useCallback(async () => {
+    setBusy("verify");
+    setError(null);
+    try {
+      let url =
+        accountRef.current?.stage === "processing"
+          ? stateRef.current?.sessionUrl
+          : null;
+
+      if (!url) {
+        const created = await api<{ sessionId: string; url: string }>(
+          "/account",
+          {
+            method: "POST",
+          },
+        );
+
+        if (!created.ok) {
+          setError(created.error);
+
+          return;
+        }
+        url = created.data.url;
+        tokenRef.current = null;
+        update((current) => ({ ...current, sessionUrl: created.data.url }));
+        await refreshAccount();
+      }
+      emitRef.current({ type: "verify-started" });
+      const result = await openVerification(url);
+
+      if (result.type === "failed")
+        setError(result.error?.message ?? "The verification could not start.");
+      await settleAccount();
+    } finally {
+      setBusy(null);
+    }
+  }, [refreshAccount, settleAccount, update]);
+
+  /* ── Money: always submitted from the browser ── */
+
+  const ensureToken = React.useCallback(async (force: boolean) => {
+    const current = tokenRef.current;
+
+    if (!force && current && current.expiresAt - Date.now() > 60_000)
+      return current;
+    const minted = await api<{
+      token: string;
+      expiresAt: string | null;
+      baseUrl: string;
+    }>("/token", { method: "POST" });
+
+    if (!minted.ok) throw new Error(minted.error);
+    tokenRef.current = {
+      token: minted.data.token,
+      baseUrl: minted.data.baseUrl,
+      expiresAt:
+        Date.parse(minted.data.expiresAt ?? "") || Date.now() + 600_000,
+    };
+
+    return tokenRef.current;
+  }, []);
+
+  const send = React.useCallback(
     async (
-      id: string,
-      from: { status: string; action: string | null },
-      attempts: number,
-    ) => {
-      setBusyItem(id);
+      kind: ActivityItem["kind"],
+      asset: Asset,
+      wallet: string,
+      payload: Parameters<typeof submitTransaction>[0]["transaction"],
+    ): Promise<ActivityItem | null> => {
       try {
+        const submitted = await submitTransaction({
+          token: ensureToken,
+          transaction: payload,
+        });
+        const detail = await api<TransactionView>(
+          `/transactions/${submitted.transactionId}`,
+        );
+
+        if (!detail.ok) {
+          setError(detail.error);
+
+          return null;
+        }
+        const item: ActivityItem = {
+          id: submitted.transactionId,
+          kind,
+          asset,
+          wallet,
+          createdAt: new Date().toISOString(),
+          view: detail.data,
+        };
+
+        upsert(item);
+        emitRef.current({ type: "transaction", item });
+
+        return item;
+      } catch (failure) {
+        setError(errorText(failure, "Didit did not accept the transaction."));
+
+        return null;
+      }
+    },
+    [ensureToken, upsert],
+  );
+
+  const deposit = React.useCallback(
+    async (input: { asset: Asset; amount: string; source: DepositSource }) => {
+      const current = stateRef.current;
+      const fullName = accountRef.current?.fullName;
+
+      if (!current || !fullName) return null;
+      setBusy("deposit");
+      setError(null);
+      try {
+        const own = input.source === "own-wallet" || input.asset !== "ETH";
+
+        return await send(
+          "deposit",
+          input.asset,
+          own ? current.wallets[input.asset] : SANCTIONED_WALLET,
+          buildDepositPayload({
+            txnId: newTxnId("dep", crypto.randomUUID()),
+            fullName,
+            asset: input.asset,
+            amount: input.amount,
+            source: input.source,
+            ownWallet: current.wallets[input.asset],
+          }),
+        );
+      } finally {
+        setBusy(null);
+      }
+    },
+    [send],
+  );
+
+  const withdraw = React.useCallback(
+    async (input: {
+      asset: Asset;
+      amount: string;
+      destination: WithdrawalDestination;
+      address: string;
+    }) => {
+      const fullName = accountRef.current?.fullName;
+
+      if (!fullName) return null;
+      setBusy("withdraw");
+      setError(null);
+      try {
+        return await send(
+          "withdrawal",
+          input.asset,
+          input.address,
+          buildWithdrawalPayload({
+            txnId: newTxnId("wd", crypto.randomUUID()),
+            fullName,
+            asset: input.asset,
+            amount: input.amount,
+            destination: input.destination,
+            address: input.address,
+            beneficiaryName: input.destination === "own-wallet" ? fullName : "",
+          }),
+        );
+      } finally {
+        setBusy(null);
+      }
+    },
+    [send],
+  );
+
+  /** Opens what Didit asked for (the wallet proof or the selfie), then waits for Didit to move on. */
+  const runAction = React.useCallback(
+    async (item: ActivityItem) => {
+      const action = item.view.action;
+
+      if (!action) return;
+      setBusy("action");
+      setError(null);
+      try {
+        const result = await openVerification(action.url);
+
+        if (result.type === "failed")
+          setError(result.error?.message ?? "The Didit flow could not start.");
+        const attempts = action.type === "verification_session" ? 30 : 10;
+
         for (let attempt = 0; attempt < attempts; attempt++) {
-          if (attempt > 0)
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-          const item = await refreshItem(id);
+          if (attempt > 0) await sleep(2000);
+          const next = await refreshItem(item.id);
 
           if (
-            item &&
-            (item.view.status !== from.status ||
-              (item.view.action?.type ?? null) !== from.action)
+            next &&
+            (next.view.status !== item.view.status ||
+              (next.view.action?.type ?? null) !== action.type)
           ) {
+            emitRef.current({ type: "transaction", item: next });
+
             return;
           }
         }
       } finally {
-        setBusyItem(null);
+        setBusy(null);
       }
     },
     [refreshItem],
   );
 
-  // Hydrate from storage, read the account, and refresh unsettled transfers.
-  React.useEffect(() => {
-    const stored = loadState();
-
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
-    setState(stored);
-    stateRef.current = stored;
-    refreshAccount().then((current) => {
-      if (!current) return;
-      for (const item of stored.activity) {
-        if (!isSettled(item)) refreshItem(item.id);
-      }
-    });
-  }, []);
-
-  // The Didit web SDK: one modal for the onboarding session, the wallet
-  // ownership widget and the selfie step-up.
-  React.useEffect(() => {
-    let disposed = false;
-
-    import("@didit-protocol/sdk-web").then(({ DiditSdk }) => {
-      if (disposed) return;
-      sdkRef.current = DiditSdk;
-      setSdkReady(true);
-      DiditSdk.shared.onComplete = (result) => {
-        const flow = flowRef.current;
-
-        flowRef.current = null;
-        if (result.type === "failed") {
-          setSdkError(
-            result.error?.message ?? "The Didit flow could not start.",
-          );
-        }
-        if (!flow) return;
-        if (flow.kind === "onboarding") {
-          // The decision can trail the flow by a few seconds.
-          (async () => {
-            for (let attempt = 0; attempt < 6; attempt++) {
-              const current = await refreshAccount();
-
-              if (current && current.stage !== "processing") return;
-              await new Promise((resolve) => setTimeout(resolve, 2500));
-            }
-          })();
-
-          return;
-        }
-        pollItem(
-          flow.itemId,
-          { status: flow.status, action: flow.action },
-          flow.action === "verification_session" ? 30 : 10,
-        );
-      };
-    });
-
-    return () => {
-      disposed = true;
-      if (sdkRef.current) sdkRef.current.shared.onComplete = undefined;
-    };
-  }, []);
-
-  const open = React.useCallback((url: string, flow: Flow) => {
-    if (!sdkRef.current) {
-      setSdkError("The Didit web SDK is still loading. Try again in a moment.");
-
-      return false;
-    }
-    setSdkError(null);
-    flowRef.current = flow;
-    sdkRef.current.shared.startVerification({
-      url,
-      configuration: {
-        showCloseButton: true,
-        showExitConfirmation: false,
-        closeModalOnComplete: true,
-      },
-    });
-
-    return true;
-  }, []);
-
-  const signUp = React.useCallback(async () => {
-    setSigningUp(true);
-    setAccountError(null);
-    try {
-      const result = await api<{ sessionId: string; url: string }>("/account", {
-        method: "POST",
-      });
-
-      if (!result.ok) {
-        setAccountError(result.error);
-
-        return;
-      }
-      update((current) => ({ ...current, sessionUrl: result.data.url }));
-      await refreshAccount();
-      open(result.data.url, { kind: "onboarding" });
-    } finally {
-      setSigningUp(false);
-    }
-  }, [open, refreshAccount, update]);
-
-  const continueVerification = React.useCallback(() => {
-    const url = stateRef.current?.sessionUrl;
-
-    if (url) open(url, { kind: "onboarding" });
-  }, [open]);
-
   const reset = React.useCallback(async () => {
     await api("/account", { method: "DELETE" });
-    const fresh = { wallets: freshWallets(), activity: [], sessionUrl: null };
+    const next = fresh();
 
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
-    setState(fresh);
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    stateRef.current = next;
+    tokenRef.current = null;
+    setState(next);
     setAccount(null);
-    setAccountStatus("none");
-    setAccountError(null);
+    setError(null);
   }, []);
 
-  const deposit = React.useCallback(
-    async (source: DepositSource, amount: string) => {
-      const wallets = stateRef.current?.wallets;
-
-      if (!wallets) return { error: "The demo is still loading." };
-      const result = await api<TransactionView>("/deposits", {
-        method: "POST",
-        body: JSON.stringify({ source, amount, ownWallet: wallets.ownWallet }),
-      });
-
-      if (!result.ok) return { error: result.error };
-      const item: ActivityItem = {
-        id: result.data.id,
-        kind: "deposit",
-        label: DEPOSIT_LABEL[source],
-        createdAt: new Date().toISOString(),
-        view: result.data,
-      };
-
-      upsertItem(item);
-
-      return { item };
-    },
-    [upsertItem],
-  );
-
-  const withdraw = React.useCallback(
-    async (input: {
-      destination: WithdrawalDestination;
-      amount: string;
-      address: string;
-      beneficiaryName: string;
-    }) => {
-      const sdk = sdkRef.current;
-      const fullName = account?.fullName;
-
-      if (!sdk || !fullName)
-        return { error: "The Didit web SDK is still loading." };
-
-      const token = await api<{ token: string; baseUrl: string }>("/token", {
-        method: "POST",
-      });
-
-      if (!token.ok) return { error: token.error };
-
-      let transactionId: string;
-
-      try {
-        // autoLaunchAction: false - Didit can mint a wallet-ownership widget
-        // for a transfer its rules then decline. Kestrel decides when to show
-        // it (see withdrawalStage), instead of the SDK opening it right away.
-        const submitted = await sdk.shared.submitTransaction({
-          transactionToken: token.data.token,
-          baseUrl: token.data.baseUrl,
-          autoLaunchAction: false,
-          transaction: buildWithdrawalPayload({
-            txnId: newTxnId("wd", crypto.randomUUID()),
-            fullName,
-            amount: input.amount,
-            destination: input.destination,
-            address: input.address,
-            beneficiaryName: input.beneficiaryName,
-          }),
-        });
-
-        transactionId = submitted.transactionId;
-      } catch (error) {
-        return {
-          error:
-            error instanceof Error && error.message
-              ? error.message
-              : "Didit did not accept the withdrawal.",
-        };
-      }
-
-      const detail = await api<TransactionView>(
-        `/transactions/${transactionId}`,
-      );
-
-      if (!detail.ok) return { error: detail.error };
-      const item: ActivityItem = {
-        id: transactionId,
-        kind: "withdrawal",
-        label: WITHDRAWAL_LABEL[input.destination],
-        createdAt: new Date().toISOString(),
-        view: detail.data,
-      };
-
-      upsertItem(item);
-
-      return { item };
-    },
-    [account?.fullName, upsertItem],
-  );
-
-  /** Opens the action Didit asked for: the wallet widget or the selfie. */
-  const runAction = React.useCallback(
-    (item: ActivityItem) => {
-      const action = item.view.action;
-
-      if (!action) return;
-      open(action.url, {
-        kind: "action",
-        itemId: item.id,
-        action: action.type,
-        status: item.view.status,
-      });
-    },
-    [open],
-  );
-
-  const checkAgain = React.useCallback(
-    (item: ActivityItem) =>
-      pollItem(
-        item.id,
-        { status: item.view.status, action: item.view.action?.type ?? null },
-        1,
-      ),
-    [pollItem],
-  );
+  const activity = state?.activity ?? [];
 
   return {
-    hydrated: state !== null,
-    sdkReady,
+    hydrated: state !== null && accountLoaded,
+    profile: state?.profile ?? null,
     wallets: state?.wallets ?? null,
-    activity: state?.activity ?? [],
-    hasSessionUrl: Boolean(state?.sessionUrl),
-    balances: balancesOf(state?.activity ?? []),
+    activity,
+    balances: balancesOf(activity),
     account,
-    accountStatus,
-    accountError,
-    sdkError,
-    signingUp,
-    busyItem,
-    signUp,
-    refreshAccount,
-    continueVerification,
-    reset,
+    busy,
+    error,
+    setError,
+    join,
+    verify,
     deposit,
     withdraw,
     runAction,
-    checkAgain,
+    refreshAccount,
+    reset,
   };
 }
 
