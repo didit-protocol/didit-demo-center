@@ -90,8 +90,8 @@
           "accept_language": "*",
           "network_context": {
             "isp": "Google LLC",
-            "ip_city": "The Dalles",
-            "ip_state": "Oregon",
+            "ip_city": "Example City",
+            "ip_state": "Example State",
             "latitude": 45.59455871582031,
             "longitude": -121.17868041992188,
             "time_zone": "America/Los_Angeles",
@@ -324,8 +324,8 @@
           "accept_language": "*",
           "network_context": {
             "isp": "Google LLC",
-            "ip_city": "The Dalles",
-            "ip_state": "Oregon",
+            "ip_city": "Example City",
+            "ip_state": "Example State",
             "latitude": 45.59455871582031,
             "longitude": -121.17868041992188,
             "time_zone": "America/Los_Angeles",
