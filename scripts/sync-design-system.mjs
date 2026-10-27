@@ -30,6 +30,7 @@ const BUNDLE = "design-system/components/bundle.css";
 /** Bundle blocks, in order: [name, first line starts with, stop before the line that starts with]. */
 export const BLOCKS = [
   ["root", "/* ---------- 1. Root ---------- */", "/* ---------- 2. Type"],
+  ["type", "/* ---------- 2. Type", ".dd-prose {"],
   ["button", "/* ==== DS4 BUTTON BEGIN", "/* ==== DS4 BUTTON END ==== */"],
   ["button-icon", "/* icon-only: a circle", "/* the danger fill"],
   ["status", ".dd-status {", "/* ==== DS4 TAG BEGIN"],

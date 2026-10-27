@@ -159,7 +159,7 @@ export function Hub() {
         </div>
       </header>
 
-      <section className="hub-hero">
+      <section className="hub-hero dd-wash">
         <div className="hub-in hub-hero-in">
           <div className="hub-hero-x">
             <p className="dd-eb dd-eb-section">

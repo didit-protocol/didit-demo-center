@@ -337,7 +337,7 @@
   --text-t-app-filter: 450 13px/16px var(--font-sans); /* Filter chips and segmented controls. */
   --text-t-app-label: 450 12px/16px var(--font-sans); /* Card titles, field labels, table headers. Sentence case, never uppercase. */
 }
-/* design-system/components/bundle.css: root, button, button-icon, status, tag, tile, halftone, window, tabs, wash, eyebrow */
+/* design-system/components/bundle.css: root, type, button, button-icon, status, tag, tile, halftone, window, tabs, wash, eyebrow */
 /* ---------- 1. Root ---------- */
 .dd { --dd-font: "Didit Grotesk", -apple-system, "Helvetica Neue", Arial, sans-serif; --dd-mono: "Didit Grotesk Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --dd-container: 1200px; --dd-gutter: 32px; --dd-section-y: 112px; --dd-header-h: 64px;
@@ -355,6 +355,32 @@
 :where(.dd) :where(ul, ol) { padding: 0; list-style: none; }
 :where(.dd) button { font: inherit; color: inherit; }
 .dd ::selection { background: var(--c-accent-soft); }
+/* ---------- 2. Type (marketing scale; product scale lives in the console tokens) ---------- */
+.dd-display { font-size: 80px; line-height: 84px; font-weight: 500; letter-spacing: -1.76px; color: var(--c-heading); text-wrap: balance; }
+.dd-h1 { font-size: 64px; line-height: 68px; font-weight: 500; letter-spacing: -1.32px; color: var(--c-heading); text-wrap: balance; }
+.dd-h2 { font-size: 44px; line-height: 50px; font-weight: 500; letter-spacing: -0.88px; color: var(--c-heading); text-wrap: balance; }
+.dd-h3 { font-size: 24px; line-height: 30px; font-weight: 500; letter-spacing: -0.33px; color: var(--c-heading); text-wrap: balance; }
+.dd-h4 { font-size: 18px; line-height: 24px; font-weight: 500; letter-spacing: -0.17px; color: var(--c-heading); }
+.dd-h5 { font-size: 15px; line-height: 20px; font-weight: 500; letter-spacing: -0.11px; color: var(--c-heading); }
+.dd-lede { font-size: 19px; line-height: 30px; font-weight: 400; letter-spacing: -0.11px; color: var(--c-text-subtle); text-wrap: pretty; }
+.dd-lede b, .dd-lede strong { font-weight: 500; color: var(--c-heading); }
+.dd-body { font-size: 16px; line-height: 26px; color: var(--c-text); text-wrap: pretty; }
+.dd-small { font-size: 14px; line-height: 22px; color: var(--c-text-subtle); }
+.dd-caption { font-size: 13px; line-height: 18px; color: var(--c-text-subtle); }
+.dd-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: var(--dd-mono); font-variation-settings: "MONO" 100, "ROND" 100; font-size: 13px; line-height: 16px; font-weight: 450; letter-spacing: 1.04px; text-transform: uppercase; color: var(--c-accent); }
+.dd-mono { font-family: var(--dd-mono); font-variation-settings: "MONO" 100, "ROND" 100; font-size: 12px; line-height: 16px; font-weight: 450; letter-spacing: 0.6px; text-transform: uppercase; color: var(--c-text-subtle); }
+.dd-code { font-family: var(--dd-mono); font-variation-settings: "MONO" 100, "ROND" 100; font-size: 13px; line-height: 20px; }
+.dd-num { font-variant-numeric: tabular-nums; }
+.dd-muted { color: var(--c-text-subtle); }
+.dd-faint { color: var(--c-text-faint); }
+.dd-ink { color: var(--c-heading); }
+.dd-accent { color: var(--c-accent); }
+.dd-two-tone { color: var(--c-heading); max-width: 880px; }
+.dd-two-tone span, .dd-two-tone .dd-dim { color: var(--c-text-faint); }
+.dd-link { color: var(--c-accent); font-weight: 450; display: inline-flex; align-items: center; gap: 4px; }
+.dd-link:hover { color: var(--c-accent-hover); }
+.dd-link .dd-i { width: 14px; height: 14px; transition: transform var(--duration-fast, 160ms) var(--ease-standard, cubic-bezier(.2,.8,.2,1)); }
+.dd-link:hover .dd-i { transform: translateX(2px); }
 /* ==== DS4 BUTTON BEGIN (P1 Tuned pill, 23 Oct 2026) ==== */
 .dd-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: var(--radius-pill); border: 1px solid transparent; font-size: 15px; line-height: 20px; font-weight: 450; letter-spacing: -0.06px; white-space: nowrap; cursor: pointer; text-decoration: none;
   transition: background-color 160ms cubic-bezier(.2,.8,.2,1), border-color 160ms cubic-bezier(.2,.8,.2,1), color 160ms cubic-bezier(.2,.8,.2,1), box-shadow 160ms cubic-bezier(.2,.8,.2,1), transform 220ms cubic-bezier(.2,.8,.2,1), filter 160ms cubic-bezier(.2,.8,.2,1); }

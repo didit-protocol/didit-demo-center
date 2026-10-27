@@ -8,6 +8,7 @@
   ],
   "blocks": [
     "root",
+    "type",
     "button",
     "button-icon",
     "status",

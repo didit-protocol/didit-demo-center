@@ -19,13 +19,8 @@
 .hub-nav-r { margin-left: auto; display: inline-flex; align-items: center; gap: 10px; }
 .hub-docs { display: inline-flex; align-items: center; gap: 6px; margin-right: 10px; font-size: 15px; line-height: 20px; color: var(--c-text-subtle); white-space: nowrap; }
 
-/* hero: the DS v4 wash */
-.hub-hero.hub-hero { margin: 0; padding: 0; border-radius: var(--radius-3xl); border: 1px solid var(--c-line); position: relative; overflow: hidden; isolation: isolate;
-  --field-a: color-mix(in srgb, var(--c-accent) 20%, transparent); --field-b: color-mix(in srgb, var(--c-accent) 9%, transparent);
-  background: radial-gradient(85% 120% at 100% 0%, var(--field-a), transparent 62%), radial-gradient(70% 100% at 0% 100%, var(--field-b), transparent 66%), var(--site-band); }
-.hub-hero::before { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
-  background-image: radial-gradient(circle, color-mix(in srgb, var(--c-accent) 34%, transparent) 1px, transparent 1.3px); background-size: 9px 9px;
-  -webkit-mask-image: radial-gradient(70% 90% at 100% 0%, #000, transparent 70%); mask-image: radial-gradient(70% 90% at 100% 0%, #000, transparent 70%); }
+/* hero: on the DS v4 wash (dd-wash) */
+.hub-hero.dd-wash { padding: 0; border-radius: var(--radius-3xl); }
 .hub-hero-in { max-width: none; height: 640px; padding: 0 74px 0 130px; display: grid; grid-template-columns: 560px minmax(0, 1fr); gap: 40px; }
 .hub-hero-x { display: flex; flex-direction: column; align-items: flex-start; padding-top: 120px; }
 .hub-hero h1 { margin-top: 22px; max-width: 580px; }
@@ -74,7 +69,8 @@
 .hub-tile-art.is-feed .hub-feed { left: 40px; right: 40px; top: 27px; bottom: auto; width: auto; }
 .hub-tile-art.is-pin { border-bottom: 1px solid var(--c-plate-line); }
 .hub-tile-art.is-pin img { position: absolute; top: 30px; left: -24%; width: 160%; max-width: none; }
-.hub-tile-art.is-pin .co { left: 150px; top: 166px; }
+.hub-tile-art.is-pin .co { left: 150px; top: 171px; }
+.hub-tile-art.is-pin .co-card { white-space: nowrap; }
 .hub-tile-art.is-console .hub-mini { position: absolute; left: 24px; top: 30px; width: 560px; }
 .hub-mini-top { height: 30px; display: flex; align-items: center; gap: 8px; padding: 0 10px; border-bottom: 1px solid var(--c-line); font-size: 10px; color: var(--c-text-subtle); }
 .hub-mini-top img { width: 7px; height: 11px; }
@@ -99,8 +95,8 @@
 .hub-band-x .dd-h2 { max-width: 560px; }
 .hub-band-x .dd-lede { margin-top: 18px; max-width: 560px; }
 .hub-band-x .hub-cta { margin-top: 28px; }
-.hub-code { margin: 0; padding: 22px 20px; border-radius: 18px; background: var(--code-bg); color: var(--code-text); font-family: var(--dd-font); font-size: 14px; line-height: 21px;
-            white-space: pre-wrap; overflow-x: auto; }
+.hub-code { margin: 0; padding: 22px 20px; border-radius: 18px; background: var(--code-bg); color: var(--code-text); font-family: var(--dd-font); font-size: 13.5px; line-height: 21px;
+            white-space: pre; overflow-x: auto; }
 .hub-code .c { color: var(--code-subtle); }
 .hub-code .k { color: var(--code-key); }
 .hub-code .s { color: var(--code-str); }
