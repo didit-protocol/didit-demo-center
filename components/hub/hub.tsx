@@ -177,7 +177,10 @@ export function Hub() {
               <a className="dd-btn dd-btn-primary dd-btn-lg" href="#demos">
                 Open an industry demo <ArrowRight aria-hidden size={18} />
               </a>
-              <Link className="dd-btn dd-btn-secondary dd-btn-lg" href="/modules">
+              <Link
+                className="dd-btn dd-btn-secondary dd-btn-lg"
+                href="/modules"
+              >
                 Browse product demos
               </Link>
             </span>
@@ -292,7 +295,9 @@ export function Hub() {
       <section className="hub-sec" id="how">
         <div className="hub-in">
           <Eyebrow>How it works</Eyebrow>
-          <h2 className="dd-h2">See what Didit sees, without leaving the app.</h2>
+          <h2 className="dd-h2">
+            See what Didit sees, without leaving the app.
+          </h2>
           <div className="hub-layer">
             <article className="hub-tile">
               <div aria-hidden className="hub-tile-art is-feed">

@@ -133,11 +133,7 @@ export function LiveFeed({
   }
 
   return (
-    <section
-      aria-label="Didit live"
-      className="lv dd"
-      data-testid="didit-live"
-    >
+    <section aria-label="Didit live" className="lv dd" data-testid="didit-live">
       <div className="lv-in">
         <div className="lv-head">
           <DiditRing />
