@@ -105,6 +105,8 @@ export interface CreateSessionInput {
   callback: string;
   email?: string;
   metadata?: Record<string, unknown>;
+  /** Base64 reference portrait, for biometric authentication workflows. */
+  portraitImage?: string;
 }
 
 export interface SessionCreated {
@@ -144,6 +146,9 @@ export const didit = {
               }
             : {}),
           ...(input.metadata ? { metadata: input.metadata } : {}),
+          ...(input.portraitImage
+            ? { portrait_image: input.portraitImage }
+            : {}),
         },
         env,
       );
