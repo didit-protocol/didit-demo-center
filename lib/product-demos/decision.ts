@@ -367,11 +367,6 @@ export function consolePage(
         link: "All events",
         items: input.timeline,
       },
-      {
-        kind: "pairs",
-        title: "Decision",
-        pairs: view.rows.filter(([label]) => label !== "Session"),
-      },
     ],
     side: {
       title: "Details",

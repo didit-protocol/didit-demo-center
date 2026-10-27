@@ -178,6 +178,24 @@
 .pd-feed .lv, .pd-feed .lv-pill { position: static; width: auto; }
 .pd-feed .lv { box-shadow: 0 30px 60px -30px rgba(10, 10, 10, .28); }
 .pd-feed .lv-close { display: none; }
+/* the ProductDemoResult board's feed: a hairline DS v4 card, glyphs in neutral tiles, a dot before the product */
+.pd-feed .lv { padding: 1px; background: var(--pd-line); border-radius: 20px; }
+.pd-feed .lv-in { border-radius: 19px; }
+.pd-feed .lv-head { padding: 14px 16px 12px; border-bottom: 1px solid var(--pd-line); }
+.pd-feed .lv-head b { font-size: 15.5px; }
+.pd-feed .lv-list { border-top: 0; }
+.pd-feed .lv-ev { padding: 12px 16px; grid-template-columns: 32px minmax(0, 1fr) auto; }
+.pd-feed .lv-ev.is-new { background: var(--pd-soft); }
+.pd-feed .lv-ic { width: 32px; height: 32px; background: var(--pd-soft); border: 1px solid var(--pd-line); color: var(--c); }
+.pd-feed .lv-x small { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--pd-muted); }
+.pd-feed .lv-x small::before { content: ""; width: 7px; height: 7px; border-radius: 999px; background: var(--c); }
+.pd-feed .lv-x b { font-size: 15px; line-height: 22px; }
+.pd-feed .lv-x span { font-size: 14px; line-height: 20px; }
+.pd-feed .lv-x code { background: #FFFFFF; border: 1px solid var(--pd-line); }
+.pd-feed .lv-foot { padding: 12px 16px 14px; border-top: 1px solid var(--pd-line); }
+.pd-feed .lv-foot button { height: 36px; border-radius: 999px; font-size: 14px; }
+.pd-feed .lv-foot .is-pri { background: var(--pd-blue); }
+.pd-feed .lv-foot .is-sec { background: #FFFFFF; border: 1px solid var(--pd-line-2); }
 
 /* the hub's Product demos section */
 .pdh { max-width: 1296px; margin: 0 auto; padding: 88px 24px 0; font-family: var(--font-sans); color: var(--pd-text); }
