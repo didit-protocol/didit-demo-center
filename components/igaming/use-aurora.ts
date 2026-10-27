@@ -21,7 +21,14 @@ import {
   projectTransaction,
 } from "@/lib/igaming/records";
 
-type Sdk = typeof import("@didit-protocol/sdk-web").DiditSdk;
+import { openVerification, submitTransaction } from "@/lib/didit/browser";
+
+/** What just happened with Didit, for the live layer. */
+export type AuroraSignal =
+  | { type: "check-started"; check: "age" | "kyc" }
+  | { type: "check-decided"; check: "age" | "kyc"; summary: SessionSummary }
+  | { type: "transaction"; item: ActivityItem }
+  | { type: "transaction-updated"; record: TransactionRecord };
 
 export interface CheckState {
   sessionId: string;
@@ -123,7 +130,9 @@ function load<T>(storage: Storage | undefined, key: string): T | null {
  * /api/igaming/sessions, or a transaction read back from `/v1/transactions/`
  * with the player's own token.
  */
-export function useAurora() {
+export function useAurora(
+  emit: (signal: AuroraSignal) => void = () => undefined,
+) {
   const [state, setState] = React.useState<PlayerState | null>(null);
   const [hydrated, setHydrated] = React.useState(false);
   const [log, setLog] = React.useState<LogEntry[]>([]);
@@ -135,10 +144,11 @@ export function useAurora() {
   const [busy, setBusy] = React.useState<Busy>(null);
   const [notice, setNotice] = React.useState<Notice | null>(null);
   const [kycPrompt, setKycPrompt] = React.useState(false);
-  const [sdkReady, setSdkReady] = React.useState(false);
   const [secondPending, setSecondPending] = React.useState(false);
 
-  const sdkRef = React.useRef<Sdk | null>(null);
+  const emitRef = React.useRef(emit);
+
+  emitRef.current = emit;
   const tokenRef = React.useRef<Token | null>(null);
   const stateRef = React.useRef<PlayerState | null>(null);
   const hostedRef = React.useRef<"age" | "kyc" | null>(null);
@@ -256,13 +266,12 @@ export function useAurora() {
 
   /* ── The web SDK ── */
 
-  React.useEffect(() => {
-    let disposed = false;
-
-    import("@didit-protocol/sdk-web").then(({ DiditSdk }) => {
-      if (disposed) return;
-      sdkRef.current = DiditSdk;
-      DiditSdk.shared.onComplete = (result) => {
+  const openHosted = React.useCallback(
+    (kind: "age" | "kyc", url: string) => {
+      hostedRef.current = kind;
+      record("sdk", "SDK", "startVerification (hosted flow)", null);
+      emitRef.current({ type: "check-started", check: kind });
+      openVerification(url).then((result) => {
         if (result.type === "failed") {
           setNotice({
             tone: "error",
@@ -270,34 +279,6 @@ export function useAurora() {
           });
         }
         completeRef.current(result.session?.sessionId ?? null);
-      };
-      setSdkReady(true);
-    });
-
-    return () => {
-      disposed = true;
-      if (sdkRef.current) sdkRef.current.shared.onComplete = undefined;
-    };
-  }, []);
-
-  const openHosted = React.useCallback(
-    (kind: "age" | "kyc", url: string) => {
-      const sdk = sdkRef.current;
-
-      if (!sdk) {
-        setNotice({ tone: "error", text: "The Didit SDK is still loading." });
-
-        return;
-      }
-      hostedRef.current = kind;
-      record("sdk", "SDK", "startVerification (hosted flow)", null);
-      sdk.shared.startVerification({
-        url,
-        configuration: {
-          showCloseButton: true,
-          showExitConfirmation: true,
-          closeModalOnComplete: true,
-        },
       });
     },
     [record],
@@ -385,6 +366,7 @@ export function useAurora() {
 
   const replaceRecord = React.useCallback(
     (next: TransactionRecord) => {
+      emitRef.current({ type: "transaction-updated", record: next });
       update((current) => ({
         ...current,
         activity: current.activity.map((item) =>
@@ -403,9 +385,8 @@ export function useAurora() {
       detail: string | null,
     ): Promise<ActivityItem | null> => {
       const player = stateRef.current;
-      const sdk = sdkRef.current;
 
-      if (!player || !sdk) return null;
+      if (!player) return null;
 
       const payload = buildCashierPayload(
         { kind, amount, playerName: player.name, detail: detail ?? undefined },
@@ -424,30 +405,11 @@ export function useAurora() {
       };
 
       try {
-        let token = await ensureToken();
-        let result;
+        const result = await submitTransaction({
+          token: (force) => ensureToken(force),
+          transaction: payload,
+        });
 
-        try {
-          result = await sdk.shared.submitTransaction({
-            transactionToken: token.token,
-            transaction: payload,
-            baseUrl: token.baseUrl,
-          });
-        } catch (error) {
-          const failure = error as { type?: string };
-
-          if (
-            failure.type !== "expired_token" &&
-            failure.type !== "invalid_token"
-          )
-            throw error;
-          token = await ensureToken(true);
-          result = await sdk.shared.submitTransaction({
-            transactionToken: token.token,
-            transaction: payload,
-            baseUrl: token.baseUrl,
-          });
-        }
         record("browser", "POST", "/v1/transactions/", null, result.status);
         item.record =
           (await readTransaction(result.transactionId)) ??
@@ -526,6 +488,7 @@ export function useAurora() {
           : {}),
       }));
       if (action?.type === "verification_session") setKycPrompt(true);
+      emitRef.current({ type: "transaction", item });
 
       return item;
     },
@@ -572,6 +535,7 @@ export function useAurora() {
           ...current,
           kyc: current.kyc ? { ...current.kyc, summary } : current.kyc,
         }));
+        emitRef.current({ type: "check-decided", check: "kyc", summary });
         if (summary.status === "Approved") {
           await route("/api/igaming/verified", {
             method: "POST",
@@ -616,6 +580,7 @@ export function useAurora() {
             ? { ...current, age: { ...current.age, summary } }
             : current,
         );
+        emitRef.current({ type: "check-decided", check: "age", summary });
       } catch (error) {
         setNotice({
           tone: "error",
@@ -841,7 +806,6 @@ export function useAurora() {
   return {
     state,
     hydrated,
-    sdkReady,
     log,
     operator,
     busy,
