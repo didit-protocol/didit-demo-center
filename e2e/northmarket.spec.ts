@@ -14,6 +14,13 @@ const isPhone = (page: Page) => (page.viewportSize()?.width ?? 1440) < 768;
 const app = (page: Page) => page.getByTestId("northmarket-app");
 const live = (page: Page) => page.getByTestId("didit-live");
 
+/** On a phone the feed opens on each new check; fold it to reach the app. */
+async function foldFeed(page: Page) {
+  if (isPhone(page) && (await live(page).isVisible())) {
+    await live(page).getByRole("button", { name: "Fold the feed" }).click();
+  }
+}
+
 async function openFeed(page: Page) {
   if (isPhone(page) && !(await live(page).isVisible())) {
     await page.getByRole("button", { name: /Didit live, \d+ checks?/ }).click();
@@ -84,6 +91,7 @@ test("a shop, its KYB before payouts, the 1,497 EUR order held for an age check,
   expect(mock.headers[0]["x-didit-pid"]).toBeTruthy();
 
   // 2. Verify: the KYB in the web SDK modal, then payouts turn on.
+  await foldFeed(page);
   await page.getByRole("button", { name: "Verify my business" }).click();
   await completeHostedFlow(page);
   await expect(page.getByTestId("nm-payouts")).toContainText("Payouts are on");
@@ -98,7 +106,9 @@ test("a shop, its KYB before payouts, the 1,497 EUR order held for an age check,
   await expect(live(page).getByText("Business approved")).toBeVisible();
 
   // 3. Transact: the order from the browser, held for the buyer's age check.
+  await foldFeed(page);
   await goToStep(page, "Transact");
+  await foldFeed(page);
   await app(page)
     .getByRole("button", { name: "Place order · 1,497 EUR" })
     .click();
@@ -113,12 +123,14 @@ test("a shop, its KYB before payouts, the 1,497 EUR order held for an age check,
     await expect(page.getByTestId("callout-rule")).toContainText(
       "Rule hit: orders of 1,000 EUR or more",
     );
+  await foldFeed(page);
   await hold.getByRole("button", { name: "Take a selfie" }).click();
   await completeHostedFlow(page);
   await expect(hold).toContainText("Order placed");
   await expect(hold).toContainText("1,497 EUR to Ruiz Vintage");
 
   // 4. Stop fraud: a second shop on the same device, payouts paused.
+  await foldFeed(page);
   await goToStep(page, "Stop fraud");
   await expect(
     page.getByText("This is a second shop on the same device as Ruiz Vintage"),

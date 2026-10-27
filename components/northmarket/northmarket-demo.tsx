@@ -577,7 +577,9 @@ export function NorthmarketDemo() {
       events={live.events}
       integration={integration}
       person={person}
-      quiet={market.busy === "kyb" || market.busy === "age"}
+      quiet={
+        current === "signup" || market.busy === "kyb" || market.busy === "age"
+      }
       step={step}
       tiles={tiles}
       onConsole={openConsole}
@@ -618,9 +620,9 @@ export function NorthmarketDemo() {
           <HubScreen
             busy={market.busy === "kyb"}
             canContinue={Boolean(kyb?.url)}
-            owner={kyb?.url ? null : (owner?.name ?? null)}
             company={company ?? first.company}
             kyb={kyb?.status ?? null}
+            owner={kyb?.url ? null : (owner?.name ?? null)}
             payoutDay={nextPayoutDay(Date.now())}
             shop={first.shop}
             onBuyerView={() => setScreen("checkout")}
