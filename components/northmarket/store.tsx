@@ -468,7 +468,9 @@ export function HubScreen({
           <small>Available for payout</small>
           <b>{eur(SHOP_STATS.payout)}</b>
           <span>
-            {approved ? `Next payout ${payoutDay}` : "Waits for the business check"}
+            {approved
+              ? `Next payout ${payoutDay}`
+              : "Waits for the business check"}
           </span>
         </div>
         <div className="nm-kpi">
@@ -588,7 +590,7 @@ export function CheckoutScreen({
               </label>
             </div>
             <h3>Payment</h3>
-            <label className="nm-field">
+            <div className="nm-field">
               Card
               <span className="nm-input nm-card-row">
                 <span className="inline-flex items-center gap-2.5">
@@ -597,7 +599,7 @@ export function CheckoutScreen({
                 </span>
                 <em>Buyer protection included</em>
               </span>
-            </label>
+            </div>
           </section>
           {held ? (
             <div className="nm-hold" data-testid="nm-hold">

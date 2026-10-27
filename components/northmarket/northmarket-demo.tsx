@@ -199,7 +199,7 @@ export function NorthmarketDemo() {
   /* ── Decisions that arrived while the visitor was away ── */
 
   React.useEffect(() => {
-    if (!kyb || !first) return;
+    if (!kyb || !first || /not started|in progress/i.test(kyb.status)) return;
     const [input] = kybDecided(kyb, first.company);
     const before = live.events.find((event) => event.id === input.key);
 
@@ -313,7 +313,12 @@ export function NorthmarketDemo() {
     );
 
     if (!result.ok) return setToast({ tone: "error", text: result.error });
-    push(transactionEvents(result.data, { shop: first?.shop ?? "", previous: null }));
+    push(
+      transactionEvents(result.data, {
+        shop: first?.shop ?? "",
+        previous: null,
+      }),
+    );
   };
 
   const confirmAge = async (held: TransactionSummary) => {
@@ -321,7 +326,12 @@ export function NorthmarketDemo() {
     const result = await market.confirmAge(held);
 
     if (!result.ok) return setToast({ tone: "error", text: result.error });
-    push(transactionEvents(result.data, { shop: first?.shop ?? "", previous: null }));
+    push(
+      transactionEvents(result.data, {
+        shop: first?.shop ?? "",
+        previous: null,
+      }),
+    );
     if (result.data.status === "AWAITING_USER")
       setToast({
         tone: "info",
@@ -492,7 +502,11 @@ export function NorthmarketDemo() {
                 ? "Known device"
                 : "New device",
           },
-          { product: "verification", label: "Verification", value: "KYB approved" },
+          {
+            product: "verification",
+            label: "Verification",
+            value: "KYB approved",
+          },
           {
             product: "transactions",
             label: "Transactions",
@@ -506,7 +520,7 @@ export function NorthmarketDemo() {
       ? CHECKOUT.buyer.name
       : current === "outlet" && outlet
         ? outlet.shop
-        : company ?? auth?.email ?? null;
+        : (company ?? auth?.email ?? null);
 
   const consoleTabs = northmarketConsole({
     shops: sellers.map((seller) => ({
@@ -568,9 +582,15 @@ export function NorthmarketDemo() {
       <Store
         bodyClass={`is-${current}${current === "hub" || current === "outlet" ? " is-scroll" : ""}`}
         category={current === "checkout" ? "Cameras" : "All"}
-        toast={toast ?? (market.error ? { tone: "error", text: market.error } : null)}
+        toast={
+          toast ?? (market.error ? { tone: "error", text: market.error } : null)
+        }
         visitor={
-          current === "checkout" ? "buyer" : first && current !== "signup" ? "seller" : "guest"
+          current === "checkout"
+            ? "buyer"
+            : first && current !== "signup"
+              ? "seller"
+              : "guest"
         }
         onLogIn={() =>
           authOn ? void auth?.signIn("/marketplace") : setScreen("signup")
@@ -619,7 +639,9 @@ export function NorthmarketDemo() {
         {current === "outlet" && outlet ? (
           <OutletScreen
             device={
-              didit.device ? `${didit.device.browser} on ${didit.device.os}` : null
+              didit.device
+                ? `${didit.device.browser} on ${didit.device.os}`
+                : null
             }
             firstVisit={didit.device?.firstVisit ?? null}
             opened={opened}

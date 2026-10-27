@@ -1,8 +1,15 @@
 "use client";
 
 import type { DiditTransactionPayload } from "@didit-protocol/sdk-web";
-import type { SellerView, StateView, TokenGrant } from "@/lib/marketplace/server";
-import type { KybSummary, TransactionSummary } from "@/lib/marketplace/summaries";
+import type {
+  SellerView,
+  StateView,
+  TokenGrant,
+} from "@/lib/marketplace/server";
+import type {
+  KybSummary,
+  TransactionSummary,
+} from "@/lib/marketplace/summaries";
 
 import * as React from "react";
 
@@ -149,7 +156,9 @@ export function useNorthmarket() {
 
       await refresh();
 
-      return signup.ok ? { ok: true, data: { seller, signup: signup.data } } : signup;
+      return signup.ok
+        ? { ok: true, data: { seller, signup: signup.data } }
+        : signup;
     } finally {
       setBusy(null);
     }
