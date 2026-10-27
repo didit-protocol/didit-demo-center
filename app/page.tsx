@@ -6,6 +6,7 @@ import "@/styles/demos/hub.css";
 import "@/styles/demos/product-demos.css";
 
 import { Hub } from "@/components/hub/hub";
+import { routeForLegacy } from "@/lib/product-demos/demos";
 
 export const metadata: Metadata = {
   title: {
@@ -16,9 +17,9 @@ export const metadata: Metadata = {
 };
 
 /**
- * demos.didit.me. Links to a single module (`/?demo=<id>`, from didit.me) and
- * the hosted flow's return (`/?verificationSessionId=`) belong to the module
- * catalogue, which lives at /modules.
+ * demos.didit.me. A link to a single module (`/?demo=<id>`, from didit.me)
+ * opens its product demo page; the old catalogue's hosted flow return
+ * (`/?verificationSessionId=`) still goes to /modules.
  */
 export default async function Home({
   searchParams,
@@ -26,6 +27,13 @@ export default async function Home({
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const params = await searchParams;
+
+  const product =
+    typeof params.demo === "string" && !params.verificationSessionId
+      ? routeForLegacy(params.demo)
+      : null;
+
+  if (product) redirect(product);
 
   if (params.demo || params.verificationSessionId) {
     const query = new URLSearchParams();
