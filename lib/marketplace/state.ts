@@ -74,7 +74,9 @@ export function sealState(state: MarketState, key: Buffer): string {
 }
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-const VENDOR = /^mkt-(seller|buyer)-[a-z0-9]{12}$/;
+// A cookie identity, or the signed-in Didit user's (lib/didit/config.ts).
+const VENDOR =
+  /^(mkt-(seller|buyer)-[a-z0-9]{12}|northmarket-[A-Za-z0-9_-]{6,80}(-buyer)?)$/;
 
 const isUuidOrNull = (value: unknown) =>
   value === null || (typeof value === "string" && UUID.test(value));

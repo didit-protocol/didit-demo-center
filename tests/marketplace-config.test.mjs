@@ -6,7 +6,6 @@ import assert from "node:assert/strict";
 
 import { HIGH_VALUE_THRESHOLD, LISTINGS, SELLER_COUNTRIES, getListing } from "../lib/marketplace/catalog.ts";
 import { consoleLink } from "../lib/marketplace/console-links.ts";
-import { GUIDE, getChapter, isChapterId } from "../lib/marketplace/guide.ts";
 import {
   parsePayoutAmount,
   payoutTransaction,
@@ -230,36 +229,17 @@ test("console links land on the record, or honestly on the console home", () => 
   });
 });
 
-test("every chapter documents its modules and calls, each linked to the docs", () => {
-  assert.deepEqual(
-    GUIDE.map((chapter) => chapter.id),
-    ["seller", "buyer", "payouts", "fraud", "operator"],
-  );
-  for (const chapter of GUIDE) {
-    assert.ok(chapter.modules.length > 0, chapter.id);
-    assert.ok(chapter.calls.length > 0, chapter.id);
-    for (const call of chapter.calls) {
-      assert.match(call.docsPath, /^[a-z0-9-]+(\/[a-z0-9-]+)+$/, call.call);
-    }
-  }
-  assert.equal(getChapter("nope").id, "seller");
-  assert.equal(isChapterId("fraud"), true);
-  assert.equal(isChapterId("admin"), false);
-});
-
 test("no copy uses an em dash", async () => {
   const fs = await import("node:fs");
   const files = [
     "lib/marketplace/catalog.ts",
-    "lib/marketplace/guide.ts",
     "lib/marketplace/status.ts",
     "lib/marketplace/server.ts",
-    "components/marketplace/seller-chapter.tsx",
-    "components/marketplace/buyer-chapter.tsx",
-    "components/marketplace/payouts-chapter.tsx",
-    "components/marketplace/fraud-chapter.tsx",
-    "components/marketplace/operator-chapter.tsx",
-    "components/marketplace/marketplace-demo.tsx",
+    "lib/marketplace/northmarket.ts",
+    "lib/marketplace/live-events.ts",
+    "lib/marketplace/console-pages.ts",
+    "components/northmarket/store.tsx",
+    "components/northmarket/northmarket-demo.tsx",
   ];
 
   for (const file of files) {
