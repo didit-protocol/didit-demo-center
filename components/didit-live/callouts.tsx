@@ -42,7 +42,9 @@ function place(
   const reach = 9 + (spec.line ?? 40) + 16;
   // The card wraps rather than run off the screen.
   const room = (space: number) =>
-    ({ "--co-max": `${Math.max(160, space - reach)}px` }) as React.CSSProperties;
+    ({
+      "--co-max": `${Math.max(160, space - reach)}px`,
+    }) as React.CSSProperties;
 
   if (spec.side === "right")
     return {

@@ -337,3 +337,5 @@
 }
 .co-card { max-width: var(--co-max, none); white-space: normal; }
 .co-card b { overflow-wrap: anywhere; }
+.cs-kv { row-gap: 14px; }
+.cs-kv dd .cs-tag { vertical-align: middle; }

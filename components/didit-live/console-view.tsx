@@ -339,22 +339,24 @@ function Page({ page }: { page: RecordPage }) {
         </div>
         <aside className="cs-side">
           <h4>{page.side.title}</h4>
-          <dl className="cs-panel cs-kv m-0">
-            {page.side.tag ? (
-              <>
-                <dt>Status</dt>
-                <dd>
-                  <TagChip tag={page.side.tag} />
-                </dd>
-              </>
-            ) : null}
-            {page.side.pairs.map(([key, value]) => (
-              <React.Fragment key={key}>
-                <dt>{key}</dt>
-                <dd title={value}>{value}</dd>
-              </React.Fragment>
-            ))}
-          </dl>
+          <div className="cs-panel">
+            <dl className="cs-kv m-0">
+              {page.side.tag ? (
+                <>
+                  <dt>Status</dt>
+                  <dd>
+                    <TagChip tag={page.side.tag} />
+                  </dd>
+                </>
+              ) : null}
+              {page.side.pairs.map(([key, value]) => (
+                <React.Fragment key={key}>
+                  <dt>{key}</dt>
+                  <dd title={value}>{value}</dd>
+                </React.Fragment>
+              ))}
+            </dl>
+          </div>
           {page.linked.length ? (
             <>
               <h4 className="mt-2">Linked records</h4>
