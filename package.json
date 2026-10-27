@@ -68,7 +68,7 @@
     "postcss": "8.4.38",
     "tailwind-variants": "0.1.20",
     "tailwindcss": "3.4.3",
-    "typescript": "5.6.3"
+    "typescript": "5.5.4"
   },
   "overrides": {
     "@didit-protocol/auth": "$@didit-protocol/auth",
