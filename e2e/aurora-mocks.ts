@@ -204,12 +204,7 @@ export async function mockAurora(page: Page): Promise<AuroraMock> {
 
   // Anonymous visits skip cleanly; cookie sign-up makes a token available.
   await page.route("**/api/didit/events-token", (route) =>
-    json(
-      route,
-      player >= 0
-        ? { token: "e2e-monitoring" }
-        : { token: null },
-    ),
+    json(route, player >= 0 ? { token: "e2e-monitoring" } : { token: null }),
   );
   await page.route(`${API}/v1/events/**`, (route) =>
     json(route, { results: [] }, 202),

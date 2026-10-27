@@ -5,7 +5,7 @@ import { alder } from "../didit/demos.ts";
 /**
  * The Alder customer's identity when Didit Authentication is off: a random
  * `vendor_data` in a signed, httpOnly cookie. With Authentication on the
- * customer is the signed-in Didit user instead (lib/fintech/server.ts).
+ * customer is the signed-in Didit user instead (lib/didit/auth.ts).
  *
  * The routes scope every Didit call (sessions, tokens) to it, and signing
  * means knowing someone else's id, which the console view prints, is not
