@@ -309,27 +309,16 @@ than failing on a 400.
 npm test                     # node --test (unit tests, lib/didit, /api/igaming,
                              # /api/fintech, /api/crypto-exchange and
                              # /marketplace route tests)
-<<<<<<< HEAD
-npm run test:e2e             # Playwright flows for /marketplace
-                             # against BASE_URL (E2E_LIVE=1 adds the live
-                             # staging flows)
-=======
-npm run test:e2e             # Playwright flows for /fintech against BASE_URL
-                             # (E2E_LIVE=1 adds the live staging flows)
->>>>>>> origin/main
 npm run build && npm run test:e2e:crypto-exchange
                              # Playwright flows for /crypto-exchange, desktop and
                              # phone, on recorded Didit responses
 npm run build && npm run test:e2e:aurora-play
                              # the same for /igaming (build without
                              # DIDIT_PUBLISHABLE_KEY)
-<<<<<<< HEAD
 npm run build && npm run test:e2e:alder
                              # the same for /fintech
-=======
 npm run build && npm run test:e2e:northmarket
                              # the same for /marketplace
->>>>>>> origin/main
 npm run typecheck            # tsc --noEmit
 npm run lint                 # eslint (vendor/ is excluded - it is synced)
 npm run build                # next build
@@ -347,13 +336,8 @@ PROOF_SESSION_ID=<a real session id> npm run shots
 Writes the catalogue (`/modules`), both modal families and the 390px layouts to `proof/`.
 The catalogue is light-only, exactly like didit.me and help.didit.me - the
 design system ships no dark token set. The industry demos bring their own
-<<<<<<< HEAD
-look: Aurora Play is a dark casino, Alder a light neobank, and `/marketplace`
-has a dark theme.
-=======
-look: Aurora Play is a dark casino, Northmarket a warm light marketplace, and
-`/fintech` has a dark theme.
->>>>>>> origin/main
+look: Aurora Play is a dark casino, Alder a light neobank, and Northmarket
+is a warm light marketplace.
 
 ## Technical documentation
 
