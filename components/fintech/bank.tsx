@@ -43,7 +43,12 @@ export function Logo({ size = 32 }: { size?: number }) {
       className="al-logo"
       style={{ width: size, height: size, borderRadius: size * 0.31 }}
     >
-      <Leaf color="#C6F26B" fill="#C6F26B" size={size * 0.5} strokeWidth={1.5} />
+      <Leaf
+        color="#C6F26B"
+        fill="#C6F26B"
+        size={size * 0.5}
+        strokeWidth={1.5}
+      />
     </span>
   );
 }
@@ -400,7 +405,8 @@ export function HomeView({
       <div className="al-col">
         <div className="al-card al-bal">
           <small>
-            Main account · EUR <span className="al-chip is-neu">DE89 •••• 4021</span>
+            Main account · EUR{" "}
+            <span className="al-chip is-neu">DE89 •••• 4021</span>
           </small>
           <span className="al-bal-row">
             <span data-callout="balance">
@@ -416,7 +422,11 @@ export function HomeView({
               <Plus aria-hidden size={17} />
               Add money
             </button>
-            <button className="al-btn al-desk" type="button" onClick={onAddMoney}>
+            <button
+              className="al-btn al-desk"
+              type="button"
+              onClick={onAddMoney}
+            >
               <Repeat aria-hidden size={17} />
               Exchange
             </button>
@@ -449,8 +459,12 @@ export function HomeView({
             {bars.map((item, index) => (
               <i
                 key={item.key}
-                className={index === bars.length - 1 ? "is-hi" : index % 2 ? "is-on" : ""}
-                style={{ height: `${Math.max(14, (item.amount / top) * 100)}%` }}
+                className={
+                  index === bars.length - 1 ? "is-hi" : index % 2 ? "is-on" : ""
+                }
+                style={{
+                  height: `${Math.max(14, (item.amount / top) * 100)}%`,
+                }}
               />
             ))}
           </div>
@@ -482,7 +496,11 @@ export function PendingHome({
               ? "Checking"
               : "In progress",
       chip:
-        status === "declined" ? "is-no" : status === "start" ? "is-neu" : "is-hold",
+        status === "declined"
+          ? "is-no"
+          : status === "start"
+            ? "is-neu"
+            : "is-hold",
     },
     { label: "Your IBAN and virtual card", state: "Next", chip: "is-neu" },
   ];
@@ -520,7 +538,9 @@ export function PendingHome({
       <div className="al-col is-side">
         <div className="al-card al-locked">
           <DebitCard className="is-locked" name="Your name" />
-          <p className="al-muted">Your card appears here once you are verified.</p>
+          <p className="al-muted">
+            Your card appears here once you are verified.
+          </p>
         </div>
       </div>
     </div>
@@ -586,7 +606,9 @@ export function SecurityView({
             </span>
             <span>
               <h2>We blocked a sign-in to your account</h2>
-              <p>Today at {at(attempt.at)}. Nobody got in, and no money moved.</p>
+              <p>
+                Today at {at(attempt.at)}. Nobody got in, and no money moved.
+              </p>
             </span>
             <span className="al-chip is-no">Blocked</span>
           </div>
@@ -598,7 +620,9 @@ export function SecurityView({
             <span>
               <small>Bot score</small>
               <b>
-                {attempt.botScore === null ? "Not read" : attempt.botScore.toFixed(2)}
+                {attempt.botScore === null
+                  ? "Not read"
+                  : attempt.botScore.toFixed(2)}
               </b>
             </span>
             <span>
@@ -650,7 +674,11 @@ export function SecurityView({
           ) : null}
           <div className="al-row">
             <span aria-hidden className="al-merch is-green">
-              {/^passkey/i.test(signIn) ? <KeyRound size={18} /> : <Smartphone size={18} />}
+              {/^passkey/i.test(signIn) ? (
+                <KeyRound size={18} />
+              ) : (
+                <Smartphone size={18} />
+              )}
             </span>
             <span className="x">
               <b>{device ?? "This browser"}</b>
@@ -663,4 +691,3 @@ export function SecurityView({
     </div>
   );
 }
-

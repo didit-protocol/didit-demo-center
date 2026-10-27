@@ -49,7 +49,10 @@ export async function POST(request: NextRequest) {
   calls.push(decision.call);
   if (decision.status === 0 || decision.status >= 500) {
     return noStore(
-      { error: "The identity check could not be read from Didit.", didit: calls },
+      {
+        error: "The identity check could not be read from Didit.",
+        didit: calls,
+      },
       { status: 502 },
     );
   }

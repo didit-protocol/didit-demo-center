@@ -214,7 +214,9 @@ function transactionPage(input: AlderConsoleInput): RecordPage | null {
       tag: statusTag(record.status),
       meta: [
         outbound ? `${name} → ${counterparty}` : `${counterparty} → ${name}`,
-        focus.kind === "transfer" ? "SEPA Instant" : focus.kind.replace(/_/g, " "),
+        focus.kind === "transfer"
+          ? "SEPA Instant"
+          : focus.kind.replace(/_/g, " "),
         time(when, input.now),
       ],
     },
@@ -296,7 +298,12 @@ function transactionPage(input: AlderConsoleInput): RecordPage | null {
         pairs: [
           ["Transaction ID", record.txnId],
           ["Didit ID", short(record.id)],
-          ["Type", focus.kind === "transfer" ? "Bank transfer" : focus.kind.replace(/_/g, " ")],
+          [
+            "Type",
+            focus.kind === "transfer"
+              ? "Bank transfer"
+              : focus.kind.replace(/_/g, " "),
+          ],
           [
             outbound ? "Payee" : "From",
             `${focus.account ?? counterparty}${focus.newPayee ? " · new" : ""}`,

@@ -2,12 +2,7 @@ import { NextRequest } from "next/server";
 
 import { didit } from "@/lib/didit/server";
 import { projectSession } from "@/lib/igaming/records";
-import {
-  UUID,
-  noCustomer,
-  noStore,
-  readCustomer,
-} from "@/lib/fintech/server";
+import { UUID, noCustomer, noStore, readCustomer } from "@/lib/fintech/server";
 
 export const dynamic = "force-dynamic";
 

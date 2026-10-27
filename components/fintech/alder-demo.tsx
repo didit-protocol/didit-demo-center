@@ -459,7 +459,9 @@ export function AlderDemo() {
       anchor: "stepup",
       tone: "hold",
       side: "left",
-      title: hit ? `Rule hit: ${ruleName(hit.title)}` : "Step-up on a new payee",
+      title: hit
+        ? `Rule hit: ${ruleName(hit.title)}`
+        : "Step-up on a new payee",
     });
   } else if (!modal && view === "security" && state?.takeover) {
     callouts.push({
@@ -492,7 +494,9 @@ export function AlderDemo() {
             product: "signals",
             label: "Signals",
             value:
-              didit.device?.firstVisit === false ? "Known device" : "New device",
+              didit.device?.firstVisit === false
+                ? "Known device"
+                : "New device",
           },
           {
             product: "verification",
@@ -578,7 +582,11 @@ export function AlderDemo() {
     const hello = firstName(name);
     const hour = new Date().getHours();
     const greeting =
-      hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+      hour < 12
+        ? "Good morning"
+        : hour < 18
+          ? "Good afternoon"
+          : "Good evening";
     const today = new Date().toLocaleDateString("en-GB", {
       weekday: "long",
       day: "numeric",
@@ -596,10 +604,7 @@ export function AlderDemo() {
     const titles: Record<View, [string, string]> = {
       home: approved
         ? [`${greeting}${hello ? `, ${hello}` : ""}`, today]
-        : [
-            `Welcome to Alder${hello ? `, ${hello}` : ""}`,
-            "Two minutes left",
-          ],
+        : [`Welcome to Alder${hello ? `, ${hello}` : ""}`, "Two minutes left"],
       payments: ["Payments", "Send money in seconds"],
       security: ["Security", "Your devices and sign-ins"],
     };

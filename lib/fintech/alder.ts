@@ -8,9 +8,9 @@
  *   whose onboarding Didit approved, so no payment moves before it.
  * - Every payment is submitted from the browser with `submitTransaction`, so
  *   the web SDK attaches the device signals sees.
- * - A transfer of 5,000 EUR or more to a new payee is held by a rule and
- *   released once the customer confirms it (a passkey with Didit
- *   Authentication, the selfie step-up without it).
+ * - A transfer of 5,000 EUR or more to a new payee is held by a rule
+ *   (`AWAITING_USER`) and Didit releases it once the customer passes the
+ *   step-up the rule opened: a selfie matched to the one from onboarding.
  * - A sign-in without the passkey is reported as a security event and
  *   blocked by an event rule: the account-takeover step.
  */
@@ -75,10 +75,7 @@ export function payeeById(id: string): Payee | null {
 }
 
 export type PaymentKind =
-  | "incoming_transfer"
-  | "card_payment"
-  | "transfer"
-  | "account_funding";
+  "incoming_transfer" | "card_payment" | "transfer" | "account_funding";
 
 export interface Seed {
   kind: PaymentKind;

@@ -209,7 +209,9 @@ export function stepUpDecided(
       key: "stepup-decided",
       tone: approved ? "ver" : "stop",
       product: "verification",
-      title: approved ? "It's you: step-up approved" : `Step-up ${summary.status.toLowerCase()}`,
+      title: approved
+        ? "It's you: step-up approved"
+        : `Step-up ${summary.status.toLowerCase()}`,
       detail: approved
         ? "Selfie matches the person who opened the account"
         : "The transfer stays on hold",
@@ -259,9 +261,11 @@ export function takeoverEvents(
       key: "ato-device",
       tone: "sig",
       product: "signals",
-      title: device ? `Sign-in from ${device.browser} on ${device.os}` : "Sign-in device read",
+      title: device
+        ? `Sign-in from ${device.browser} on ${device.os}`
+        : "Sign-in device read",
       detail: "Device fingerprint and network attached to the event",
-      code: "submitEvent({ category: \"security\", … }) · @didit-protocol/signals",
+      code: 'submitEvent({ category: "security", … }) · @didit-protocol/signals',
     },
     {
       key: "ato-blocked",

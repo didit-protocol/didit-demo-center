@@ -68,13 +68,7 @@ export interface CustomerState {
 }
 
 export type Busy =
-  | "open"
-  | "onboarding"
-  | "seed"
-  | "send"
-  | "stepUp"
-  | "takeover"
-  | null;
+  "open" | "onboarding" | "seed" | "send" | "stepUp" | "takeover" | null;
 
 export interface Notice {
   tone: "error" | "info";
@@ -122,7 +116,9 @@ export function balanceOf(activity: PaymentItem[]): number {
  * comes from Didit: a session decision read through /api/fintech/sessions or
  * a payment read back from `/v1/transactions/` with the customer's token.
  */
-export function useAlder(emit: (signal: AlderSignal) => void = () => undefined) {
+export function useAlder(
+  emit: (signal: AlderSignal) => void = () => undefined,
+) {
   const [state, setState] = React.useState<CustomerState | null>(null);
   const [hydrated, setHydrated] = React.useState(false);
   const [busy, setBusy] = React.useState<Busy>(null);
@@ -164,7 +160,10 @@ export function useAlder(emit: (signal: AlderSignal) => void = () => undefined) 
     async <T>(path: string, init?: RequestInit) => {
       const response = await fetch(path, {
         ...init,
-        headers: { "Content-Type": "application/json", ...(init?.headers || {}) },
+        headers: {
+          "Content-Type": "application/json",
+          ...(init?.headers || {}),
+        },
       });
       const data = (await response.json().catch(() => null)) as
         (T & { error?: string; code?: string; didit?: DiditCall[] }) | null;
@@ -601,57 +600,54 @@ export function useAlder(emit: (signal: AlderSignal) => void = () => undefined) 
    * as a security event through signals, which attaches this device, and
    * Didit's event rule decides it.
    */
-  const attemptTakeover = React.useCallback(
-    async () => {
-      if (!stateRef.current) return;
-      setBusy("takeover");
-      setNotice(null);
-      let result: TakeoverResult = { status: null, score: null, error: null };
+  const attemptTakeover = React.useCallback(async () => {
+    if (!stateRef.current) return;
+    setBusy("takeover");
+    setNotice(null);
+    let result: TakeoverResult = { status: null, score: null, error: null };
 
-      try {
-        const { token } = await route<{ token: string }>(
-          "/api/fintech/monitoring-token",
-          { method: "POST" },
-        );
-        const { flush, submitEvent } = await import("@didit-protocol/signals");
-        const event = takeoverEvent(Date.now());
-        const eventId = submitEvent({ monitoringToken: token, event });
-        const flushed = await flush();
-        const answer = flushed.results.find((item) => item.eventId === eventId);
+    try {
+      const { token } = await route<{ token: string }>(
+        "/api/fintech/monitoring-token",
+        { method: "POST" },
+      );
+      const { flush, submitEvent } = await import("@didit-protocol/signals");
+      const event = takeoverEvent(Date.now());
+      const eventId = submitEvent({ monitoringToken: token, event });
+      const flushed = await flush();
+      const answer = flushed.results.find((item) => item.eventId === eventId);
 
-        result = answer?.error
-          ? { status: null, score: null, error: answer.error.message }
-          : {
-              status: answer?.status ?? null,
-              score: answer?.score ?? null,
-              error: answer ? null : "Didit has not answered yet",
-            };
-      } catch (error) {
-        const code = (error as { code?: string }).code;
+      result = answer?.error
+        ? { status: null, score: null, error: answer.error.message }
+        : {
+            status: answer?.status ?? null,
+            score: answer?.score ?? null,
+            error: answer ? null : "Didit has not answered yet",
+          };
+    } catch (error) {
+      const code = (error as { code?: string }).code;
 
-        result = {
-          status: null,
-          score: null,
-          error:
-            code === "event_monitoring_disabled"
-              ? "event monitoring is off for this application"
-              : error instanceof Error
-                ? error.message
-                : String(error),
-        };
-      } finally {
-        setBusy(null);
-      }
-      update((current) => ({
-        ...current,
-        takeover: { ...result, at: Date.now() },
-      }));
-      emitRef.current({ type: "takeover", result });
+      result = {
+        status: null,
+        score: null,
+        error:
+          code === "event_monitoring_disabled"
+            ? "event monitoring is off for this application"
+            : error instanceof Error
+              ? error.message
+              : String(error),
+      };
+    } finally {
+      setBusy(null);
+    }
+    update((current) => ({
+      ...current,
+      takeover: { ...result, at: Date.now() },
+    }));
+    emitRef.current({ type: "takeover", result });
 
-      return result;
-    },
-    [route, update],
-  );
+    return result;
+  }, [route, update]);
 
   const reset = React.useCallback(() => {
     tokenRef.current = null;
@@ -691,7 +687,8 @@ export function useAlder(emit: (signal: AlderSignal) => void = () => undefined) 
       state?.onboarding && openHosted("onboarding", state.onboarding.url),
     seed,
     pay,
-    confirmStepUp: () => state?.stepUp && openHosted("stepUp", state.stepUp.url),
+    confirmStepUp: () =>
+      state?.stepUp && openHosted("stepUp", state.stepUp.url),
     attemptTakeover,
     resumeFromRedirect,
     reset,

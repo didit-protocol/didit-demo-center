@@ -44,10 +44,7 @@ export async function readCustomer(
 }
 
 export function noCustomer() {
-  return noStore(
-    { error: "Open your Alder account first." },
-    { status: 401 },
-  );
+  return noStore({ error: "Open your Alder account first." }, { status: 401 });
 }
 
 /** A failed Didit call, with Didit's own reason. */
