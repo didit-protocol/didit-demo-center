@@ -1,0 +1,60 @@
+- generic [active] [ref=f1e1]:
+  - generic [ref=f1e2]:
+    - banner [ref=f1e3]:
+      - link "Didit Demo Center" [ref=f1e4] [cursor=pointer]:
+        - /url: /
+        - img "Didit" [ref=f1e5]
+      - link "Demo Center" [ref=f1e7] [cursor=pointer]:
+        - /url: /
+      - 'button "Step 1 of 5: Sign up. Show the steps" [ref=f1e9] [cursor=pointer]':
+        - generic [ref=f1e10]: "1"
+        - text: Sign up
+    - generic [ref=f1e11]:
+      - generic [ref=f1e13]:
+        - generic [ref=f1e14]:
+          - generic [ref=f1e20]:
+            - text: Aurora
+            - emphasis [ref=f1e21]: Play
+          - button "Sign up" [ref=f1e23] [cursor=pointer]
+        - generic [ref=f1e24]:
+          - generic [ref=f1e26]:
+            - generic [ref=f1e27]: Welcome offer
+            - heading "100 free spins on your first deposit" [level=1] [ref=f1e28]
+            - button "Join and claim" [ref=f1e30] [cursor=pointer]
+          - generic [ref=f1e31]:
+            - generic [ref=f1e32]:
+              - heading "Popular slots" [level=2] [ref=f1e33]
+              - link "See all" [ref=f1e34] [cursor=pointer]:
+                - /url: "#slots"
+            - generic [ref=f1e35]:
+              - button "Pharaoh's Gold" [ref=f1e36] [cursor=pointer]
+              - button "Aurora Crystals" [ref=f1e39] [cursor=pointer]
+              - button "Neon Fruits" [ref=f1e42] [cursor=pointer]
+              - button "Dragon Pearl" [ref=f1e45] [cursor=pointer]
+              - button "Viking Storm" [ref=f1e48] [cursor=pointer]
+              - button "Reef Riches" [ref=f1e51] [cursor=pointer]
+      - region "Didit live" [ref=f1e55]:
+        - generic [ref=f1e56]:
+          - generic [ref=f1e57]:
+            - generic [ref=f1e58]: Didit live
+            - generic [ref=f1e59]: Live
+            - generic [ref=f1e60]: No one signed in yet
+            - button "Fold the feed" [ref=f1e61] [cursor=pointer]
+          - list [ref=f1e63]:
+            - listitem [ref=f1e64]:
+              - generic [ref=f1e75]:
+                - generic [ref=f1e76]: Signals
+                - generic [ref=f1e77]: "Bot protection: human"
+                - generic [ref=f1e78]: Bot score 0.00
+              - time [ref=f1e79]: now
+            - listitem [ref=f1e80]:
+              - generic [ref=f1e91]:
+                - generic [ref=f1e92]: Signals
+                - generic [ref=f1e93]: New device fingerprinted
+                - generic [ref=f1e94]: Chrome on Linux · first visit
+              - time [ref=f1e95]: now
+          - generic [ref=f1e96]:
+            - button "Open the console view" [ref=f1e97] [cursor=pointer]
+            - button "Code" [ref=f1e98] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=f1e107] [cursor=pointer]
+  - alert [ref=f1e54]
