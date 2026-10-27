@@ -109,7 +109,7 @@ test("every old catalogue id redirects to its new page", () => {
 });
 
 // Words that keep their capitals mid-sentence: names and acronyms.
-const PROPER = /^(ID|IDs|KYC|KYB|AML|PEP|UBOs|ISO|CAPTCHA|IP|VPN|BTC|EUR|Didit|Alder|Kestrel|Northmarket|Aurora|Play|Northwind|Trading|B\.V\.|Ivan|Petrov|Jonas|Koch)[,.]?$/;
+const PROPER = /^(ID|IDs|KYC|KYB|AML|PEP|UBOs|ISO|CAPTCHA|IP|VPN|Tor|BTC|EUR|Didit|Alder|Kestrel|Northmarket|Aurora|Play|Northwind|Trading|B\.V\.|Ivan|Petrov|Jonas|Koch)[,.]?$/;
 
 function sentenceCase(text) {
   return text
