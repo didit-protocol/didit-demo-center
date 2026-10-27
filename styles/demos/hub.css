@@ -23,11 +23,11 @@
 .hub-hero.dd-wash { padding: 0; border-radius: var(--radius-3xl); }
 .hub-hero-in { max-width: none; height: 640px; padding: 0 74px 0 130px; display: grid; grid-template-columns: 560px minmax(0, 1fr); gap: 40px; }
 .hub-hero-x { display: flex; flex-direction: column; align-items: flex-start; padding-top: 120px; }
-.hub-hero h1 { margin-top: 22px; max-width: 580px; }
+.hub-hero h1 { margin-top: 18px; max-width: 580px; }
 .hub-hero h1 em { color: var(--c-accent); }
-.hub-hero .dd-lede { margin-top: 26px; max-width: 540px; }
+.hub-hero .dd-lede { margin-top: 22px; max-width: 540px; }
 .hub-cta { display: flex; flex-wrap: wrap; gap: 12px; }
-.hub-hero .hub-cta { margin-top: 30px; }
+.hub-hero .hub-cta { margin-top: 26px; }
 .hub-stats { margin: 36px 0 0; padding-top: 22px; border-top: 1px solid var(--c-line); width: 100%; max-width: 548px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .hub-stats dt { font-size: 24px; line-height: 30px; font-weight: 500; letter-spacing: -0.4px; color: var(--c-heading); font-variant-numeric: tabular-nums; }
 .hub-stats dd { margin: 2px 0 0; font-size: 14px; line-height: 20px; color: var(--c-text-subtle); }
@@ -35,9 +35,9 @@
 .hub-window { box-shadow: var(--site-shadow-window); }
 .hub-window > img { display: block; width: 100%; height: auto; }
 .hub-collage .hub-window { position: absolute; width: 560px; }
-.hub-collage .w1 { right: 0; top: 73px; }
-.hub-collage .w2 { right: 45px; top: 252px; transform: translateX(-60px); }
-.hub-collage .hub-feed { left: auto; right: 15px; top: 233px; bottom: auto; width: 340px; }
+.hub-collage .w1 { right: -15px; top: 73px; }
+.hub-collage .w2 { right: 45px; top: 252px; }
+.hub-collage .hub-feed { left: auto; right: 0; top: 233px; bottom: auto; width: 340px; }
 
 /* sections */
 .hub-sec { padding-top: 104px; }
