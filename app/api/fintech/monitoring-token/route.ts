@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 
+import { diditUrls } from "@/lib/didit/config";
 import { didit, diditMessage } from "@/lib/didit/server";
 import { noCustomer, noStore, readCustomer } from "@/lib/fintech/server";
 
@@ -37,6 +38,8 @@ export async function POST(request: NextRequest) {
   return noStore({
     token,
     expiresAt: result.data?.expires_at ?? null,
+    // submitEvent posts to production unless told otherwise.
+    baseUrl: diditUrls.api,
     didit: [result.call],
   });
 }
