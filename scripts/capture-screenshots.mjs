@@ -62,7 +62,7 @@ async function main() {
     // ── Desktop ──────────────────────────────────────────────────────
     const page = await browser.newPage({ viewport: DESKTOP });
 
-    await page.goto(BASE_URL, { waitUntil: "networkidle" });
+    await page.goto(`${BASE_URL}/modules`, { waitUntil: "networkidle" });
     await page.waitForTimeout(600);
 
     await shot(page, "catalogue-desktop", { fullPage: true });
@@ -108,7 +108,7 @@ async function main() {
 
     // Category filter, then a free-text search across the whole catalogue,
     // then the empty state - three different results, one bar.
-    await page.goto(BASE_URL, { waitUntil: "networkidle" });
+    await page.goto(`${BASE_URL}/modules`, { waitUntil: "networkidle" });
     await page.getByRole("button", { name: /^Monitoring/ }).click();
     await page.waitForTimeout(300);
     await shot(page, "catalogue-filtered");
@@ -145,7 +145,7 @@ async function main() {
       deviceScaleFactor: 2,
     });
 
-    await mobile.goto(BASE_URL, { waitUntil: "networkidle" });
+    await mobile.goto(`${BASE_URL}/modules`, { waitUntil: "networkidle" });
     await mobile.waitForTimeout(600);
     await shot(mobile, "catalogue-mobile", { fullPage: true });
     await shot(mobile, "catalogue-mobile-viewport");
