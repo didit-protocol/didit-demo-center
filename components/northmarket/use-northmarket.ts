@@ -91,26 +91,27 @@ export function useNorthmarket() {
     build: (grant: TokenGrant, random: string) => DiditTransactionPayload,
     seller?: string,
   ): Promise<Outcome<TransactionSummary>> => {
-    let grant: TokenGrant | null = null;
-    const token = async (force: boolean) => {
-      if (!grant || force) {
-        const minted = await api<TokenGrant>("/token", {
-          method: "POST",
-          body: { purpose, seller },
-        });
+    const mint = async () => {
+      const minted = await api<TokenGrant>("/token", {
+        method: "POST",
+        body: { purpose, seller },
+      });
 
-        if (!minted.ok) throw new Error(minted.error);
-        grant = minted.data;
-      }
+      if (!minted.ok) throw new Error(minted.error);
 
-      return { token: grant.token, baseUrl: grant.baseUrl };
+      return minted.data;
     };
 
     try {
-      await token(false);
+      let grant = await mint();
       const result = await submitTransaction({
-        token,
-        transaction: build(grant as unknown as TokenGrant, crypto.randomUUID()),
+        // A fresh token only when the first one expired on the way.
+        token: async (force) => {
+          if (force) grant = await mint();
+
+          return { token: grant.token, baseUrl: grant.baseUrl };
+        },
+        transaction: build(grant, crypto.randomUUID()),
       });
       const claimed = await api<TransactionSummary>("/transactions", {
         method: "POST",
