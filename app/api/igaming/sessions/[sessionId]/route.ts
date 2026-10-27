@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
 
 import { projectSession } from "@/lib/igaming/records";
-import { didit, noPlayer, noStore, readPlayer } from "@/lib/igaming/server";
+import { gateway, noPlayer, noStore, readPlayer } from "@/lib/igaming/server";
+import { didit as diditClient } from "@/lib/didit/server";
 
 export const dynamic = "force-dynamic";
 
@@ -24,10 +25,7 @@ export async function GET(
     return noStore({ error: "Unknown session." }, { status: 404 });
   }
 
-  const result = await didit(
-    "GET",
-    `/v3/session/${params.sessionId}/decision/`,
-  );
+  const result = gateway(await diditClient.sessions.decision(params.sessionId));
   const session = result.ok ? projectSession(result.data, playerId) : null;
 
   if (!session) {

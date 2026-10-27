@@ -4,11 +4,12 @@ import { projectUser } from "@/lib/igaming/records";
 import {
   type DiditCall,
   consoleContext,
-  didit,
+  gateway,
   noPlayer,
   noStore,
   readPlayer,
 } from "@/lib/igaming/server";
+import { didit as diditClient } from "@/lib/didit/server";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +24,7 @@ export async function GET(request: NextRequest) {
 
   const calls: DiditCall[] = [];
   const context = await consoleContext(calls);
-  const user = await didit("GET", `/v3/users/${encodeURIComponent(playerId)}/`);
+  const user = gateway(await diditClient.users.get(playerId));
 
   calls.push(user.call);
 

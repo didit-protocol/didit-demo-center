@@ -2,7 +2,8 @@ import { NextRequest } from "next/server";
 
 import { AGE_WORKFLOW_ID, OPERATOR_NAME } from "@/lib/igaming/policy";
 import { diditErrorMessage } from "@/lib/igaming/records";
-import { didit, noPlayer, noStore, readPlayer } from "@/lib/igaming/server";
+import { gateway, noPlayer, noStore, readPlayer } from "@/lib/igaming/server";
+import { didit as diditClient } from "@/lib/didit/server";
 import { siteConfig } from "@/config/site";
 
 export const dynamic = "force-dynamic";
@@ -41,18 +42,19 @@ export async function POST(request: NextRequest) {
     return noStore({ error: "Enter a valid email address." }, { status: 400 });
   }
 
-  const result = await didit("POST", "/v3/session/", {
-    workflow_id: AGE_WORKFLOW_ID,
-    vendor_data: playerId,
-    callback: CALLBACK,
-    callback_method: "both",
-    contact_details: { email, send_notification_emails: false },
-    metadata: {
+  const result = gateway(
+    await diditClient.sessions.create({
+      workflowId: AGE_WORKFLOW_ID,
+      vendorData: playerId,
+      callback: CALLBACK,
+      email,
+      metadata: {
       operator: OPERATOR_NAME,
       step: "registration",
-      ...(fullName ? { full_name: fullName } : {}),
-    },
-  });
+        ...(fullName ? { full_name: fullName } : {}),
+      },
+    }),
+  );
 
   if (!result.ok) {
     return noStore(

@@ -4,12 +4,13 @@ import { AGE_WORKFLOW_ID } from "@/lib/igaming/policy";
 import { diditErrorMessage, projectSession } from "@/lib/igaming/records";
 import {
   type DiditCall,
-  didit,
+  gateway,
   noPlayer,
   noStore,
   readPlayer,
 } from "@/lib/igaming/server";
-import { VERIFICATION_BASE_URL } from "@/lib/auth-service";
+import { diditUrls } from "@/lib/didit/config";
+import { didit as diditClient } from "@/lib/didit/server";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
 
   if (!UUID.test(ageSessionId)) return notOldEnough();
 
-  const decision = await didit("GET", `/v3/session/${ageSessionId}/decision/`);
+  const decision = gateway(await diditClient.sessions.decision(ageSessionId));
 
   calls.push(decision.call);
   if (decision.status >= 500) {
@@ -59,11 +60,13 @@ export async function POST(request: NextRequest) {
   if (age?.workflowId !== AGE_WORKFLOW_ID || age.status !== "Approved")
     return notOldEnough();
 
-  const result = await didit("POST", "/v3/transactions/sdk-token/", {
-    vendor_data: playerId,
-    ttl_seconds: 900,
-    max_uses: 30,
-  });
+  const result = gateway(
+    await diditClient.transactions.sdkToken({
+      vendorData: playerId,
+      ttlSeconds: 900,
+      maxUses: 30,
+    }),
+  );
 
   calls.push(result.call);
   if (!result.ok) {
@@ -83,7 +86,7 @@ export async function POST(request: NextRequest) {
   return noStore({
     token: token.sdk_token,
     expiresAt: token.expires_at,
-    baseUrl: VERIFICATION_BASE_URL,
+    baseUrl: diditUrls.api,
     didit: calls,
   });
 }

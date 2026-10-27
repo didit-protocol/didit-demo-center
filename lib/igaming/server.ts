@@ -9,7 +9,12 @@ import { PLAYER_PREFIX } from "./policy";
 import { siteConfig } from "@/config/site";
 import { authEnabled, visitorVendorData } from "@/lib/didit/auth";
 import { apiKey as sharedApiKey } from "@/lib/didit/config";
-import { type DiditCall, callDidit, consoleIds } from "@/lib/didit/server";
+import {
+  type DiditCall,
+  type DiditResult as SharedResult,
+  callDidit,
+  consoleIds,
+} from "@/lib/didit/server";
 
 /**
  * The server half of /igaming: every call that needs the API key.
@@ -34,14 +39,8 @@ export function apiKey(): string {
   return sharedApiKey();
 }
 
-/** One Didit call through the shared client; unreachable reads as a 502. */
-export async function didit(
-  method: "GET" | "POST" | "PATCH",
-  path: string,
-  body?: unknown,
-): Promise<DiditResult> {
-  const result = await callDidit(method, path, body);
-
+/** A shared-client result where "unreachable" reads as a 502. */
+export function gateway<T>(result: SharedResult<T>): DiditResult {
   return result.status === 0
     ? {
         ...result,
@@ -49,6 +48,15 @@ export async function didit(
         data: { detail: "The Didit API could not be reached." },
       }
     : result;
+}
+
+/** One Didit call through the shared client; unreachable reads as a 502. */
+export async function didit(
+  method: "GET" | "POST" | "PATCH",
+  path: string,
+  body?: unknown,
+): Promise<DiditResult> {
+  return gateway(await callDidit(method, path, body));
 }
 
 export function noStore(data: unknown, init?: ResponseInit) {
