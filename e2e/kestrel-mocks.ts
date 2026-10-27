@@ -4,20 +4,23 @@ import fs from "node:fs";
 import path from "node:path";
 
 import { toAccountView } from "../lib/crypto-exchange/onboarding";
-import {
-  SANCTIONED_WALLET,
-  toTransactionView,
-} from "../lib/crypto-exchange/transactions";
+import { toTransactionView } from "../lib/crypto-exchange/transactions";
 
 /**
- * The Didit side of the /crypto-exchange demo, for the E2E suite.
+ * The Didit side of /crypto-exchange (Kestrel) for the E2E suite.
  *
  * Transactions come from tests/fixtures/crypto-exchange: real responses
- * recorded on the staging application for a synthetic user, run through the
- * same `toTransactionView` the server routes use. Didit's hosted pages (the
- * verification flow, the wallet-ownership widget) are replaced by a small
- * stand-in page on the same host that reports completion the way they do, with
- * a `didit:completed` postMessage.
+ * recorded on the staging application for a synthetic user. The withdrawal
+ * recordings are ETH transfers; a submission answers with its recording
+ * carrying the submitted asset, amount and wallet, the same way Didit
+ * echoes them. Session decisions use the fields docs.didit.me documents for
+ * a finished session, because the sandbox cannot pass KYC. Didit's hosted
+ * pages (the verification flow, the wallet-ownership widget, the selfie)
+ * are replaced by a stand-in page on the same host that reports completion
+ * the way they do, with a `didit:completed` postMessage.
+ *
+ * Authentication is off in this suite (no publishable key), the production
+ * path until it ships there: Kestrel's own sign-up opens the account.
  */
 
 const FIXTURES = path.join(
@@ -27,8 +30,14 @@ const FIXTURES = path.join(
   "fixtures",
   "crypto-exchange",
 );
-const VERIFY = "https://verify.staging.didit.me";
-const API = "https://verification.staging.didit.me";
+// The app builds for staging from .env; set NEXT_PUBLIC_IS_STAGING=false for a production build.
+const STAGING = process.env.NEXT_PUBLIC_IS_STAGING !== "false";
+const API = STAGING
+  ? "https://verification.staging.didit.me"
+  : "https://verification.didit.me";
+const VERIFY = STAGING
+  ? "https://verify.staging.didit.me"
+  : "https://verify.didit.me";
 
 export function raw(name: string): Record<string, unknown> {
   return JSON.parse(
@@ -36,28 +45,24 @@ export function raw(name: string): Record<string, unknown> {
   );
 }
 
-const subject = raw("withdrawal-own-wallet");
-const destination = (name: string) =>
-  (raw(name).payment_methods as { account_id: string }[])[0].account_id;
-
-export const USER_ID = String(subject.vendor_data);
-
-/** The wallets the recordings used, so forms and results show one address. */
-export const WALLETS = {
-  ownWallet: destination("withdrawal-own-wallet"),
-  exchangeDeposit: destination("withdrawal-exchange"),
-};
+export const USER_ID = String(raw("withdrawal-own-wallet").vendor_data);
 
 /**
  * Account views. "processing" is the real decision of a session nobody has
  * started; the others use the field names docs.didit.me documents for a
- * finished session, because the sandbox cannot pass KYC.
+ * finished session.
  */
 const decided = (status: string, checks: string, amlHits: number) => ({
   session_id: raw("decision-not-started").session_id,
   status,
   id_verifications: [
-    { status: checks, first_name: "Avery", last_name: "Quinn" },
+    {
+      status: checks,
+      first_name: "Avery",
+      last_name: "Quinn",
+      document_type: "PASSPORT",
+      issuing_state_name: "Portugal",
+    },
   ],
   liveness_checks: [{ status: checks }],
   face_matches: [{ status: checks }],
@@ -77,22 +82,6 @@ export const ACCOUNTS = {
 };
 
 export type AccountKey = keyof typeof ACCOUNTS;
-
-/**
- * The Console ids GET /account hands the page for deep links. Placeholders:
- * on a real server they come from Didit's own transaction summaries.
- */
-export const CONSOLE = {
-  organizationId: "e2e-organization",
-  applicationId: "e2e-application",
-};
-
-/** Which recorded transaction each submission returns. */
-const WITHDRAWAL_FIXTURE: Record<string, string> = {
-  "own-wallet": "withdrawal-own-wallet",
-  exchange: "withdrawal-exchange",
-  address: "withdrawal-sanctioned",
-};
 
 /** After a hosted action completes, the record Didit returns next. */
 const AFTER_ACTION: Record<string, string> = {
@@ -123,9 +112,35 @@ const json = (route: Route, body: unknown, status = 200) =>
     body: JSON.stringify(body),
   });
 
+interface Submitted {
+  id: string;
+  fixture: string;
+  amount: string;
+  currency: string;
+  wallet: string;
+  txnId: string;
+}
+
+/** A recording, carrying what this submission sent. */
+function answer(submitted: Submitted): Record<string, unknown> {
+  const record = raw(submitted.fixture);
+  const methods = (record.payment_methods as Record<string, unknown>[]).map(
+    (method) => ({ ...method, account_id: submitted.wallet }),
+  );
+
+  return {
+    ...record,
+    uuid: submitted.id,
+    amount: submitted.amount,
+    currency: submitted.currency,
+    txn_id: submitted.txnId,
+    payment_methods: methods,
+  };
+}
+
 export interface KestrelMock {
-  /** Didit transactions created so far, by id, as the fixture they resolve to. */
-  transactions: Map<string, string>;
+  /** Didit transactions created so far, by id. */
+  transactions: Map<string, Submitted>;
   requests: { method: string; url: string; body: unknown }[];
 }
 
@@ -134,13 +149,11 @@ export async function mockKestrel(
   options: {
     account?: AccountKey | null;
     afterOnboarding?: AccountKey;
-    /** null: the application has no transaction yet, so no Console ids. */
-    console?: typeof CONSOLE | null;
-    seedWallets?: boolean;
+    /** Kestrel's own sign-up already done in this browser. */
+    signedUp?: boolean;
   } = {},
 ): Promise<KestrelMock> {
   let account = options.account === undefined ? "approved" : options.account;
-  const consoleIds = options.console === undefined ? CONSOLE : options.console;
   const mock: KestrelMock = { transactions: new Map(), requests: [] };
   const record = (route: Route) => {
     const request = route.request();
@@ -152,15 +165,25 @@ export async function mockKestrel(
     });
   };
 
-  if (options.seedWallets !== false) {
-    await page.addInitScript((wallets) => {
-      if (!window.localStorage.getItem("kestrel-demo:v1")) {
-        window.localStorage.setItem(
-          "kestrel-demo:v1",
-          JSON.stringify({ wallets, activity: [], sessionUrl: null }),
-        );
-      }
-    }, WALLETS);
+  if (options.signedUp ?? account !== null) {
+    await page.addInitScript(() => {
+      const key = "kestrel-demo:v2";
+
+      if (window.localStorage.getItem(key)) return;
+      window.localStorage.setItem(
+        key,
+        JSON.stringify({
+          version: 2,
+          profile: { email: "avery.quinn@example.com", country: "Portugal" },
+          wallets: {
+            BTC: "bc1q7p76rqpwr55pcg9c9nptkwvdztkywsqk4u6tp0",
+            ETH: "0xb69303df0fc354d3202ec3233425c755483d3f28",
+          },
+          activity: [],
+          sessionUrl: null,
+        }),
+      );
+    });
   }
 
   await page.route("**/api/crypto-exchange/account", async (route) => {
@@ -187,23 +210,9 @@ export async function mockKestrel(
 
     return json(route, {
       account: account
-        ? { ...ACCOUNTS[account], userId: USER_ID, console: consoleIds }
+        ? { ...ACCOUNTS[account], userId: USER_ID, console: null }
         : null,
     });
-  });
-
-  await page.route("**/api/crypto-exchange/deposits", async (route) => {
-    record(route);
-    const body = route.request().postDataJSON();
-    const name =
-      body.source === "own-wallet"
-        ? "deposit-own-wallet"
-        : "deposit-unknown-sender";
-    const view = toTransactionView(raw(name));
-
-    mock.transactions.set(view.id, name);
-
-    return json(route, view, 201);
   });
 
   await page.route("**/api/crypto-exchange/token", async (route) => {
@@ -219,69 +228,88 @@ export async function mockKestrel(
   await page.route("**/api/crypto-exchange/transactions/*", async (route) => {
     record(route);
     const id = route.request().url().split("/").pop() ?? "";
-    const name = mock.transactions.get(id);
+    const submitted = mock.transactions.get(id);
 
-    if (!name) return json(route, { error: "Not found." }, 404);
+    if (!submitted) return json(route, { error: "Not found." }, 404);
 
-    return json(route, toTransactionView(raw(name)));
+    return json(route, toTransactionView(answer(submitted)));
   });
+
+  await page.route("**/api/didit/events-token", (route) =>
+    json(route, { error: "Nobody is signed in." }, 401),
+  );
 
   // What the web SDK's submitTransaction posts to.
   await page.route(`${API}/v1/transactions/`, async (route) => {
     if (route.request().method() !== "POST") return route.fallback();
     record(route);
     const body = route.request().postDataJSON();
-    let name = WITHDRAWAL_FIXTURE[body?.props?.withdrawal_destination] ?? "";
+    const props = body?.props ?? {};
+    const info = body?.info ?? {};
+    const wallet = String(body?.counterparty?.paymentMethod?.accountId ?? "");
+    let fixture = "";
 
-    if (body?.props?.withdrawal_destination === "address") {
-      name =
-        body?.counterparty?.paymentMethod?.accountId === SANCTIONED_WALLET
-          ? "withdrawal-sanctioned"
-          : "";
-    }
-    if (!name)
-      return json(route, { detail: "No recording for this destination." }, 400);
-    const response = raw(name);
+    if (props.deposit_source)
+      fixture =
+        props.deposit_source === "unknown-sender"
+          ? "deposit-unknown-sender"
+          : info.currency === "BTC"
+            ? "deposit-own-wallet-btc"
+            : "deposit-own-wallet";
+    else if (props.withdrawal_destination === "own-wallet")
+      fixture = "withdrawal-own-wallet";
+    else if (/^0x098B716B8Aaf21512996dC57EB0615e2383E2f96$/i.test(wallet))
+      fixture = "withdrawal-sanctioned";
+    if (!fixture)
+      return json(route, { detail: "No recording for this transfer." }, 400);
+    const submitted: Submitted = {
+      id: `00000000-0000-4000-8000-${String(mock.transactions.size + 1).padStart(12, "0")}`,
+      fixture,
+      amount: String(info.amount),
+      currency: String(info.currency),
+      wallet,
+      txnId: String(body.txnId),
+    };
+    const response = answer(submitted);
 
-    mock.transactions.set(String(response.uuid), name);
+    mock.transactions.set(submitted.id, submitted);
 
     return json(route, response, 201);
   });
 
-  // Didit's hosted pages: the verification flow and the wallet-ownership widget.
+  // Didit's hosted pages: the verification flow, the wallet widget, the selfie.
   await page.route(`${VERIFY}/**`, async (route) => {
     const url = route.request().url();
 
-    if (url.includes("/wallet-ownership/") || url.includes("/session/")) {
-      let title = "Didit verification";
+    if (!url.includes("/wallet-ownership/") && !url.includes("/session/"))
+      return route.fulfill({ status: 204, body: "" });
+    let title = "Didit verification";
 
-      if (url.includes("/wallet-ownership/")) title = "Verify wallet ownership";
-      if (url.includes("e2e-onboarding")) {
-        title = "Verify your identity";
-        if (options.afterOnboarding) account = options.afterOnboarding;
+    if (url.includes("e2e-onboarding")) {
+      title = "Verify your identity";
+      if (options.afterOnboarding) account = options.afterOnboarding;
+    }
+    // Opening an action moves the recorded transaction on to what Didit
+    // returned after that action finished.
+    for (const [id, submitted] of Array.from(mock.transactions)) {
+      const view = toTransactionView(raw(submitted.fixture));
+
+      if (view.action && url.startsWith(view.action.url.split("?")[0])) {
+        const next = AFTER_ACTION[submitted.fixture];
+
+        if (next) mock.transactions.set(id, { ...submitted, fixture: next });
+        title =
+          view.action.type === "wallet_ownership"
+            ? "Verify wallet ownership"
+            : "Selfie check";
       }
-      // Opening an action moves the recorded transaction on to what Didit
-      // returned after that action finished.
-      for (const [id, name] of Array.from(mock.transactions)) {
-        const view = toTransactionView(raw(name));
-
-        if (view.action && url.startsWith(view.action.url.split("?")[0])) {
-          if (AFTER_ACTION[name]) mock.transactions.set(id, AFTER_ACTION[name]);
-          title =
-            view.action.type === "wallet_ownership"
-              ? "Verify wallet ownership"
-              : "Selfie check";
-        }
-      }
-
-      return route.fulfill({
-        status: 200,
-        contentType: "text/html",
-        body: standInPage(title, "e2e-session"),
-      });
     }
 
-    return route.fulfill({ status: 204, body: "" });
+    return route.fulfill({
+      status: 200,
+      contentType: "text/html",
+      body: standInPage(title, "e2e-session"),
+    });
   });
 
   return mock;
