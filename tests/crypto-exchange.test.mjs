@@ -190,14 +190,14 @@ test("balances count only what Didit approved, and a declined withdrawal moves n
     item("deposit-own-wallet", "deposit", "ETH"),
     item("deposit-unknown-sender", "deposit", "ETH"),
     item("withdrawal-sanctioned", "withdrawal", "ETH"),
+    item("withdrawal-own-wallet", "withdrawal", "ETH"),
     btc("deposit-own-wallet-btc", "deposit"),
-    btc("withdrawal-own-wallet", "withdrawal"),
   ]);
 
-  // 1.25 ETH credited; the frozen 0.8 never was; the declined 0.2 never left.
-  assert.deepEqual(balances.ETH, { total: 1.25, available: 1.25, held: 0 });
-  // 0.25 BTC credited, 0.4 held by a withdrawal waiting for the wallet proof.
-  assert.deepEqual(balances.BTC, { total: 0.25, available: -0.15, held: 0.4 });
+  // 1.25 ETH credited; the frozen 0.8 never was; the declined 0.2 never
+  // left; 0.4 is held by a withdrawal waiting for the wallet proof.
+  assert.deepEqual(balances.ETH, { total: 1.25, available: 0.85, held: 0.4 });
+  assert.deepEqual(balances.BTC, { total: 0.25, available: 0.25, held: 0 });
   assert.equal(ruleName("Wallet risk: sanctioned wallet (crypto exchange demo)"), "Sanctioned wallet");
 });
 
