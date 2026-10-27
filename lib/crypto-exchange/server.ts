@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 
 import { toAccountView, type AccountView } from "./onboarding";
 
-import { VERIFICATION_BASE_URL } from "@/lib/auth-service";
+import { callDidit } from "@/lib/didit/server";
 
 /**
  * Kestrel's backend: the four routes under /api/crypto-exchange share this.
@@ -17,8 +17,6 @@ import { VERIFICATION_BASE_URL } from "@/lib/auth-service";
  * KYC is not approved - which is also what keeps a public demo from being a
  * free way to run billable screenings.
  */
-
-export const DIDIT_V3 = `${VERIFICATION_BASE_URL}/v3`;
 
 /**
  * The visitor's Kestrel account: the `vendor_data` Kestrel gave them and their

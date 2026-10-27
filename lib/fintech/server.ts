@@ -20,6 +20,7 @@ import {
   type OnboardingView,
   type PaymentView,
 } from "./model";
+import { callDidit } from "../didit/server.ts";
 
 /**
  * The fintech demo's server side, one function per API route.
@@ -125,16 +126,14 @@ async function didit(
   path: string,
   body?: unknown,
 ): Promise<Record<string, unknown>> {
-  let response: Response;
+  const result = await callDidit<Record<string, unknown>>(method, path, body, {
+    apiBase: env.apiBase,
+    apiKey: env.apiKey,
+    fetch: env.fetch,
+  });
+  const data = result.data;
 
-  try {
-    response = await env.fetch(`${env.apiBase}${path}`, {
-      method,
-      headers: { "x-api-key": env.apiKey, "Content-Type": "application/json" },
-      body: body === undefined ? undefined : JSON.stringify(body),
-      cache: "no-store",
-    });
-  } catch {
+  if (result.status === 0) {
     const failure: DiditFailure = {
       upstream: 0,
       detail: "Didit could not be reached.",
@@ -143,17 +142,12 @@ async function didit(
     throw failure;
   }
 
-  const data = (await response.json().catch(() => null)) as Record<
-    string,
-    unknown
-  > | null;
-
-  if (!response.ok) {
+  if (!result.ok) {
     const detail = data && (data.detail ?? data.error ?? data.message);
 
     const failure: DiditFailure = {
-      upstream: response.status,
-      detail: typeof detail === "string" ? detail : `HTTP ${response.status}`,
+      upstream: result.status,
+      detail: typeof detail === "string" ? detail : `HTTP ${result.status}`,
     };
 
     throw failure;

@@ -48,6 +48,7 @@ import {
   summarizeNotes,
   summarizeTransaction,
 } from "./summaries.ts";
+import { callDidit } from "../didit/server.ts";
 
 export interface MarketEnv {
   apiKey: string;
@@ -135,23 +136,14 @@ async function didit(
   path: string,
   body?: unknown,
 ): Promise<ApiResult> {
-  try {
-    const response = await env.fetch(`${env.apiBase}${path}`, {
-      method,
-      headers: {
-        "x-api-key": env.apiKey,
-        "Content-Type": "application/json",
-      },
-      body: body === undefined ? undefined : JSON.stringify(body),
-      cache: "no-store",
-      signal: AbortSignal.timeout(20000),
-    });
-    const data = await response.json().catch(() => null);
+  const result = await callDidit(method, path, body, {
+    apiBase: env.apiBase,
+    apiKey: env.apiKey,
+    fetch: env.fetch,
+    timeoutMs: 20000,
+  });
 
-    return { ok: response.ok, status: response.status, data };
-  } catch {
-    return { ok: false, status: 0, data: null };
-  }
+  return { ok: result.ok, status: result.status, data: result.data };
 }
 
 /** The API's own message when it gives one, so the page can say why. */
