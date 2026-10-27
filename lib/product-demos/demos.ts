@@ -15,8 +15,6 @@ import { alder, auroraPlay, kestrel } from "../didit/demos";
 
 import { type ProductDemo, defineProductDemo } from "./define";
 
-const SANDBOX = "sandbox";
-
 export const coreKyc = defineProductDemo({
   id: "core-kyc",
   legacyId: "core-kyc",
@@ -677,6 +675,3 @@ export function routeForLegacy(legacyId: string | null | undefined): string | nu
 
   return demo ? `/product-demos/${demo.id}` : null;
 }
-
-/** Where every live demo's sessions say they come from. */
-export const ENVIRONMENT_LABEL = SANDBOX;
