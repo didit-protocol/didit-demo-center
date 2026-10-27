@@ -4,7 +4,6 @@ import { randomUUID } from "node:crypto";
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { marketWorkflows } from "./config.ts";
 import {
   STATE_COOKIE,
   STATE_MAX_AGE,
@@ -14,24 +13,35 @@ import {
   type MarketState,
 } from "./state.ts";
 
-import { VERIFICATION_BASE_URL } from "@/lib/auth-service";
 import { siteConfig } from "@/config/site";
+import { authEnabled, visitorVendorData } from "@/lib/didit/auth";
+import { apiKey, diditUrls, isStaging } from "@/lib/didit/config";
+import { northmarket } from "@/lib/didit/demos";
 
 /**
  * Glue between Next's route handlers and lib/marketplace/server.ts.
  *
- * `NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID` is the seller KYB workflow; without it
- * the page says the KYB is not published and everything else runs.
+ * Base URL, key and workflows come from lib/didit: the Northmarket config
+ * holds the seller KYB, the buyer age check and the key people's KYC for each
+ * environment (staging reads the KYB from NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID).
+ * With Didit Authentication on, the signed-in user is the shop and the buyer.
  * `DIDIT_CONSOLE_ORG_ID` and `DIDIT_CONSOLE_APP_ID` are optional: the console
  * organization and application behind API_KEY. Without them the server reads
  * both from the API itself (see resolveConsoleIds).
  */
-export function marketEnv(): MarketEnv {
+export async function marketEnv(): Promise<MarketEnv> {
   return {
-    apiKey: process.env.API_KEY || "",
-    apiBase: VERIFICATION_BASE_URL,
-    isStaging: process.env.NEXT_PUBLIC_IS_STAGING === "true",
-    workflows: marketWorkflows(process.env.NEXT_PUBLIC_DIDIT_KYB_WORKFLOW_ID),
+    apiKey: apiKey(),
+    apiBase: diditUrls.api,
+    isStaging,
+    workflows: {
+      kyb: northmarket.workflows.sellerKyb,
+      age: northmarket.workflows.buyerAge,
+      person: northmarket.workflows.person,
+    },
+    visitor: authEnabled()
+      ? await visitorVendorData(northmarket.vendorPrefix)
+      : undefined,
     console: {
       origin: siteConfig.links.console,
       orgId: process.env.DIDIT_CONSOLE_ORG_ID || null,
