@@ -237,6 +237,10 @@
   .pd-vm-body { grid-template-columns: 1fr; min-height: 0; }
   .pd-vm-r { display: none; }
   .pd-vm-l { min-height: 300px; }
+  .pd-vm-l p { font-size: 12px; line-height: 18px; }
+  .pd-vm-chips span { height: 22px; font-size: 10.5px; }
+  .pd-vm-l li b { font-size: 12px; } .pd-vm-l li small { font-size: 10.5px; }
+  .pd-vm-foot button { height: 32px; font-size: 12px; } .pd-vm-foot small { font-size: 9.5px; line-height: 13px; }
   .pd-stage { padding: 12px 8px; }
   .pd-decision-b { flex-direction: column; }
   .pd-portrait { width: 100%; height: 220px; }
