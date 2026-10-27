@@ -1,0 +1,739 @@
+- generic [ref=f13e2]:
+  - banner [ref=f13e3]:
+    - region "Announcement" [ref=f13e6]:
+      - generic [ref=f13e7]:
+        - generic [ref=f13e8]:
+          - text: Didit Raises
+          - generic [ref=f13e9]: $7.5M
+          - text: to Build the Infrastructure for Identity and Fraud
+        - link "Read the announcement" [ref=f13e10] [cursor=pointer]:
+          - /url: https://didit.me/blog/didit-7-5m-seed-infrastructure-identity-fraud/
+      - button "Dismiss announcement" [ref=f13e15] [cursor=pointer]
+    - banner [ref=f13e19]:
+      - generic [ref=f13e20]:
+        - generic [ref=f13e21]:
+          - link [ref=f13e22] [cursor=pointer]:
+            - /url: /
+            - img "Didit" [ref=f13e24]
+          - navigation [ref=f13e25]:
+            - button "Solutions" [ref=f13e27] [cursor=pointer]
+            - button "Developers" [ref=f13e31] [cursor=pointer]
+            - button "Resources" [ref=f13e35] [cursor=pointer]
+            - link "Pricing" [ref=f13e39] [cursor=pointer]:
+              - /url: https://didit.me/pricing/
+            - button "Search" [disabled] [ref=f13e40]
+        - generic [ref=f13e44]:
+          - 'button "Change language. Current language: English." [ref=f13e45] [cursor=pointer]':
+            - generic [ref=f13e47]: English
+          - link "Sign up" [ref=f13e48] [cursor=pointer]:
+            - /url: https://business.didit.me?utm_source=navbar
+          - link "Talk to us" [ref=f13e49] [cursor=pointer]:
+            - /url: https://didit.me/get-a-demo/
+  - main [ref=f13e50]:
+    - generic [ref=f13e52]:
+      - generic [ref=f13e53]:
+        - paragraph [ref=f13e54]: Authenticate · Verify · Monitor
+        - heading "Every module, live. One sandbox." [level=1] [ref=f13e55]: Every module, live.One sandbox.
+        - paragraph [ref=f13e56]: Run the real thing - 18 pre-built workflows across KYC, KYB, monitoring and fraud. Launch a live session on your own device, or click through a sample decision for the flows that run server-side. Every demo ships with the request that created it.
+        - generic [ref=f13e57]:
+          - button "Start with free KYC" [ref=f13e58] [cursor=pointer]
+          - link "Read the API reference" [ref=f13e61] [cursor=pointer]:
+            - /url: https://docs.didit.me/api-reference/overview
+      - generic [ref=f13e62]:
+        - generic [ref=f13e63]:
+          - definition [ref=f13e64]: "18"
+          - term [ref=f13e65]: Live demos
+        - generic [ref=f13e66]:
+          - definition [ref=f13e67]: 25+
+          - term [ref=f13e68]: Modules
+        - generic [ref=f13e69]:
+          - definition [ref=f13e70]: 220+
+          - term [ref=f13e71]: Countries
+        - generic [ref=f13e72]:
+          - definition [ref=f13e73]: 1.8s
+          - term [ref=f13e74]: P95 decision
+    - generic [ref=f13e76]:
+      - generic [ref=f13e77]:
+        - button "All demos 18" [pressed] [ref=f13e78] [cursor=pointer]:
+          - text: All demos
+          - generic [ref=f13e79]: "18"
+        - button "KYC 10" [ref=f13e80] [cursor=pointer]:
+          - text: KYC
+          - generic [ref=f13e81]: "10"
+        - button "KYB 2" [ref=f13e82] [cursor=pointer]:
+          - text: KYB
+          - generic [ref=f13e83]: "2"
+        - button "Monitoring 3" [ref=f13e84] [cursor=pointer]:
+          - text: Monitoring
+          - generic [ref=f13e85]: "3"
+        - button "Fraud & security 3" [ref=f13e86] [cursor=pointer]:
+          - text: Fraud & security
+          - generic [ref=f13e87]: "3"
+      - textbox "Search demos" [ref=f13e92]:
+        - /placeholder: Search modules, e.g. UBO
+    - generic [ref=f13e93]:
+      - generic [ref=f13e94]:
+        - generic [ref=f13e95]:
+          - heading "User verification · KYC" [level=2] [ref=f13e96]
+          - generic [ref=f13e98]: Launch on this device - the session opens in the Didit SDK modal
+        - generic [ref=f13e99]:
+          - button "Core KYC ID + liveness + face match Hosted flow The free plan. Scan a government ID, pass a passive liveness check, get a decision in under 10 seconds. ID Verification Passive Liveness Face Match 1:1 Free · 500 checks / month, then $0.33 Launch session" [ref=f13e100] [cursor=pointer]:
+            - generic [ref=f13e101]:
+              - generic [ref=f13e103]:
+                - generic [ref=f13e104]: Core KYC
+                - generic [ref=f13e105]: ID + liveness + face match
+              - generic [ref=f13e106]: Hosted flow
+            - generic [ref=f13e107]: The free plan. Scan a government ID, pass a passive liveness check, get a decision in under 10 seconds.
+            - generic [ref=f13e108]:
+              - generic [ref=f13e109]: ID Verification
+              - generic [ref=f13e110]: Passive Liveness
+              - generic [ref=f13e111]: Face Match 1:1
+            - generic [ref=f13e112]:
+              - generic [ref=f13e113]: Free · 500 checks / month, then $0.33
+              - generic [ref=f13e114]: Launch session
+          - button "KYC + AML Enhanced compliance API demo Active liveness plus real-time screening against sanctions, PEP and adverse-media datasets. Active Liveness AML Screening Face Match 1:1 $0.38 KYC · AML $0.20 when you add it Open sample decision" [ref=f13e117] [cursor=pointer]:
+            - generic [ref=f13e118]:
+              - generic [ref=f13e120]:
+                - generic [ref=f13e121]: KYC + AML
+                - generic [ref=f13e122]: Enhanced compliance
+              - generic [ref=f13e123]: API demo
+            - generic [ref=f13e124]: Active liveness plus real-time screening against sanctions, PEP and adverse-media datasets.
+            - generic [ref=f13e125]:
+              - generic [ref=f13e126]: Active Liveness
+              - generic [ref=f13e127]: AML Screening
+              - generic [ref=f13e128]: Face Match 1:1
+            - generic [ref=f13e129]:
+              - generic [ref=f13e130]: $0.38 KYC · AML $0.20 when you add it
+              - generic [ref=f13e131]: Open sample decision
+          - button "Liveness only No document required Hosted flow Prove a real, live person is behind an action - password resets, step-up auth, high-risk transactions. Active Liveness Passive Liveness iBeta L2 Free · 500 checks / month, then $0.10 Launch session" [ref=f13e134] [cursor=pointer]:
+            - generic [ref=f13e135]:
+              - generic [ref=f13e137]:
+                - generic [ref=f13e138]: Liveness only
+                - generic [ref=f13e139]: No document required
+              - generic [ref=f13e140]: Hosted flow
+            - generic [ref=f13e141]: Prove a real, live person is behind an action - password resets, step-up auth, high-risk transactions.
+            - generic [ref=f13e142]:
+              - generic [ref=f13e143]: Active Liveness
+              - generic [ref=f13e144]: Passive Liveness
+              - generic [ref=f13e145]: iBeta L2
+            - generic [ref=f13e146]:
+              - generic [ref=f13e147]: Free · 500 checks / month, then $0.10
+              - generic [ref=f13e148]: Launch session
+          - button "Biometric auth Passwordless re-entry Hosted flow Match a fresh selfie against the portrait from an approved verification. Needs a reference photo. Face Match 1:1 Liveness Reference photo $0.10 per authentication Upload photo & launch" [ref=f13e151] [cursor=pointer]:
+            - generic [ref=f13e152]:
+              - generic [ref=f13e154]:
+                - generic [ref=f13e155]: Biometric auth
+                - generic [ref=f13e156]: Passwordless re-entry
+              - generic [ref=f13e157]: Hosted flow
+            - generic [ref=f13e158]: Match a fresh selfie against the portrait from an approved verification. Needs a reference photo.
+            - generic [ref=f13e159]:
+              - generic [ref=f13e160]: Face Match 1:1
+              - generic [ref=f13e161]: Liveness
+              - generic [ref=f13e162]: Reference photo
+            - generic [ref=f13e163]:
+              - generic [ref=f13e164]: $0.10 per authentication
+              - generic [ref=f13e165]: Upload photo & launch
+          - button "Multi-factor Liveness + phone OTP Hosted flow Bind a live face to a phone number the user actually controls. Blocks bulk fake accounts. Liveness Phone Verification OTP $0.10 liveness + $0.04 phone + carrier fee Launch session" [ref=f13e168] [cursor=pointer]:
+            - generic [ref=f13e169]:
+              - generic [ref=f13e171]:
+                - generic [ref=f13e172]: Multi-factor
+                - generic [ref=f13e173]: Liveness + phone OTP
+              - generic [ref=f13e174]: Hosted flow
+            - generic [ref=f13e175]: Bind a live face to a phone number the user actually controls. Blocks bulk fake accounts.
+            - generic [ref=f13e176]:
+              - generic [ref=f13e177]: Liveness
+              - generic [ref=f13e178]: Phone Verification
+              - generic [ref=f13e179]: OTP
+            - generic [ref=f13e180]:
+              - generic [ref=f13e181]: $0.10 liveness + $0.04 phone + carrier fee
+              - generic [ref=f13e182]: Launch session
+          - button "Adaptive age check Estimation with ID fallback Hosted flow Privacy-first age estimation for most users; a full ID check only inside the 15-25 buffer zone. Age Estimation Conditional ID GDPR $0.10 estimate · $0.15 ID only when it falls back Launch session" [ref=f13e185] [cursor=pointer]:
+            - generic [ref=f13e186]:
+              - generic [ref=f13e188]:
+                - generic [ref=f13e189]: Adaptive age check
+                - generic [ref=f13e190]: Estimation with ID fallback
+              - generic [ref=f13e191]: Hosted flow
+            - generic [ref=f13e192]: Privacy-first age estimation for most users; a full ID check only inside the 15-25 buffer zone.
+            - generic [ref=f13e193]:
+              - generic [ref=f13e194]: Age Estimation
+              - generic [ref=f13e195]: Conditional ID
+              - generic [ref=f13e196]: GDPR
+            - generic [ref=f13e197]:
+              - generic [ref=f13e198]: $0.10 estimate · $0.15 ID only when it falls back
+              - generic [ref=f13e199]: Launch session
+          - button "ACCS ISO 27566 · Age estimation Certified facial age estimate Hosted flow Facial age estimation run to the ISO/IEC 27566 age-assurance model - an age band back, no document, no identity. Age Estimation ISO/IEC 27566 No ID required $0.10 per estimate Launch session" [ref=f13e202] [cursor=pointer]:
+            - generic [ref=f13e203]:
+              - generic [ref=f13e205]:
+                - generic [ref=f13e206]: ACCS ISO 27566 · Age estimation
+                - generic [ref=f13e207]: Certified facial age estimate
+              - generic [ref=f13e208]: Hosted flow
+            - generic [ref=f13e209]: Facial age estimation run to the ISO/IEC 27566 age-assurance model - an age band back, no document, no identity.
+            - generic [ref=f13e210]:
+              - generic [ref=f13e211]: Age Estimation
+              - generic [ref=f13e212]: ISO/IEC 27566
+              - generic [ref=f13e213]: No ID required
+            - generic [ref=f13e214]:
+              - generic [ref=f13e215]: $0.10 per estimate
+              - generic [ref=f13e216]: Launch session
+          - button "ACCS ISO 27566 · Age verification Age proven from a document Hosted flow Age proven against an authoritative source, then shared as a single yes/no attribute rather than a date of birth. ID Verification NFC Age attribute only $0.15 ID + $0.15 NFC + $0.05 face match Launch session" [ref=f13e219] [cursor=pointer]:
+            - generic [ref=f13e220]:
+              - generic [ref=f13e222]:
+                - generic [ref=f13e223]: ACCS ISO 27566 · Age verification
+                - generic [ref=f13e224]: Age proven from a document
+              - generic [ref=f13e225]: Hosted flow
+            - generic [ref=f13e226]: Age proven against an authoritative source, then shared as a single yes/no attribute rather than a date of birth.
+            - generic [ref=f13e227]:
+              - generic [ref=f13e228]: ID Verification
+              - generic [ref=f13e229]: NFC
+              - generic [ref=f13e230]: Age attribute only
+            - generic [ref=f13e231]:
+              - generic [ref=f13e232]: $0.15 ID + $0.15 NFC + $0.05 face match
+              - generic [ref=f13e233]: Launch session
+          - button "Proof of address Document + address parse Hosted flow Utility bill, bank statement or government letter - parsed, validated and tamper-checked. PoA Address parsing Tamper detection $0.20 per document Launch session" [ref=f13e236] [cursor=pointer]:
+            - generic [ref=f13e237]:
+              - generic [ref=f13e239]:
+                - generic [ref=f13e240]: Proof of address
+                - generic [ref=f13e241]: Document + address parse
+              - generic [ref=f13e242]: Hosted flow
+            - generic [ref=f13e243]: Utility bill, bank statement or government letter - parsed, validated and tamper-checked.
+            - generic [ref=f13e244]:
+              - generic [ref=f13e245]: PoA
+              - generic [ref=f13e246]: Address parsing
+              - generic [ref=f13e247]: Tamper detection
+            - generic [ref=f13e248]:
+              - generic [ref=f13e249]: $0.20 per document
+              - generic [ref=f13e250]: Launch session
+          - button "Questionnaires Declarations in-flow Hosted flow Collect source of funds, PEP self-declaration or risk questions inside the same verification session. Questionnaires Conditional logic Audit trail $0.10 per questionnaire Launch session" [ref=f13e253] [cursor=pointer]:
+            - generic [ref=f13e254]:
+              - generic [ref=f13e256]:
+                - generic [ref=f13e257]: Questionnaires
+                - generic [ref=f13e258]: Declarations in-flow
+              - generic [ref=f13e259]: Hosted flow
+            - generic [ref=f13e260]: Collect source of funds, PEP self-declaration or risk questions inside the same verification session.
+            - generic [ref=f13e261]:
+              - generic [ref=f13e262]: Questionnaires
+              - generic [ref=f13e263]: Conditional logic
+              - generic [ref=f13e264]: Audit trail
+            - generic [ref=f13e265]:
+              - generic [ref=f13e266]: $0.10 per questionnaire
+              - generic [ref=f13e267]: Launch session
+      - generic [ref=f13e270]:
+        - generic [ref=f13e271]:
+          - heading "Business verification · KYB" [level=2] [ref=f13e272]
+          - generic [ref=f13e274]: Server-side flows - click through a sample case
+        - generic [ref=f13e275]:
+          - button "Business verification Registry + documents API demo Pull the company straight from the official registry, validate documents, and score the entity. Registry lookup Document AI Entity risk From $2.00 · $4-5 with shareholders Open sample case" [ref=f13e276] [cursor=pointer]:
+            - generic [ref=f13e277]:
+              - generic [ref=f13e279]:
+                - generic [ref=f13e280]: Business verification
+                - generic [ref=f13e281]: Registry + documents
+              - generic [ref=f13e282]: API demo
+            - generic [ref=f13e283]: Pull the company straight from the official registry, validate documents, and score the entity.
+            - generic [ref=f13e284]:
+              - generic [ref=f13e285]: Registry lookup
+              - generic [ref=f13e286]: Document AI
+              - generic [ref=f13e287]: Entity risk
+            - generic [ref=f13e288]:
+              - generic [ref=f13e289]: From $2.00 · $4-5 with shareholders
+              - generic [ref=f13e290]: Open sample case
+          - button "Key people & UBO Ownership graph API demo Walk the ownership chain to the humans, then run KYC and AML on each one of them. Ownership graph PEP & sanctions Per-person KYC $5.00 - $9.00 registry UBOs + KYC per person Open sample case" [ref=f13e293] [cursor=pointer]:
+            - generic [ref=f13e294]:
+              - generic [ref=f13e296]:
+                - generic [ref=f13e297]: Key people & UBO
+                - generic [ref=f13e298]: Ownership graph
+              - generic [ref=f13e299]: API demo
+            - generic [ref=f13e300]: Walk the ownership chain to the humans, then run KYC and AML on each one of them.
+            - generic [ref=f13e301]:
+              - generic [ref=f13e302]: Ownership graph
+              - generic [ref=f13e303]: PEP & sanctions
+              - generic [ref=f13e304]: Per-person KYC
+            - generic [ref=f13e305]:
+              - generic [ref=f13e306]: $5.00 - $9.00 registry UBOs + KYC per person
+              - generic [ref=f13e307]: Open sample case
+      - generic [ref=f13e310]:
+        - generic [ref=f13e311]:
+          - heading "Monitoring & compliance" [level=2] [ref=f13e312]
+          - generic [ref=f13e314]: API-first - sample payloads with the real field names
+        - generic [ref=f13e315]:
+          - button "Transaction monitoring Rules + risk scoring API demo Stream payment events, hit them with your rule set, and open a case when the score crosses the line. Rule engine Case management Webhooks $0.02 per screened transaction Open sample feed" [ref=f13e316] [cursor=pointer]:
+            - generic [ref=f13e317]:
+              - generic [ref=f13e319]:
+                - generic [ref=f13e320]: Transaction monitoring
+                - generic [ref=f13e321]: Rules + risk scoring
+              - generic [ref=f13e322]: API demo
+            - generic [ref=f13e323]: Stream payment events, hit them with your rule set, and open a case when the score crosses the line.
+            - generic [ref=f13e324]:
+              - generic [ref=f13e325]: Rule engine
+              - generic [ref=f13e326]: Case management
+              - generic [ref=f13e327]: Webhooks
+            - generic [ref=f13e328]:
+              - generic [ref=f13e329]: $0.02 per screened transaction
+              - generic [ref=f13e330]: Open sample feed
+          - button "Wallet screening (KYT) On-chain exposure API demo Score an address before you let value move - direct and indirect exposure, by hop. Exposure by hop Sanctions addresses Multi-chain $0.15 per screen · $0.02 with your own key Open sample wallet" [ref=f13e333] [cursor=pointer]:
+            - generic [ref=f13e334]:
+              - generic [ref=f13e336]:
+                - generic [ref=f13e337]: Wallet screening (KYT)
+                - generic [ref=f13e338]: On-chain exposure
+              - generic [ref=f13e339]: API demo
+            - generic [ref=f13e340]: Score an address before you let value move - direct and indirect exposure, by hop.
+            - generic [ref=f13e341]:
+              - generic [ref=f13e342]: Exposure by hop
+              - generic [ref=f13e343]: Sanctions addresses
+              - generic [ref=f13e344]: Multi-chain
+            - generic [ref=f13e345]:
+              - generic [ref=f13e346]: $0.15 per screen · $0.02 with your own key
+              - generic [ref=f13e347]: Open sample wallet
+          - button "AML screening Standalone API API demo Screen a name you already hold against sanctions, PEP and adverse media - no session needed. Sanctions PEP Adverse media Ongoing $0.20 per screen Open sample hits" [ref=f13e350] [cursor=pointer]:
+            - generic [ref=f13e351]:
+              - generic [ref=f13e353]:
+                - generic [ref=f13e354]: AML screening
+                - generic [ref=f13e355]: Standalone API
+              - generic [ref=f13e356]: API demo
+            - generic [ref=f13e357]: Screen a name you already hold against sanctions, PEP and adverse media - no session needed.
+            - generic [ref=f13e358]:
+              - generic [ref=f13e359]: Sanctions
+              - generic [ref=f13e360]: PEP
+              - generic [ref=f13e361]: Adverse media
+              - generic [ref=f13e362]: Ongoing
+            - generic [ref=f13e363]:
+              - generic [ref=f13e364]: $0.20 per screen
+              - generic [ref=f13e365]: Open sample hits
+      - generic [ref=f13e368]:
+        - generic [ref=f13e369]:
+          - heading "Fraud & security" [level=2] [ref=f13e370]
+          - generic [ref=f13e372]: Signals and gates that sit around the flows
+        - generic [ref=f13e373]:
+          - button "Face search 1:N Duplicate & ban detection API demo Check a new face against everyone you have already onboarded - catch duplicates and returning bans. 1:N search Duplicate accounts Ban evasion $0.05 per search Search sample gallery" [ref=f13e374] [cursor=pointer]:
+            - generic [ref=f13e375]:
+              - generic [ref=f13e377]:
+                - generic [ref=f13e378]: Face search 1:N
+                - generic [ref=f13e379]: Duplicate & ban detection
+              - generic [ref=f13e380]: API demo
+            - generic [ref=f13e381]: Check a new face against everyone you have already onboarded - catch duplicates and returning bans.
+            - generic [ref=f13e382]:
+              - generic [ref=f13e383]: 1:N search
+              - generic [ref=f13e384]: Duplicate accounts
+              - generic [ref=f13e385]: Ban evasion
+            - generic [ref=f13e386]:
+              - generic [ref=f13e387]: $0.05 per search
+              - generic [ref=f13e388]: Search sample gallery
+          - 'button "Didit CAPTCHA Liveness instead of puzzles Hosted flow A bot wall users don''t hate: one face check replaces the grid of blurry traffic lights. Bot resistance Drop-in widget Liveness-backed Free · 500 liveness checks / month Try the widget" [ref=f13e391] [cursor=pointer]':
+            - generic [ref=f13e392]:
+              - generic [ref=f13e394]:
+                - generic [ref=f13e395]: Didit CAPTCHA
+                - generic [ref=f13e396]: Liveness instead of puzzles
+              - generic [ref=f13e397]: Hosted flow
+            - generic [ref=f13e398]: "A bot wall users don't hate: one face check replaces the grid of blurry traffic lights."
+            - generic [ref=f13e399]:
+              - generic [ref=f13e400]: Bot resistance
+              - generic [ref=f13e401]: Drop-in widget
+              - generic [ref=f13e402]: Liveness-backed
+            - generic [ref=f13e403]:
+              - generic [ref=f13e404]: Free · 500 liveness checks / month
+              - generic [ref=f13e405]: Try the widget
+          - button "IP & device analysis Signals on every session API demo VPN, data-centre and geo-distance signals attached to every verification you run. VPN / Tor Data centre Geo distance Free · 500 checks / month, then $0.03 Open sample signals" [ref=f13e408] [cursor=pointer]:
+            - generic [ref=f13e409]:
+              - generic [ref=f13e411]:
+                - generic [ref=f13e412]: IP & device analysis
+                - generic [ref=f13e413]: Signals on every session
+              - generic [ref=f13e414]: API demo
+            - generic [ref=f13e415]: VPN, data-centre and geo-distance signals attached to every verification you run.
+            - generic [ref=f13e416]:
+              - generic [ref=f13e417]: VPN / Tor
+              - generic [ref=f13e418]: Data centre
+              - generic [ref=f13e419]: Geo distance
+            - generic [ref=f13e420]:
+              - generic [ref=f13e421]: Free · 500 checks / month, then $0.03
+              - generic [ref=f13e422]: Open sample signals
+    - generic [ref=f13e426]:
+      - paragraph [ref=f13e427]: Industry demo apps
+      - heading "Every module, in a real product." [level=2] [ref=f13e428]
+      - list [ref=f13e429]:
+        - listitem [ref=f13e430]:
+          - 'link "Aurora Play iGaming Casino and sportsbook: age estimation at sign-up, licensed markets, monitored deposits, an ID check at 2,000 EUR, bonus abuse and self-exclusion." [ref=f13e431] [cursor=pointer]':
+            - /url: /igaming
+            - generic [ref=f13e434]:
+              - generic [ref=f13e435]: Aurora Play
+              - generic [ref=f13e436]: iGaming
+            - generic [ref=f13e439]: "Casino and sportsbook: age estimation at sign-up, licensed markets, monitored deposits, an ID check at 2,000 EUR, bonus abuse and self-exclusion."
+        - listitem [ref=f13e440]:
+          - 'link "Alder Fintech Neobank: sign-up with KYC and AML screening, payments through transaction monitoring, a large transfer held for review and ongoing AML monitoring." [ref=f13e441] [cursor=pointer]':
+            - /url: /fintech
+            - generic [ref=f13e444]:
+              - generic [ref=f13e445]: Alder
+              - generic [ref=f13e446]: Fintech
+            - generic [ref=f13e449]: "Neobank: sign-up with KYC and AML screening, payments through transaction monitoring, a large transfer held for review and ongoing AML monitoring."
+        - listitem [ref=f13e450]:
+          - 'link "Northmarket Marketplace Resale marketplace: seller KYB with UBOs and the representatives'' ID checks, buyer age checks at 1,000 EUR, monitored orders and payouts, and a second shop caught on a shared device." [ref=f13e451] [cursor=pointer]':
+            - /url: /marketplace
+            - generic [ref=f13e454]:
+              - generic [ref=f13e455]: Northmarket
+              - generic [ref=f13e456]: Marketplace
+            - generic [ref=f13e459]: "Resale marketplace: seller KYB with UBOs and the representatives' ID checks, buyer age checks at 1,000 EUR, monitored orders and payouts, and a second shop caught on a shared device."
+        - listitem [ref=f13e460]:
+          - link "Kestrel Crypto exchange KYC and AML at sign-up, wallet screening on every deposit and withdrawal, the Travel Rule and a selfie step-up, with the compliance view of each transfer." [ref=f13e461] [cursor=pointer]:
+            - /url: /crypto-exchange
+            - generic [ref=f13e464]:
+              - generic [ref=f13e465]: Kestrel
+              - generic [ref=f13e466]: Crypto exchange
+            - generic [ref=f13e469]: KYC and AML at sign-up, wallet screening on every deposit and withdrawal, the Travel Rule and a selfie step-up, with the compliance view of each transfer.
+    - generic [ref=f13e471]:
+      - generic [ref=f13e472]:
+        - paragraph [ref=f13e473]: None of these fit?
+        - heading "Compose any flow. No code." [level=2] [ref=f13e474]
+        - paragraph [ref=f13e475]: Every demo above is just a workflow id. Chain 25+ modules with your own branching logic in the console, copy the id, and pass it to the same endpoint.
+        - generic [ref=f13e476]:
+          - link "Open the builder" [ref=f13e477] [cursor=pointer]:
+            - /url: https://business.staging.didit.me
+          - link "Workflow docs" [ref=f13e481] [cursor=pointer]:
+            - /url: https://docs.didit.me/console/workflows
+      - generic [ref=f13e482]:
+        - paragraph [ref=f13e488]: Adaptive age · node graph
+        - generic [ref=f13e489]:
+          - generic [ref=f13e490]:
+            - generic [ref=f13e492]: Selfie · age estimation
+            - generic [ref=f13e493]: always
+          - generic [ref=f13e494]:
+            - generic [ref=f13e496]: Estimated age ≥ 26
+            - generic [ref=f13e497]: → approve
+          - generic [ref=f13e498]:
+            - generic [ref=f13e500]: Estimated age 15-25
+            - generic [ref=f13e501]: → ID scan
+          - generic [ref=f13e502]:
+            - generic [ref=f13e504]: Estimated age < 15
+            - generic [ref=f13e505]: → decline
+          - generic [ref=f13e506]:
+            - generic [ref=f13e508]: IP analysis
+            - generic [ref=f13e509]: on every branch
+  - region "Ask an AI to summarise this page" [ref=f13e510]:
+    - generic [ref=f13e511]:
+      - generic [ref=f13e512]: Ask an AI to summarise this page
+      - list [ref=f13e513]:
+        - listitem [ref=f13e514]:
+          - link "Open this page in ChatGPT" [ref=f13e515] [cursor=pointer]:
+            - /url: https://chatgpt.com/?q=Please%20read%20https%3A%2F%2Fdemos.didit.me%2Fmodules%20and%20summarise%20this%20page%20for%20me.%20Tell%20me%20what%20Didit%20is%2C%20which%20verification%20demos%20this%20page%20runs%2C%20who%20they%20are%20for%2C%20and%20how%20to%20integrate%20them.%20Cite%20the%20URL%20in%20your%20answer.
+        - listitem [ref=f13e518]:
+          - link "Open this page in Claude" [ref=f13e519] [cursor=pointer]:
+            - /url: https://claude.ai/new?q=Please%20read%20https%3A%2F%2Fdemos.didit.me%2Fmodules%20and%20summarise%20this%20page%20for%20me.%20Tell%20me%20what%20Didit%20is%2C%20which%20verification%20demos%20this%20page%20runs%2C%20who%20they%20are%20for%2C%20and%20how%20to%20integrate%20them.%20Cite%20the%20URL%20in%20your%20answer.
+        - listitem [ref=f13e522]:
+          - link "Open this page in Perplexity" [ref=f13e523] [cursor=pointer]:
+            - /url: https://www.perplexity.ai/?q=Please%20read%20https%3A%2F%2Fdemos.didit.me%2Fmodules%20and%20summarise%20this%20page%20for%20me.%20Tell%20me%20what%20Didit%20is%2C%20which%20verification%20demos%20this%20page%20runs%2C%20who%20they%20are%20for%2C%20and%20how%20to%20integrate%20them.%20Cite%20the%20URL%20in%20your%20answer.
+        - listitem [ref=f13e526]:
+          - link "Open this page in Google AI Mode" [ref=f13e527] [cursor=pointer]:
+            - /url: https://www.google.com/search?udm=50&q=Please%20read%20https%3A%2F%2Fdemos.didit.me%2Fmodules%20and%20summarise%20this%20page%20for%20me.%20Tell%20me%20what%20Didit%20is%2C%20which%20verification%20demos%20this%20page%20runs%2C%20who%20they%20are%20for%2C%20and%20how%20to%20integrate%20them.%20Cite%20the%20URL%20in%20your%20answer.
+        - listitem [ref=f13e530]:
+          - link "Open this page in Grok" [ref=f13e531] [cursor=pointer]:
+            - /url: https://grok.com/?q=Please%20read%20https%3A%2F%2Fdemos.didit.me%2Fmodules%20and%20summarise%20this%20page%20for%20me.%20Tell%20me%20what%20Didit%20is%2C%20which%20verification%20demos%20this%20page%20runs%2C%20who%20they%20are%20for%2C%20and%20how%20to%20integrate%20them.%20Cite%20the%20URL%20in%20your%20answer.
+  - contentinfo [ref=f13e535]:
+    - generic [ref=f13e536]:
+      - generic [ref=f13e537]:
+        - generic [ref=f13e538]:
+          - img "Didit" [ref=f13e540]
+          - generic [ref=f13e541]:
+            - paragraph [ref=f13e542]: One API for identity and fraud.
+            - paragraph [ref=f13e543]: SOC 2 · ISO 27001 · iBeta PAD L1 · GDPR · eIDAS 2.0 · MiCA · AMLD6 · DORA-aligned
+            - paragraph [ref=f13e544]:
+              - text: Recognised by Spain's Tesoro, Banco de España, and SEPBLAC as safer than in-person verification.
+              - link "Read the report" [ref=f13e545] [cursor=pointer]:
+                - /url: https://didit.me/security-compliance/#regulator
+            - generic "Backed by Y Combinator, Robinhood Ventures" [ref=f13e547]:
+              - generic [ref=f13e548]: Backed by
+              - generic [ref=f13e549]:
+                - link [ref=f13e550] [cursor=pointer]:
+                  - /url: https://www.ycombinator.com/companies/didit
+                  - img "Y Combinator" [ref=f13e551]
+                - link [ref=f13e552] [cursor=pointer]:
+                  - /url: https://robinhood.com/us/en/stocks/RVII/
+                  - img "Robinhood Ventures" [ref=f13e553]
+            - paragraph [ref=f13e554]: San Francisco, USA · Headquarters
+            - link "Email Didit" [ref=f13e555] [cursor=pointer]:
+              - /url: mailto:hello@didit.me
+              - text: hello@didit.me
+            - link "Didit is rated 4.9 out of 5 on G2" [ref=f13e559] [cursor=pointer]:
+              - /url: https://www.g2.com/products/didit-identity-verification/reviews
+              - generic [ref=f13e560]: "4.9"
+              - paragraph [ref=f13e589]: Infrastructure for identity and fraud
+        - generic [ref=f13e590]:
+          - generic [ref=f13e591]: Solutions
+          - list [ref=f13e592]:
+            - listitem [ref=f13e593]:
+              - link "Full KYC onboarding" [ref=f13e594] [cursor=pointer]:
+                - /url: https://didit.me/solutions/full-kyc-onboarding/
+            - listitem [ref=f13e596]:
+              - link "Age verification" [ref=f13e597] [cursor=pointer]:
+                - /url: https://didit.me/solutions/age-verification/
+            - listitem [ref=f13e599]:
+              - link "Crypto on-ramp KYC + KYT" [ref=f13e600] [cursor=pointer]:
+                - /url: https://didit.me/solutions/crypto-onramp-kyc-kyt/
+            - listitem [ref=f13e602]:
+              - link "Stop account takeovers" [ref=f13e603] [cursor=pointer]:
+                - /url: https://didit.me/solutions/account-takeover/
+            - listitem [ref=f13e605]:
+              - link "Block multi-account abuse" [ref=f13e606] [cursor=pointer]:
+                - /url: https://didit.me/solutions/multi-account-abuse/
+            - listitem [ref=f13e608]:
+              - link "Gig worker verification" [ref=f13e609] [cursor=pointer]:
+                - /url: https://didit.me/solutions/gig-worker-verification/
+            - listitem [ref=f13e611]:
+              - link "Proof of human" [ref=f13e612] [cursor=pointer]:
+                - /url: https://didit.me/solutions/proof-of-human/
+            - listitem [ref=f13e614]:
+              - link "Block bots" [ref=f13e615] [cursor=pointer]:
+                - /url: https://didit.me/solutions/bot-detection/
+            - listitem [ref=f13e617]:
+              - link "iGaming responsible gaming" [ref=f13e618] [cursor=pointer]:
+                - /url: https://didit.me/solutions/igaming-responsible-gaming/
+            - listitem [ref=f13e620]:
+              - link "MiCA crypto user verification" [ref=f13e621] [cursor=pointer]:
+                - /url: https://didit.me/solutions/mica-crypto-user-verification/
+            - listitem [ref=f13e623]:
+              - link "Crypto Travel Rule" [ref=f13e624] [cursor=pointer]:
+                - /url: https://didit.me/solutions/crypto-travel-rule/
+            - listitem [ref=f13e626]:
+              - link "UBO verification (6AMLD)" [ref=f13e627] [cursor=pointer]:
+                - /url: https://didit.me/solutions/ubo-verification-6amld/
+            - listitem [ref=f13e629]:
+              - link "BNPL underwriting" [ref=f13e630] [cursor=pointer]:
+                - /url: https://didit.me/solutions/bnpl-underwriting/
+            - listitem [ref=f13e632]:
+              - link "PSD3 SCA" [ref=f13e633] [cursor=pointer]:
+                - /url: https://didit.me/solutions/psd3-sca/
+            - listitem [ref=f13e635]:
+              - link "Marketplace seller KYB" [ref=f13e636] [cursor=pointer]:
+                - /url: https://didit.me/solutions/marketplace-seller-kyb/
+            - listitem [ref=f13e638]:
+              - link "Employee onboarding" [ref=f13e639] [cursor=pointer]:
+                - /url: https://didit.me/solutions/employee-onboarding/
+            - listitem [ref=f13e641]:
+              - link "NFC ePassport onboarding" [ref=f13e642] [cursor=pointer]:
+                - /url: https://didit.me/solutions/nfc-epassport-onboarding/
+            - listitem [ref=f13e644]:
+              - link "Password recovery" [ref=f13e645] [cursor=pointer]:
+                - /url: https://didit.me/solutions/password-recovery/
+            - listitem [ref=f13e647]:
+              - link "All use cases" [ref=f13e648] [cursor=pointer]:
+                - /url: https://didit.me/solutions/
+        - generic [ref=f13e652]:
+          - generic [ref=f13e653]: Products
+          - list [ref=f13e654]:
+            - listitem [ref=f13e655]:
+              - link "User Verification (KYC)" [ref=f13e656] [cursor=pointer]:
+                - /url: https://didit.me/products/free-kyc/
+            - listitem [ref=f13e662]:
+              - link "Business Verification (KYB)" [ref=f13e663] [cursor=pointer]:
+                - /url: https://didit.me/products/business-verification/
+            - listitem [ref=f13e666]:
+              - link "Transaction Monitoring" [ref=f13e667] [cursor=pointer]:
+                - /url: https://didit.me/products/transaction-monitoring/
+            - listitem [ref=f13e670]:
+              - link "Wallet Screening (KYT)" [ref=f13e671] [cursor=pointer]:
+                - /url: https://didit.me/products/wallet-screening/
+            - listitem [ref=f13e674]:
+              - link "AML Screening" [ref=f13e675] [cursor=pointer]:
+                - /url: https://didit.me/products/aml-screening/
+            - listitem [ref=f13e678]:
+              - link "ID Verification" [ref=f13e679] [cursor=pointer]:
+                - /url: https://didit.me/products/id-verification/
+            - listitem [ref=f13e682]:
+              - link "Liveness" [ref=f13e683] [cursor=pointer]:
+                - /url: https://didit.me/products/liveness/
+            - listitem [ref=f13e686]:
+              - link "Face Match 1:1" [ref=f13e687] [cursor=pointer]:
+                - /url: https://didit.me/products/face-match-1to1/
+            - listitem [ref=f13e690]:
+              - link "Face Search 1:N" [ref=f13e691] [cursor=pointer]:
+                - /url: https://didit.me/products/face-search-1ton/
+            - listitem [ref=f13e694]:
+              - link "Biometric Authentication" [ref=f13e695] [cursor=pointer]:
+                - /url: https://didit.me/products/biometric-authentication/
+            - listitem [ref=f13e698]:
+              - link "Age Estimation" [ref=f13e699] [cursor=pointer]:
+                - /url: https://didit.me/products/age-estimation/
+            - listitem [ref=f13e702]:
+              - link "NFC Reading" [ref=f13e703] [cursor=pointer]:
+                - /url: https://didit.me/products/nfc-verification/
+            - listitem [ref=f13e706]:
+              - link "Database Validation" [ref=f13e707] [cursor=pointer]:
+                - /url: https://didit.me/products/database-validation/
+            - listitem [ref=f13e710]:
+              - link "Device & IP Analysis" [ref=f13e711] [cursor=pointer]:
+                - /url: https://didit.me/products/device-ip-analysis/
+            - listitem [ref=f13e714]:
+              - link "Email Verification" [ref=f13e715] [cursor=pointer]:
+                - /url: https://didit.me/products/email-verification/
+            - listitem [ref=f13e718]:
+              - link "Phone Verification" [ref=f13e719] [cursor=pointer]:
+                - /url: https://didit.me/products/phone-verification/
+            - listitem [ref=f13e722]:
+              - link "Workflow Orchestrator" [ref=f13e723] [cursor=pointer]:
+                - /url: https://didit.me/products/workflow-orchestrator/
+            - listitem [ref=f13e726]:
+              - link "White Label" [ref=f13e727] [cursor=pointer]:
+                - /url: https://didit.me/products/white-label/
+            - listitem [ref=f13e730]:
+              - link "All products" [ref=f13e731] [cursor=pointer]:
+                - /url: https://didit.me/products/
+      - generic [ref=f13e735]:
+        - generic [ref=f13e736]:
+          - generic [ref=f13e737]: Industries
+          - list [ref=f13e738]:
+            - listitem [ref=f13e739]:
+              - link "Fintech" [ref=f13e740] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-fintech/
+            - listitem [ref=f13e743]:
+              - link "Crypto / Web3" [ref=f13e744] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-crypto/
+            - listitem [ref=f13e747]:
+              - link "Marketplaces" [ref=f13e748] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-marketplaces/
+            - listitem [ref=f13e751]:
+              - link "Mobility" [ref=f13e752] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-mobility/
+            - listitem [ref=f13e755]:
+              - link "iGaming / Gambling" [ref=f13e756] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-igaming/
+            - listitem [ref=f13e759]:
+              - link "Banking" [ref=f13e760] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-banking/
+            - listitem [ref=f13e763]:
+              - link "Insurance" [ref=f13e764] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-insurance/
+            - listitem [ref=f13e767]:
+              - link "E-commerce" [ref=f13e768] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-ecommerce/
+            - listitem [ref=f13e771]:
+              - link "Telecom" [ref=f13e772] [cursor=pointer]:
+                - /url: https://didit.me/industries/identity-verification-telecom/
+            - listitem [ref=f13e775]:
+              - link "All industries" [ref=f13e776] [cursor=pointer]:
+                - /url: https://didit.me/industries/
+        - generic [ref=f13e780]:
+          - generic [ref=f13e781]: Developers
+          - list [ref=f13e782]:
+            - listitem [ref=f13e783]:
+              - link "Documentation" [ref=f13e784] [cursor=pointer]:
+                - /url: https://docs.didit.me
+            - listitem [ref=f13e789]:
+              - link "API Reference" [ref=f13e790] [cursor=pointer]:
+                - /url: https://docs.didit.me/api-reference
+            - listitem [ref=f13e795]:
+              - link "Quickstart, 5 min" [ref=f13e796] [cursor=pointer]:
+                - /url: https://docs.didit.me/getting-started/quick-start
+            - listitem [ref=f13e801]:
+              - link "Integration prompt" [ref=f13e802] [cursor=pointer]:
+                - /url: https://docs.didit.me/integration/integration-prompt
+            - listitem [ref=f13e807]:
+              - link "MCP Server" [ref=f13e808] [cursor=pointer]:
+                - /url: https://docs.didit.me/mcp
+            - listitem [ref=f13e813]:
+              - link "Agent Skills" [ref=f13e814] [cursor=pointer]:
+                - /url: https://docs.didit.me/getting-started/agent-skills
+            - listitem [ref=f13e819]:
+              - link "SDKs" [ref=f13e820] [cursor=pointer]:
+                - /url: https://docs.didit.me/integration/web-sdks/overview
+            - listitem [ref=f13e825]:
+              - link "Sandbox (free)" [ref=f13e826] [cursor=pointer]:
+                - /url: https://business.didit.me
+            - listitem [ref=f13e831]:
+              - link "Changelog" [ref=f13e832] [cursor=pointer]:
+                - /url: https://docs.didit.me/changelog
+            - listitem [ref=f13e837]:
+              - link "Service Status" [ref=f13e838] [cursor=pointer]:
+                - /url: https://status.didit.me
+            - listitem [ref=f13e843]:
+              - link "Demo Center" [ref=f13e844] [cursor=pointer]:
+                - /url: https://demos.didit.me
+        - generic [ref=f13e849]:
+          - generic [ref=f13e850]: Pricing & Compare
+          - list [ref=f13e851]:
+            - listitem [ref=f13e852]:
+              - link "Pricing" [ref=f13e853] [cursor=pointer]:
+                - /url: https://didit.me/pricing/
+            - listitem [ref=f13e855]:
+              - link "vs Sumsub" [ref=f13e856] [cursor=pointer]:
+                - /url: https://didit.me/switch/sumsub-alternative/
+            - listitem [ref=f13e858]:
+              - link "vs Veriff" [ref=f13e859] [cursor=pointer]:
+                - /url: https://didit.me/switch/veriff-alternative/
+            - listitem [ref=f13e861]:
+              - link "vs Onfido" [ref=f13e862] [cursor=pointer]:
+                - /url: https://didit.me/switch/onfido-alternative/
+            - listitem [ref=f13e864]:
+              - link "vs Jumio" [ref=f13e865] [cursor=pointer]:
+                - /url: https://didit.me/switch/jumio-alternative/
+            - listitem [ref=f13e867]:
+              - link "vs Persona" [ref=f13e868] [cursor=pointer]:
+                - /url: https://didit.me/switch/persona-alternative/
+            - listitem [ref=f13e870]:
+              - link "vs Stripe Identity" [ref=f13e871] [cursor=pointer]:
+                - /url: https://didit.me/switch/stripe-identity-alternative/
+            - listitem [ref=f13e873]:
+              - link "Countries supported" [ref=f13e874] [cursor=pointer]:
+                - /url: https://didit.me/solutions/countries/
+            - listitem [ref=f13e876]:
+              - link "Supported documents" [ref=f13e877] [cursor=pointer]:
+                - /url: https://didit.me/supported-documents/
+            - listitem [ref=f13e879]:
+              - link "All competitor comparisons" [ref=f13e880] [cursor=pointer]:
+                - /url: https://didit.me/switch/
+        - generic [ref=f13e884]:
+          - generic [ref=f13e885]: Company
+          - list [ref=f13e886]:
+            - listitem [ref=f13e887]:
+              - link "About us" [ref=f13e888] [cursor=pointer]:
+                - /url: https://didit.me/about-us/
+            - listitem [ref=f13e890]:
+              - link "Blog" [ref=f13e891] [cursor=pointer]:
+                - /url: https://didit.me/blog/
+            - listitem [ref=f13e893]:
+              - link "Browse all articles" [ref=f13e894] [cursor=pointer]:
+                - /url: https://didit.me/blog/archive/
+            - listitem [ref=f13e896]:
+              - link "Success Stories" [ref=f13e897] [cursor=pointer]:
+                - /url: https://didit.me/success-stories/
+            - listitem [ref=f13e899]:
+              - link "Security & Compliance" [ref=f13e900] [cursor=pointer]:
+                - /url: https://didit.me/security-compliance/
+            - listitem [ref=f13e902]:
+              - link "Brand kit" [ref=f13e903] [cursor=pointer]:
+                - /url: https://didit.me/brand/
+            - listitem [ref=f13e905]:
+              - link "Support" [ref=f13e906] [cursor=pointer]:
+                - /url: https://didit.me/support/
+            - listitem [ref=f13e908]:
+              - link "Help Center" [ref=f13e909] [cursor=pointer]:
+                - /url: https://help.didit.me
+            - listitem [ref=f13e914]:
+              - link "Contact" [ref=f13e915] [cursor=pointer]:
+                - /url: https://didit.me/get-a-demo/
+            - listitem [ref=f13e917]:
+              - link "Get a demo" [ref=f13e918] [cursor=pointer]:
+                - /url: https://didit.me/get-a-demo/
+            - listitem [ref=f13e920]:
+              - link "Careers" [ref=f13e921] [cursor=pointer]:
+                - /url: https://didit.jobs.personio.com/
+    - generic [ref=f13e927]:
+      - generic [ref=f13e929]:
+        - text: © 2026 Didit ·
+        - link "Privacy" [ref=f13e930] [cursor=pointer]:
+          - /url: https://didit.me/terms/privacy-policy/
+        - text: ·
+        - link "Cookies" [ref=f13e931] [cursor=pointer]:
+          - /url: https://didit.me/terms/cookies/
+        - text: ·
+        - link "Terms for Business" [ref=f13e932] [cursor=pointer]:
+          - /url: https://didit.me/terms/business/
+        - text: ·
+        - link "Contact" [ref=f13e933] [cursor=pointer]:
+          - /url: https://didit.me/get-a-demo/
+      - generic [ref=f13e935]:
+        - link "Didit on LinkedIn" [ref=f13e936] [cursor=pointer]:
+          - /url: https://www.linkedin.com/company/91001155
+        - link "Didit on X (Twitter)" [ref=f13e941] [cursor=pointer]:
+          - /url: https://x.com/getdidit
+        - link "Didit on YouTube" [ref=f13e944] [cursor=pointer]:
+          - /url: https://www.youtube.com/@getdidit
+        - link "Didit on GitHub" [ref=f13e948] [cursor=pointer]:
+          - /url: https://github.com/didit-protocol
+        - 'button "Change language. Current language: English." [ref=f13e952] [cursor=pointer]':
+          - generic [ref=f13e954]: English
