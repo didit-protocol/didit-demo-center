@@ -1,0 +1,150 @@
+{
+  "uuid": "66ef27fd-09ae-494c-a5ae-9b4a81bfeab4",
+  "environment": "live",
+  "transaction_number": 32,
+  "txn_id": "mkt-signup-0e9b79eb8b0148ec8721",
+  "txn_date": "2026-10-13T21:49:22.475899Z",
+  "zone_id": "UTC",
+  "transaction_type": "userPlatformEvent",
+  "action_type": "seller_signup",
+  "direction": "INBOUND",
+  "status": "APPROVED",
+  "source": "LIVE",
+  "amount": "0",
+  "currency": "EUR",
+  "currency_type": null,
+  "amount_in_default_currency": null,
+  "default_currency_code": null,
+  "preferred_currency_amount": "0",
+  "preferred_currency_code": "USD",
+  "payment_details": "Seller sign-up: Atelier Nord",
+  "payment_txn_id": null,
+  "score": 0,
+  "severity": null,
+  "decision_reason_code": null,
+  "decision_reason_label": null,
+  "vendor_data": "mkt-seller-9e7b751f882f",
+  "metadata": {
+    "subject": {
+      "full_name": "Industria de Diseno Textil SA",
+      "entity_type": "company",
+      "vendor_data": "mkt-seller-9e7b751f882f",
+      "device_context": {
+        "metadata": {
+          "bot_score": 0,
+          "webview_kind": "browser",
+          "accept_language": "en-US,en;q=0.9",
+          "composite_server_id": "9d73387e58fad7e6bed1157ce5de8563"
+        },
+        "platform": "desktop",
+        "os_family": "Linux",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+        "fingerprint": "heORv5s26Ljg7zJNnFuJvg",
+        "browser_family": "Chrome",
+        "composite_hash": "JJeUspChiRksZgjz6c9S-w",
+        "accept_language": "en-US,en;q=0.9",
+        "network_context": {
+          "ip_address": "34.83.210.9"
+        },
+        "persistent_device_id": "heORv5s26Ljg7zJNnFuJvg"
+      }
+    },
+    "counterparty": {}
+  },
+  "props": {
+    "role": "seller",
+    "shop": "Atelier Nord",
+    "demo_app": "marketplace",
+    "is_data_center": true
+  },
+  "tags": [],
+  "parties": [
+    {
+      "uuid": "6322326b-4ccf-45ab-84b2-a98ba3abc11b",
+      "role": "APPLICANT",
+      "entity_type": "company",
+      "kind": "BUSINESS",
+      "vendor_data": "mkt-seller-9e7b751f882f",
+      "full_name": "Industria de Diseno Textil SA",
+      "first_name": null,
+      "last_name": null,
+      "country_code": null,
+      "dob": null,
+      "address": {},
+      "institution_info": {},
+      "device": {
+        "metadata": {
+          "bot_score": 0,
+          "webview_kind": "browser",
+          "accept_language": "en-US,en;q=0.9",
+          "composite_server_id": "9d73387e58fad7e6bed1157ce5de8563"
+        },
+        "platform": "desktop",
+        "os_family": "Linux",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+        "fingerprint": "heORv5s26Ljg7zJNnFuJvg",
+        "browser_family": "Chrome",
+        "composite_hash": "JJeUspChiRksZgjz6c9S-w",
+        "accept_language": "en-US,en;q=0.9",
+        "network_context": {
+          "isp": "Google LLC",
+          "ip_city": "The Dalles",
+          "ip_state": "Oregon",
+          "latitude": 45.59455871582031,
+          "longitude": -121.17868041992188,
+          "time_zone": "America/Los_Angeles",
+          "asn_number": 396982,
+          "ip_address": "34.83.210.9",
+          "ip_country": "United States",
+          "organization": "Google LLC",
+          "is_vpn_or_tor": false,
+          "is_data_center": true,
+          "ip_country_code": "US",
+          "asn_organization": "Google LLC",
+          "time_zone_offset": "-0700"
+        },
+        "persistent_device_id": "heORv5s26Ljg7zJNnFuJvg"
+      },
+      "external_party_snapshot": null
+    }
+  ],
+  "payment_methods": [],
+  "documents": [],
+  "activities": [
+    {
+      "uuid": "c051ca14-9a10-400a-965c-037667559360",
+      "activity_type": "TRANSACTION_CREATED",
+      "source": "TRANSACTION",
+      "status": "APPROVED",
+      "title": "seller_signup",
+      "description": null,
+      "metadata": {
+        "amount": "0E-18",
+        "currency": "EUR",
+        "direction": "INBOUND",
+        "action_type": "seller_signup"
+      },
+      "occurred_at": "2026-10-13T21:49:22.480818Z"
+    }
+  ],
+  "alerts": [],
+  "rule_runs": [],
+  "provider_results": [],
+  "travel_rule": null,
+  "network_snapshot": null,
+  "remediation": null,
+  "action_required": null,
+  "cost_breakdown": {
+    "total_price": 0.02,
+    "items": [
+      {
+        "usage_type": "transaction_monitoring",
+        "price": 0.02,
+        "details": {
+          "product": "transactions"
+        },
+        "created_at": "2026-10-13T21:49:22.625455Z"
+      }
+    ]
+  }
+}
