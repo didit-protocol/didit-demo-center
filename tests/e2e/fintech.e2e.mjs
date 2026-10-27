@@ -428,6 +428,7 @@ test("option groups take one Tab stop and move with the arrow keys", async () =>
         scheme,
       colorScheme,
     );
+    await chosen.waitFor();
     assert.deepEqual(
       await theme
         .getByRole("radio")
