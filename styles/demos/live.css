@@ -335,3 +335,5 @@
   .dx-steps { display: none; }
   .dx-steps-phone { display: block; }
 }
+.co-card { max-width: var(--co-max, none); white-space: normal; }
+.co-card b { overflow-wrap: anywhere; }

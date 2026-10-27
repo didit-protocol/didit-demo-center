@@ -39,11 +39,23 @@ function place(
 
   if (rect.width === 0 && rect.height === 0) return null;
   const midY = rect.top - box.top + rect.height / 2;
+  const reach = 9 + (spec.line ?? 40) + 16;
+  // The card wraps rather than run off the screen.
+  const room = (space: number) =>
+    ({ "--co-max": `${Math.max(160, space - reach)}px` }) as React.CSSProperties;
 
   if (spec.side === "right")
-    return { left: rect.right - box.left - 9, top: midY };
+    return {
+      left: rect.right - box.left - 9,
+      top: midY,
+      ...room(box.right - rect.right),
+    };
   if (spec.side === "left")
-    return { right: box.right - rect.left - 9, top: midY };
+    return {
+      right: box.right - rect.left - 9,
+      top: midY,
+      ...room(rect.left - box.left),
+    };
 
   return { left: rect.left - box.left + 24, top: rect.bottom - box.top };
 }
