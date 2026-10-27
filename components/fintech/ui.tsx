@@ -235,7 +235,7 @@ export function Field({
   id: string;
   label: string;
   error?: string | null;
-  children: React.ReactElement;
+  children: React.ReactElement<React.InputHTMLAttributes<HTMLElement>>;
 }) {
   return (
     <div className="flex flex-col gap-1.5">
