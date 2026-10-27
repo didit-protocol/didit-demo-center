@@ -43,7 +43,11 @@ const action = (page: Page, name: string) =>
     .filter({ visible: true })
     .first();
 
-async function deposit(page: Page, network: "Bitcoin" | "Ethereum", amount: string) {
+async function deposit(
+  page: Page,
+  network: "Bitcoin" | "Ethereum",
+  amount: string,
+) {
   await action(page, "Deposit").click();
   const dialog = page.getByRole("dialog", { name: /^Deposit/ });
 
@@ -89,14 +93,19 @@ test("sign-up, signals from the first load, and the KYC before the first deposit
   ).toBeVisible();
   expect(
     mock.requests.some(
-      (request) => request.method === "POST" && request.url.endsWith("/account"),
+      (request) =>
+        request.method === "POST" && request.url.endsWith("/account"),
     ),
   ).toBe(true);
   await completeHostedFlow(page);
-  await expect(page.getByText("Verify your identity to deposit.")).toHaveCount(0);
+  await expect(page.getByText("Verify your identity to deposit.")).toHaveCount(
+    0,
+  );
   await openFeed(page);
   await expect(live(page).getByText("KYC and AML approved")).toBeVisible();
-  await expect(live(page).getByText("Passport · Portugal · no matches")).toBeVisible();
+  await expect(
+    live(page).getByText("Passport · Portugal · no matches"),
+  ).toBeVisible();
 });
 
 test("an account in review cannot deposit yet", async ({ page }) => {
@@ -107,7 +116,11 @@ test("an account in review cannot deposit yet", async ({ page }) => {
     page.getByText("Your verification is in review.").filter({ visible: true }),
   ).toBeVisible();
   await action(page, "Deposit").click();
-  await expect(page.getByRole("status").filter({ hasText: "Deposits open once it is approved" })).toBeVisible();
+  await expect(
+    page
+      .getByRole("status")
+      .filter({ hasText: "Deposits open once it is approved" }),
+  ).toBeVisible();
   await expect(page.getByRole("dialog", { name: /^Deposit/ })).toHaveCount(0);
 });
 
@@ -119,7 +132,10 @@ test("a deposit is screened by the sending wallet before it is credited", async 
   await page.goto("/crypto-exchange");
   await deposit(page, "Bitcoin", "0.25");
 
-  const row = app(page).getByTestId("kestrel-activity-row").filter({ visible: true }).first();
+  const row = app(page)
+    .getByTestId("kestrel-activity-row")
+    .filter({ visible: true })
+    .first();
 
   await expect(row).toContainText("Deposit · 0.25 BTC");
   await expect(row).toContainText("Screened");
@@ -132,7 +148,11 @@ test("a deposit is screened by the sending wallet before it is credited", async 
   };
 
   // From the browser, with the sending wallet for Didit to screen.
-  expect(posted.info).toMatchObject({ currency: "BTC", direction: "in", amount: "0.25" });
+  expect(posted.info).toMatchObject({
+    currency: "BTC",
+    direction: "in",
+    amount: "0.25",
+  });
   expect(posted.props).toMatchObject({
     demo_app: "crypto-exchange",
     deposit_source: "own-wallet",
@@ -173,7 +193,11 @@ test("a Travel Rule withdrawal asks for the wallet proof, then a selfie, then it
   }
   const posted = mock.requests.filter((request) =>
     request.url.endsWith("/v1/transactions/"),
-  )[1]?.body as { type: string; info: { currency: string }; props: Record<string, string> };
+  )[1]?.body as {
+    type: string;
+    info: { currency: string };
+    props: Record<string, string>;
+  };
 
   expect(posted.type).toBe("travelRule");
   expect(posted.info.currency).toBe("BTC");
@@ -185,7 +209,9 @@ test("a Travel Rule withdrawal asks for the wallet proof, then a selfie, then it
   await dialog.getByRole("button", { name: "Take a selfie" }).click();
   await completeHostedFlow(page);
   await expect(dialog.getByRole("status")).toContainText("Sent.");
-  await expect(dialog.getByRole("status")).toContainText("0.8 BTC is on its way");
+  await expect(dialog.getByRole("status")).toContainText(
+    "0.8 BTC is on its way",
+  );
   await dialog.getByRole("button", { name: "Close" }).click();
   await openFeed(page);
   await expect(live(page).getByText("Withdrawal sent")).toBeVisible();
@@ -210,9 +236,13 @@ test("a withdrawal to a sanctioned wallet is declined, and the console view show
 
   await expect(declined).toContainText("We can’t send to this address");
   await expect(declined).toContainText("linked to a sanctioned service");
-  await expect(declined).toContainText("Your 1.5 ETH stays in your Kestrel account");
+  await expect(declined).toContainText(
+    "Your 1.5 ETH stays in your Kestrel account",
+  );
   // Never asked to prove a wallet it already refused.
-  await expect(dialog.getByRole("button", { name: "Sign the message" })).toHaveCount(0);
+  await expect(
+    dialog.getByRole("button", { name: "Sign the message" }),
+  ).toHaveCount(0);
   if (!isPhone(page)) {
     await expect(page.getByTestId("callout-declined")).toContainText(
       "Wallet risk 95 · sanctions",
@@ -228,10 +258,9 @@ test("a withdrawal to a sanctioned wallet is declined, and the console view show
   await goToStep(page, "Console");
   const consoleView = page.getByTestId("console-view");
 
-  await expect(consoleView.getByRole("tab", { name: "Transaction" })).toHaveAttribute(
-    "aria-selected",
-    "true",
-  );
+  await expect(
+    consoleView.getByRole("tab", { name: "Transaction" }),
+  ).toHaveAttribute("aria-selected", "true");
   await expect(consoleView).toContainText("1.5 ETH");
   await expect(consoleView).toContainText("95 / 100");
   await expect(consoleView).toContainText("Sanctioned wallet");

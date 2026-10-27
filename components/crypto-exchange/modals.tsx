@@ -449,11 +449,13 @@ export function WithdrawModal({
             </button>
           </>
         )}
-        <span className="ks-secured">
-          <DiditRing />
-          {result ? "Step-up secured by" : "Withdrawals checked by"}{" "}
-          <b>Didit</b>
-        </span>
+        {result && withdrawalStage(result.view) === "blocked" ? null : (
+          <span className="ks-secured">
+            <DiditRing />
+            {result ? "Step-up secured by" : "Withdrawals checked by"}{" "}
+            <b>Didit</b>
+          </span>
+        )}
       </form>
     </Layer>
   );

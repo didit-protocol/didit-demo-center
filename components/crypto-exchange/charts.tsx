@@ -41,6 +41,7 @@ export function Sparkline({
         stroke={change >= 0 ? UP : DOWN}
         strokeLinejoin="round"
         strokeWidth="1.6"
+        vectorEffect="non-scaling-stroke"
       />
     </svg>
   );
