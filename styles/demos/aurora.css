@@ -215,3 +215,5 @@
   .ap-offer-x { padding: 20px; }
   .ap-socs { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 }
+/* keep modals clear of the live feed, as on the boards */
+@media (min-width: 1200px) { .ap-layer { padding-right: 260px; } }

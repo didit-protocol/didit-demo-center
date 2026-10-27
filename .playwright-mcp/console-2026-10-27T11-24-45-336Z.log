@@ -42,3 +42,7 @@ It can also happen if the client has a browser extension installed which messes 
                 ...
     ...
  @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/next-devtools/userspace/app/errors/intercept-console-error.js:56
+[   17076ms] [LOG] [Fast Refresh] rebuilding @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/hot-reloader/app/hot-reloader-app.js:196
+[   17659ms] [LOG] [Fast Refresh] done in 583ms @ webpack-internal:///(app-pages-browser)/./node_modules/next/dist/client/dev/report-hmr-latency.js:13
+[   17730ms] [ERROR] Failed to load resource: the server responded with a status of 403 () @ https://demo-application-3785d422ab08bf8b46a42c9d13540030.auth.staging.didit.me/sign-in/?language=en&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fcallback&state=X13h_dkKyjbTuiNPvFFq1Xh1A_TBQRt9yMpIVLiWyAE&code_challenge=ATR86AFYCdYh_AGOSj8_LFtfrg6qIOYotPlhjGQuv2g&code_challenge_method=S256:0
+[   18309ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://demo-application-3785d422ab08bf8b46a42c9d13540030.auth.staging.didit.me/favicon.ico:0
