@@ -24,7 +24,7 @@ const CALLBACK = new URL("/igaming", siteConfig.url).toString();
  * the Didit user carries it without the demo ever emailing anyone.
  */
 export async function POST(request: NextRequest) {
-  const playerId = readPlayer(request);
+  const playerId = await readPlayer(request);
 
   if (!playerId) return noPlayer();
 

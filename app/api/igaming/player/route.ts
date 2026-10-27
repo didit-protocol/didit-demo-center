@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 /** The current demo player, if this browser has one. */
 export async function GET(request: NextRequest) {
-  return noStore({ playerId: readPlayer(request) });
+  return noStore({ playerId: await readPlayer(request) });
 }
 
 /**

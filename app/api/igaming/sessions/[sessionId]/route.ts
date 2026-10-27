@@ -17,7 +17,7 @@ export async function GET(
   context: { params: Promise<{ sessionId: string }> },
 ) {
   const params = await context.params;
-  const playerId = readPlayer(request);
+  const playerId = await readPlayer(request);
 
   if (!playerId) return noPlayer();
   if (!UUID.test(params.sessionId)) {

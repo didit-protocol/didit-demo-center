@@ -70,7 +70,7 @@ export function licensedMarket(
 export function isPlayerId(value: unknown): value is string {
   return (
     typeof value === "string" &&
-    new RegExp(`^${PLAYER_PREFIX}[a-f0-9]{24}$`).test(value)
+    new RegExp(`^${PLAYER_PREFIX}[A-Za-z0-9_-]{6,80}$`).test(value)
   );
 }
 

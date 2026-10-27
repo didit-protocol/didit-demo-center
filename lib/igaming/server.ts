@@ -4,7 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { PLAYER_COOKIE, verifyPlayer } from "./player";
 
+import { PLAYER_PREFIX } from "./policy";
+
 import { siteConfig } from "@/config/site";
+import { authEnabled, visitorVendorData } from "@/lib/didit/auth";
 import { apiKey as sharedApiKey } from "@/lib/didit/config";
 import { type DiditCall, callDidit, consoleIds } from "@/lib/didit/server";
 
@@ -55,8 +58,14 @@ export function noStore(data: unknown, init?: ResponseInit) {
   });
 }
 
-/** The visitor's player id, or null when the cookie is missing or forged. */
-export function readPlayer(request: NextRequest): string | null {
+/**
+ * The visitor's player id: with Didit Authentication on, the signed-in Didit
+ * user as `vendor_data`; otherwise the signed player cookie. Null when there
+ * is neither, or the cookie is forged.
+ */
+export async function readPlayer(request: NextRequest): Promise<string | null> {
+  if (authEnabled()) return visitorVendorData(PLAYER_PREFIX);
+
   return verifyPlayer(request.cookies.get(PLAYER_COOKIE)?.value, apiKey());
 }
 

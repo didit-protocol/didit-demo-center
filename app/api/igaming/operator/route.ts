@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
  * links, and this player's Didit user record (status, internal id).
  */
 export async function GET(request: NextRequest) {
-  const playerId = readPlayer(request);
+  const playerId = await readPlayer(request);
 
   if (!playerId) return noPlayer();
 
