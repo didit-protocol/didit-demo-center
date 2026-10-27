@@ -89,14 +89,14 @@ const fail = (status: number, error: string, code?: string): Reply => ({
 /* ── Availability ────────────────────────────────────────────────── */
 
 export interface Availability {
-  /** Orders, payouts and sign-ups: staging plus an API key. */
+  /** Orders, payouts and sign-ups: an API key. */
   transactions: boolean;
   /** Seller KYB: additionally the KYB workflow id. */
   kyb: boolean;
 }
 
 export function availability(env: MarketEnv): Availability {
-  const transactions = env.isStaging && Boolean(env.apiKey);
+  const transactions = Boolean(env.apiKey);
 
   return { transactions, kyb: transactions && Boolean(env.workflows.kyb) };
 }
@@ -107,8 +107,8 @@ function notLive(env: MarketEnv): Reply | null {
   return {
     status: 503,
     body: {
-      error: `The marketplace demo runs on staging, against the demo organization: ${STAGING_DEMO_URL}`,
-      code: "staging_only",
+      error: `The marketplace demo has no Didit API key on this server. Try it on ${STAGING_DEMO_URL}`,
+      code: "not_configured",
     },
   };
 }
