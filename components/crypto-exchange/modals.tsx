@@ -149,20 +149,22 @@ function NetworkField({
 /* ── Deposit ─────────────────────────────────────────────────────────── */
 
 export function DepositModal({
+  initialAsset = "BTC",
   wallets,
   busy,
   error,
   onDeposit,
   onClose,
 }: {
+  initialAsset?: Asset;
   wallets: CxWallets;
   busy: boolean;
   error: string | null;
   onDeposit(input: { asset: Asset; amount: string; source: DepositSource }): void;
   onClose(): void;
 }) {
-  const [asset, setAsset] = React.useState<Asset>("BTC");
-  const [amount, setAmount] = React.useState("0.25");
+  const [asset, setAsset] = React.useState<Asset>(initialAsset);
+  const [amount, setAmount] = React.useState(initialAsset === "BTC" ? "0.25" : "1.5");
   const [source, setSource] = React.useState<DepositSource>("own-wallet");
   const [problem, setProblem] = React.useState<string | null>(null);
   const from = source === "own-wallet" ? wallets[asset] : SANCTIONED_WALLET;
