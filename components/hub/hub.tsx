@@ -300,7 +300,7 @@ export function Hub() {
                   </span>
                   <span>
                     <small>Signals</small>
-                    <b>Same device, second account</b>
+                    <b>Same device, 2 accounts</b>
                   </span>
                 </span>
               </span>
