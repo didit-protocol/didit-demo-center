@@ -1,0 +1,501 @@
+{
+  "translation_v1": {
+    "chrome": {
+      "header": {
+        "developers": {
+          "primary": {
+            "mcpServer": "MCP Server",
+            "quickstart": "Panduan Cepat",
+            "docs": "Dokumentasi",
+            "apiReference": "Referensi API"
+          },
+          "quickstartCard": {
+            "description": "Integrasikan Didit dalam 5 menit. Dapatkan sandbox key, POST sesi pertamamu, verifikasi webhook, panduan lengkap dengan curl.",
+            "cta": "Baca panduan cepat",
+            "eyebrow": "INTEGRASI DALAM 5 MENIT"
+          },
+          "buildLinks": {
+            "heading": "Bangun",
+            "sessionsApi": "Sessions API",
+            "webhooks": "Webhooks",
+            "sdks": "SDKs",
+            "openApi": "OpenAPI / Postman",
+            "agentSkills": "Agent Skills",
+            "codingAgentIntegration": "Integrasi Coding Agent"
+          },
+          "ship": {
+            "integrationPrompt": "Prompt integrasi",
+            "heading": "Rilis",
+            "sandbox": "Sandbox",
+            "changelog": "Changelog",
+            "status": "Status Layanan"
+          },
+          "viewAll": "Developer hub"
+        },
+        "resources": {
+          "hero": {
+            "blog": "Blog",
+            "successStories": "Kisah Sukses",
+            "helpCenter": "Pusat Bantuan",
+            "demoCenter": "Pusat Demo",
+            "roiCalculator": "Kalkulator ROI",
+            "academy": "Academy"
+          },
+          "foundersCard": {
+            "title": "Kenalan dengan para founder",
+            "description": "Alejandro dan Alberto Rosas, saudara kembar dari Barcelona yang membangun infrastruktur untuk identitas dan fraud.",
+            "cta": "Baca tentang Didit"
+          },
+          "read": {
+            "heading": "Baca & jelajahi"
+          },
+          "company": {
+            "heading": "Perusahaan",
+            "about": "Tentang kami",
+            "careers": "Karier",
+            "securityCompliance": "Keamanan & Kepatuhan",
+            "contact": "Kontak"
+          },
+          "viewAll": "Semua sumber daya"
+        },
+        "ctas": {
+          "signIn": "Masuk",
+          "signUp": "Daftar",
+          "startFree": "Mulai gratis",
+          "talkToUs": "Hubungi kami",
+          "learnMore": "Pelajari lebih lanjut"
+        },
+        "localeSwitcherLabel": "Bahasa",
+        "solutions": {
+          "cards": {
+            "monitoring": {
+              "title": "Pemantauan",
+              "description": "AML berkelanjutan, aturan transaksi, KYT wallet"
+            },
+            "amlCompliance": {
+              "title": "AML & Kepatuhan",
+              "description": "Sanksi, PEP, media negatif, berkelanjutan"
+            },
+            "onboardCustomer": {
+              "title": "Verifikasi Pengguna (KYC)",
+              "description": "KYC gratis hingga 500 verifikasi per bulan, selamanya. ID, liveness, dan pencocokan wajah dalam satu paket.",
+              "iconLabel": "Verifikasi Pengguna (KYC)"
+            },
+            "verifyBusiness": {
+              "title": "Verifikasi Bisnis (KYB)",
+              "description": "Registri, pemilik manfaat, pejabat, dan AML entitas. Setiap UBO langsung mendapatkan sesi KYC terhubung."
+            },
+            "stopFraud": {
+              "title": "Pemantauan Transaksi",
+              "description": "Rule engine real-time untuk fiat dan kripto. Manajemen kasus, alur kerja SAR, dan remediasi otomatis ke KYC yang terhubung.",
+              "iconLabel": "Hentikan penipuan"
+            },
+            "complyAml": {
+              "title": "Patuhi AML",
+              "description": "Saring terhadap 1.300+ daftar sanksi, PEP, dan media negatif. Pemantauan berkelanjutan harian seharga $0.07 per pengguna/tahun.",
+              "iconLabel": "Patuhi AML"
+            },
+            "authentication": {
+              "title": "Autentikasi",
+              "description": "Liveness, autentikasi biometrik, IP dan perangkat"
+            },
+            "verification": {
+              "title": "Verifikasi",
+              "description": "KYC, KYB, dokumen, dan pemeriksaan registri"
+            }
+          },
+          "byUseCase": {
+            "heading": "Kasus penggunaan",
+            "fullKycOnboarding": "Onboarding KYC lengkap",
+            "ageVerification": "Verifikasi usia",
+            "cryptoOnramp": "KYC + KYT on-ramp kripto",
+            "accountTakeover": "Hentikan pengambilalihan akun",
+            "multiAccountAbuse": "Blokir penyalahgunaan multi-akun",
+            "proofOfHuman": "Verifikasi identitas manusia",
+            "gigWorker": "Orientasi pekerja lepas",
+            "botDetection": "Blokir bot",
+            "passwordRecovery": "Pemulihan kata sandi",
+            "seeAll": "Semua kasus penggunaan"
+          },
+          "byIndustry": {
+            "heading": "Berdasarkan industri",
+            "fintech": "Fintech",
+            "crypto": "Kripto",
+            "marketplaces": "Marketplace",
+            "mobility": "Mobilitas",
+            "seeAll": "Lihat semua industri",
+            "fintechDesc": "Neobank · pembayaran · pinjaman · broker",
+            "cryptoDesc": "Bursa · dompet · on/off-ramp · VASP",
+            "marketplacesDesc": "Gig · pengiriman · kreator · e-commerce",
+            "mobilityDesc": "Ride-hail · armada · pengiriman last-mile",
+            "igaming": "iGaming",
+            "igamingDesc": "Sportsbook · kasino · lotre · fantasy sports"
+          },
+          "byModule": {
+            "heading": "Berdasarkan modul",
+            "freeKyc": "KYC Gratis",
+            "governmentChecks": "Pemeriksaan Pemerintah",
+            "biometricAuthentication": "Autentikasi Biometrik",
+            "walletScreening": "Penyaringan Dompet (KYT)",
+            "ageEstimation": "Estimasi Usia",
+            "ipAnalysis": "Analisis Perangkat & IP",
+            "idVerification": "Verifikasi ID",
+            "whiteLabel": "White Label",
+            "liveness": "Liveness",
+            "faceMatch": "Pencocokan Wajah",
+            "seeAll": "Semua 25+ modul"
+          },
+          "viewAll": "Jelajahi katalog lengkap"
+        },
+        "nav": {
+          "products": "Produk",
+          "pricing": "Harga",
+          "image": {
+            "alt": {
+              "didit": "Didit"
+            }
+          },
+          "solutions": {
+            "cards": {
+              "verifyBusiness": {
+                "iconLabel": "Verifikasi Bisnis (KYB)"
+              }
+            }
+          },
+          "developers": {
+            "primary": {
+              "terminal": {
+                "readyOpenDashboard": "→ siap dalam 5 menit · buka dashboard",
+                "integrateDidit": "> integrasikan verifikasi Didit",
+                "sessionScaffolded": "✓ /v3/session/ sudah di-scaffold",
+                "readingMcp": "↻ membaca mcp://didit.me",
+                "webhookReady": "✓ webhook handler siap",
+                "mcpConnected": "✓ MCP server terhubung",
+                "claude": "$ claude"
+              },
+              "quickstartIconLabel": "Quickstart"
+            }
+          },
+          "resources": {
+            "foundersCard": {
+              "imageAlt": "Alejandro Rosas (kiri) dan Alberto Rosas (kanan), co-founder Didit",
+              "iconLabel": "Tentang Didit"
+            }
+          },
+          "labels": {
+            "solutions": "Solusi",
+            "developers": "Developer",
+            "resources": "Sumber Daya",
+            "pricing": "Harga"
+          }
+        },
+        "products": {
+          "cards": {
+            "userVerification": {
+              "title": "Verifikasi Pengguna",
+              "description": "Paket KYC · $0.33"
+            },
+            "businessVerification": {
+              "title": "Verifikasi Bisnis",
+              "description": "KYB · mulai dari $2.00"
+            },
+            "transactionMonitoring": {
+              "title": "Pemantauan Transaksi",
+              "description": "Aturan real-time · $0.02/tx"
+            },
+            "walletScreening": {
+              "title": "Penyaringan Wallet (KYT)",
+              "description": "Risiko wallet on-chain · $0.15"
+            }
+          },
+          "modules": {
+            "headingDocuments": "Dokumen & Kontak",
+            "headingBiometrics": "Biometrik & Risiko",
+            "idVerification": "Verifikasi ID",
+            "nfcVerification": "Verifikasi NFC",
+            "proofOfAddress": "Bukti Alamat",
+            "databaseValidation": "Validasi Database",
+            "questionnaires": "Kuesioner Kustom",
+            "emailVerification": "Verifikasi Email",
+            "phoneVerification": "Verifikasi Telepon",
+            "liveness": "Liveness",
+            "faceMatch": "Pencocokan Wajah 1:1",
+            "faceSearch": "Pencarian Wajah 1:N",
+            "biometricAuth": "Autentikasi Biometrik",
+            "ageEstimation": "Estimasi Usia",
+            "ipAnalysis": "Analisis Perangkat & IP",
+            "walletScreening": "Penyaringan Wallet (KYT)",
+            "seeAll": "Lihat semua 25+ modul"
+          },
+          "viewAll": "Jelajahi semua produk"
+        }
+      },
+      "announcementBar": {
+        "slot1": {
+          "text": "Didit Raih <amt>$7,5 Juta</amt> untuk Membangun Infrastruktur Identitas dan Fraud",
+          "ctaLabel": "Baca pengumumannya",
+          "href": "/blog/didit-7-5m-seed-infrastructure-identity-fraud-id/"
+        },
+        "slot2": {
+          "text": "Regulator keuangan Spanyol mengakui Didit lebih aman dari verifikasi tatap muka.",
+          "ctaLabel": "Baca laporannya",
+          "href": "/security-compliance#regulator"
+        },
+        "slot3": {
+          "text": "Penyaringan wallet $0.15 per pemeriksaan, atau pakai penyedia screening-mu sendiri.",
+          "ctaLabel": "Lihat penyaringan wallet",
+          "href": "/products/wallet-screening"
+        },
+        "slot4": {
+          "text": "Harga KYB dan Transaction Monitoring sudah tersedia.",
+          "ctaLabel": "Lihat harga",
+          "href": "/pricing"
+        },
+        "slot5": {
+          "text": "$0.33 untuk KYC lengkap. Gratis 500 setiap bulan.",
+          "ctaLabel": "Mulai gratis",
+          "href": "https://business.didit.me"
+        }
+      },
+      "footer": {
+        "askAi": {
+          "eyebrow": "Minta AI untuk merangkum halaman ini",
+          "openIn": "Buka halaman ini di {provider}"
+        },
+        "cols": {
+          "solutions": {
+            "seeAll": "Semua kasus penggunaan",
+            "heading": "Solusi",
+            "fullKycOnboarding": "Onboarding KYC lengkap",
+            "ageVerification": "Verifikasi usia",
+            "cryptoOnramp": "KYC + KYT untuk Crypto on-ramp",
+            "accountTakeover": "Hentikan pengambilalihan akun",
+            "multiAccountAbuse": "Blokir penyalahgunaan multi-akun",
+            "proofOfHuman": "Bukti manusia",
+            "botDetection": "Blokir bot",
+            "gigWorkerVerification": "Verifikasi pekerja lepas",
+            "igamingResponsibleGaming": "iGaming yang bertanggung jawab",
+            "micaCrypto": "Verifikasi pengguna crypto MiCA",
+            "cryptoTravelRule": "Aturan Perjalanan Crypto",
+            "uboVerification": "Verifikasi UBO (6AMLD)",
+            "bnplUnderwriting": "Penjaminan BNPL",
+            "psd3Sca": "SCA PSD3",
+            "marketplaceSellerKyb": "KYB penjual Marketplace",
+            "employeeOnboarding": "Onboarding karyawan",
+            "nfcEpassport": "Onboarding e-Paspor NFC",
+            "passwordRecovery": "Pemulihan kata sandi"
+          },
+          "industries": {
+            "heading": "Industri",
+            "fintech": "Fintech",
+            "crypto": "Crypto / Web3",
+            "marketplaces": "Marketplace",
+            "mobility": "Mobilitas",
+            "gambling": "iGaming / Perjudian",
+            "banking": "Perbankan",
+            "insurance": "Asuransi",
+            "ecommerce": "E-commerce",
+            "telecom": "Telekomunikasi",
+            "seeAll": "Semua industri"
+          },
+          "developers": {
+            "heading": "Developer",
+            "documentation": "Dokumentasi",
+            "apiReference": "Referensi API",
+            "quickstart": "Quickstart, 5 menit",
+            "integrationPrompt": "Prompt Integrasi",
+            "mcp": "MCP Server",
+            "agentSkills": "Agent Skills",
+            "sdks": "SDK",
+            "sandbox": "Sandbox (gratis)",
+            "changelog": "Changelog",
+            "status": "Status Layanan",
+            "demoCenter": "Pusat Demo"
+          },
+          "comparePricing": {
+            "heading": "Harga & Perbandingan",
+            "pricing": "Harga",
+            "roiCalculator": "Kalkulator ROI",
+            "sumsub": "vs Sumsub",
+            "veriff": "vs Veriff",
+            "onfido": "vs Onfido",
+            "jumio": "vs Jumio",
+            "persona": "vs Persona",
+            "stripeIdentity": "vs Stripe Identity",
+            "allSwitch": "Semua perbandingan kompetitor",
+            "countries": "Negara yang didukung",
+            "supportedDocuments": "Dokumen yang didukung"
+          },
+          "resources": {
+            "heading": "Sumber Daya",
+            "securityCompliance": "Keamanan & Kepatuhan",
+            "supportedDocuments": "Dokumen yang Didukung",
+            "roiCalculator": "Kalkulator ROI",
+            "status": "Status Layanan",
+            "demoCenter": "Pusat Demo"
+          },
+          "products": {
+            "heading": "Produk",
+            "userVerification": "Verifikasi Pengguna (KYC)",
+            "businessVerification": "Verifikasi Bisnis (KYB)",
+            "transactionMonitoring": "Pemantauan Transaksi",
+            "walletScreening": "Penyaringan Wallet (KYT)",
+            "amlScreening": "Penyaringan AML",
+            "idVerification": "Verifikasi ID",
+            "liveness": "Liveness",
+            "faceMatch1to1": "Face Match 1:1",
+            "faceSearch1toN": "Pencarian Wajah 1:N",
+            "biometricAuth": "Autentikasi Biometrik",
+            "ageEstimation": "Estimasi Usia",
+            "nfcReading": "Pembacaan NFC",
+            "databaseValidation": "Validasi Database",
+            "ipAnalysis": "Analisis Perangkat & IP",
+            "emailVerification": "Verifikasi Email",
+            "phoneVerification": "Verifikasi Telepon",
+            "workflowOrchestrator": "Orkestrator Alur Kerja",
+            "whiteLabel": "White Label",
+            "seeAllModules": "Semua produk"
+          },
+          "company": {
+            "heading": "Perusahaan",
+            "about": "Tentang kami",
+            "blog": "Blog",
+            "successStories": "Kisah Sukses",
+            "securityCompliance": "Keamanan & Kepatuhan",
+            "contact": "Kontak",
+            "getDemo": "Dapatkan demo",
+            "careers": "Karier",
+            "brand": "Brand kit",
+            "support": "Dukungan",
+            "helpCenter": "Pusat Bantuan"
+          },
+          "backedby": {
+            "investors": {
+              "name": {
+                "yCombinator": "Y Combinator"
+              }
+            }
+          }
+        },
+        "tagline": "Satu API untuk identitas dan fraud.",
+        "trustStrip": "SOC 2 · ISO 27001 · iBeta PAD L1 · GDPR · eIDAS 2.0 · MiCA · AMLD6 · DORA-aligned",
+        "regulatorMicroline": "Diakui oleh Tesoro, Banco de España, dan SEPBLAC Spanyol sebagai lebih aman daripada verifikasi langsung.",
+        "regulatorReadReport": "Baca laporannya",
+        "backedBy": "Didukung oleh",
+        "hq": "San Francisco, USA · Kantor Pusat",
+        "legal": {
+          "copyright": "© 2026 Didit",
+          "privacy": "Privasi",
+          "cookies": "Cookie",
+          "businessTerms": "Ketentuan Bisnis",
+          "subProcessors": "Sub-prosesor",
+          "contact": "Kontak"
+        },
+        "social": {
+          "labels": {
+            "linkedin": "LinkedIn",
+            "x": "X (Twitter)",
+            "github": "GitHub"
+          },
+          "ariaLabel": "Didit di {network}"
+        },
+        "g2Aria": "Didit mendapat rating 4,9 dari 5 di G2",
+        "g2Tagline": "Infrastruktur untuk identitas dan fraud"
+      }
+    },
+    "localeswitcher": {
+      "language": "Bahasa",
+      "ariaLabel": {
+        "language": "Bahasa",
+        "languageColumn1": "Bahasa (kolom 1)",
+        "languageColumn2": "Bahasa (kolom 2)",
+        "changeLanguage": "Ganti bahasa. Bahasa saat ini: {current}."
+      }
+    },
+    "ui": {
+      "navbar": {
+        "image": {
+          "sizes": {
+            "minWidth1024px480px": "(min-width: 1024px) 480px, 100vw"
+          },
+          "alt": {
+            "didit": "Didit"
+          }
+        },
+        "dropdownPanel": {
+          "subtleDarkening": {
+            "description": "Penggelapan halus hanya di bagian bawah, cukup untuk\n                        menjangkarkan teks tanpa meredupkan bagian atas\n                        foto. h-[55%] dimulai jauh\n                        di bawah wajah para pendiri."
+          },
+          "accentVariant": {
+            "description": "Varian aksen, bungkus tautan dalam \"pill\" Didit Biru agar\n            // terbaca sebagai call-out konversi tinggi."
+          },
+          "heroStrip": {
+            "heading": "Hero strip, kartu gradien dalam satu baris horizontal."
+          },
+          "linkColumnsRow": {
+            "heading": "Baris kolom tautan, Modul · Kasus penggunaan · Industri."
+          },
+          "imageBackgroundVariant": {
+            "description": "Varian latar belakang gambar, digunakan untuk kartu \"Meet the founders\" di menu Sumber Daya.\n                  // Next/Image mengisi kartu; blok teks bertumpuk rata kiri\n                  // (judul + deskripsi + CTA) berada di sudut kiri bawah\n                  // sehingga foto mendominasi sekitar 80% kartu. Tanpa overlay gradien gelap, keterbacaan teks\n                  // didukung oleh text-shadow yang rapat pada\n                  // tipe canvas-white. Menurut Alberto: \"hapus\n                  // opasitas di bawah dan buat seperti sebelumnya di\n                  // rata kiri, pastikan saja dimulai lebih ke\n                  // bawah seperti sebelumnya.\""
+          },
+          "titleRow": {
+            "description": "Baris judul, ikon sejajar KIRI dari judul (tanpa chip\n                    latar belakang, tanpa cincin, tanpa bayangan). Menggunakan keluarga ikon yang sama\n                    dengan yang digunakan `/pricing` melalui ConsoleModuleIcon (yang\n                    mencerminkan registri ikon fitur alur kerja aplikasi konsol);\n                    kembali ke mask iconSrc saat `moduleKey` tidak ada."
+          },
+          "accentSideColumn": {
+            "description": "`accent` pada tautan kolom samping membuatnya tampil dalam warna Didit\n                  // Biru dengan panah di belakang, digunakan untuk \"Lihat semua 25+\n                  // modul\", \"Semua 15 industri\", \"Jelajahi semua …\" agar\n                  // terbaca sebagai CTA untuk eksplorasi lebih lanjut\n                  // daripada tautan modul biasa."
+          }
+        },
+        "searchDidit": "Cari Didit",
+        "closeSearch": "Tutup pencarian",
+        "openMenu": "Buka menu",
+        "closeMenu": "Tutup menu"
+      },
+      "topBar": {
+        "announcementAriaLabel": "Pengumuman",
+        "dismissAnnouncementAriaLabel": "Tutup pengumuman"
+      },
+      "navTerminalCard": {
+        "diditZsh": "~/didit · zsh",
+        "navTerminalCard": {
+          "live": "LIVE"
+        }
+      },
+      "logoContextMenu": {
+        "aria": "Aset merek Didit",
+        "eyebrow": "Kit merek",
+        "copyLogo": "Salin logo sebagai SVG",
+        "copied": "Disalin",
+        "downloadSvg": "Unduh logo (SVG)",
+        "downloadPng": "Unduh logo (PNG)",
+        "downloadMark": "Unduh simbol (SVG)",
+        "copyColor": "Salin warna merek",
+        "guidelines": "Pedoman merek"
+      },
+      "footer": {
+        "legalTagline": "Infrastruktur identitas untuk tim yang butuh kepercayaan."
+      },
+      "backedBy": {
+        "label": "Didukung oleh"
+      }
+    },
+    "blog": {
+      "archive": {
+        "eyebrow": "Arsip blog",
+        "title": "Jelajahi semua <blue>artikel Didit</blue>.",
+        "titleAccent": "artikel Didit",
+        "description": "Semua artikel tentang identitas dan penipuan yang telah terbit, disusun dalam halaman ringan agar cepat dijelajahi.",
+        "browseAll": "Jelajahi semua artikel",
+        "navigationAria": "Halaman arsip blog",
+        "pageOf": "Halaman {page} dari {total}",
+        "range": "Artikel {start}–{end}",
+        "articleCount": "{count} artikel",
+        "metadata": {
+          "title": "Arsip blog | Didit",
+          "pageTitle": "Arsip blog, halaman {page} | Didit",
+          "description": "Temukan arsip lengkap blog Didit berisi artikel praktis tentang verifikasi identitas, pencegahan fraud, kepatuhan, pembaruan produk, dan berita perusahaan.",
+          "pageDescription": "Lihat halaman {page} arsip blog Didit untuk artikel tentang verifikasi identitas, pencegahan fraud, kepatuhan, pembaruan produk, dan berita perusahaan."
+        }
+      }
+    }
+  }
+}
