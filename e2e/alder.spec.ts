@@ -15,9 +15,12 @@ const app = (page: Page) => page.getByTestId("alder-app");
 const live = (page: Page) => page.getByTestId("didit-live");
 
 async function openFeed(page: Page) {
-  if (isPhone(page) && !(await live(page).isVisible())) {
-    await page.getByRole("button", { name: /Didit live, \d+ checks?/ }).click();
-  }
+  if (!isPhone(page)) return;
+  const pill = page.getByRole("button", { name: /Didit live, \d+ checks?/ });
+
+  // The feed mounts after the first paint: wait for it or its pill.
+  await expect(live(page).or(pill)).toBeVisible();
+  if (await pill.isVisible()) await pill.click();
 }
 
 /** On a phone the open feed covers the app: fold it before tapping on. */
