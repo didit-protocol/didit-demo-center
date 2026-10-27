@@ -148,6 +148,21 @@ export function kybDecided(kyb: KybSummary, fallback: string): LiveInput[] {
     ];
   }
 
+  if (status === "awaiting user") {
+    const waiting = kyb.people.length - owners;
+
+    return [
+      {
+        key: "kyb-decided",
+        tone: "hold",
+        product: "verification",
+        title: "Business found, owners next",
+        detail: `${company} · ${waiting} ${waiting === 1 ? "owner checks their" : "owners check their"} ID`,
+        code,
+      },
+    ];
+  }
+
   return [
     {
       key: "kyb-decided",

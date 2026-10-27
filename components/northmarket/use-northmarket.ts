@@ -189,6 +189,24 @@ export function useNorthmarket() {
     }
   };
 
+  /** One owner's own ID check, from the KYB's key people. */
+  const checkOwner = async (
+    sellerId: string,
+    url: string,
+  ): Promise<Outcome<KybSummary | null>> => {
+    setBusy("kyb");
+    try {
+      await openVerification(url);
+      const kyb = await settleKyb(sellerId, 3);
+
+      await refresh();
+
+      return { ok: true, data: kyb };
+    } finally {
+      setBusy(null);
+    }
+  };
+
   /** The 1,497 EUR order, submitted from the browser. */
   const placeOrder = async (
     seller: { id: string; shop: string } | null,
@@ -239,6 +257,7 @@ export function useNorthmarket() {
     refresh,
     openShop,
     verifyBusiness,
+    checkOwner,
     placeOrder,
     confirmAge,
     reset,
