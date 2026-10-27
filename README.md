@@ -121,7 +121,7 @@ environment in [`lib/didit/demos.ts`](lib/didit/demos.ts)).
 | --- | --- |
 | Sign up | Didit Authentication on the bank's sign-up card (hosted passkey sign-up, or an email code); without a publishable key, the bank's own form |
 | Verify | KYC + AML onboarding before the IBAN: `didit.sessions.create`, the web SDK modal, `didit.sessions.decision` |
-| Transact | `didit.transactions.sdkToken` on the server, only after the customer's approved onboarding; `submitTransaction` in the browser. A transfer of 5,000 EUR or more to a new payee is held by a rule (`AWAITING_USER`) and Didit releases it once the customer passes the selfie step-up the rule opened |
+| Transact | `didit.transactions.sdkToken` on the server, only after the customer's approved onboarding; `submitTransaction` in the browser. A transfer of 5,000 EUR or more to a new payee is held by a rule (`AWAITING_USER`). With Authentication on, the customer first confirms it with their passkey (`reauthenticate()`, which checks it is the same person); Didit then releases it once they pass the selfie step-up the rule opened |
 | Stop fraud | A sign-in that fails the passkey check is reported with `submitEvent` (category `security`) and an event rule declines it |
 | Console | The console view: Transaction, Person, Verification and Device, from this visitor's records |
 
