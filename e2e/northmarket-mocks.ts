@@ -3,7 +3,10 @@ import type { Page, Route } from "@playwright/test";
 import fs from "node:fs";
 import path from "node:path";
 
-import { summarizeKyb, summarizeTransaction } from "../lib/marketplace/summaries";
+import {
+  summarizeKyb,
+  summarizeTransaction,
+} from "../lib/marketplace/summaries";
 
 /**
  * The Didit side of /marketplace (Northmarket) for the E2E suite.
