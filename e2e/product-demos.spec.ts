@@ -13,7 +13,14 @@ import { expect, test, type Page, type Route } from "@playwright/test";
 
 const FIXTURE = JSON.parse(
   fs.readFileSync(
-    path.join(__dirname, "..", "tests", "fixtures", "product-demos", "liveness.json"),
+    path.join(
+      __dirname,
+      "..",
+      "tests",
+      "fixtures",
+      "product-demos",
+      "liveness.json",
+    ),
     "utf8",
   ),
 );
@@ -113,16 +120,20 @@ test("Liveness: start, finish the selfie, see the decision, the feed and the con
     "GET /api/product-demos/liveness/session",
   ]);
 
-  if (isPhone(page)) {
-    await page.getByRole("button", { name: /Didit live, 3 checks/ }).click();
-  }
   const feed = page.getByTestId("didit-live");
+
+  // On a phone the feed opens by itself for a new event, or sits in the pill.
+  if (isPhone(page) && !(await feed.isVisible()))
+    await page.getByRole("button", { name: /Didit live, 3 checks/ }).click();
 
   await expect(feed).toContainText("Liveness passed");
   await expect(feed).toContainText("IP analysis");
   await expect(feed).toContainText("Session created");
 
-  await demo.getByRole("button", { name: "Open the console view" }).click();
+  await demo
+    .getByRole("button", { name: "Open the console view" })
+    .first()
+    .click();
   const console = page.getByRole("dialog", { name: "Console view" });
 
   await expect(console).toContainText("Demo visitor");
