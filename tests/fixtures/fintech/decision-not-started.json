@@ -1,0 +1,101 @@
+{
+  "recorded": "2026-10-13, verification.staging.didit.me, demo organization",
+  "source": "real response; hosted-flow links and tokens redacted",
+  "status": 200,
+  "response": {
+    "biometric_retention": {
+      "jurisdictions": [],
+      "deletes_at": null
+    },
+    "session_id": "95b6c3a1-fca4-4006-bd90-933bd22b9ef0",
+    "session_kind": "user",
+    "shared_from_session": null,
+    "shared_from_session_number": null,
+    "session_number": 8065,
+    "session_url": "<redacted>",
+    "status": "Not Started",
+    "status_override": null,
+    "decision_trace": {
+      "status": "Not Started",
+      "decided_by": null,
+      "decided_at": null,
+      "automatic_status": null,
+      "terminal_node_id": null,
+      "actor": null,
+      "warning_counts": {
+        "error": 0,
+        "warning": 0,
+        "information": 0,
+        "total": 0
+      },
+      "status_warnings": []
+    },
+    "investigator": null,
+    "fraud_check": null,
+    "linked_records": {
+      "same_face": {
+        "count": 0,
+        "best_match": null
+      },
+      "earlier_verifications": {
+        "count": 0,
+        "vendor_user_id": "90162d96-66a7-4bf0-89f3-b353b569d1d1"
+      },
+      "networks": {
+        "count": 0,
+        "open": 0,
+        "dismissed": 0,
+        "items": []
+      }
+    },
+    "workflow_id": "c076a8bb-b0a1-482a-a257-c296391fac2f",
+    "features": [
+      "ID_VERIFICATION",
+      "LIVENESS",
+      "FACE_MATCH",
+      "AML",
+      "IP_ANALYSIS"
+    ],
+    "vendor_data": "fintech-demo-rec-1791926220",
+    "metadata": {
+      "demo_app": "fintech"
+    },
+    "callback": "http://localhost:3000/fintech",
+    "id_verifications": null,
+    "nfc_verifications": null,
+    "nfc_skip_reason": null,
+    "liveness_checks": null,
+    "face_matches": null,
+    "poa_verifications": null,
+    "phone_verifications": null,
+    "email_verifications": null,
+    "aml_screenings": null,
+    "ip_analyses": null,
+    "geolocation_checks": null,
+    "geolocation_attempts": null,
+    "database_validations": null,
+    "database_validation_not_performed_reason": {
+      "code": "no_document_data",
+      "message": "Database validation did not run because no readable identity document was available to check against the configured databases."
+    },
+    "bank_verifications": null,
+    "questionnaire_responses": null,
+    "document_ai_documents": null,
+    "reviews": [],
+    "assignee": null,
+    "waiting_since": null,
+    "sla_due_at": null,
+    "contact_details": {
+      "email": "lena.fischer@example.com",
+      "email_lang": null,
+      "send_notification_emails": false,
+      "phone": null
+    },
+    "expected_details": null,
+    "biometric_consent": null,
+    "environment": "live",
+    "sandbox_scenario": null,
+    "created_at": "2026-10-13T21:17:28.082876Z",
+    "expires_at": "2026-10-20T21:17:28.070205Z"
+  }
+}
