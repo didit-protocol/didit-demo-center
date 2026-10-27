@@ -247,7 +247,9 @@ function personPage(input: KestrelConsoleInput): RecordPage | null {
     side: {
       title: "Details",
       pairs: [
-        ...(input.email ? ([["Email", input.email]] as [string, string][]) : []),
+        ...(input.email
+          ? ([["Email", input.email]] as [string, string][])
+          : []),
         ...(input.device
           ? ([["Device", `${input.device.browser} on ${input.device.os}`]] as [
               string,
@@ -263,15 +265,15 @@ function personPage(input: KestrelConsoleInput): RecordPage | null {
     nav: [
       { label: "All people", count: 1 },
       { label: "Verified", count: input.account?.stage === "approved" ? 1 : 0 },
-      { label: "Needs review", count: input.account?.stage === "review" ? 1 : 0 },
+      {
+        label: "Needs review",
+        count: input.account?.stage === "review" ? 1 : 0,
+      },
     ],
   };
 }
 
-function ruleRows(
-  input: KestrelConsoleInput,
-  focus: ActivityItem,
-): RuleRow[] {
+function ruleRows(input: KestrelConsoleInput, focus: ActivityItem): RuleRow[] {
   const view = focus.view;
   const rows: RuleRow[] = view.rules
     .filter((rule) => rule.statusTarget)
@@ -311,7 +313,13 @@ function ruleRows(
 
   return rows.length
     ? rows
-    : [{ state: "passed", title: "No rule matched", detail: "approved on its own" }];
+    : [
+        {
+          state: "passed",
+          title: "No rule matched",
+          detail: "approved on its own",
+        },
+      ];
 }
 
 function transactionPage(input: KestrelConsoleInput): RecordPage | null {
@@ -329,7 +337,9 @@ function transactionPage(input: KestrelConsoleInput): RecordPage | null {
   const wallet = shortAddress(view.wallet ?? focus.wallet);
   const network = ASSETS[focus.asset]?.network ?? view.currency;
   const hits = view.rules.filter((rule) => rule.statusTarget).length;
-  const declinedBy = view.rules.find((rule) => rule.statusTarget === "DECLINED");
+  const declinedBy = view.rules.find(
+    (rule) => rule.statusTarget === "DECLINED",
+  );
   const blocks: RecordPage["blocks"] = [];
 
   if (view.status === "DECLINED") {
@@ -421,7 +431,10 @@ function transactionPage(input: KestrelConsoleInput): RecordPage | null {
               ? "Rules"
               : "Automatic",
         ],
-        ["Queue", view.status === "IN_REVIEW" ? "Manual review" : "None needed"],
+        [
+          "Queue",
+          view.status === "IN_REVIEW" ? "Manual review" : "None needed",
+        ],
         ...(view.stepUp
           ? ([["Selfie step-up", view.stepUp.status || "Requested"]] as [
               string,

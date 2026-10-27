@@ -62,7 +62,9 @@ function fresh(): StoredState {
   return {
     version: 2,
     profile: null,
-    wallets: randomWallets((size) => crypto.getRandomValues(new Uint8Array(size))),
+    wallets: randomWallets((size) =>
+      crypto.getRandomValues(new Uint8Array(size)),
+    ),
     activity: [],
     sessionUrl: null,
   };
@@ -74,7 +76,11 @@ function load(): StoredState {
       window.localStorage.getItem(STORAGE_KEY) ?? "null",
     ) as StoredState | null;
 
-    if (parsed?.version === 2 && parsed.wallets?.BTC && Array.isArray(parsed.activity))
+    if (
+      parsed?.version === 2 &&
+      parsed.wallets?.BTC &&
+      Array.isArray(parsed.activity)
+    )
       return parsed;
   } catch {
     // Unreadable storage: start a fresh demo.
@@ -86,7 +92,9 @@ function load(): StoredState {
 async function api<T>(
   path: string,
   init?: RequestInit,
-): Promise<{ ok: true; data: T } | { ok: false; status: number; error: string }> {
+): Promise<
+  { ok: true; data: T } | { ok: false; status: number; error: string }
+> {
   try {
     const response = await fetch(`/api/crypto-exchange${path}`, {
       ...init,
@@ -99,12 +107,17 @@ async function api<T>(
       return {
         ok: false,
         status: response.status,
-        error: data?.error ?? "Something went wrong talking to Kestrel's server.",
+        error:
+          data?.error ?? "Something went wrong talking to Kestrel's server.",
       };
 
     return { ok: true, data: data as T };
   } catch {
-    return { ok: false, status: 0, error: "Kestrel's server could not be reached." };
+    return {
+      ok: false,
+      status: 0,
+      error: "Kestrel's server could not be reached.",
+    };
   }
 }
 
@@ -117,7 +130,9 @@ const errorText = (error: unknown, fallback: string) =>
  * Balances come from Didit's decisions alone: a deposit counts once Didit
  * approves it, a withdrawal holds its funds until Didit blocks it.
  */
-export function useKestrel(emit: (signal: KestrelSignal) => void = () => undefined) {
+export function useKestrel(
+  emit: (signal: KestrelSignal) => void = () => undefined,
+) {
   const [state, setState] = React.useState<StoredState | null>(null);
   const [account, setAccount] = React.useState<KestrelAccount | null>(null);
   const [accountLoaded, setAccountLoaded] = React.useState(false);
@@ -125,32 +140,38 @@ export function useKestrel(emit: (signal: KestrelSignal) => void = () => undefin
   const [error, setError] = React.useState<string | null>(null);
   const stateRef = React.useRef(state);
   const accountRef = React.useRef(account);
-  const tokenRef = React.useRef<(TransactionToken & { expiresAt: number }) | null>(null);
+  const tokenRef = React.useRef<
+    (TransactionToken & { expiresAt: number }) | null
+  >(null);
   const emitRef = React.useRef(emit);
 
   stateRef.current = state;
   accountRef.current = account;
   emitRef.current = emit;
 
-  const update = React.useCallback((next: (current: StoredState) => StoredState) => {
-    setState((current) => {
-      if (!current) return current;
-      const value = next(current);
+  const update = React.useCallback(
+    (next: (current: StoredState) => StoredState) => {
+      setState((current) => {
+        if (!current) return current;
+        const value = next(current);
 
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
-      stateRef.current = value;
+        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(value));
+        stateRef.current = value;
 
-      return value;
-    });
-  }, []);
+        return value;
+      });
+    },
+    [],
+  );
 
   const upsert = React.useCallback(
     (item: ActivityItem) =>
       update((current) => ({
         ...current,
-        activity: [item, ...current.activity.filter((entry) => entry.id !== item.id)].sort(
-          (a, b) => b.createdAt.localeCompare(a.createdAt),
-        ),
+        activity: [
+          item,
+          ...current.activity.filter((entry) => entry.id !== item.id),
+        ].sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
       })),
     [update],
   );
@@ -172,7 +193,9 @@ export function useKestrel(emit: (signal: KestrelSignal) => void = () => undefin
 
   const refreshItem = React.useCallback(
     async (id: string) => {
-      const existing = stateRef.current?.activity.find((item) => item.id === id);
+      const existing = stateRef.current?.activity.find(
+        (item) => item.id === id,
+      );
       const result = await api<TransactionView>(`/transactions/${id}`);
 
       if (!result.ok || !existing) return existing ?? null;
@@ -194,7 +217,8 @@ export function useKestrel(emit: (signal: KestrelSignal) => void = () => undefin
     setState(stored);
     refreshAccount().then((current) => {
       if (current?.stage !== "approved") return;
-      for (const item of stored.activity) if (!isSettled(item)) void refreshItem(item.id);
+      for (const item of stored.activity)
+        if (!isSettled(item)) void refreshItem(item.id);
     });
   }, []);
 
@@ -209,7 +233,11 @@ export function useKestrel(emit: (signal: KestrelSignal) => void = () => undefin
   const settleAccount = React.useCallback(async () => {
     let current = await refreshAccount();
 
-    for (let attempt = 0; attempt < 6 && current?.stage === "processing"; attempt++) {
+    for (
+      let attempt = 0;
+      attempt < 6 && current?.stage === "processing";
+      attempt++
+    ) {
       await sleep(2500);
       current = await refreshAccount();
     }
@@ -223,12 +251,18 @@ export function useKestrel(emit: (signal: KestrelSignal) => void = () => undefin
     setBusy("verify");
     setError(null);
     try {
-      let url = accountRef.current?.stage === "processing" ? stateRef.current?.sessionUrl : null;
+      let url =
+        accountRef.current?.stage === "processing"
+          ? stateRef.current?.sessionUrl
+          : null;
 
       if (!url) {
-        const created = await api<{ sessionId: string; url: string }>("/account", {
-          method: "POST",
-        });
+        const created = await api<{ sessionId: string; url: string }>(
+          "/account",
+          {
+            method: "POST",
+          },
+        );
 
         if (!created.ok) {
           setError(created.error);
@@ -256,17 +290,20 @@ export function useKestrel(emit: (signal: KestrelSignal) => void = () => undefin
   const ensureToken = React.useCallback(async (force: boolean) => {
     const current = tokenRef.current;
 
-    if (!force && current && current.expiresAt - Date.now() > 60_000) return current;
-    const minted = await api<{ token: string; expiresAt: string | null; baseUrl: string }>(
-      "/token",
-      { method: "POST" },
-    );
+    if (!force && current && current.expiresAt - Date.now() > 60_000)
+      return current;
+    const minted = await api<{
+      token: string;
+      expiresAt: string | null;
+      baseUrl: string;
+    }>("/token", { method: "POST" });
 
     if (!minted.ok) throw new Error(minted.error);
     tokenRef.current = {
       token: minted.data.token,
       baseUrl: minted.data.baseUrl,
-      expiresAt: Date.parse(minted.data.expiresAt ?? "") || Date.now() + 600_000,
+      expiresAt:
+        Date.parse(minted.data.expiresAt ?? "") || Date.now() + 600_000,
     };
 
     return tokenRef.current;
@@ -280,8 +317,13 @@ export function useKestrel(emit: (signal: KestrelSignal) => void = () => undefin
       payload: Parameters<typeof submitTransaction>[0]["transaction"],
     ): Promise<ActivityItem | null> => {
       try {
-        const submitted = await submitTransaction({ token: ensureToken, transaction: payload });
-        const detail = await api<TransactionView>(`/transactions/${submitted.transactionId}`);
+        const submitted = await submitTransaction({
+          token: ensureToken,
+          transaction: payload,
+        });
+        const detail = await api<TransactionView>(
+          `/transactions/${submitted.transactionId}`,
+        );
 
         if (!detail.ok) {
           setError(detail.error);

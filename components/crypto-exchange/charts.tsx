@@ -29,7 +29,12 @@ export function Sparkline({
     .join(" ");
 
   return (
-    <svg aria-hidden height={height} viewBox={`0 0 ${width} ${height}`} width={width}>
+    <svg
+      aria-hidden
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
+      width={width}
+    >
       <polyline
         fill="none"
         points={points}
@@ -77,13 +82,25 @@ export function CandleChart() {
     14 + ((high - price) / (high - low)) * (priceArea - 28);
   const step = (width - axis) / series.length;
   const last = series[series.length - 1].close;
-  const ticks = [0.15, 0.4, 0.65, 0.9].map((share) => high - (high - low) * share);
+  const ticks = [0.15, 0.4, 0.65, 0.9].map(
+    (share) => high - (high - low) * share,
+  );
 
   return (
-    <svg aria-hidden preserveAspectRatio="none" viewBox={`0 0 ${width} ${height}`}>
+    <svg
+      aria-hidden
+      preserveAspectRatio="none"
+      viewBox={`0 0 ${width} ${height}`}
+    >
       {ticks.map((price) => (
         <g key={price}>
-          <line stroke="#1B2530" x1="0" x2={width - axis} y1={y(price)} y2={y(price)} />
+          <line
+            stroke="#1B2530"
+            x1="0"
+            x2={width - axis}
+            y1={y(price)}
+            y2={y(price)}
+          />
           <text
             fill="#56677A"
             fontFamily="var(--font-ks-mono), monospace"
@@ -112,7 +129,13 @@ export function CandleChart() {
 
         return (
           <g key={index}>
-            <line stroke={color} x1={x} x2={x} y1={y(candle.high)} y2={y(candle.low)} />
+            <line
+              stroke={color}
+              x1={x}
+              x2={x}
+              y1={y(candle.high)}
+              y2={y(candle.low)}
+            />
             <rect
               fill={color}
               height={Math.max(1.5, bottom - top)}

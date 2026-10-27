@@ -75,10 +75,16 @@ export function KestrelDemo() {
             : transactionEvents(signal.item);
 
       for (const input of inputs) {
-        const existing = eventsRef.current.find((event) => event.id === input.key);
+        const existing = eventsRef.current.find(
+          (event) => event.id === input.key,
+        );
 
         // A re-read with nothing new does not move an event back to the top.
-        if (existing && existing.title === input.title && existing.detail === input.detail)
+        if (
+          existing &&
+          existing.title === input.title &&
+          existing.detail === input.detail
+        )
           continue;
         live.push(input);
       }
@@ -94,14 +100,15 @@ export function KestrelDemo() {
   const signedIn = Boolean(
     auth?.status === "signed-in" || ks.profile || account,
   );
-  const person =
-    account?.fullName ?? auth?.email ?? ks.profile?.email ?? null;
+  const person = account?.fullName ?? auth?.email ?? ks.profile?.email ?? null;
 
   /* ── Steps already seen in this visit ── */
 
   React.useEffect(() => {
     try {
-      setSeen(new Set(JSON.parse(window.sessionStorage.getItem(SEEN_KEY) ?? "[]")));
+      setSeen(
+        new Set(JSON.parse(window.sessionStorage.getItem(SEEN_KEY) ?? "[]")),
+      );
     } catch {
       // Starts with no step seen.
     }
@@ -128,7 +135,8 @@ export function KestrelDemo() {
 
   React.useEffect(() => {
     if (!auth?.sessionId || auth.status !== "signed-in") return;
-    if (live.events.some((event) => event.id === `auth-${auth.sessionId}`)) return;
+    if (live.events.some((event) => event.id === `auth-${auth.sessionId}`))
+      return;
     const signUp = window.sessionStorage.getItem(OWN_SIGNUP) === "1";
 
     live.push(
@@ -193,7 +201,9 @@ export function KestrelDemo() {
 
       return false;
     } catch (error) {
-      setAuthError(error instanceof Error ? error.message : "The code could not be sent.");
+      setAuthError(
+        error instanceof Error ? error.message : "The code could not be sent.",
+      );
 
       return false;
     } finally {
@@ -213,7 +223,9 @@ export function KestrelDemo() {
       if (result.status !== "signed_in")
         setAuthError("That code did not work. Check it and try again.");
     } catch (error) {
-      setAuthError(error instanceof Error ? error.message : "That code did not work.");
+      setAuthError(
+        error instanceof Error ? error.message : "That code did not work.",
+      );
     } finally {
       setAuthBusy(false);
     }
@@ -226,7 +238,9 @@ export function KestrelDemo() {
 
   const scrollToSignUp = () =>
     document
-      .querySelector<HTMLInputElement>('[aria-label="Create your account"] input, [data-callout="passkey"]')
+      .querySelector<HTMLInputElement>(
+        '[aria-label="Create your account"] input, [data-callout="passkey"]',
+      )
       ?.focus();
 
   /** Money moves only for a verified customer; anyone else is sent to the KYC. */
@@ -265,12 +279,18 @@ export function KestrelDemo() {
   };
 
   const ownWithdrawal = (): WithdrawPreset => {
-    const asset = ks.balances.BTC.available > 0 || ks.balances.ETH.available <= 0 ? "BTC" : "ETH";
+    const asset =
+      ks.balances.BTC.available > 0 || ks.balances.ETH.available <= 0
+        ? "BTC"
+        : "ETH";
     const available = ks.balances[asset].available;
 
     return {
       asset,
-      amount: available > 0 ? String(Math.min(available, asset === "BTC" ? 0.8 : 1.5)) : "",
+      amount:
+        available > 0
+          ? String(Math.min(available, asset === "BTC" ? 0.8 : 1.5))
+          : "",
       destination: "own-wallet",
       address: ks.wallets?.[asset] ?? "",
     };
@@ -303,7 +323,8 @@ export function KestrelDemo() {
     setSeen(new Set());
     setModal(null);
     setConsoleOpen(false);
-    if (authOn && auth?.status === "signed-in") await auth.signOut("/crypto-exchange");
+    if (authOn && auth?.status === "signed-in")
+      await auth.signOut("/crypto-exchange");
   };
 
   const openConsole = (open: boolean, tab?: string) => {
@@ -316,13 +337,18 @@ export function KestrelDemo() {
 
   const activity = ks.activity;
   const blocked = activity.find(
-    (item) => item.kind === "withdrawal" && withdrawalStage(item.view) === "blocked",
+    (item) =>
+      item.kind === "withdrawal" && withdrawalStage(item.view) === "blocked",
   );
   const done = new Set<StepId>();
 
   if (signedIn) done.add("signup");
   if (approved) done.add("verify");
-  if (activity.some((item) => item.kind === "deposit" && item.view.status === "APPROVED"))
+  if (
+    activity.some(
+      (item) => item.kind === "deposit" && item.view.status === "APPROVED",
+    )
+  )
     done.add("transact");
   if (blocked || seen.has("fraud")) done.add("fraud");
   if (seen.has("console")) done.add("console");
@@ -343,18 +369,20 @@ export function KestrelDemo() {
         ? "transact"
         : ks.busy === "verify"
           ? "verify"
-          : ((["signup", "verify", "transact", "fraud", "console"] as StepId[]).find(
-              (id) => !done.has(id),
-            ) ?? "console");
+          : ((
+              ["signup", "verify", "transact", "fraud", "console"] as StepId[]
+            ).find((id) => !done.has(id)) ?? "console");
 
   const onStep = (target: StepId) => {
     switch (target) {
       case "signup":
         if (!signedIn) scrollToSignUp();
-        else setToast({ tone: "info", text: "You are signed in. Next: verify." });
+        else
+          setToast({ tone: "info", text: "You are signed in. Next: verify." });
         break;
       case "verify":
-        if (approved) setToast({ tone: "info", text: "Your identity is verified." });
+        if (approved)
+          setToast({ tone: "info", text: "Your identity is verified." });
         else requireApproved(() => undefined);
         break;
       case "transact":
@@ -419,7 +447,10 @@ export function KestrelDemo() {
     });
   }
 
-  const topRisk = Math.max(0, ...activity.map((item) => item.view.screening?.riskScore ?? 0));
+  const topRisk = Math.max(
+    0,
+    ...activity.map((item) => item.view.screening?.riskScore ?? 0),
+  );
   const tiles: ProductTile[] | undefined =
     !modal && approved
       ? [
@@ -439,7 +470,10 @@ export function KestrelDemo() {
           {
             product: "signals",
             label: "Signals",
-            value: didit.device?.firstVisit === false ? "Known device" : "New device",
+            value:
+              didit.device?.firstVisit === false
+                ? "Known device"
+                : "New device",
           },
           { product: "verification", label: "Verification", value: "Approved" },
           {
@@ -533,7 +567,8 @@ export function KestrelDemo() {
           busy: ks.busy !== null,
           onVerify: () => void ks.verify(),
           onDeposit: () => requireApproved(() => openDeposit()),
-          onWithdraw: () => requireApproved(() => openWithdraw(ownWithdrawal())),
+          onWithdraw: () =>
+            requireApproved(() => openWithdraw(ownWithdrawal())),
           onItem: (item) => {
             if (item.kind === "withdrawal")
               openWithdraw(
@@ -548,7 +583,9 @@ export function KestrelDemo() {
             else openConsole(true, "transaction");
           },
         }}
-        onSignIn={() => (authOn ? void auth?.signIn("/crypto-exchange") : scrollToSignUp())}
+        onSignIn={() =>
+          authOn ? void auth?.signIn("/crypto-exchange") : scrollToSignUp()
+        }
         onSignUp={scrollToSignUp}
       >
         {modal === "deposit" && ks.wallets ? (

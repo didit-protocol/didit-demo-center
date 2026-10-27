@@ -13,7 +13,11 @@ import * as React from "react";
 import { Check, CircleSlash, X } from "lucide-react";
 
 import { DiditRing } from "@/components/didit-live/icons";
-import { eurValue, formatAmount, formatEur } from "@/lib/crypto-exchange/markets";
+import {
+  eurValue,
+  formatAmount,
+  formatEur,
+} from "@/lib/crypto-exchange/markets";
 import {
   ASSETS,
   SANCTIONED_WALLET,
@@ -46,7 +50,12 @@ function Layer({
   return (
     <div className="ks-layer">
       <div aria-hidden className="ks-scrim" onMouseDown={onClose} />
-      <div aria-label={label} aria-modal="true" className="ks-modal" role="dialog">
+      <div
+        aria-label={label}
+        aria-modal="true"
+        className="ks-modal"
+        role="dialog"
+      >
         <button
           aria-label="Close"
           className="ks-modal-x"
@@ -160,11 +169,17 @@ export function DepositModal({
   wallets: CxWallets;
   busy: boolean;
   error: string | null;
-  onDeposit(input: { asset: Asset; amount: string; source: DepositSource }): void;
+  onDeposit(input: {
+    asset: Asset;
+    amount: string;
+    source: DepositSource;
+  }): void;
   onClose(): void;
 }) {
   const [asset, setAsset] = React.useState<Asset>(initialAsset);
-  const [amount, setAmount] = React.useState(initialAsset === "BTC" ? "0.25" : "1.5");
+  const [amount, setAmount] = React.useState(
+    initialAsset === "BTC" ? "0.25" : "1.5",
+  );
   const [source, setSource] = React.useState<DepositSource>("own-wallet");
   const [problem, setProblem] = React.useState<string | null>(null);
   const from = source === "own-wallet" ? wallets[asset] : SANCTIONED_WALLET;
@@ -195,7 +210,7 @@ export function DepositModal({
         </div>
         <div className="ks-field">
           From
-          <Chips
+          <Chips<DepositSource>
             label="Sending wallet"
             options={[
               { value: "own-wallet", label: "Your wallet" },
@@ -339,9 +354,17 @@ export function WithdrawModal({
             <label className="ks-field">
               Amount
               <span className="ks-input is-mono">
-                <input readOnly aria-label="Amount" value={formatAmount(Number(result.view.amount) || 0, 8)} />
+                <input
+                  readOnly
+                  aria-label="Amount"
+                  value={formatAmount(Number(result.view.amount) || 0, 8)}
+                />
                 <span className="unit">
-                  ≈ {formatEur(eurValue(result.asset, Number(result.view.amount) || 0), 0)}
+                  ≈{" "}
+                  {formatEur(
+                    eurValue(result.asset, Number(result.view.amount) || 0),
+                    0,
+                  )}
                 </span>
               </span>
             </label>
@@ -352,7 +375,11 @@ export function WithdrawModal({
             <label className="ks-field">
               Network
               <span className="ks-input">
-                <input readOnly aria-label="Network" value={ASSETS[result.asset].network} />
+                <input
+                  readOnly
+                  aria-label="Network"
+                  value={ASSETS[result.asset].network}
+                />
               </span>
             </label>
           ) : (
@@ -368,7 +395,7 @@ export function WithdrawModal({
         {!result ? (
           <div className="ks-field">
             To
-            <Chips
+            <Chips<WithdrawalDestination>
               label="Destination"
               options={[
                 { value: "own-wallet", label: "Your wallet" },
@@ -424,7 +451,8 @@ export function WithdrawModal({
         )}
         <span className="ks-secured">
           <DiditRing />
-          {result ? "Step-up secured by" : "Withdrawals checked by"} <b>Didit</b>
+          {result ? "Step-up secured by" : "Withdrawals checked by"}{" "}
+          <b>Didit</b>
         </span>
       </form>
     </Layer>
@@ -450,6 +478,7 @@ function WithdrawalOutcome({
   const selfHosted = view.walletType === "unhosted_wallet";
   const travel = (
     <Step
+      aside={<span className="ks-pill is-tr">Travel Rule</span>}
       callout="travel-rule"
       detail={
         selfHosted
@@ -459,7 +488,6 @@ function WithdrawalOutcome({
       n={1}
       state="done"
       title={selfHosted ? "A self-hosted wallet" : "Travel Rule data sent"}
-      aside={<span className="ks-pill is-tr">Travel Rule</span>}
     />
   );
   const proof = (state: "done" | "on") => (
@@ -485,7 +513,11 @@ function WithdrawalOutcome({
       }
       n={2}
       state={state}
-      title={state === "done" ? "Wallet proven by a signed message" : "Prove the wallet is yours"}
+      title={
+        state === "done"
+          ? "Wallet proven by a signed message"
+          : "Prove the wallet is yours"
+      }
     />
   );
   const selfie = (state: "done" | "on" | "todo") => (
@@ -514,7 +546,11 @@ function WithdrawalOutcome({
   switch (stage) {
     case "blocked":
       return (
-        <div className="ks-stop" data-callout="declined" data-testid="kestrel-declined">
+        <div
+          className="ks-stop"
+          data-callout="declined"
+          data-testid="kestrel-declined"
+        >
           <span className="h">
             <span className="ks-pill is-no">
               <CircleSlash aria-hidden size={14} />

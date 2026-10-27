@@ -18,14 +18,16 @@ import { kestrel } from "../didit/demos.ts";
  * selects (the ids live in lib/didit/demos.ts). `null` means "not published
  * on this environment": the page then says so instead of failing.
  */
-export const CX_WORKFLOWS: { onboarding: string | null; stepUp: string | null } =
-  {
-    /** KYC + AML: ID, liveness, face match, AML screening and IP analysis. */
-    onboarding: kestrel.workflows.onboarding || null,
-    /** Face authentication: liveness and a face match against the
-     * onboarding selfie. The withdrawal step-up. */
-    stepUp: kestrel.workflows.stepUp || null,
-  };
+export const CX_WORKFLOWS: {
+  onboarding: string | null;
+  stepUp: string | null;
+} = {
+  /** KYC + AML: ID, liveness, face match, AML screening and IP analysis. */
+  onboarding: kestrel.workflows.onboarding || null,
+  /** Face authentication: liveness and a face match against the
+   * onboarding selfie. The withdrawal step-up. */
+  stepUp: kestrel.workflows.stepUp || null,
+};
 
 const DEMO_SCOPE = {
   field: "custom_values.demo_app",

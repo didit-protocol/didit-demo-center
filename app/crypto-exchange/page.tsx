@@ -4,7 +4,10 @@ import { Suspense } from "react";
 import "@/styles/demos/live.css";
 import "@/styles/demos/kestrel.css";
 
-import { fontKestrelMono, fontKestrelSans } from "@/components/crypto-exchange/fonts";
+import {
+  fontKestrelMono,
+  fontKestrelSans,
+} from "@/components/crypto-exchange/fonts";
 import { KestrelDemo } from "@/components/crypto-exchange/kestrel-demo";
 
 export const metadata: Metadata = {

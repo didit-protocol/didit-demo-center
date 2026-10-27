@@ -7,7 +7,14 @@ import type {
 } from "@/lib/crypto-exchange/transactions";
 
 import * as React from "react";
-import { Apple, ArrowDown, ArrowUp, KeyRound, Search, ShieldCheck } from "lucide-react";
+import {
+  Apple,
+  ArrowDown,
+  ArrowUp,
+  KeyRound,
+  Search,
+  ShieldCheck,
+} from "lucide-react";
 
 import { AreaLine, CandleChart, Sparkline } from "./charts";
 
@@ -168,11 +175,21 @@ function SignUpCard({
             Create a passkey
           </button>
           <span className="ks-socs">
-            <button className="ks-btn" disabled={busy} type="button" onClick={onHosted}>
+            <button
+              className="ks-btn"
+              disabled={busy}
+              type="button"
+              onClick={onHosted}
+            >
               <GoogleMark />
               Google
             </button>
-            <button className="ks-btn" disabled={busy} type="button" onClick={onHosted}>
+            <button
+              className="ks-btn"
+              disabled={busy}
+              type="button"
+              onClick={onHosted}
+            >
               <Apple aria-hidden fill="currentColor" size={16} />
               Apple
             </button>
@@ -199,7 +216,10 @@ function SignUpCard({
         <>
           <label className="ks-field">
             Email
-            <span className="ks-input" data-callout={authEnabled ? undefined : "passkey"}>
+            <span
+              className="ks-input"
+              data-callout={authEnabled ? undefined : "passkey"}
+            >
               <input
                 required
                 autoComplete="email"
@@ -277,7 +297,12 @@ function Landing(props: SignUpCardProps) {
               <span className="p ks-mono">
                 {formatEur(market.price, market.decimals)}
               </span>
-              <Sparkline change={market.change} height={40} symbol={market.symbol} width={180} />
+              <Sparkline
+                change={market.change}
+                height={40}
+                symbol={market.symbol}
+                width={180}
+              />
             </div>
           ))}
         </div>
@@ -292,8 +317,10 @@ const itemTitle = (item: ActivityItem) =>
 
 function itemPill(item: ActivityItem): { tone: string; label: string } {
   if (item.kind === "deposit") {
-    if (item.view.status === "APPROVED") return { tone: "is-ok", label: "Screened" };
-    if (item.view.status === "DECLINED") return { tone: "is-no", label: "Frozen" };
+    if (item.view.status === "APPROVED")
+      return { tone: "is-ok", label: "Screened" };
+    if (item.view.status === "DECLINED")
+      return { tone: "is-no", label: "Frozen" };
 
     return { tone: "is-hold", label: statusLabel(item.view.status) };
   }
@@ -331,13 +358,29 @@ export interface TradeProps {
   onItem(item: ActivityItem): void;
 }
 
-function KycBar({ banner, busy, onVerify }: Pick<TradeProps, "banner" | "busy" | "onVerify">) {
+function KycBar({
+  banner,
+  busy,
+  onVerify,
+}: Pick<TradeProps, "banner" | "busy" | "onVerify">) {
   if (!banner) return null;
   const copy = {
-    verify: ["Verify your identity to deposit.", "EU law asks every crypto exchange to know its customers. It takes about two minutes."],
-    processing: ["Finishing your verification.", "Complete it in the window that opened, or continue it here."],
-    review: ["Your verification is in review.", "A compliance analyst decides before your first deposit."],
-    declined: ["We could not verify you.", "This account cannot deposit or withdraw."],
+    verify: [
+      "Verify your identity to deposit.",
+      "EU law asks every crypto exchange to know its customers. It takes about two minutes.",
+    ],
+    processing: [
+      "Finishing your verification.",
+      "Complete it in the window that opened, or continue it here.",
+    ],
+    review: [
+      "Your verification is in review.",
+      "A compliance analyst decides before your first deposit.",
+    ],
+    declined: [
+      "We could not verify you.",
+      "This account cannot deposit or withdraw.",
+    ],
   }[banner.kind];
 
   return (
@@ -352,7 +395,9 @@ function KycBar({ banner, busy, onVerify }: Pick<TradeProps, "banner" | "busy" |
           type="button"
           onClick={onVerify}
         >
-          {banner.kind === "verify" ? "Verify my identity" : "Continue verification"}
+          {banner.kind === "verify"
+            ? "Verify my identity"
+            : "Continue verification"}
         </button>
       ) : null}
     </div>
@@ -426,7 +471,11 @@ function Trade(props: TradeProps) {
 
   return (
     <>
-      <KycBar banner={props.banner} busy={props.busy} onVerify={props.onVerify} />
+      <KycBar
+        banner={props.banner}
+        busy={props.busy}
+        onVerify={props.onVerify}
+      />
       <div className="ks-trade">
         <div className="ks-col">
           <div className="ks-h">
@@ -435,13 +484,20 @@ function Trade(props: TradeProps) {
           </div>
           <div className="ks-mkts">
             {MARKETS.map((market, index) => (
-              <div key={market.symbol} className={`ks-mkt${index === 0 ? " is-on" : ""}`}>
+              <div
+                key={market.symbol}
+                className={`ks-mkt${index === 0 ? " is-on" : ""}`}
+              >
                 <Coin symbol={market.symbol} />
                 <span className="x">
                   <b>{market.symbol}/EUR</b>
                   <span>{market.name}</span>
                 </span>
-                <Sparkline change={market.change} symbol={market.symbol} width={70} />
+                <Sparkline
+                  change={market.change}
+                  symbol={market.symbol}
+                  width={70}
+                />
                 <span className="r ks-mono">
                   {formatPrice(market.price, market.decimals)}
                   <Change value={market.change} />
@@ -477,7 +533,10 @@ function Trade(props: TradeProps) {
           </div>
           <div className="ks-tabs">
             {["15m", "1h", "4h", "1D", "1W"].map((label) => (
-              <span key={label} className={label === "1h" ? "is-on" : undefined}>
+              <span
+                key={label}
+                className={label === "1h" ? "is-on" : undefined}
+              >
                 {label}
               </span>
             ))}
@@ -489,7 +548,11 @@ function Trade(props: TradeProps) {
           <div className="ks-chart">
             <CandleChart />
           </div>
-          <Activity activity={props.activity} banner={props.banner} onItem={props.onItem} />
+          <Activity
+            activity={props.activity}
+            banner={props.banner}
+            onItem={props.onItem}
+          />
         </div>
         <div className="ks-col">
           <div className="ks-h">
@@ -503,7 +566,10 @@ function Trade(props: TradeProps) {
             </div>
             {book.asks.map((row) => (
               <div key={`a${row.price}`}>
-                <i className="is-ask" style={{ width: `${row.depth * 100}%` }} />
+                <i
+                  className="is-ask"
+                  style={{ width: `${row.depth * 100}%` }}
+                />
                 <span className="ks-down">{formatPrice(row.price, 1)}</span>
                 <span>{row.amount.toFixed(4)}</span>
                 <span>{compact(row.total)}</span>
@@ -514,7 +580,10 @@ function Trade(props: TradeProps) {
             </div>
             {book.bids.map((row) => (
               <div key={`b${row.price}`}>
-                <i className="is-bid" style={{ width: `${row.depth * 100}%` }} />
+                <i
+                  className="is-bid"
+                  style={{ width: `${row.depth * 100}%` }}
+                />
                 <span className="ks-up">{formatPrice(row.price, 1)}</span>
                 <span>{row.amount.toFixed(4)}</span>
                 <span>{compact(row.total)}</span>
@@ -540,7 +609,11 @@ function PhoneHome(props: TradeProps) {
     <div className="ks-phone">
       {props.banner ? (
         <div className="ks-pf">
-          <KycBar banner={props.banner} busy={props.busy} onVerify={props.onVerify} />
+          <KycBar
+            banner={props.banner}
+            busy={props.busy}
+            onVerify={props.onVerify}
+          />
         </div>
       ) : null}
       <div className="ks-pf">
@@ -551,7 +624,11 @@ function PhoneHome(props: TradeProps) {
         <AreaLine symbol="PORTFOLIO" />
       </div>
       <div className="ks-pf-acts">
-        <button className="ks-btn is-teal" type="button" onClick={props.onDeposit}>
+        <button
+          className="ks-btn is-teal"
+          type="button"
+          onClick={props.onDeposit}
+        >
           Deposit
         </button>
         <button className="ks-btn" type="button" onClick={props.onWithdraw}>
@@ -570,12 +647,18 @@ function PhoneHome(props: TradeProps) {
             </span>
             <span className="r ks-mono">
               {formatAmount(props.balances[asset].total, 4)}
-              <span>{formatEur(eurValue(asset, props.balances[asset].total), 0)}</span>
+              <span>
+                {formatEur(eurValue(asset, props.balances[asset].total), 0)}
+              </span>
             </span>
           </div>
         );
       })}
-      <Activity activity={props.activity} banner={props.banner} onItem={props.onItem} />
+      <Activity
+        activity={props.activity}
+        banner={props.banner}
+        onItem={props.onItem}
+      />
     </div>
   );
 }
@@ -612,7 +695,9 @@ export function Exchange({
           {NAV.map((item) => (
             <span
               key={item}
-              className={item === (signedIn ? "Trade" : "Markets") ? "is-on" : undefined}
+              className={
+                item === (signedIn ? "Trade" : "Markets") ? "is-on" : undefined
+              }
             >
               {item}
             </span>
@@ -640,14 +725,22 @@ export function Exchange({
                 <ArrowUp aria-hidden size={18} />
                 Withdraw
               </button>
-              <img alt={trade.name ?? "Your account"} className="ks-ava" src={AVATAR} />
+              <img
+                alt={trade.name ?? "Your account"}
+                className="ks-ava"
+                src={AVATAR}
+              />
             </>
           ) : (
             <>
               <button className="ks-btn" type="button" onClick={onSignIn}>
                 Log in
               </button>
-              <button className="ks-btn is-teal" type="button" onClick={onSignUp}>
+              <button
+                className="ks-btn is-teal"
+                type="button"
+                onClick={onSignUp}
+              >
                 Sign up
               </button>
             </>

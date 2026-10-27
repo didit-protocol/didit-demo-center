@@ -111,7 +111,9 @@ export function transactionEvents(item: ActivityItem): LiveInput[] {
   const view = item.view;
   const amount = amountOf(view);
   const key = `txn-${item.id}`;
-  const declinedBy = view.rules.find((rule) => rule.statusTarget === "DECLINED");
+  const declinedBy = view.rules.find(
+    (rule) => rule.statusTarget === "DECLINED",
+  );
 
   if (item.kind === "deposit") {
     const code = `submitTransaction({ actionType: "deposit", currency: "${view.currency}" })`;
