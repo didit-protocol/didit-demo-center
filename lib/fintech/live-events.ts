@@ -186,6 +186,45 @@ export function paymentEvents(
   ];
 }
 
+/** The first half of the step-up: the passkey, through Didit Authentication. */
+export function passkeyStarted(): LiveInput[] {
+  return [
+    {
+      key: "stepup-passkey",
+      tone: "auth",
+      product: "authentication",
+      title: "Passkey asked",
+      detail: "Same person, fresh sign-in · then the selfie",
+      code: "reauthenticate() · @didit-protocol/auth-nextjs",
+    },
+  ];
+}
+
+/** Didit signed the same person in again; `methods` says how. */
+export function passkeyConfirmed(input: {
+  methods: string[];
+  email: string | null;
+}): LiveInput[] {
+  const passkey = input.methods.includes("passkey");
+
+  return [
+    {
+      key: "stepup-passkey",
+      tone: "auth",
+      product: "authentication",
+      title: passkey
+        ? "Confirmed with the passkey"
+        : input.methods.includes("code")
+          ? "Confirmed with an email code"
+          : "Signed in again",
+      detail: [input.email, "one quick selfie releases the payment"]
+        .filter(Boolean)
+        .join(" · "),
+      code: "useAuth().session.methods · @didit-protocol/auth-nextjs",
+    },
+  ];
+}
+
 export function stepUpStarted(): LiveInput[] {
   return [
     {
