@@ -2,19 +2,18 @@ import { defineConfig, devices } from "@playwright/test";
 
 /**
  * End-to-end tests for the crypto exchange (`npm run test:e2e:crypto-exchange`),
- * Aurora Play (`npm run test:e2e:aurora-play`), Northmarket
- * (`npm run test:e2e:northmarket`), the Demo Center chrome
- * (`npm run test:e2e:demo-center`) and the product demos
- * (`npm run test:e2e:product-demos`). The fintech browser tests are a
- * separate harness: `npm run test:e2e`.
+ * Aurora Play (`npm run test:e2e:aurora-play`), Alder
+ * (`npm run test:e2e:alder`), Northmarket (`npm run test:e2e:northmarket`),
+ * the Demo Center chrome (`npm run test:e2e:demo-center`) and the product
+ * demos (`npm run test:e2e:product-demos`).
  *
  * They run against the production build, so build first:
  *   npm run build && npm run test:e2e:crypto-exchange
  *
  * Every Didit call is answered from recorded staging responses
- * (tests/fixtures/crypto-exchange, igaming, marketplace and product-demos),
- * so the suite is deterministic, needs no API key and never bills the
- * application.
+ * (tests/fixtures/crypto-exchange, igaming, alder, marketplace and
+ * product-demos), so the suite is deterministic, needs no API key and never
+ * bills the application.
  */
 const PORT = Number(process.env.E2E_PORT ?? 4317);
 
