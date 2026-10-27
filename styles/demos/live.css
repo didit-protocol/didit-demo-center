@@ -3,8 +3,8 @@
 /* The Demo Center chrome (the bar above every demo), the Didit live layer that floats over each customer app (the
    event feed, the collapsed pill and the callouts) and the console view modal, on design system v4: white surfaces,
    hairlines, DS v4 buttons, statuses, tags and tiles from vendor/didit-design-system (imported above, so every
-   page that brings the live layer brings the design system with it). Product colours are the DS v4 categories and only reach glyphs, dots and lines: Authentication cat-auth,
-   Signals identity-data, Verification cat-identity, Transactions cat-transactions, on hold the review tokens and
+   page that brings the live layer brings the design system with it). Product colours are the DS v4 categories and
+   only reach glyphs, dots and lines: Authentication cat-auth, Signals identity-data, Verification cat-identity, Transactions cat-transactions, on hold the review tokens and
    blocked the danger tokens. Each customer app keeps its own brand in its own sheet (aurora.css ...). */
 
 /* The design system names its faces "Didit Grotesk" and "Didit Grotesk Mono": the same files this app serves. */
