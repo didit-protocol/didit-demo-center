@@ -440,7 +440,7 @@ export function auroraConsole(input: AuroraConsoleInput): ConsoleTab[] {
     {
       id: "device",
       label: "Device",
-      tone: "hold",
+      tone: "sig",
       note: "The device signals saw, and every account opened on it.",
       page: devicePage(input),
       empty: "Signals has not read this device yet.",

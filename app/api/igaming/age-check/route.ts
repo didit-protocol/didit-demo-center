@@ -32,7 +32,9 @@ export async function POST(request: NextRequest) {
   const fullName = String(body?.fullName ?? "").trim();
   const email = String(body?.email ?? "").trim();
 
-  if (fullName.length < 2 || fullName.length > 80) {
+  // A Didit Authentication sign-up gives an email only; the name comes later
+  // from the ID. The casino's own sign-up asks for it.
+  if (fullName && (fullName.length < 2 || fullName.length > 80)) {
     return noStore({ error: "Enter your full name." }, { status: 400 });
   }
   if (!EMAIL.test(email) || email.length > 120) {
@@ -48,7 +50,7 @@ export async function POST(request: NextRequest) {
     metadata: {
       operator: OPERATOR_NAME,
       step: "registration",
-      full_name: fullName,
+      ...(fullName ? { full_name: fullName } : {}),
     },
   });
 
