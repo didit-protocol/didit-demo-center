@@ -48,7 +48,7 @@ async function recordEvents(page: Page) {
   return batches;
 }
 
-test("a returning cookie customer sends a page view on first load and reload", async ({
+test("cookie mode refreshes the token and sends a page view on first load and reload", async ({
   page,
 }) => {
   let tokenRequests = 0;
