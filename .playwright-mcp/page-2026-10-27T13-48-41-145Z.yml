@@ -1,0 +1,108 @@
+- generic [ref=f2e1]:
+  - generic [ref=f2e3]:
+    - banner [ref=f2e4]:
+      - link "Didit Demo Center" [ref=f2e5] [cursor=pointer]:
+        - /url: /
+        - img "Didit" [ref=f2e6]
+      - link "Demo Center" [ref=f2e8] [cursor=pointer]:
+        - /url: /
+      - button "A Alder Fintech" [ref=f2e10] [cursor=pointer]:
+        - generic [ref=f2e11]: A
+        - text: Alder
+        - emphasis [ref=f2e12]: Fintech
+      - navigation "Demo steps" [ref=f2e15]:
+        - button "1 Sign up" [ref=f2e16] [cursor=pointer]:
+          - generic [ref=f2e17]: "1"
+          - generic [ref=f2e18]: Sign up
+        - button "2 Verify" [ref=f2e20] [cursor=pointer]:
+          - generic [ref=f2e21]: "2"
+          - generic [ref=f2e22]: Verify
+        - button "3 Transact" [ref=f2e24] [cursor=pointer]:
+          - generic [ref=f2e25]: "3"
+          - generic [ref=f2e26]: Transact
+        - button "4 Stop fraud" [ref=f2e28] [cursor=pointer]:
+          - generic [ref=f2e29]: "4"
+          - generic [ref=f2e30]: Stop fraud
+        - button "5 Console" [ref=f2e32] [cursor=pointer]:
+          - generic [ref=f2e33]: "5"
+          - generic [ref=f2e34]: Console
+      - generic [ref=f2e35]:
+        - generic [ref=f2e36]: Sandbox
+        - button "Console view" [ref=f2e37] [cursor=pointer]
+        - button "Restart the demo" [ref=f2e38] [cursor=pointer]
+    - generic [ref=f2e42]:
+      - generic [ref=f2e43]:
+        - banner [ref=f2e44]:
+          - generic [ref=f2e45]: alder
+          - navigation "Alder" [ref=f2e50]:
+            - generic [ref=f2e51]: Personal
+            - generic [ref=f2e52]: Business
+            - generic [ref=f2e53]: Pricing
+            - generic [ref=f2e54]: Help
+          - button "Log in" [ref=f2e55] [cursor=pointer]
+        - generic [ref=f2e56]:
+          - generic [ref=f2e57]:
+            - generic [ref=f2e58]: Free personal account, no monthly fee
+            - heading "A bank account in five minutes." [level=1] [ref=f2e62]
+            - paragraph [ref=f2e63]: Get your IBAN and a virtual card today, a metal card in three days. No branch visit, no paperwork, no password.
+            - list [ref=f2e64]:
+              - listitem [ref=f2e65]: Deposits protected to 100,000 EUR
+              - listitem [ref=f2e69]: Licensed bank in the EU
+              - listitem [ref=f2e72]: Passkey sign-in on every device
+            - generic [aria-hidden] [ref=f2e76]:
+              - generic [ref=f2e77]:
+                - generic [ref=f2e78]:
+                  - generic [ref=f2e79]: alder
+                  - generic [ref=f2e83]: DEBIT
+                - generic [aria-hidden] [ref=f2e86]: ((·))
+                - generic [ref=f2e87]: LENA FISCHER
+                - generic [ref=f2e88]:
+                  - generic [ref=f2e89]: •••• 7712
+                  - generic [ref=f2e90]: 09/30
+              - generic [ref=f2e91]:
+                - generic [ref=f2e92]: Your IBAN, ready today
+                - generic [ref=f2e93]: DE89 3704 0044 0532 0130 00
+          - form "Open your Alder account" [ref=f2e95]:
+            - generic [ref=f2e100]: Step 1 of 3 · Your account
+            - heading "Open your Alder account" [level=2] [ref=f2e101]
+            - paragraph [ref=f2e102]: Sign in with your face or fingerprint. No password, ever.
+            - button "Create a passkey" [ref=f2e103] [cursor=pointer]
+            - generic [ref=f2e107]:
+              - button "Google" [ref=f2e108] [cursor=pointer]
+              - button "Apple" [ref=f2e114] [cursor=pointer]
+            - generic [ref=f2e118]:
+              - text: Email
+              - textbox "Email" [ref=f2e120]
+            - generic [ref=f2e121]:
+              - text: Mobile number
+              - generic [ref=f2e122]:
+                - generic [ref=f2e123]: "+49"
+                - textbox "Mobile number +49" [ref=f2e124]
+            - paragraph [ref=f2e125]: "Next: your ID and a selfie, then your card. About 5 minutes."
+            - generic [ref=f2e126]:
+              - text: Sign-in secured by
+              - generic [ref=f2e127]: Didit
+      - region "Didit live" [ref=f2e128]:
+        - generic [ref=f2e129]:
+          - generic [ref=f2e130]:
+            - generic [ref=f2e131]: Didit live
+            - generic [ref=f2e132]: Live
+            - generic [ref=f2e133]: No one signed in yet
+            - button "Fold the feed" [ref=f2e134] [cursor=pointer]
+          - list [ref=f2e136]:
+            - listitem [ref=f2e137]:
+              - generic [ref=f2e148]:
+                - generic [ref=f2e149]: Signals
+                - generic [ref=f2e150]: "Bot protection: human"
+                - generic [ref=f2e151]: Bot score 0.00
+              - time [ref=f2e152]: now
+            - listitem [ref=f2e153]:
+              - generic [ref=f2e164]:
+                - generic [ref=f2e165]: Signals
+                - generic [ref=f2e166]: New device fingerprinted
+                - generic [ref=f2e167]: Chrome on Linux · first visit
+              - time [ref=f2e168]: now
+          - generic [ref=f2e169]:
+            - button "Open the console view" [ref=f2e170] [cursor=pointer]
+            - button "Code" [ref=f2e171] [cursor=pointer]
+  - alert [ref=f2e175]
