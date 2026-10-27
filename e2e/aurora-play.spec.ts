@@ -33,6 +33,22 @@ async function signUp(page: Page, name: string, email: string) {
   await expect(app(page).getByTestId("aurora-balance")).toBeVisible();
 }
 
+/** The five steps: in the bar on a computer, behind the step pill on a phone. */
+async function goToStep(page: Page, step: string) {
+  if (isPhone(page)) {
+    await page.getByRole("button", { name: /^Step \d of 5/ }).click();
+    await page
+      .getByRole("menu", { name: "Demo steps" })
+      .getByRole("menuitem", { name: step })
+      .click();
+  } else {
+    await page
+      .getByRole("navigation", { name: "Demo steps" })
+      .getByRole("button", { name: new RegExp(step) })
+      .click();
+  }
+}
+
 async function deposit(page: Page, amount: string) {
   const cashier = page.getByRole("dialog", { name: "Cashier" });
 
@@ -113,7 +129,7 @@ test("sign up, age check, monitored deposits and the ID step-up at 2,000 EUR", a
   );
 
   // The console view: this visitor's own records, never canned ones.
-  await page.getByRole("button", { name: "Console view" }).click();
+  await page.getByRole("button", { name: "Console view", exact: true }).click();
   const consoleView = page.getByTestId("console-view");
 
   await expect(
@@ -139,10 +155,7 @@ test("a second account on the same device cannot take the welcome offer again", 
   await expect(page.getByRole("status")).toContainText("Welcome offer added");
 
   // Stop fraud: a new account in the same browser claims it again.
-  await page
-    .getByRole("navigation", { name: "Demo steps" })
-    .getByRole("button", { name: /Stop fraud/ })
-    .click();
+  await goToStep(page, "Stop fraud");
   await expect(
     page.getByText(
       "This is a second account on the same device as Sofia Marin",

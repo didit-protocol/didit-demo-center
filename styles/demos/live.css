@@ -327,3 +327,11 @@
 .lv-pill .lv-go { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: #FFFFFF; }
 .cv-backdrop { position: absolute; inset: 0; }
 .cv { position: relative; }
+.dx-steps-phone { display: none; position: relative; margin-left: auto; }
+.dx-steps-phone .dx-menu { left: auto; right: 0; width: 220px; }
+.dx-menu button { display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 8px; border-radius: 8px; font-size: 13px; color: #E9EAF2; text-align: left; }
+.dx-menu button:hover { background: #20232F; }
+@media (max-width: 767px) {
+  .dx-steps { display: none; }
+  .dx-steps-phone { display: block; }
+}

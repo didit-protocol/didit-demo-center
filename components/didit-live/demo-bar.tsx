@@ -34,7 +34,10 @@ export function DemoBar({
   onRestart,
 }: DemoBarProps) {
   const [menu, setMenu] = React.useState(false);
+  const [stepsMenu, setStepsMenu] = React.useState(false);
   const menuRef = React.useRef<HTMLDivElement>(null);
+  const stepsRef = React.useRef<HTMLDivElement>(null);
+  const index = STEPS.findIndex((item) => item.id === step);
 
   React.useEffect(() => {
     if (!menu) return;
@@ -46,6 +49,18 @@ export function DemoBar({
 
     return () => document.removeEventListener("mousedown", close);
   }, [menu]);
+
+  React.useEffect(() => {
+    if (!stepsMenu) return;
+    const close = (event: MouseEvent) => {
+      if (!stepsRef.current?.contains(event.target as Node))
+        setStepsMenu(false);
+    };
+
+    document.addEventListener("mousedown", close);
+
+    return () => document.removeEventListener("mousedown", close);
+  }, [stepsMenu]);
 
   return (
     <header className="dx-bar">
@@ -120,6 +135,51 @@ export function DemoBar({
           );
         })}
       </nav>
+      {/* A phone has room for the current step only; it opens the other four. */}
+      <div ref={stepsRef} className="dx-steps-phone">
+        <button
+          aria-expanded={stepsMenu}
+          aria-haspopup="menu"
+          aria-label={`Step ${index + 1} of 5: ${STEPS[index].label}. Show the steps`}
+          className="dx-step is-on"
+          type="button"
+          onClick={() => setStepsMenu((open) => !open)}
+        >
+          <span className="n">{index + 1}</span>
+          {STEPS[index].label}
+        </button>
+        {stepsMenu ? (
+          <div aria-label="Demo steps" className="dx-menu" role="menu">
+            {STEPS.map((item, number) => (
+              <button
+                key={item.id}
+                role="menuitem"
+                type="button"
+                onClick={() => {
+                  setStepsMenu(false);
+                  onStep(item.id);
+                }}
+              >
+                <span
+                  className="dx-bm"
+                  style={{
+                    background: done.has(item.id)
+                      ? "#1E3A2F"
+                      : "var(--lv-ring)",
+                  }}
+                >
+                  {done.has(item.id) ? (
+                    <Check aria-hidden size={12} />
+                  ) : (
+                    number + 1
+                  )}
+                </span>
+                {item.label}
+              </button>
+            ))}
+          </div>
+        ) : null}
+      </div>
       <div className="dx-r">
         <span className="dx-sandbox">Sandbox</span>
         <button className="dx-btn is-pri" type="button" onClick={onConsole}>
