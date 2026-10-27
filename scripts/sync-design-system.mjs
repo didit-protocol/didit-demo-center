@@ -19,6 +19,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 import { makeReader, resolveCommit } from "./website-chrome/lib.mjs";
 
@@ -139,4 +140,4 @@ function main() {
   console.log(`wrote ${DEST}`);
 }
 
-main();
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) main();

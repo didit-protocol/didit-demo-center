@@ -120,7 +120,7 @@ test("the feed: a hairline card on a computer, the collapsed pill on a phone", a
   expect(await css(feed, "border-top-color")).toBe("rgb(237, 237, 237)");
   // Signals reads the device on load: its glyph sits in a neutral tile in
   // the Signals colour, after a module dot in the same colour.
-  const event = feed.locator(".lv-ev").first();
+  const event = feed.locator(".lv-ev.p-sig").first();
 
   await expect(event).toContainText("Signals");
   const tile = event.locator(".lv-ic");
