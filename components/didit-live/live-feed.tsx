@@ -60,6 +60,7 @@ export function LiveFeed({
   person,
   tiles,
   integration,
+  quiet = false,
   onConsole,
 }: {
   events: LiveEvent[];
@@ -68,19 +69,21 @@ export function LiveFeed({
   tiles?: ProductTile[];
   /** The few lines a developer writes for this demo, for "Code". */
   integration: string[];
+  /** The app has a dialog open: fold into the pill and stay out of its way. */
+  quiet?: boolean;
   onConsole(): void;
 }) {
   const now = useNow();
   const phone = useIsPhone();
   const [open, setOpen] = React.useState<boolean | null>(null);
   const [code, setCode] = React.useState(false);
-  const expanded = open ?? !phone;
+  const expanded = !(phone && quiet) && (open ?? !phone);
   const products = Array.from(new Set(events.map((event) => event.product)));
   const newest = events[0]?.id;
 
   React.useEffect(() => {
     // A new event on a phone opens the feed once, like a notification.
-    if (phone && newest) setOpen(true);
+    if (phone && newest && !quiet) setOpen(true);
   }, [newest, phone]);
 
   if (!expanded) {

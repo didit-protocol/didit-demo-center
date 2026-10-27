@@ -161,7 +161,6 @@ export async function mockAurora(page: Page): Promise<AuroraMock> {
         playerId: player >= 0 ? current() : null,
         authenticated: false,
       });
-    if (process.env.E2E_DEBUG) console.log("route", key, player);
     if (key === "POST /api/igaming/player") {
       player += 1;
 
@@ -239,7 +238,7 @@ export async function mockAurora(page: Page): Promise<AuroraMock> {
     }
     const body = request.postDataJSON() as Record<string, unknown>;
     const info = body.info as Record<string, string>;
-    const kind = info.actionType ?? info.action_type;
+    const kind = info.type;
     const amount = Number(info.amount);
     let name = "deposit-approved";
 
@@ -253,7 +252,6 @@ export async function mockAurora(page: Page): Promise<AuroraMock> {
       name = player > 0 ? "bonus-shared-device" : "bonus-approved";
     }
     mock.submitted.push(name);
-    if (process.env.E2E_DEBUG) console.log("submit", kind, player, name);
     count += 1;
     const fixture = recording(name);
     const uuid = `00000000-0000-4000-8000-${String(count).padStart(12, "0")}`;

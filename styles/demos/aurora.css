@@ -206,8 +206,8 @@
   .ap-game span { display: none; }
   .ap-game-img .ap-badge { display: none; }
   .ap-row-h a { display: inline; }
-  .ap-layer { padding: 0; place-items: end stretch; }
-  .ap-layer .ap-modal { border-radius: 22px 22px 0 0; max-height: 92%; width: 100%; }
+  .ap-layer { padding: 0 8px 76px; place-items: end stretch; }
+  .ap-layer .ap-modal { border-radius: 22px; max-height: 100%; width: 100%; }
   .ap-signup { grid-template-columns: minmax(0, 1fr); }
   .ap-signup-art { display: none; }
   .ap-signup-form { padding: 28px 20px 20px; }

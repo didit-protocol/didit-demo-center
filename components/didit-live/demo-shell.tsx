@@ -31,6 +31,7 @@ export function DemoShell({
   consoleOpen,
   consoleTab,
   onConsole,
+  quiet,
   children,
 }: {
   demo: DemoBarProps["demo"];
@@ -49,6 +50,8 @@ export function DemoShell({
   consoleOpen: boolean;
   consoleTab: string;
   onConsole(open: boolean, tab?: string): void;
+  /** The app has a dialog open: the feed folds on a phone. */
+  quiet?: boolean;
   children: React.ReactNode;
 }) {
   const appRef = React.useRef<HTMLDivElement>(null);
@@ -70,6 +73,7 @@ export function DemoShell({
           events={events}
           integration={integration}
           person={person}
+          quiet={quiet}
           tiles={tiles}
           onConsole={() => onConsole(true)}
         />

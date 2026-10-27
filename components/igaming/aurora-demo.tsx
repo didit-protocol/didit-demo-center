@@ -659,6 +659,7 @@ export function AuroraDemo() {
       events={live.events}
       integration={integration}
       person={person}
+      quiet={modal !== null}
       step={step}
       tiles={tiles}
       onConsole={openConsole}
