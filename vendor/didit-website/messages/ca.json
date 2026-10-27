@@ -1,0 +1,501 @@
+{
+  "translation_v1": {
+    "chrome": {
+      "header": {
+        "nav": {
+          "products": "Productes",
+          "pricing": "Preus",
+          "image": {
+            "alt": {
+              "didit": "Didit"
+            }
+          },
+          "solutions": {
+            "cards": {
+              "verifyBusiness": {
+                "iconLabel": "Verificació d'Empreses (KYB)"
+              }
+            }
+          },
+          "developers": {
+            "primary": {
+              "terminal": {
+                "readyOpenDashboard": "→ a punt en 5 min · obre el panell",
+                "integrateDidit": "> integra la verificació de Didit",
+                "sessionScaffolded": "✓ /v3/session/ preparat",
+                "readingMcp": "↻ llegint mcp://didit.me",
+                "webhookReady": "✓ controlador de webhook a punt",
+                "mcpConnected": "✓ servidor MCP connectat",
+                "claude": "$ claude"
+              },
+              "quickstartIconLabel": "Guia ràpida"
+            }
+          },
+          "resources": {
+            "foundersCard": {
+              "imageAlt": "Alejandro Rosas (esquerra) i Alberto Rosas (dreta), cofundadors de Didit",
+              "iconLabel": "Sobre Didit"
+            }
+          },
+          "labels": {
+            "solutions": "Solucions",
+            "developers": "Desenvolupadors",
+            "resources": "Recursos",
+            "pricing": "Preus"
+          }
+        },
+        "solutions": {
+          "cards": {
+            "monitoring": {
+              "title": "Monitorització",
+              "description": "AML continu, regles de transacció, KYT de cartera"
+            },
+            "amlCompliance": {
+              "title": "AML i compliment",
+              "description": "Sancions, PEP, mitjans adversos, continu"
+            },
+            "onboardCustomer": {
+              "title": "Verificació d'usuaris (KYC)",
+              "description": "KYC gratuït per a fins a 500 verificacions al mes, per sempre. Identificació, prova de vida i reconeixement facial en un sol paquet.",
+              "iconLabel": "Verificació d'usuaris (KYC)"
+            },
+            "verifyBusiness": {
+              "title": "Verificació d'empreses (KYB)",
+              "description": "Registre, beneficiaris reals, directius i AML d'entitats. Cada UBO obté una sessió KYC vinculada de forma automàtica."
+            },
+            "stopFraud": {
+              "title": "Monitorització de transaccions",
+              "description": "Motor de regles en temps real per a fiat i cripto. Gestió de casos, flux de treball SAR i auto-remediació a un KYC vinculat.",
+              "iconLabel": "Atura el frau"
+            },
+            "complyAml": {
+              "title": "Compliment AML",
+              "description": "Comprova més de 1.300 llistes de sancions, PEP i mitjans adversos. Monitorització contínua diària per 0,07 $ per usuari/any.",
+              "iconLabel": "Compliment AML"
+            },
+            "authentication": {
+              "title": "Autenticació",
+              "description": "Prova de vida, autenticació biomètrica, IP i dispositiu"
+            },
+            "verification": {
+              "title": "Verificació",
+              "description": "KYC, KYB, documents i comprovacions de registre"
+            }
+          },
+          "byUseCase": {
+            "heading": "Casos d'ús",
+            "fullKycOnboarding": "Onboarding KYC complet",
+            "ageVerification": "Verificació d'edat",
+            "cryptoOnramp": "KYC + KYT per a criptomonedes",
+            "accountTakeover": "Evita la suplantació de comptes",
+            "multiAccountAbuse": "Bloqueja l'abús de múltiples comptes",
+            "proofOfHuman": "Prova d'humanitat",
+            "gigWorker": "Incorpora treballadors autònoms",
+            "botDetection": "Bloqueja bots",
+            "passwordRecovery": "Recuperació de contrasenyes",
+            "seeAll": "Tots els casos d'ús"
+          },
+          "byIndustry": {
+            "heading": "Per sector",
+            "fintech": "Fintech",
+            "crypto": "Cripto",
+            "marketplaces": "Marketplaces",
+            "mobility": "Mobilitat",
+            "seeAll": "Veure tots els sectors",
+            "fintechDesc": "Neobancs · pagaments · préstecs · corretatge",
+            "cryptoDesc": "Intercanvis · carteres · passarel·les on/off-ramp · VASP",
+            "marketplacesDesc": "Serveis · lliurament · creadors · e-commerce",
+            "mobilityDesc": "VTC · flotes · lliurament d'última milla",
+            "igaming": "iGaming",
+            "igamingDesc": "Apostes esportives · casinos · loteria · esports de fantasia"
+          },
+          "byModule": {
+            "heading": "Per mòdul",
+            "freeKyc": "KYC gratuït",
+            "governmentChecks": "Verificacions governamentals",
+            "biometricAuthentication": "Autenticació biomètrica",
+            "walletScreening": "Anàlisi de carteres (KYT)",
+            "ageEstimation": "Estimació d'edat",
+            "ipAnalysis": "Anàlisi de dispositius i IP",
+            "idVerification": "Verificació d'identitat",
+            "whiteLabel": "Marca blanca",
+            "liveness": "Prova de vida",
+            "faceMatch": "Coincidència facial",
+            "seeAll": "Tots els 25+ mòduls"
+          },
+          "viewAll": "Explora el catàleg complet"
+        },
+        "developers": {
+          "primary": {
+            "docs": "Documentació",
+            "apiReference": "Referència de l'API",
+            "mcpServer": "Servidor MCP",
+            "quickstart": "Guia ràpida"
+          },
+          "quickstartCard": {
+            "description": "Integra Didit en 5 minuts. Aconsegueix una clau de sandbox, fes un POST a la teva primera sessió, verifica el webhook: un tutorial amb curl.",
+            "cta": "Llegeix la guia ràpida",
+            "eyebrow": "INTEGRA EN 5 MIN"
+          },
+          "buildLinks": {
+            "heading": "Desenvolupa",
+            "sessionsApi": "API de sessions",
+            "webhooks": "Webhooks",
+            "sdks": "SDKs",
+            "openApi": "OpenAPI / Postman",
+            "agentSkills": "Habilitats de l'agent",
+            "codingAgentIntegration": "Integració de l'agent de codificació"
+          },
+          "ship": {
+            "integrationPrompt": "Indicador d'integració",
+            "heading": "Llança",
+            "sandbox": "Sandbox",
+            "changelog": "Registre de canvis",
+            "status": "Estat del servei"
+          },
+          "viewAll": "Centre per a desenvolupadors"
+        },
+        "resources": {
+          "hero": {
+            "blog": "Blog",
+            "successStories": "Casos d'èxit",
+            "helpCenter": "Centre d'ajuda",
+            "demoCenter": "Centre de demostracions",
+            "roiCalculator": "Calculadora de ROI",
+            "academy": "Academy"
+          },
+          "foundersCard": {
+            "title": "Coneix els fundadors",
+            "description": "Alejandro i Alberto Rosas, germans bessons de Barcelona que construeixen la infraestructura per a la identitat i el frau.",
+            "cta": "Llegeix sobre Didit"
+          },
+          "read": {
+            "heading": "Llegeix i explora"
+          },
+          "company": {
+            "heading": "Empresa",
+            "about": "Sobre nosaltres",
+            "careers": "Feina",
+            "securityCompliance": "Seguretat i Compliment",
+            "contact": "Contacte"
+          },
+          "viewAll": "Tots els recursos"
+        },
+        "ctas": {
+          "signIn": "Inicia sessió",
+          "signUp": "Registra't",
+          "startFree": "Comença gratis",
+          "talkToUs": "Parla amb nosaltres",
+          "learnMore": "Més informació"
+        },
+        "localeSwitcherLabel": "Idioma",
+        "products": {
+          "cards": {
+            "userVerification": {
+              "title": "Verificació d'Usuaris",
+              "description": "Paquet KYC · 0,33 $"
+            },
+            "businessVerification": {
+              "title": "Verificació d'Empreses",
+              "description": "KYB · des de 2,00 $"
+            },
+            "transactionMonitoring": {
+              "title": "Monitorització de Transaccions",
+              "description": "Regles en temps real · 0,02 $/transacció"
+            },
+            "walletScreening": {
+              "title": "Anàlisi de Carteres (KYT)",
+              "description": "Risc de cartera on-chain · 0,15 $"
+            }
+          },
+          "modules": {
+            "headingDocuments": "Documents i Contacte",
+            "headingBiometrics": "Biometria i Risc",
+            "idVerification": "Verificació d'Identitat",
+            "nfcVerification": "Verificació NFC",
+            "proofOfAddress": "Prova de domicili",
+            "databaseValidation": "Validació de bases de dades",
+            "questionnaires": "Qüestionaris personalitzats",
+            "emailVerification": "Verificació d'e-mail",
+            "phoneVerification": "Verificació de telèfon",
+            "liveness": "Prova de vida",
+            "faceMatch": "Reconeixement facial 1:1",
+            "faceSearch": "Cerca facial 1:N",
+            "biometricAuth": "Autenticació biomètrica",
+            "ageEstimation": "Estimació d'edat",
+            "ipAnalysis": "Anàlisi de dispositius i IP",
+            "walletScreening": "Anàlisi de carteres (KYT)",
+            "seeAll": "Veure els més de 25 mòduls"
+          },
+          "viewAll": "Explora tots els productes"
+        }
+      },
+      "announcementBar": {
+        "slot1": {
+          "text": "Didit recapta <amt>7,5M $</amt> per construir la infraestructura per a identitat i frau",
+          "ctaLabel": "Llegeix l'anunci",
+          "href": "/blog/didit-7-5m-seed-infrastructure-identity-fraud-ca/"
+        },
+        "slot2": {
+          "text": "El regulador financer espanyol va reconèixer Didit com a més segur que presencialment.",
+          "ctaLabel": "Llegeix l'informe",
+          "href": "/security-compliance#regulator"
+        },
+        "slot3": {
+          "text": "Anàlisi de carteres per 0,15 $ la comprovació, o porta el teu propi proveïdor d'anàlisi.",
+          "ctaLabel": "Veure anàlisi de carteres",
+          "href": "/products/wallet-screening"
+        },
+        "slot4": {
+          "text": "Els preus de KYB i Transaction Monitoring ja estan disponibles.",
+          "ctaLabel": "Veure preus",
+          "href": "/pricing"
+        },
+        "slot5": {
+          "text": "0,33 $ per KYC complet. 500 gratuïts cada mes.",
+          "ctaLabel": "Comença gratis",
+          "href": "https://business.didit.me"
+        }
+      },
+      "footer": {
+        "cols": {
+          "solutions": {
+            "seeAll": "Tots els casos d'ús",
+            "heading": "Solucions",
+            "fullKycOnboarding": "Onboarding KYC complet",
+            "ageVerification": "Verificació d'edat",
+            "cryptoOnramp": "KYC + KYT per a accés a cripto",
+            "accountTakeover": "Atura les suplantacions de compte",
+            "multiAccountAbuse": "Bloqueja l'abús de comptes múltiples",
+            "proofOfHuman": "Prova d'humanitat",
+            "botDetection": "Bloqueja els bots",
+            "gigWorkerVerification": "Verificació de treballadors temporals",
+            "igamingResponsibleGaming": "Joc responsable en iGaming",
+            "micaCrypto": "Verificació d'usuaris de cripto MiCA",
+            "cryptoTravelRule": "Crypto Travel Rule",
+            "uboVerification": "Verificació UBO (6AMLD)",
+            "bnplUnderwriting": "Avaluació de crèdit BNPL",
+            "psd3Sca": "SCA PSD3",
+            "marketplaceSellerKyb": "KYB per a venedors de marketplace",
+            "employeeOnboarding": "Onboarding d'empleats",
+            "nfcEpassport": "Onboarding amb passaport electrònic NFC",
+            "passwordRecovery": "Recuperació de contrasenya"
+          },
+          "industries": {
+            "heading": "Indústries",
+            "fintech": "Fintech",
+            "crypto": "Cripto / Web3",
+            "marketplaces": "Marketplaces",
+            "mobility": "Mobilitat",
+            "gambling": "iGaming / Jocs d'atzar",
+            "banking": "Banca",
+            "insurance": "Assegurances",
+            "ecommerce": "E-commerce",
+            "telecom": "Telecomunicacions",
+            "seeAll": "Totes les indústries"
+          },
+          "developers": {
+            "heading": "Desenvolupadors",
+            "documentation": "Documentació",
+            "apiReference": "Referència de l'API",
+            "quickstart": "Guia ràpida, 5 min",
+            "integrationPrompt": "Indicador d'integració",
+            "mcp": "Servidor MCP",
+            "agentSkills": "Habilitats de l'agent",
+            "sdks": "SDKs",
+            "sandbox": "Sandbox (gratuït)",
+            "changelog": "Registre de canvis",
+            "status": "Estat del servei",
+            "demoCenter": "Centre de demostracions"
+          },
+          "comparePricing": {
+            "heading": "Preus i comparació",
+            "pricing": "Preus",
+            "roiCalculator": "Calculadora de ROI",
+            "sumsub": "vs Sumsub",
+            "veriff": "vs Veriff",
+            "onfido": "vs Onfido",
+            "jumio": "vs Jumio",
+            "persona": "vs Persona",
+            "stripeIdentity": "vs Stripe Identity",
+            "allSwitch": "Totes les comparacions amb la competència",
+            "countries": "Països compatibles",
+            "supportedDocuments": "Documents compatibles"
+          },
+          "resources": {
+            "heading": "Recursos",
+            "securityCompliance": "Seguretat i Compliment",
+            "supportedDocuments": "Documents compatibles",
+            "roiCalculator": "Calculadora de ROI",
+            "status": "Estat del servei",
+            "demoCenter": "Centre de demostracions"
+          },
+          "products": {
+            "heading": "Productes",
+            "userVerification": "Verificació d'Usuaris (KYC)",
+            "businessVerification": "Verificació d'Empreses (KYB)",
+            "transactionMonitoring": "Monitorització de Transaccions",
+            "walletScreening": "Anàlisi de Carteres (KYT)",
+            "amlScreening": "Anàlisi AML",
+            "idVerification": "Verificació d'Identitat",
+            "liveness": "Prova de vida",
+            "faceMatch1to1": "Reconeixement facial 1:1",
+            "faceSearch1toN": "Cerca facial 1:N",
+            "biometricAuth": "Autenticació biomètrica",
+            "ageEstimation": "Estimació d'edat",
+            "nfcReading": "Lectura NFC",
+            "databaseValidation": "Validació de base de dades",
+            "ipAnalysis": "Anàlisi de dispositius i IP",
+            "emailVerification": "Verificació de correu electrònic",
+            "phoneVerification": "Verificació de telèfon",
+            "workflowOrchestrator": "Orquestrador de fluxos de treball",
+            "whiteLabel": "Marca blanca",
+            "seeAllModules": "Tots els productes"
+          },
+          "company": {
+            "heading": "Empresa",
+            "about": "Sobre nosaltres",
+            "blog": "Blog",
+            "successStories": "Casos d'èxit",
+            "securityCompliance": "Seguretat i Compliment",
+            "contact": "Contacte",
+            "getDemo": "Demana una demo",
+            "careers": "Feina",
+            "brand": "Kit de marca",
+            "support": "Suport",
+            "helpCenter": "Centre d'ajuda"
+          },
+          "backedby": {
+            "investors": {
+              "name": {
+                "yCombinator": "Y Combinator"
+              }
+            }
+          }
+        },
+        "askAi": {
+          "eyebrow": "Demana a una IA que resumeixi aquesta pàgina",
+          "openIn": "Obre aquesta pàgina a {provider}"
+        },
+        "tagline": "Una API per a la identitat i el frau.",
+        "trustStrip": "SOC 2 · ISO 27001 · iBeta PAD L1 · GDPR · eIDAS 2.0 · MiCA · AMLD6 · DORA-aligned",
+        "regulatorMicroline": "Reconegut pel Tresor, el Banc d'Espanya i el SEPBLAC com a més segur que la verificació presencial.",
+        "regulatorReadReport": "Llegeix l'informe",
+        "backedBy": "Amb el suport de",
+        "hq": "San Francisco, EUA · Seu central",
+        "legal": {
+          "copyright": "© 2026 Didit",
+          "privacy": "Privadesa",
+          "cookies": "Cookies",
+          "businessTerms": "Condicions per a empreses",
+          "subProcessors": "Subencarregats del tractament",
+          "contact": "Contacte"
+        },
+        "social": {
+          "labels": {
+            "linkedin": "LinkedIn",
+            "x": "X (Twitter)",
+            "github": "GitHub"
+          },
+          "ariaLabel": "Didit a {network}"
+        },
+        "g2Aria": "Didit té una valoració de 4,9 sobre 5 a G2",
+        "g2Tagline": "Infraestructura per a la identitat i el frau"
+      }
+    },
+    "localeswitcher": {
+      "language": "Idioma",
+      "ariaLabel": {
+        "language": "Idioma",
+        "languageColumn1": "Idioma (columna 1)",
+        "languageColumn2": "Idioma (columna 2)",
+        "changeLanguage": "Canvia l'idioma. Idioma actual: {current}."
+      }
+    },
+    "ui": {
+      "navbar": {
+        "image": {
+          "sizes": {
+            "minWidth1024px480px": "(min-width: 1024px) 480px, 100vw"
+          },
+          "alt": {
+            "didit": "Didit"
+          }
+        },
+        "dropdownPanel": {
+          "subtleDarkening": {
+            "description": "Enfosquiment subtil només a la part inferior, just el suficient per\n                        ancorar el text sense enfosquir la part superior\n                        de la foto. h-[55%] comença ben\n                        per sota de les cares dels fundadors."
+          },
+          "accentVariant": {
+            "description": "Variant d'accent, embolica l'enllaç en una píndola Didit Blava perquè\n            // es llegeixi com una crida a l'acció d'alta conversió."
+          },
+          "heroStrip": {
+            "heading": "Franja hero, targetes degradades en una sola fila horitzontal."
+          },
+          "linkColumnsRow": {
+            "heading": "Fila de columnes d'enllaços, Mòduls · Casos d'ús · Indústries."
+          },
+          "imageBackgroundVariant": {
+            "description": "Variant amb imatge de fons, utilitzada per a la targeta \"Coneix els fundadors\" del menú de Recursos.\n                  // Next/Image omple la targeta; un bloc de text apilat alineat a l'esquerra\n                  // (títol + descripció + CTA) se situa a la part inferior esquerra perquè la foto domini\n                  // aproximadament el 80% de la targeta. Sense superposició de degradat fosc, la llegibilitat del text\n                  // es manté amb una ombra de text ajustada sobre\n                  // el text blanc del llenç. Segons Alberto: \"treu l'opacitat de sota i fes-ho com abans a l'esquerra\n                  // alineat, només assegura't que comenci més avall\n                  // com abans.\""
+          },
+          "titleRow": {
+            "description": "Fila de títol, icona en línia a l'ESQUERRA del títol (sense fons de xip,\n                    sense anell, sense ombra). Utilitza la mateixa família d'icones que\n                    `/pricing` a través de ConsoleModuleIcon (que reflecteix el registre d'icones de característiques de flux de treball de fe-application-console);\n                    torna a la màscara iconSrc quan `moduleKey` no hi és."
+          },
+          "accentSideColumn": {
+            "description": "L'accent en un enllaç de columna lateral el renderitza en Didit\n                  // Blau amb una fletxa final, utilitzat per a \"Veure tots els 25+\n                  // mòduls\", \"Totes les 15 indústries\", \"Explorar tots els…\" per tal que es llegeixin com a CTAs d'exploració\n                  // en lloc d'enllaços de mòduls regulars."
+          }
+        },
+        "searchDidit": "Cerca a Didit",
+        "closeSearch": "Tanca la cerca",
+        "openMenu": "Obre el menú",
+        "closeMenu": "Tanca el menú"
+      },
+      "topBar": {
+        "announcementAriaLabel": "Anunci",
+        "dismissAnnouncementAriaLabel": "Descartar anunci"
+      },
+      "navTerminalCard": {
+        "diditZsh": "~/didit · zsh",
+        "navTerminalCard": {
+          "live": "EN DIRECTE"
+        }
+      },
+      "logoContextMenu": {
+        "aria": "Recursos de marca de Didit",
+        "eyebrow": "Kit de marca",
+        "copyLogo": "Copia el logotip com a SVG",
+        "copied": "Copiat",
+        "downloadSvg": "Descarrega el logotip (SVG)",
+        "downloadPng": "Descarrega el logotip (PNG)",
+        "downloadMark": "Descarrega el símbol (SVG)",
+        "copyColor": "Copia el color de marca",
+        "guidelines": "Directrius de marca"
+      },
+      "footer": {
+        "legalTagline": "Infraestructura d'identitat per a equips que necessiten confiança."
+      },
+      "backedBy": {
+        "label": "Amb el suport de"
+      }
+    },
+    "blog": {
+      "archive": {
+        "eyebrow": "Arxiu del blog",
+        "title": "Consulta tots els <blue>articles de Didit</blue>.",
+        "titleAccent": "articles de Didit",
+        "description": "Tots els articles publicats sobre identitat i frau, organitzats en pàgines lleugeres per navegar-hi ràpidament.",
+        "browseAll": "Explora tots els articles",
+        "navigationAria": "Pàgines de l’arxiu del blog",
+        "pageOf": "Pàgina {page} de {total}",
+        "range": "Articles {start}–{end}",
+        "articleCount": "{count} articles",
+        "metadata": {
+          "title": "Arxiu del blog | Didit",
+          "pageTitle": "Arxiu del blog, pàgina {page} | Didit",
+          "description": "Consulta l’arxiu complet del blog de Didit amb articles útils sobre identitat, prevenció de frau, compliment, novetats i actualitzacions de producte.",
+          "pageDescription": "Explora la pàgina {page} de l’arxiu del blog de Didit amb articles sobre verificació d’identitat, prevenció de frau, compliance i novetats."
+        }
+      }
+    }
+  }
+}
