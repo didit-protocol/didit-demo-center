@@ -62,11 +62,51 @@ test("a session keeps the age, the location and nothing else", () => {
       isVpnOrTor: false,
       isDataCenter: true,
     },
+    fullName: null,
+    documentType: null,
+    documentCountry: null,
+    faceMatch: null,
+    liveness: null,
+    amlHits: null,
   });
   // No images, no email, no coordinates, no raw IP.
   assert.doesNotMatch(
     JSON.stringify(summary),
     /signed\.example|player@example|203\.0\.113|40\.4/,
+  );
+});
+
+test("an ID check keeps the name, document type and scores, never the document", () => {
+  const summary = projectSession(
+    decision({
+      id_verifications: [
+        {
+          status: "Approved",
+          first_name: "Sofia",
+          last_name: "Marin",
+          document_type: "Passport",
+          issuing_state_name: "Malta",
+          document_number: "MT1234567",
+          date_of_birth: "1999-03-14",
+          front_image: "https://signed.example/front.jpg",
+        },
+      ],
+      face_matches: [{ status: "Approved", score: 98.1 }],
+      liveness_checks: [{ status: "Approved", score: 99.4 }],
+      aml_screenings: [{ status: "Approved", total_hits: 0 }],
+    }),
+    PLAYER,
+  );
+
+  assert.equal(summary.fullName, "Sofia Marin");
+  assert.equal(summary.documentType, "Passport");
+  assert.equal(summary.documentCountry, "Malta");
+  assert.equal(summary.faceMatch, 98.1);
+  assert.equal(summary.liveness, 99.4);
+  assert.equal(summary.amlHits, 0);
+  assert.doesNotMatch(
+    JSON.stringify(summary),
+    /MT1234567|1999-03-14|signed\.example/,
   );
 });
 

@@ -75,7 +75,7 @@ test("the ACCS catalogue cards use the shared workflow ids", () => {
 });
 
 test("no page hard-codes a production ACCS workflow id", () => {
-  for (const path of ["lib/demos.ts", "app/accs/page.tsx"]) {
+  for (const path of ["lib/demos.ts", "app/(site)/accs/page.tsx"]) {
     const text = source(path);
 
     assert.ok(
@@ -87,10 +87,10 @@ test("no page hard-codes a production ACCS workflow id", () => {
       `${path} hard-codes ${PRODUCTION_VERIFICATION}`,
     );
   }
-  assert.match(source("app/accs/page.tsx"), /from "@\/lib\/accs-workflows"/);
+  assert.match(source("app/(site)/accs/page.tsx"), /from "@\/lib\/accs-workflows"/);
   // On staging the page must not claim the production engine ran the session.
   assert.ok(
-    !source("app/accs/page.tsx").includes("the production verification engine"),
+    !source("app/(site)/accs/page.tsx").includes("the production verification engine"),
   );
 });
 

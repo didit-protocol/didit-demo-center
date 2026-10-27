@@ -13,8 +13,9 @@ export const dynamic = "force-dynamic";
 /** An analyst approves or declines a KYB that is In Review. */
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } },
+  context: { params: Promise<{ id: string }> },
 ) {
+  const params = await context.params;
   const env = marketEnv();
 
   return respond(

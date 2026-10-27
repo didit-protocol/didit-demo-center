@@ -2,7 +2,8 @@ import { NextRequest } from "next/server";
 
 import { AGE_WORKFLOW_ID, OPERATOR_NAME } from "@/lib/igaming/policy";
 import { diditErrorMessage } from "@/lib/igaming/records";
-import { didit, noPlayer, noStore, readPlayer } from "@/lib/igaming/server";
+import { gateway, noPlayer, noStore, readPlayer } from "@/lib/igaming/server";
+import { didit as diditClient } from "@/lib/didit/server";
 import { siteConfig } from "@/config/site";
 
 export const dynamic = "force-dynamic";
@@ -24,7 +25,7 @@ const CALLBACK = new URL("/igaming", siteConfig.url).toString();
  * the Didit user carries it without the demo ever emailing anyone.
  */
 export async function POST(request: NextRequest) {
-  const playerId = readPlayer(request);
+  const playerId = await readPlayer(request);
 
   if (!playerId) return noPlayer();
 
@@ -32,25 +33,28 @@ export async function POST(request: NextRequest) {
   const fullName = String(body?.fullName ?? "").trim();
   const email = String(body?.email ?? "").trim();
 
-  if (fullName.length < 2 || fullName.length > 80) {
+  // A Didit Authentication sign-up gives an email only; the name comes later
+  // from the ID. The casino's own sign-up asks for it.
+  if (fullName && (fullName.length < 2 || fullName.length > 80)) {
     return noStore({ error: "Enter your full name." }, { status: 400 });
   }
   if (!EMAIL.test(email) || email.length > 120) {
     return noStore({ error: "Enter a valid email address." }, { status: 400 });
   }
 
-  const result = await didit("POST", "/v3/session/", {
-    workflow_id: AGE_WORKFLOW_ID,
-    vendor_data: playerId,
-    callback: CALLBACK,
-    callback_method: "both",
-    contact_details: { email, send_notification_emails: false },
-    metadata: {
-      operator: OPERATOR_NAME,
-      step: "registration",
-      full_name: fullName,
-    },
-  });
+  const result = gateway(
+    await diditClient.sessions.create({
+      workflowId: AGE_WORKFLOW_ID,
+      vendorData: playerId,
+      callback: CALLBACK,
+      email,
+      metadata: {
+        operator: OPERATOR_NAME,
+        step: "registration",
+        ...(fullName ? { full_name: fullName } : {}),
+      },
+    }),
+  );
 
   if (!result.ok) {
     return noStore(

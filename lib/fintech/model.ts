@@ -17,8 +17,10 @@
  *   nothing and bills nothing.
  */
 
-/** The published staging workflow the bank onboards with. */
-export const ONBOARDING_WORKFLOW_ID = "c076a8bb-b0a1-482a-a257-c296391fac2f";
+import { alder } from "../didit/demos.ts";
+
+/** The workflow the bank onboards with (lib/didit/demos.ts). */
+export const ONBOARDING_WORKFLOW_ID = alder.workflows.onboarding;
 
 export const CURRENCY = "EUR";
 

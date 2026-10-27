@@ -80,7 +80,7 @@ export function Catalogue() {
         status: searchParams.get("status") ?? "In Review",
         demo: getDemo(demoId),
       });
-      router.replace("/", { scroll: false });
+      router.replace("/modules", { scroll: false });
 
       return;
     }
@@ -89,7 +89,7 @@ export function Catalogue() {
 
     if (deepLinked) {
       setOpenDemo(deepLinked);
-      router.replace("/", { scroll: false });
+      router.replace("/modules", { scroll: false });
     }
   }, [searchParams, router]);
 

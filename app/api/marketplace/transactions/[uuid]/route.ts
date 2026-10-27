@@ -8,8 +8,9 @@ export const dynamic = "force-dynamic";
 /** One of this browser's transactions, trimmed. */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { uuid: string } },
+  context: { params: Promise<{ uuid: string }> },
 ) {
+  const params = await context.params;
   const env = marketEnv();
 
   return respond(
