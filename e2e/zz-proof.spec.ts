@@ -22,6 +22,8 @@ test("proof", async ({ page }, info) => {
   } else {
     await page.getByRole("navigation", { name: "Demo steps" }).getByRole("button", { name: /Transact/ }).click();
   }
+  const fold = page.getByRole("button", { name: "Fold the feed" });
+  if (await fold.isVisible()) await fold.click();
   await page.getByTestId("alder-send").getByRole("button", { name: "Send 5,000.00 EUR" }).click();
   await expect(page.getByRole("dialog", { name: "Confirm it is you" })).toBeVisible();
   await page.waitForTimeout(1200);
