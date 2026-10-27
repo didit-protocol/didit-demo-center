@@ -1,0 +1,23 @@
+.now/*
+*.css
+.changeset
+dist
+esm/*
+public/*
+tests/*
+scripts/*
+# Byte-synced from fe-didit-website-v4 - reformatting it would break parity
+# (scripts/check-website-chrome-parity.mjs).
+vendor/
+*.config.js
+.DS_Store
+node_modules
+coverage
+.next
+build
+!.commitlintrc.cjs
+!.lintstagedrc.cjs
+!jest.config.js
+!plopfile.js
+!react-shim.js
+!tsup.config.ts
