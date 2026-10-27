@@ -13,6 +13,7 @@
  * Usage:
  *   node scripts/sync-design-system.mjs --from-dir <design repo checkout>
  *   node scripts/sync-design-system.mjs --from-git <clone> --ref <ref>
+ *   --commit <sha> records the source commit for a --from-dir read
  *   add --check to compare instead of write (exits 1 on drift)
  */
 
@@ -123,7 +124,7 @@ function main() {
   const state = {
     repo: DESIGN_REPO,
     ref: source.ref ?? null,
-    commit: resolveCommit(source),
+    commit: opt("--commit") ?? resolveCommit(source),
     files: [TOKENS, BUNDLE],
     blocks: BLOCKS.map(([name]) => name),
   };
