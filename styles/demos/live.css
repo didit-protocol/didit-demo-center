@@ -243,9 +243,9 @@
 
 /* ---------- the live page (the rules above are the boards' own) ---------- */
 .dx, .dxp, .hub { --font-sans: var(--font-didit), "Inter", ui-sans-serif, system-ui, sans-serif; --dd-mono: var(--font-didit-mono), ui-monospace, "SF Mono", Menlo, monospace; }
-.dx button, .dx a { font: inherit; color: inherit; cursor: pointer; }
-.dx button { background: none; border: 0; padding: 0; }
-.dx a { text-decoration: none; }
+:where(.dx) :where(button, a) { font: inherit; color: inherit; cursor: pointer; }
+:where(.dx) :where(button) { background: none; border: 0; padding: 0; }
+:where(.dx) :where(a) { text-decoration: none; }
 .dx :focus-visible { outline: 2px solid #7A5AF8; outline-offset: 2px; }
 .dx-switch { position: relative; }
 .dx-switch svg { color: #8D90A6; }

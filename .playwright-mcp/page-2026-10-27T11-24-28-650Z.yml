@@ -1,0 +1,150 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - link "Didit Demo Center" [ref=e4] [cursor=pointer]:
+      - /url: /
+      - img "Didit" [ref=e5]
+    - link "Demo Center" [ref=e7] [cursor=pointer]:
+      - /url: /
+    - button "A Aurora Play iGaming" [ref=e9] [cursor=pointer]:
+      - generic [ref=e10]: A
+      - text: Aurora Play
+      - emphasis [ref=e11]: iGaming
+    - navigation "Demo steps" [ref=e14]:
+      - button "1 Sign up" [ref=e15] [cursor=pointer]:
+        - generic [ref=e16]: "1"
+        - generic [ref=e17]: Sign up
+      - button "2 Verify" [ref=e19] [cursor=pointer]:
+        - generic [ref=e20]: "2"
+        - generic [ref=e21]: Verify
+      - button "3 Transact" [ref=e23] [cursor=pointer]:
+        - generic [ref=e24]: "3"
+        - generic [ref=e25]: Transact
+      - button "4 Stop fraud" [ref=e27] [cursor=pointer]:
+        - generic [ref=e28]: "4"
+        - generic [ref=e29]: Stop fraud
+      - button "5 Console" [ref=e31] [cursor=pointer]:
+        - generic [ref=e32]: "5"
+        - generic [ref=e33]: Console
+    - generic [ref=e34]:
+      - generic [ref=e35]: Sandbox
+      - button "Console view" [ref=e36] [cursor=pointer]
+      - button "Restart the demo" [ref=e37] [cursor=pointer]
+  - generic [ref=e41]:
+    - generic [ref=e42]:
+      - complementary [ref=e43]:
+        - generic [ref=e48]:
+          - text: Aurora
+          - emphasis [ref=e49]: Play
+        - button "Lobby" [ref=e50] [cursor=pointer]
+        - button "Slots" [ref=e55] [cursor=pointer]
+        - button "Live casino" [ref=e59] [cursor=pointer]
+        - button "Table games" [ref=e68] [cursor=pointer]
+        - button "Jackpots" [ref=e74] [cursor=pointer]
+        - button "Sports" [ref=e82] [cursor=pointer]
+        - button "Promotions 3" [ref=e87] [cursor=pointer]:
+          - generic [ref=e92]: Promotions
+          - generic [ref=e93]: "3"
+        - button "VIP club" [ref=e94] [cursor=pointer]
+        - generic [ref=e98]: Your account
+        - button "Cashier" [ref=e99] [cursor=pointer]
+        - button "History" [ref=e104] [cursor=pointer]
+        - button "Play responsibly Set deposit limits or take a break any time. 18+ only." [ref=e110] [cursor=pointer]:
+          - generic [ref=e111]: Play responsibly
+          - text: Set deposit limits or take a break any time. 18+ only.
+      - generic [ref=e112]:
+        - generic [ref=e113]:
+          - textbox "Search games" [ref=e118]:
+            - /placeholder: Search 2,400 games
+          - generic [ref=e119]:
+            - generic [ref=e120] [cursor=pointer]: Casino
+            - generic [ref=e121] [cursor=pointer]: Sports
+          - generic [ref=e122]:
+            - button "Log in" [ref=e123] [cursor=pointer]
+            - button "Sign up" [ref=e124] [cursor=pointer]
+        - generic [ref=e125]:
+          - generic [ref=e127]:
+            - generic [ref=e128]: Welcome offer
+            - heading "100 free spins on your first deposit" [level=1] [ref=e129]
+            - paragraph [ref=e130]: Plus a 100% match up to 200 EUR. Wagering 30x. 18+, play responsibly.
+            - generic [ref=e131]:
+              - button "Join and claim" [ref=e132] [cursor=pointer]
+              - button "Terms" [ref=e133] [cursor=pointer]
+          - generic [ref=e138]:
+            - generic [ref=e145]:
+              - generic [ref=e146]: Aurora mega jackpot
+              - generic [ref=e147]: 1,284,551.20 EUR
+            - generic [ref=e148]:
+              - text: Last win
+              - emphasis [ref=e149]: 48,210 EUR
+              - text: on Aurora Crystals
+          - generic [ref=e150]:
+            - generic [ref=e151]:
+              - heading "Popular slots" [level=2] [ref=e152]
+              - generic [ref=e153]:
+                - generic [ref=e154] [cursor=pointer]: All
+                - generic [ref=e155] [cursor=pointer]: New
+                - generic [ref=e156] [cursor=pointer]: Jackpots
+                - generic [ref=e157] [cursor=pointer]: Megaways
+            - generic [ref=e158]:
+              - button "HOT Pharaoh's Gold Aurora Originals · 96.5%" [ref=e159] [cursor=pointer]:
+                - generic [ref=e160]: HOT
+                - generic [ref=e162]: Pharaoh's Gold
+                - generic [ref=e163]: Aurora Originals · 96.5%
+              - button "JACKPOT Aurora Crystals Aurora Originals · 96.2%" [ref=e164] [cursor=pointer]:
+                - generic [ref=e165]: JACKPOT
+                - generic [ref=e167]: Aurora Crystals
+                - generic [ref=e168]: Aurora Originals · 96.2%
+              - button "Neon Fruits Lumen Games · 96.8%" [ref=e169] [cursor=pointer]:
+                - generic [ref=e171]: Neon Fruits
+                - generic [ref=e172]: Lumen Games · 96.8%
+              - button "NEW Dragon Pearl Jade Studio · 96.1%" [ref=e173] [cursor=pointer]:
+                - generic [ref=e174]: NEW
+                - generic [ref=e176]: Dragon Pearl
+                - generic [ref=e177]: Jade Studio · 96.1%
+              - button "Viking Storm Northwind · 96.4%" [ref=e178] [cursor=pointer]:
+                - generic [ref=e180]: Viking Storm
+                - generic [ref=e181]: Northwind · 96.4%
+              - button "Reef Riches Lumen Games · 96.3%" [ref=e182] [cursor=pointer]:
+                - generic [ref=e184]: Reef Riches
+                - generic [ref=e185]: Lumen Games · 96.3%
+          - generic [ref=e186]:
+            - generic [ref=e187]:
+              - heading "Live casino" [level=2] [ref=e188]
+              - link "See all" [ref=e189] [cursor=pointer]:
+                - /url: "#live"
+            - generic [ref=e190]:
+              - generic [ref=e191]:
+                - generic [ref=e192]: LIVE
+                - generic [ref=e193]:
+                  - generic [ref=e194]: Aurora Roulette
+                  - generic [ref=e195]: 1 to 5,000 EUR
+              - generic [ref=e196]:
+                - generic [ref=e197]: LIVE
+                - generic [ref=e198]:
+                  - generic [ref=e199]: Blackjack VIP
+                  - generic [ref=e200]: 25 to 10,000 EUR
+              - generic [ref=e201]:
+                - generic [ref=e202]: LIVE
+                - generic [ref=e203]:
+                  - generic [ref=e204]: Baccarat Royale
+                  - generic [ref=e205]: 5 to 7,500 EUR
+          - generic [ref=e206]:
+            - generic [ref=e207]:
+              - heading "Sportsbook" [level=2] [ref=e208]
+              - link "Today" [ref=e209] [cursor=pointer]:
+                - /url: "#sports"
+            - generic [ref=e215]:
+              - generic [ref=e216]: Live odds on 1,200 matches a day
+              - generic [ref=e217]: Football, tennis, basketball and esports
+    - region "Didit live" [ref=e218]:
+      - generic [ref=e219]:
+        - generic [ref=e220]:
+          - generic [ref=e221]: Didit live
+          - generic [ref=e222]: Live
+          - generic [ref=e223]: No one signed in yet
+          - button "Fold the feed" [ref=e224] [cursor=pointer]
+        - list [ref=e226]:
+          - listitem [ref=e227]: Nothing yet. Every check Didit runs for you in this demo shows up here as it happens.
+        - generic [ref=e228]:
+          - button "Open the console view" [ref=e229] [cursor=pointer]
+          - button "Code" [ref=e230] [cursor=pointer]
