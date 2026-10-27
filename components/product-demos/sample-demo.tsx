@@ -13,7 +13,7 @@ import {
   SquareTerminal,
 } from "lucide-react";
 
-import { Code, Crumbs, Eyebrow, Status, Steps, Tags } from "./parts";
+import { Code, Crumbs, Eyebrow, Status, Steps } from "./parts";
 
 import { diditUrls } from "@/lib/didit/config";
 import { docs } from "@/lib/docs";
@@ -69,7 +69,6 @@ export function SampleDemo({ demo }: { demo: Sample }) {
           <span>Free in the sandbox</span>
         </div>
         <Steps steps={demo.steps} />
-        <Tags demo={demo} />
         <div className="pd-cta">
           {demo.industry ? (
             <Link className="pd-btn is-pri" href={demo.industry.route}>

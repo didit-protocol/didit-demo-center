@@ -1,0 +1,387 @@
+- generic [ref=f4e2]:
+  - generic [ref=f4e3]:
+    - generic [ref=f4e4]:
+      - link "Didit Demo Center" [ref=f4e5] [cursor=pointer]:
+        - /url: /
+        - img "Didit" [ref=f4e6]
+        - generic [ref=f4e8]: Demo Center
+      - navigation "Demo Center" [ref=f4e9]:
+        - link "Demos" [ref=f4e10] [cursor=pointer]:
+          - /url: "#demos"
+        - link "How it works" [ref=f4e11] [cursor=pointer]:
+          - /url: "#how"
+        - link "Integrate" [ref=f4e12] [cursor=pointer]:
+          - /url: "#integrate"
+        - link "Modules" [ref=f4e13] [cursor=pointer]:
+          - /url: /modules
+      - generic [ref=f4e14]:
+        - link "Docs" [ref=f4e15] [cursor=pointer]:
+          - /url: https://docs.didit.me
+        - link "Start free" [ref=f4e19] [cursor=pointer]:
+          - /url: https://business.staging.didit.me
+    - generic [ref=f4e20]:
+      - generic [ref=f4e21]:
+        - generic [ref=f4e22]: Sandbox · no real money, no real people
+        - heading [level=1] [ref=f4e23]:
+          - text: Four real products.
+          - emphasis [ref=f4e24]: Didit inside each one.
+        - paragraph [ref=f4e25]: Sign up, verify, move money and watch an attack get stopped, in a casino, a bank, a marketplace and a crypto exchange. The Didit live layer shows every check as it happens, and the console view shows what your team sees.
+        - generic [ref=f4e26]:
+          - link "Start with Aurora Play" [ref=f4e27] [cursor=pointer]:
+            - /url: /igaming
+          - link "How it works" [ref=f4e30] [cursor=pointer]:
+            - /url: "#how"
+      - generic [aria-hidden] [ref=f4e31]:
+        - generic [ref=f4e40]:
+          - generic [ref=f4e41]: Verification
+          - generic [ref=f4e42]: Age 25+ approved
+        - generic [ref=f4e48]:
+          - generic [ref=f4e49]: Authentication
+          - generic [ref=f4e50]: Passkey created
+        - generic [ref=f4e56]:
+          - generic [ref=f4e57]: Blocked
+          - generic [ref=f4e58]: Sanctioned wallet declined
+        - generic [ref=f4e64]:
+          - generic [ref=f4e65]: Transactions
+          - generic [ref=f4e66]: "Deposit held: ID check"
+  - generic [ref=f4e67]:
+    - heading "Pick an industry" [level=2] [ref=f4e68]
+    - paragraph [ref=f4e69]: Each demo is a complete product with its own brand. Every step runs on the Didit sandbox, live.
+    - list [ref=f4e70]:
+      - listitem [ref=f4e71]:
+        - link [aria-hidden] [ref=f4e72] [cursor=pointer]:
+          - /url: /igaming
+        - generic [ref=f4e73]:
+          - generic [ref=f4e74]:
+            - generic [ref=f4e75]: A
+            - generic [ref=f4e76]:
+              - heading "Aurora Play" [level=3] [ref=f4e77]
+              - generic [ref=f4e78]: iGaming · Casino and sportsbook
+          - paragraph [ref=f4e79]: A passkey sign-up, an age check before the first bet, deposits held for an ID check at 2,000 EUR, and bonus abuse caught by the device.
+          - generic [ref=f4e80]:
+            - generic [ref=f4e81]: Authentication
+            - generic [ref=f4e83]: Signals
+            - generic [ref=f4e85]: Verification
+            - generic [ref=f4e87]: Transactions
+          - generic [ref=f4e89]:
+            - link "Open the demo" [ref=f4e90] [cursor=pointer]:
+              - /url: /igaming
+            - generic [ref=f4e93]: demos.staging.didit.me/igaming
+      - listitem [ref=f4e94]:
+        - link [aria-hidden] [ref=f4e95] [cursor=pointer]:
+          - /url: /fintech
+        - generic [ref=f4e96]:
+          - generic [ref=f4e97]:
+            - generic [ref=f4e98]: A
+            - generic [ref=f4e99]:
+              - heading "Alder" [level=3] [ref=f4e100]
+              - generic [ref=f4e101]: Fintech · A neobank
+          - paragraph [ref=f4e102]: An account in five minutes with KYC and AML, a 5,000 EUR transfer confirmed with a passkey, and an account takeover blocked at sign-in.
+          - generic [ref=f4e103]:
+            - generic [ref=f4e104]: Authentication
+            - generic [ref=f4e106]: Signals
+            - generic [ref=f4e108]: Verification
+            - generic [ref=f4e110]: Transactions
+          - generic [ref=f4e112]:
+            - link "Open the demo" [ref=f4e113] [cursor=pointer]:
+              - /url: /fintech
+            - generic [ref=f4e116]: demos.staging.didit.me/fintech
+      - listitem [ref=f4e117]:
+        - link [aria-hidden] [ref=f4e118] [cursor=pointer]:
+          - /url: /marketplace
+        - generic [ref=f4e119]:
+          - generic [ref=f4e120]:
+            - generic [ref=f4e121]: "N"
+            - generic [ref=f4e122]:
+              - heading "Northmarket" [level=3] [ref=f4e123]
+              - generic [ref=f4e124]: Marketplace · Vintage and design resale
+          - paragraph [ref=f4e125]: Sellers pass KYB before their first payout, large orders wait for a quick age check, and a second shop on the same device is paused.
+          - generic [ref=f4e126]:
+            - generic [ref=f4e127]: Authentication
+            - generic [ref=f4e129]: Signals
+            - generic [ref=f4e131]: Verification
+            - generic [ref=f4e133]: Transactions
+          - generic [ref=f4e135]:
+            - link "Open the demo" [ref=f4e136] [cursor=pointer]:
+              - /url: /marketplace
+            - generic [ref=f4e139]: demos.staging.didit.me/marketplace
+      - listitem [ref=f4e140]:
+        - link [aria-hidden] [ref=f4e141] [cursor=pointer]:
+          - /url: /crypto-exchange
+        - generic [ref=f4e142]:
+          - generic [ref=f4e143]:
+            - generic [ref=f4e144]: K
+            - generic [ref=f4e145]:
+              - heading "Kestrel" [level=3] [ref=f4e146]
+              - generic [ref=f4e147]: Crypto exchange · Buy, hold and send crypto
+          - paragraph [ref=f4e148]: KYC and AML before the first deposit, deposits screened by wallet, a Travel Rule withdrawal with a selfie, and a sanctioned wallet declined.
+          - generic [ref=f4e149]:
+            - generic [ref=f4e150]: Authentication
+            - generic [ref=f4e152]: Signals
+            - generic [ref=f4e154]: Verification
+            - generic [ref=f4e156]: Transactions
+          - generic [ref=f4e158]:
+            - link "Open the demo" [ref=f4e159] [cursor=pointer]:
+              - /url: /crypto-exchange
+            - generic [ref=f4e162]: demos.staging.didit.me/crypto-exchange
+  - region [ref=f4e163]:
+    - paragraph [ref=f4e164]: Product demos
+    - heading "One product at a time." [level=2] [ref=f4e165]
+    - paragraph [ref=f4e166]: Live demos run a real session on the Didit sandbox. Samples show a real decision without sending anything.
+    - group "Filter by family" [ref=f4e167]:
+      - button [pressed] [ref=f4e168] [cursor=pointer]:
+        - text: All
+        - emphasis [ref=f4e169]: "18"
+      - button [ref=f4e170] [cursor=pointer]:
+        - text: Identity
+        - emphasis [ref=f4e171]: "10"
+      - button [ref=f4e172] [cursor=pointer]:
+        - text: Authentication
+        - emphasis [ref=f4e173]: "3"
+      - button [ref=f4e174] [cursor=pointer]:
+        - text: Business
+        - emphasis [ref=f4e175]: "2"
+      - button [ref=f4e176] [cursor=pointer]:
+        - text: Transactions and AML
+        - emphasis [ref=f4e177]: "3"
+    - list [ref=f4e178]:
+      - listitem [ref=f4e179]:
+        - link "Core KYC ID, passive liveness and face match, decided in seconds. Live 1 min Try it" [ref=f4e180] [cursor=pointer]:
+          - /url: /product-demos/core-kyc
+          - generic [ref=f4e183]:
+            - generic [ref=f4e184]: Core KYC
+            - generic [ref=f4e185]: ID, passive liveness and face match, decided in seconds.
+            - generic [ref=f4e186]:
+              - generic [ref=f4e187]: Live
+              - generic [ref=f4e188]: 1 min
+              - generic [ref=f4e189]: Try it
+      - listitem [ref=f4e192]:
+        - link "KYC and AML Core KYC plus sanctions, PEP and adverse media. Live 2 min Try it" [ref=f4e193] [cursor=pointer]:
+          - /url: /product-demos/kyc-and-aml
+          - generic [ref=f4e196]:
+            - generic [ref=f4e197]: KYC and AML
+            - generic [ref=f4e198]: Core KYC plus sanctions, PEP and adverse media.
+            - generic [ref=f4e199]:
+              - generic [ref=f4e200]: Live
+              - generic [ref=f4e201]: 2 min
+              - generic [ref=f4e202]: Try it
+      - listitem [ref=f4e205]:
+        - link "Liveness A selfie and nothing else, for resets and step-ups. Live 30 s Try it" [ref=f4e206] [cursor=pointer]:
+          - /url: /product-demos/liveness
+          - generic [ref=f4e209]:
+            - generic [ref=f4e210]: Liveness
+            - generic [ref=f4e211]: A selfie and nothing else, for resets and step-ups.
+            - generic [ref=f4e212]:
+              - generic [ref=f4e213]: Live
+              - generic [ref=f4e214]: 30 s
+              - generic [ref=f4e215]: Try it
+      - listitem [ref=f4e218]:
+        - link "Adaptive age check A selfie first; an ID only inside the buffer zone. Live 1 min Try it" [ref=f4e219] [cursor=pointer]:
+          - /url: /product-demos/adaptive-age-check
+          - generic [ref=f4e222]:
+            - generic [ref=f4e223]: Adaptive age check
+            - generic [ref=f4e224]: A selfie first; an ID only inside the buffer zone.
+            - generic [ref=f4e225]:
+              - generic [ref=f4e226]: Live
+              - generic [ref=f4e227]: 1 min
+              - generic [ref=f4e228]: Try it
+      - listitem [ref=f4e231]:
+        - link "Age estimation, ISO 27566 An age band from a selfie. No document, no identity. Live 30 s Try it" [ref=f4e232] [cursor=pointer]:
+          - /url: /product-demos/age-estimation
+          - generic [ref=f4e235]:
+            - generic [ref=f4e236]: Age estimation, ISO 27566
+            - generic [ref=f4e237]: An age band from a selfie. No document, no identity.
+            - generic [ref=f4e238]:
+              - generic [ref=f4e239]: Live
+              - generic [ref=f4e240]: 30 s
+              - generic [ref=f4e241]: Try it
+      - listitem [ref=f4e244]:
+        - link "Age verification, ISO 27566 Age proven by a trusted source, shared as yes or no. Live 1 min Try it" [ref=f4e245] [cursor=pointer]:
+          - /url: /product-demos/age-verification
+          - generic [ref=f4e248]:
+            - generic [ref=f4e249]: Age verification, ISO 27566
+            - generic [ref=f4e250]: Age proven by a trusted source, shared as yes or no.
+            - generic [ref=f4e251]:
+              - generic [ref=f4e252]: Live
+              - generic [ref=f4e253]: 1 min
+              - generic [ref=f4e254]: Try it
+      - listitem [ref=f4e257]:
+        - link "Proof of address A bill or statement, parsed and tamper-checked. Live 1 min Try it" [ref=f4e258] [cursor=pointer]:
+          - /url: /product-demos/proof-of-address
+          - generic [ref=f4e261]:
+            - generic [ref=f4e262]: Proof of address
+            - generic [ref=f4e263]: A bill or statement, parsed and tamper-checked.
+            - generic [ref=f4e264]:
+              - generic [ref=f4e265]: Live
+              - generic [ref=f4e266]: 1 min
+              - generic [ref=f4e267]: Try it
+      - listitem [ref=f4e270]:
+        - link "Questionnaires Source of funds or risk questions in the same session. Live 2 min Try it" [ref=f4e271] [cursor=pointer]:
+          - /url: /product-demos/questionnaires
+          - generic [ref=f4e274]:
+            - generic [ref=f4e275]: Questionnaires
+            - generic [ref=f4e276]: Source of funds or risk questions in the same session.
+            - generic [ref=f4e277]:
+              - generic [ref=f4e278]: Live
+              - generic [ref=f4e279]: 2 min
+              - generic [ref=f4e280]: Try it
+      - listitem [ref=f4e283]:
+        - link "Face search 1:N A new face against everyone you onboarded. Sample decision See it" [ref=f4e284] [cursor=pointer]:
+          - /url: /product-demos/face-search
+          - generic [ref=f4e287]:
+            - generic [ref=f4e288]: Face search 1:N
+            - generic [ref=f4e289]: A new face against everyone you onboarded.
+            - generic [ref=f4e290]:
+              - generic [ref=f4e291]: Sample decision
+              - generic [ref=f4e292]: See it
+      - listitem [ref=f4e295]:
+        - link "IP and device VPN, data centre and distance signals on every check. Sample decision See it" [ref=f4e296] [cursor=pointer]:
+          - /url: /product-demos/ip-and-device
+          - generic [ref=f4e299]:
+            - generic [ref=f4e300]: IP and device
+            - generic [ref=f4e301]: VPN, data centre and distance signals on every check.
+            - generic [ref=f4e302]:
+              - generic [ref=f4e303]: Sample decision
+              - generic [ref=f4e304]: See it
+      - listitem [ref=f4e307]:
+        - link "Biometric authentication A fresh selfie against the verified portrait. Live 30 s Try it" [ref=f4e308] [cursor=pointer]:
+          - /url: /product-demos/biometric-authentication
+          - generic [ref=f4e311]:
+            - generic [ref=f4e312]: Biometric authentication
+            - generic [ref=f4e313]: A fresh selfie against the verified portrait.
+            - generic [ref=f4e314]:
+              - generic [ref=f4e315]: Live
+              - generic [ref=f4e316]: 30 s
+              - generic [ref=f4e317]: Try it
+      - listitem [ref=f4e320]:
+        - link "Multi-factor A live face bound to a phone the user controls. Live 1 min Try it" [ref=f4e321] [cursor=pointer]:
+          - /url: /product-demos/multi-factor
+          - generic [ref=f4e324]:
+            - generic [ref=f4e325]: Multi-factor
+            - generic [ref=f4e326]: A live face bound to a phone the user controls.
+            - generic [ref=f4e327]:
+              - generic [ref=f4e328]: Live
+              - generic [ref=f4e329]: 1 min
+              - generic [ref=f4e330]: Try it
+      - listitem [ref=f4e333]:
+        - link "Didit CAPTCHA One face check instead of a grid of traffic lights. Sample decision See it" [ref=f4e334] [cursor=pointer]:
+          - /url: /product-demos/didit-captcha
+          - generic [ref=f4e337]:
+            - generic [ref=f4e338]: Didit CAPTCHA
+            - generic [ref=f4e339]: One face check instead of a grid of traffic lights.
+            - generic [ref=f4e340]:
+              - generic [ref=f4e341]: Sample decision
+              - generic [ref=f4e342]: See it
+      - listitem [ref=f4e345]:
+        - link "Business verification The company from the registry, documents and a score. Sample decision See it" [ref=f4e346] [cursor=pointer]:
+          - /url: /product-demos/business-verification
+          - generic [ref=f4e349]:
+            - generic [ref=f4e350]: Business verification
+            - generic [ref=f4e351]: The company from the registry, documents and a score.
+            - generic [ref=f4e352]:
+              - generic [ref=f4e353]: Sample decision
+              - generic [ref=f4e354]: See it
+      - listitem [ref=f4e357]:
+        - link "Key people and UBOs The ownership chain to the people, then KYC on each. Sample decision See it" [ref=f4e358] [cursor=pointer]:
+          - /url: /product-demos/key-people-and-ubos
+          - generic [ref=f4e361]:
+            - generic [ref=f4e362]: Key people and UBOs
+            - generic [ref=f4e363]: The ownership chain to the people, then KYC on each.
+            - generic [ref=f4e364]:
+              - generic [ref=f4e365]: Sample decision
+              - generic [ref=f4e366]: See it
+      - listitem [ref=f4e369]:
+        - link "Transaction monitoring Your rules on every payment, a case past the line. Sample decision See it" [ref=f4e370] [cursor=pointer]:
+          - /url: /product-demos/transaction-monitoring
+          - generic [ref=f4e373]:
+            - generic [ref=f4e374]: Transaction monitoring
+            - generic [ref=f4e375]: Your rules on every payment, a case past the line.
+            - generic [ref=f4e376]:
+              - generic [ref=f4e377]: Sample decision
+              - generic [ref=f4e378]: See it
+      - listitem [ref=f4e381]:
+        - link "Wallet screening Direct and indirect exposure of an address, by hop. Sample decision See it" [ref=f4e382] [cursor=pointer]:
+          - /url: /product-demos/wallet-screening
+          - generic [ref=f4e385]:
+            - generic [ref=f4e386]: Wallet screening
+            - generic [ref=f4e387]: Direct and indirect exposure of an address, by hop.
+            - generic [ref=f4e388]:
+              - generic [ref=f4e389]: Sample decision
+              - generic [ref=f4e390]: See it
+      - listitem [ref=f4e393]:
+        - link "AML screening A name you hold against sanctions, PEP and media. Sample decision See it" [ref=f4e394] [cursor=pointer]:
+          - /url: /product-demos/aml-screening
+          - generic [ref=f4e397]:
+            - generic [ref=f4e398]: AML screening
+            - generic [ref=f4e399]: A name you hold against sanctions, PEP and media.
+            - generic [ref=f4e400]:
+              - generic [ref=f4e401]: Sample decision
+              - generic [ref=f4e402]: See it
+  - generic [ref=f4e405]:
+    - heading "See what Didit sees, without leaving the app" [level=2] [ref=f4e406]
+    - paragraph [ref=f4e407]: The Didit layer floats over each product. It never gets in the way of the demo, and it shows exactly what you would build.
+    - generic [ref=f4e408]:
+      - article [ref=f4e409]:
+        - generic [ref=f4e412]:
+          - generic [ref=f4e413]:
+            - generic [ref=f4e414]: Didit live
+            - generic [ref=f4e415]: Live
+          - generic [ref=f4e416]:
+            - generic [ref=f4e422]:
+              - generic [ref=f4e423]: Deposit approved
+              - generic [ref=f4e424]: Scored as it happens
+            - generic [ref=f4e433]:
+              - generic [ref=f4e434]: Age check approved
+              - generic [ref=f4e435]: Selfie age estimate
+            - generic [ref=f4e441]:
+              - generic [ref=f4e442]: Signed in with the passkey
+              - generic [ref=f4e443]: No password
+        - heading "Didit live" [level=3] [ref=f4e444]
+        - paragraph [ref=f4e445]: "Every event, the moment it happens: the passkey, the device, each check, every payment and every rule that fired, in the colour of its product. Tap Code to see the one call behind it."
+      - article [ref=f4e446]:
+        - generic [aria-hidden] [ref=f4e447]:
+          - generic:
+            - generic:
+              - generic:
+                - generic: Signals
+                - generic: Same device, 2 accounts
+        - heading "Pinned to the moment" [level=3] [ref=f4e448]
+        - paragraph [ref=f4e449]: "A callout marks the exact place in the app where Didit acted: the passkey button, the held deposit, the declined bonus."
+      - article [ref=f4e450]:
+        - generic [ref=f4e452]: Console view
+        - heading "The console view" [level=3] [ref=f4e468]
+        - paragraph [ref=f4e469]: "One tap opens a preview of the real Didit console with this visitor's data: the person, the transaction, the business, and why each decision was made."
+  - generic [ref=f4e470]:
+    - heading "The same five steps in every demo" [level=2] [ref=f4e471]
+    - list [ref=f4e472]:
+      - listitem [ref=f4e473]:
+        - generic [ref=f4e474]: "1"
+        - generic [ref=f4e475]: Sign up
+        - paragraph [ref=f4e476]: "Didit Authentication on the customer's own page: a passkey, bot protection, no password."
+      - listitem [ref=f4e477]:
+        - generic [ref=f4e478]: "2"
+        - generic [ref=f4e479]: Verify
+        - paragraph [ref=f4e480]: The redesigned verification flow in the web SDK modal, branded as the customer.
+      - listitem [ref=f4e481]:
+        - generic [ref=f4e482]: "3"
+        - generic [ref=f4e483]: Transact
+        - paragraph [ref=f4e484]: Deposits, transfers, orders and withdrawals scored as they happen.
+      - listitem [ref=f4e485]:
+        - generic [ref=f4e486]: "4"
+        - generic [ref=f4e487]: Stop fraud
+        - paragraph [ref=f4e488]: One real attack per demo, caught by device signals and rules.
+      - listitem [ref=f4e489]:
+        - generic [ref=f4e490]: "5"
+        - generic [ref=f4e491]: Console
+        - paragraph [ref=f4e492]: The same story in the Didit console your team would use.
+  - generic [ref=f4e494]:
+    - generic [ref=f4e495]:
+      - img "Didit" [ref=f4e496]
+      - heading "Build this into your product." [level=2] [ref=f4e497]
+      - paragraph [ref=f4e498]: Three packages, one publishable key. Every demo here uses exactly what you would ship.
+      - generic [ref=f4e499]:
+        - link "Start free" [ref=f4e500] [cursor=pointer]:
+          - /url: https://business.staging.didit.me
+        - link "Read the docs" [ref=f4e501] [cursor=pointer]:
+          - /url: https://docs.didit.me
+    - generic "Install the three packages" [ref=f4e502]: "# the same three packages every demo uses npm install @didit-protocol/auth-nextjs @didit-protocol/signals @didit-protocol/sdk-web import { DiditAuth } from \"@didit-protocol/auth-nextjs\" import { configureEvents } from \"@didit-protocol/signals\" import { startVerification } from \"@didit-protocol/sdk-web\""
