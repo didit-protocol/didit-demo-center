@@ -373,17 +373,27 @@ function Layer({
 export function StepUpModal({
   item,
   busy,
+  passkey,
+  onPasskey,
   onConfirm,
   onClose,
 }: {
   item: PaymentItem;
   busy: boolean;
+  /**
+   * The passkey before the selfie: `ask` until Didit Authentication signs
+   * the same person in again, then `done`. Null when Authentication is off,
+   * where the customer has no Didit passkey and the selfie is the step-up.
+   */
+  passkey: "ask" | "done" | null;
+  onPasskey(): void;
   onConfirm(): void;
   onClose(): void;
 }) {
   const status = item.record?.status ?? null;
   const released = status === "APPROVED";
   const held = status === "AWAITING_USER";
+  const askPasskey = held && passkey === "ask";
 
   return (
     <Layer
@@ -396,15 +406,25 @@ export function StepUpModal({
         className={`al-stepup-ic${released ? " is-done" : ""}`}
         data-callout="stepup"
       >
-        {released ? <CircleCheck size={30} /> : <ScanFace size={30} />}
+        {released ? (
+          <CircleCheck size={30} />
+        ) : askPasskey ? (
+          <KeyRound size={30} />
+        ) : (
+          <ScanFace size={30} />
+        )}
       </span>
       <h2>{released ? "Sent" : "Confirm it is you"}</h2>
       <p className="al-muted" data-testid="alder-stepup-copy">
         {released
           ? `${formatMoney(item.amount)} is on its way to ${item.counterparty}. It arrives today.`
-          : held
-            ? `This is your first payment to ${item.counterparty}. Take a quick selfie so we know it is you, not someone with your phone.`
-            : `${item.counterparty} has not received this payment.`}
+          : askPasskey
+            ? `This is your first payment to ${item.counterparty}. Confirm it with your passkey, then one quick selfie to release the payment.`
+            : held && passkey === "done"
+              ? "Passkey confirmed. Now one quick selfie to release the payment."
+              : held
+                ? `This is your first payment to ${item.counterparty}. One quick selfie to release the payment, so we know it is you and not someone with your phone.`
+                : `${item.counterparty} has not received this payment.`}
       </p>
       <dl className="al-summary">
         <div>
@@ -418,6 +438,18 @@ export function StepUpModal({
           <dt>Amount</dt>
           <dd>{formatMoney(item.amount)}</dd>
         </div>
+        {(held && passkey) || (released && passkey === "done") ? (
+          <div>
+            <dt>Confirmed with</dt>
+            <dd data-testid="alder-stepup-steps">
+              {released
+                ? "Passkey and selfie"
+                : passkey === "done"
+                  ? "Passkey ✓, selfie next"
+                  : "Passkey, then a selfie"}
+            </dd>
+          </div>
+        ) : null}
         <div>
           <dt>{released ? "Status" : "Arrives"}</dt>
           <dd data-testid="alder-stepup-status">
@@ -433,6 +465,21 @@ export function StepUpModal({
         <button className="al-btn is-pri is-lg" type="button" onClick={onClose}>
           Done
         </button>
+      ) : askPasskey ? (
+        <>
+          <button
+            className="al-btn is-pri is-lg"
+            disabled={busy}
+            type="button"
+            onClick={onPasskey}
+          >
+            <KeyRound aria-hidden size={19} />
+            {busy ? "Opening…" : "Confirm with your passkey"}
+          </button>
+          <button className="al-btn is-ghost" type="button" onClick={onClose}>
+            Cancel
+          </button>
+        </>
       ) : held ? (
         <>
           <button
