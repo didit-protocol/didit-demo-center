@@ -185,7 +185,7 @@
 .ap-phone-only { display: none; }
 @media (max-width: 1100px) {
   .ap { grid-template-columns: 72px minmax(0, 1fr); }
-  .ap-side .ap-nav span, .ap-side .ap-sec, .ap-side .ap-rg, .ap-brand > span, .ap-nav b, .ap-nav .ap-live-dot { display: none; }
+  .ap-side .ap-nav span, .ap-side .ap-sec, .ap-side .ap-rg, .ap-side .ap-brand > span, .ap-nav b, .ap-nav .ap-live-dot { display: none; }
   .ap-games { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 @media (max-width: 767px) {
@@ -199,11 +199,13 @@
   .ap-bal small { display: none; }
   .ap-bal .ap-dep { width: 36px; height: 36px; padding: 0; justify-content: center; border-radius: 10px; font-size: 18px; }
   .ap-content { padding: 14px; gap: 16px; }
-  .ap-hero { height: 150px; border-radius: 18px; }
+  .ap-hero { height: 168px; border-radius: 18px; }
+  .ap-hero-x { gap: 8px; }
+  .ap-hero-cta .ap-btn { height: 34px; padding: 0 14px; font-size: 13px; }
   .ap-hero-x { left: 18px; }
   .ap-hero-x h1 { font-size: 23px; line-height: 28px; }
   .ap-games { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-  .ap-game span { display: none; }
+  .ap-game > span:last-child { display: none; }
   .ap-game-img .ap-badge { display: none; }
   .ap-row-h a { display: inline; }
   .ap-layer { padding: 0 8px 76px; place-items: end stretch; }
@@ -217,3 +219,4 @@
 }
 /* keep modals clear of the live feed, as on the boards */
 @media (min-width: 1200px) { .ap-layer { padding-right: 260px; } }
+.ap-game-img { display: block; width: 100%; }
