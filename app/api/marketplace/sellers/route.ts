@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
 
 /** Open a shop: a new seller identity, remembered in this browser only. */
 export async function POST(request: NextRequest) {
-  const env = marketEnv();
+  const env = await marketEnv();
 
   return respond(
     request,
