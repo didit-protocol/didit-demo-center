@@ -66,7 +66,9 @@ test("the lobby, the Demo Center bar and signals from the first load", async ({
     page.getByRole("button", { name: /Sign up$/ }).first(),
   ).toBeVisible();
   await expect(
-    page.getByRole("navigation", { name: "Demo steps" }),
+    isPhone(page)
+      ? page.getByRole("button", { name: /^Step 1 of 5: Sign up/ })
+      : page.getByRole("navigation", { name: "Demo steps" }),
   ).toBeVisible();
   // Signals reads this device as soon as the page loads, before any sign-up.
   await openFeed(page);
@@ -129,7 +131,12 @@ test("sign up, age check, monitored deposits and the ID step-up at 2,000 EUR", a
   );
 
   // The console view: this visitor's own records, never canned ones.
-  await page.getByRole("button", { name: "Console view", exact: true }).click();
+  if (isPhone(page)) {
+    await openFeed(page);
+    await live(page).getByRole("button", { name: "Open the console view" }).click();
+  } else {
+    await page.getByRole("button", { name: "Console view", exact: true }).click();
+  }
   const consoleView = page.getByTestId("console-view");
 
   await expect(
@@ -172,6 +179,8 @@ test("a second account on the same device cannot take the welcome offer again", 
   expect(mock.submitted).toEqual(["bonus-approved", "bonus-shared-device"]);
   // Both claims carried the same device id.
   expect(mock.headers[0]["x-didit-pid"]).toBe(mock.headers[1]["x-didit-pid"]);
+  // On a phone the feed stays folded while the offer sheet is open.
+  await offer.getByRole("button", { name: "Back to the lobby" }).click();
   await openFeed(page);
   await expect(live(page).getByText("Bonus held for review")).toBeVisible();
 });
