@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@didit-protocol/auth-nextjs";
 
 import { readDevice } from "./browser";
+import { diditUrls } from "./config";
 import { DEMOS } from "./demos";
 
 /**
@@ -118,6 +119,7 @@ export function DiditClientProvider({
 
     import("@didit-protocol/signals").then(({ configureEvents }) => {
       configureEvents({
+        baseUrl: diditUrls.api,
         onError: (error) => console.warn("Didit signals:", error.type),
       });
     });
