@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Fingerprint } from "lucide-react";
 
 import { DiditRing, TONE_CLASS, ToneIcon } from "@/components/didit-live/icons";
+import { ProductDemosSection } from "@/components/product-demos/product-demos-section";
 import { TONE_LABEL } from "@/lib/didit/live";
 import { DEMOS } from "@/lib/didit/demos";
 import { siteConfig } from "@/config/site";
@@ -291,6 +292,8 @@ export function Hub() {
           </ul>
         </div>
       </section>
+
+      <ProductDemosSection />
 
       <section className="hub-sec" id="how">
         <div className="hub-in">
