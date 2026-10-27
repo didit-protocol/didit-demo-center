@@ -119,7 +119,7 @@ test("the console view's Business page: registry, key people and the linked shop
     page.kpis.map((kpi) => [kpi.label, kpi.value]),
     [
       ["Key people", "0 of 1"],
-      ["Registry", "active"],
+      ["Registry", "Active"],
       ["Documents", "1"],
       ["Linked shops", "1"],
     ],
@@ -128,7 +128,7 @@ test("the console view's Business page: registry, key people and the linked shop
 
   assert.deepEqual(people.rows[0], {
     name: "Alice Chen",
-    role: "Ubo · Ceo · 35% owner",
+    role: "CEO · 35% owner",
     status: { label: "Not started", tone: "neu" },
   });
   assert.equal(page.linked[0].title, "Ruiz Vintage Outlet");

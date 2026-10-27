@@ -91,14 +91,25 @@ const isApproved = (status: string | null) =>
 const SHARED = (tx: TransactionSummary) =>
   tx.kind === "signup" && tx.status !== "APPROVED";
 
+/** "ubo" and "shareholder" say what "35% owner" says; "CEO" stays as is. */
+function roleLabel(role: string, owns: boolean): string | null {
+  const value = role.trim();
+
+  if (/^(ubo|shareholder|owner)$/i.test(value))
+    return owns ? null : "Beneficial owner";
+  if (value === value.toUpperCase()) return value;
+
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}
+
 /** The key people: each owner and officer with their own ID check. */
 export function keyPeople(kyb: KybSummary): PersonRow[] {
   return kyb.people.map((person) => ({
     name: person.name,
     role:
       [
-        ...person.roles.map(
-          (role) => role.charAt(0).toUpperCase() + role.slice(1).toLowerCase(),
+        ...person.roles.map((role) =>
+          roleLabel(role, person.ownership !== null),
         ),
         person.ownership !== null ? `${person.ownership}% owner` : null,
       ]
@@ -194,7 +205,9 @@ function businessPage(input: NorthmarketConsoleInput): RecordPage | null {
       },
       {
         label: "Registry",
-        value: registry?.registryStatus ?? (kyb ? kyb.status : "Not run"),
+        value: statusTag(
+          registry?.registryStatus ?? (kyb ? kyb.status : "Not run"),
+        ).label,
         color: registry ? "ok" : undefined,
       },
       {
@@ -222,7 +235,7 @@ function businessPage(input: NorthmarketConsoleInput): RecordPage | null {
                 .map((item) => item.shop)
                 .join(
                   ", ",
-                )} opened on the same device with another account. Its payouts are paused for review.`,
+                )} opened on the same device with another account.${input.transactions.some(SHARED) ? " Its payouts are paused for review." : ""}`,
             },
           ]
         : []),
