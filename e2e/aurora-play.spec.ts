@@ -76,7 +76,7 @@ test("sign up, age check, monitored deposits and the ID step-up at 2,000 EUR", a
   await expect(live(page).getByText("Age check approved")).toBeVisible();
 
   // Transact: a deposit Didit approves, from the browser with device data.
-  await app(page).getByRole("button", { name: "Deposit" }).first().click();
+  await app(page).getByRole("button", { name: "Deposit", exact: true }).click();
   await deposit(page, "500");
   await expect(page.getByTestId("aurora-cashier-result")).toContainText(
     "Approved",
