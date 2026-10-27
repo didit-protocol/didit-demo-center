@@ -1,6 +1,6 @@
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 
-import { CUSTOMER_PREFIX } from "./alder.ts";
+import { alder } from "../didit/demos.ts";
 
 /**
  * The Alder customer's identity when Didit Authentication is off: a random
@@ -15,10 +15,10 @@ import { CUSTOMER_PREFIX } from "./alder.ts";
 export const CUSTOMER_COOKIE = "alder_customer";
 export const CUSTOMER_COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
 
-const ID = new RegExp(`^${CUSTOMER_PREFIX}[a-f0-9]{24}$`);
+const ID = new RegExp(`^${alder.vendorPrefix}[a-f0-9]{24}$`);
 
 export function newCustomerId(): string {
-  return `${CUSTOMER_PREFIX}${randomBytes(12).toString("hex")}`;
+  return `${alder.vendorPrefix}${randomBytes(12).toString("hex")}`;
 }
 
 function signature(customerId: string, secret: string): string {
