@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 
 import { DiditRing } from "@/components/didit-live/icons";
+import { ruleName } from "@/lib/marketplace/live-events";
 import {
   CATEGORIES,
   CHECKOUT,
@@ -800,8 +801,8 @@ export function OutletScreen({
               <b>Sign-up review</b>
               <span>
                 {signup
-                  ? signup.rules.length
-                    ? `Rule: ${signup.rules.length === 1 ? "second shop on one device" : `${signup.rules.length} rules hit`}`
+                  ? signup.rules[0]
+                    ? `Rule: ${ruleName(signup.rules[0].title).toLowerCase()}`
                     : "No rule matched"
                   : "Waiting for Didit"}
               </span>
