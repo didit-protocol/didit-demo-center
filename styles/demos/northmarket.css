@@ -75,7 +75,7 @@
 /* sign up */
 .nm-signup { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 408px; gap: 48px; padding: 0 0 0 0; position: relative; }
 .nm-hero { display: flex; flex-direction: column; gap: 18px; padding-top: 10px; position: relative; min-height: 0; }
-.nm-hero h1 { margin: 6px 0 0; font-family: var(--font-fraunces), "Fraunces", Georgia, serif; font-size: 48px; line-height: 52px; font-weight: 600; letter-spacing: -1.4px; max-width: 540px; }
+.nm-hero h1 { margin: 6px 0 0; font-family: var(--font-fraunces), "Fraunces", Georgia, serif; font-size: 46px; line-height: 52px; font-weight: 600; letter-spacing: -1.4px; }
 .nm-hero p { margin: 0; max-width: 470px; font-size: 16px; line-height: 24px; color: var(--nm-muted); }
 .nm-hero .nm-badge { align-self: flex-start; height: 26px; padding: 0 10px; font-size: 12.5px; }
 .nm-shots { position: absolute; left: 50px; bottom: 0; display: flex; align-items: flex-end; }
@@ -83,7 +83,7 @@
 .nm-shot:nth-child(1) { transform: rotate(-5deg); margin-right: -10px; }
 .nm-shot:nth-child(2) { transform: rotate(3deg) translateY(12px); width: 148px; height: 188px; margin-right: 0; z-index: 1; }
 .nm-shot:nth-child(3) { transform: rotate(-1deg) translateY(-6px); width: 160px; height: 202px; margin-left: 4px; }
-.nm-form { align-self: start; background: var(--nm-card); border: 1px solid var(--nm-line); border-radius: 22px; padding: 26px 28px 20px; display: flex; flex-direction: column; gap: 14px;
+.nm-form { align-self: start; margin-top: 22px; background: var(--nm-card); border: 1px solid var(--nm-line); border-radius: 22px; padding: 26px 28px 20px; display: flex; flex-direction: column; gap: 14px;
            box-shadow: 0 30px 60px -30px rgba(31, 27, 22, .3); }
 .nm-form h2 { margin: 0; font-family: var(--font-fraunces), "Fraunces", Georgia, serif; font-size: 27px; font-weight: 600; letter-spacing: -0.5px; }
 .nm-form > p { margin: -6px 0 0; font-size: 14px; line-height: 22px; color: var(--nm-muted); }
@@ -139,6 +139,9 @@
 .nm-lines .is-total b { font-family: var(--font-fraunces), "Fraunces", Georgia, serif; font-size: 22px; font-weight: 600; }
 .nm-summary .nm-btn { height: 48px; font-size: 15px; }
 .nm-hero-photo { display: none; }
+.nm-place { display: flex; align-items: center; gap: 16px; }
+.nm-place .nm-btn { height: 50px; padding: 0 26px; font-size: 15px; }
+.nm-place span { font-size: 13px; color: var(--nm-muted); }
 
 /* the second shop */
 .nm-details .nm-row { grid-template-columns: 44px minmax(0, 1fr) auto; padding: 12px 0; }
@@ -191,7 +194,9 @@
   .nm-summary .nm-sum-item { grid-template-columns: minmax(0, 1fr); padding: 6px 16px 0; }
   .nm-summary .nm-sum-item .nm-photo { display: none; }
   .nm-summary .nm-sum-item b.nm-price { display: block; }
-  .nm-summary .nm-lines, .nm-summary > .nm-btn { margin: 0 16px; }
+  .nm-summary .nm-lines { margin: 0 16px; }
+  .nm-place { flex-direction: column; align-items: stretch; gap: 8px; }
+  .nm-form { margin-top: 0; }
   .nm-sum-item p { display: none; }
 }
 .nm-price { display: none; font-family: var(--font-fraunces), "Fraunces", Georgia, serif; font-size: 26px; font-weight: 600; letter-spacing: -0.5px; }

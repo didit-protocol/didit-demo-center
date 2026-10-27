@@ -655,7 +655,24 @@ export function CheckoutScreen({
                 Nothing was charged.
               </p>
             </div>
-          ) : null}
+          ) : (
+            <div className="nm-place">
+              <button
+                className="nm-btn is-pri"
+                data-callout="place"
+                disabled={busy !== null}
+                type="button"
+                onClick={onPlace}
+              >
+                {busy === "order"
+                  ? "Placing the order…"
+                  : `Place order · ${eur(ORDER_TOTAL)}`}
+              </button>
+              <span>
+                You pay {eur(ORDER_TOTAL, true)}, buyer protection included.
+              </span>
+            </div>
+          )}
         </div>
         <aside className="nm-summary">
           <div
@@ -701,19 +718,6 @@ export function CheckoutScreen({
               Total <b>{eur(ORDER_TOTAL, true)}</b>
             </div>
           </div>
-          <button
-            className="nm-btn is-pri"
-            data-callout="place"
-            disabled={busy !== null || held || approved}
-            type="button"
-            onClick={onPlace}
-          >
-            {busy === "order"
-              ? "Placing the order…"
-              : approved
-                ? "Order placed"
-                : `Place order · ${eur(ORDER_TOTAL)}`}
-          </button>
         </aside>
       </div>
     </>
