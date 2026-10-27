@@ -1,0 +1,269 @@
+{
+  "page": {
+    "eyebrow": "Démo sectorielle · Fintech",
+    "title": "Alder, une néobanque construite sur Didit",
+    "lede": "Ouvrez un compte, vérifiez votre identité et déplacez de l’argent. Chaque étape utilise la vraie API de Didit : KYC et AML à l’inscription, surveillance des transactions sur chaque paiement, puis filtrage AML continu.",
+    "allDemos": "Toutes les démos",
+    "staging": "En direct sur le staging de Didit",
+    "reset": "Recommencer",
+    "theme": {
+      "label": "Thème de couleur",
+      "light": "Clair",
+      "dark": "Sombre"
+    },
+    "unavailable": {
+      "title": "Cette démo fonctionne sur le staging de Didit",
+      "body": "Ouvrir un compte ici lance une vraie vérification d’identité et un vrai filtrage AML pour l’organisation de démonstration de Didit, c’est pourquoi la démo est servie depuis l’environnement de staging.",
+      "cta": "Ouvrir la démo sur le staging"
+    }
+  },
+  "bank": {
+    "name": "Alder",
+    "fictional": "Banque fictive à des fins de démonstration"
+  },
+  "common": {
+    "back": "Retour",
+    "retry": "Réessayer",
+    "loading": "Chargement…",
+    "error": "Un problème est survenu en contactant Didit. Réessayez dans un instant.",
+    "diditError": "Réponse de Didit : {detail}",
+    "unavailable": "Cette démo n’est pas disponible sur ce déploiement."
+  },
+  "welcome": {
+    "title": "Un compte courant ouvert en quelques minutes",
+    "body": "Un IBAN à votre nom, des virements instantanés dans toute l’Europe et aucuns frais mensuels.",
+    "points": {
+      "verify": "Vérifiez-vous avec votre pièce d’identité et un selfie",
+      "send": "Envoyez et recevez de l’argent tout de suite",
+      "safe": "Chaque paiement est contrôlé contre la fraude"
+    },
+    "cta": "Ouvrir un compte",
+    "note": "Utilisez votre propre pièce d’identité : les données vont uniquement à l’environnement de staging de Didit, jamais à une vraie banque."
+  },
+  "signup": {
+    "progress": "Étape {current} sur {total}",
+    "title": "Parlez-nous de vous",
+    "body": "Nous utilisons ces informations pour ouvrir votre compte. Vous les confirmez avec votre pièce d’identité à l’étape suivante.",
+    "name": "Nom complet",
+    "namePlaceholder": "Tel qu’il figure sur votre pièce d’identité",
+    "email": "E-mail",
+    "emailPlaceholder": "vous@exemple.com",
+    "country": "Pays de résidence",
+    "countryPlaceholder": "Choisissez un pays",
+    "consent": "En continuant, vous acceptez que Alder partage vos informations avec Didit pour vérifier votre identité.",
+    "submit": "Continuer",
+    "submitting": "Ouverture de votre compte…",
+    "errors": {
+      "name": "Saisissez votre nom complet.",
+      "email": "Saisissez une adresse e-mail valide.",
+      "country": "Choisissez le pays où vous vivez."
+    }
+  },
+  "verify": {
+    "progress": "Étape {current} sur {total}",
+    "title": "Vérifiez votre identité",
+    "body": "Nous devons confirmer qui vous êtes avant d’ouvrir votre compte. Cela prend environ deux minutes.",
+    "steps": {
+      "id": "Scannez une pièce d’identité officielle",
+      "liveness": "Enregistrez une courte vidéo selfie",
+      "face": "Nous comparons votre selfie à votre pièce d’identité",
+      "aml": "Nous vérifions votre nom dans les listes de sanctions et de PPE"
+    },
+    "cta": "Vérifier mon identité",
+    "resume": "Reprendre la vérification",
+    "starting": "Ouverture de la vérification…",
+    "phone": "Pas de caméra ici ? La vérification affiche un code QR pour terminer sur votre téléphone.",
+    "cancelled": "Vous avez fermé la vérification avant la fin. Votre progression est enregistrée, vous pouvez reprendre là où vous vous êtes arrêté.",
+    "failed": "La vérification n’a pas pu démarrer. {reason}"
+  },
+  "checking": {
+    "title": "Vérification de vos informations",
+    "body": "Cela prend généralement moins d’une minute. Gardez cette page ouverte.",
+    "slow": "Cela prend plus de temps que d’habitude. Nous continuons à vérifier en arrière-plan.",
+    "checks": {
+      "id": "Pièce d’identité",
+      "liveness": "Détection du vivant",
+      "face": "Correspondance faciale",
+      "aml": "Filtrage sanctions et PPE"
+    },
+    "status": {
+      "pending": "En attente",
+      "passed": "Réussi",
+      "review": "En cours d’examen",
+      "failed": "Échoué"
+    }
+  },
+  "outcome": {
+    "approved": {
+      "title": "Votre compte est ouvert",
+      "body": "Bienvenue chez Alder, {name}. Votre compte est prêt : ajoutez de l’argent et commencez à l’utiliser.",
+      "cta": "Aller à mon compte"
+    },
+    "review": {
+      "title": "Nous examinons votre demande",
+      "body": "Nous avons besoin d’un peu plus de temps pour confirmer certaines informations. La plupart des examens se terminent en un jour ouvré, et nous écrirons à {email} dès que ce sera fait.",
+      "live": "Cette page se met à jour toute seule à la fin de l’examen."
+    },
+    "declined": {
+      "title": "Nous n’avons pas pu ouvrir votre compte",
+      "body": "Nous n’avons pas pu vérifier votre identité, nous ne pouvons donc pas vous ouvrir de compte pour le moment.",
+      "cta": "Recommencer"
+    },
+    "expired": {
+      "title": "Votre vérification a expiré",
+      "body": "Le lien de vérification n’est plus valable. Recommencez pour ouvrir votre compte.",
+      "cta": "Recommencer"
+    }
+  },
+  "home": {
+    "greeting": "Bonjour, {name}",
+    "balance": "Solde disponible",
+    "held": "{amount} en attente",
+    "add": "Ajouter de l’argent",
+    "send": "Envoyer de l’argent",
+    "activity": "Opérations",
+    "refresh": "Actualiser",
+    "emptyTitle": "Aucun paiement pour l’instant",
+    "emptyBody": "Ajoutez d’abord de l’argent, puis envoyez-en. Les virements de {threshold} ou plus sont contrôlés avant de quitter votre compte.",
+    "limit": "Vous avez atteint la limite de la démo de {limit} paiements. Recommencez pour ouvrir un nouveau compte.",
+    "verified": "Identité vérifiée"
+  },
+  "payment": {
+    "fromSelf": "Alimentation depuis votre autre banque",
+    "to": "À {name}",
+    "status": {
+      "received": "Reçu",
+      "sent": "Envoyé",
+      "held": "En attente",
+      "declined": "Refusé",
+      "action": "Action requise"
+    }
+  },
+  "pay": {
+    "depositTitle": "Ajouter de l’argent",
+    "depositBody": "Depuis votre compte dans une autre banque, à votre nom.",
+    "transferTitle": "Envoyer de l’argent",
+    "transferBody": "À toute personne ayant un compte bancaire en Europe.",
+    "amount": "Montant",
+    "otherAmount": "Autre montant",
+    "recipient": "Bénéficiaire",
+    "recipientPlaceholder": "Nom complet du bénéficiaire",
+    "available": "Disponible : {amount}",
+    "reviewHint": "Les virements de {threshold} ou plus sont retenus pour un contrôle rapide avant de partir.",
+    "willReview": "Ce virement sera contrôlé avant de partir.",
+    "submitDeposit": "Ajouter {amount}",
+    "submitTransfer": "Envoyer {amount}",
+    "submitting": "Envoi…",
+    "errors": {
+      "amount": "Saisissez un montant entre {min} et {max}.",
+      "counterparty": "Saisissez le nom complet du bénéficiaire.",
+      "insufficient": "Vous n’avez que {available} de disponible.",
+      "limit": "Vous avez atteint la limite de paiements de la démo pour ce compte."
+    }
+  },
+  "result": {
+    "received": {
+      "title": "{amount} ajoutés",
+      "body": "L’argent est sur votre compte et prêt à être utilisé."
+    },
+    "sent": {
+      "title": "{amount} envoyés à {name}",
+      "body": "Il devrait arriver en quelques secondes."
+    },
+    "held": {
+      "title": "Votre paiement est en attente",
+      "body": "Nous effectuons un contrôle rapide de ce paiement avant qu’il ne quitte votre compte. L’argent est mis de côté d’ici là, et cet écran se met à jour dès la fin du contrôle."
+    },
+    "declined": {
+      "title": "Paiement refusé",
+      "body": "Ce paiement n’a pas abouti et aucun argent n’a quitté votre compte."
+    },
+    "action": {
+      "title": "Nous avons besoin de vous",
+      "body": "Confirmez votre identité pour débloquer ce paiement."
+    },
+    "done": "Terminé"
+  },
+  "monitoring": {
+    "title": "Surveillance AML continue",
+    "body": "Une fois client, votre profil est de nouveau filtré chaque jour dans les listes de sanctions, de PPE et de presse défavorable. Une nouvelle inscription parvient à notre équipe conformité sans vous demander de vous vérifier à nouveau.",
+    "cta": "Aperçu de la surveillance pour ce compte",
+    "loading": "Interrogation de Didit…",
+    "rows": {
+      "profiles": "Profils trouvés",
+      "alreadyMonitored": "Déjà surveillés",
+      "withScreening": "Filtrage d’inscription à surveiller",
+      "needsScreening": "Seraient filtrés d’abord",
+      "missingIdentity": "Données d’identité manquantes",
+      "annualCost": "Coût annuel de la surveillance"
+    },
+    "note": "Estimation uniquement : rien n’a été activé, filtré ni facturé."
+  },
+  "panel": {
+    "title": "Comment cela utilise Didit",
+    "subtitle": "Les modules et appels d’API derrière chaque étape, en direct sur le staging.",
+    "open": "Comment cela utilise Didit",
+    "close": "Fermer",
+    "current": "Vous êtes ici",
+    "modules": "Modules",
+    "calls": "Appels d’API",
+    "production": "Une app en production ajoute",
+    "docs": "Docs",
+    "steps": {
+      "signup": {
+        "title": "Inscription",
+        "body": "Le formulaire propre à la banque. L’identifiant client qu’il crée est envoyé à Didit comme vendor_data, la clé qui relie chaque session, paiement et filtrage à cette personne."
+      },
+      "verify": {
+        "title": "Vérification d’identité",
+        "body": "Une seule session hébergée exécute le parcours de la banque : vérification de la pièce d’identité, détection du vivant active, correspondance faciale 1:1, filtrage AML et analyse IP."
+      },
+      "decision": {
+        "title": "Décision",
+        "body": "Le statut de la session décide du compte : Approved l’ouvre, In Review attend un analyste, Declined le garde fermé. Le client ne voit jamais pourquoi."
+      },
+      "payments": {
+        "title": "Surveillance des transactions",
+        "body": "Chaque paiement est envoyé avec le même vendor_data. Les règles s’exécutent de manière synchrone et le verdict revient dans la réponse."
+      },
+      "review": {
+        "title": "Examen",
+        "body": "Les virements de {threshold} ou plus déclenchent la règle « {rule} » et attendent un analyste dans la console. L’application relit le paiement et se met à jour quand il décide."
+      },
+      "monitoring": {
+        "title": "Surveillance AML continue",
+        "body": "Active le filtrage quotidien des clients vérifiés. La démo ne demande que l’estimation, qui n’écrit rien."
+      }
+    },
+    "moduleNames": {
+      "idVerification": "Vérification d’identité",
+      "liveness": "Détection du vivant active",
+      "faceMatch": "Correspondance faciale 1:1",
+      "aml": "Filtrage AML",
+      "ipAnalysis": "Analyse IP",
+      "transactions": "Surveillance des transactions",
+      "rules": "Moteur de règles",
+      "webhooks": "Webhooks",
+      "manualReview": "Examen manuel",
+      "ongoing": "Surveillance continue"
+    }
+  },
+  "operator": {
+    "title": "Vue opérateur",
+    "body": "Ce que l’équipe conformité de la banque voit pour ce client dans la console Didit.",
+    "empty": "Rien pour l’instant. Les enregistrements apparaissent ici au fil de l’application.",
+    "session": "Session de vérification",
+    "sessionNumber": "Session n° {number}",
+    "transaction": "Transaction n° {number}",
+    "score": "Score de risque",
+    "rule": "Règle déclenchée",
+    "noRule": "Aucune règle déclenchée",
+    "open": "Ouvrir dans la console",
+    "openConsole": "Ouvrir la console",
+    "find": "Recherchez {record} dans la console.",
+    "login": "Nécessite une connexion à la console de l’organisation de démonstration de Didit."
+  },
+  "amount": {
+    "presets": "Choisissez un montant"
+  }
+}
