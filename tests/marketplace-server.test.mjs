@@ -381,6 +381,63 @@ test("an open KYB is resumed instead of starting a second one", async () => {
   assert.ok(!api.calls.some((call) => call.method === "POST"));
 });
 
+const KYB_START = { origin: null, fallbackOrigin: "https://demos.staging.didit.me", language: "en" };
+
+test("a KYB whose decision cannot be read is not started a second time", async () => {
+  const api = fakeApi({
+    [decision(KYB_SID)]: [503, { detail: "Service unavailable." }],
+    "POST /v3/session/": [201, { session_id: crypto.randomUUID(), url: "https://verify.staging.didit.me/session/x" }],
+  });
+  const reply = await handleStartKyb(
+    makeEnv({ fetch: api.fetch }),
+    stateWith({ sellers: [seller(RECORDED.firstShop, { sid: KYB_SID })] }),
+    RECORDED.firstShop,
+    KYB_START,
+  );
+
+  assert.equal(reply.status, 502);
+  assert.equal(reply.state, undefined);
+  assert.ok(!api.calls.some((call) => call.method === "POST"));
+});
+
+test("only a KYB that can no longer finish is started again", async () => {
+  for (const [status, restarts] of [
+    ["Declined", true],
+    ["Expired", true],
+    ["Abandoned", true],
+    ["In Review", false],
+    ["Approved", false],
+  ]) {
+    const api = fakeApi({
+      [decision(KYB_SID)]: kybWith(status),
+      "POST /v3/session/": [201, { session_id: "7a2d0c4e-1b3f-4e5a-8c6d-9e0f1a2b3c4d", url: "https://verify.staging.didit.me/session/x" }],
+    });
+    const reply = await handleStartKyb(
+      makeEnv({ fetch: api.fetch }),
+      stateWith({ sellers: [seller(RECORDED.firstShop, { sid: KYB_SID })] }),
+      RECORDED.firstShop,
+      KYB_START,
+    );
+
+    assert.equal(reply.status, restarts ? 201 : 409, status);
+    assert.equal(api.calls.some((call) => call.method === "POST"), restarts, status);
+  }
+});
+
+test("with Authentication on, a signed-out visitor cannot start a KYB", async () => {
+  const api = fakeApi({});
+  const reply = await handleStartKyb(
+    makeEnv({ fetch: api.fetch, visitor: null }),
+    stateWith({ sellers: [seller(RECORDED.firstShop)] }),
+    RECORDED.firstShop,
+    KYB_START,
+  );
+
+  assert.equal(reply.status, 401);
+  assert.equal(reply.body.code, "signed_out");
+  assert.equal(api.calls.length, 0);
+});
+
 test("an analyst can only decide a KYB that is In Review", async () => {
   const state = stateWith({
     sellers: [seller(RECORDED.firstShop, { sid: KYB_SID })],
