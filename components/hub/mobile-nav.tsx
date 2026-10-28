@@ -64,18 +64,9 @@ export function MobileNav({
         type="button"
         onClick={() => setOpen((value) => !value)}
       >
-        {open ? (
-          <X aria-hidden size={20} />
-        ) : (
-          <Menu aria-hidden size={20} />
-        )}
+        {open ? <X aria-hidden size={20} /> : <Menu aria-hidden size={20} />}
       </button>
-      <nav
-        aria-label="Menu"
-        className="dc-menu-panel"
-        hidden={!open}
-        id={id}
-      >
+      <nav aria-label="Menu" className="dc-menu-panel" hidden={!open} id={id}>
         <ul>
           {links.map((link) => (
             <li key={link.label}>

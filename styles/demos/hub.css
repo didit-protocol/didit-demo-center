@@ -99,7 +99,6 @@
 .hub-band-x .hub-cta { margin-top: 28px; }
 .hub-code { margin: 0; padding: 22px 18px; border-radius: 18px; background: var(--code-bg); color: var(--code-text); font-family: var(--dd-font); font-size: 13px; line-height: 21px;
             white-space: pre; overflow-x: auto; min-width: 0; max-width: 100%; }
-.hub-code:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
 .hub-code .c { color: var(--code-subtle); }
 .hub-code .k { color: var(--code-key); }
 .hub-code .s { color: var(--code-str); }

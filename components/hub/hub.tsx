@@ -54,7 +54,13 @@ interface FeedEvent {
  * A still of the Didit live feed, as the demos show it. A picture, so it
  * leaves out the feed's buttons rather than drawing ones that do nothing.
  */
-function FeedStill({ events, person }: { events: FeedEvent[]; person: string }) {
+function FeedStill({
+  events,
+  person,
+}: {
+  events: FeedEvent[];
+  person: string;
+}) {
   return (
     <div aria-hidden className="lv dd hub-feed">
       <div className="lv-head">
@@ -432,13 +438,8 @@ export function Hub() {
                 </a>
               </span>
             </div>
-            {/* Scrolls inside its box on a phone; focusable so a keyboard can scroll it. */}
-            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-            <pre
-              aria-label="Install the three packages"
-              className="hub-code"
-              tabIndex={0}
-            >
+            {/* On a phone the long lines scroll inside the box. */}
+            <pre aria-label="Install the three packages" className="hub-code">
               <span className="c"># what every demo here runs on</span>
               {"\n"}npm install{" "}
               <span className="s">@didit-protocol/auth-nextjs</span> \{"\n  "}

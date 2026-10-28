@@ -74,7 +74,11 @@ export function TopBar() {
             className="pd-menu"
             links={[
               { label: "Industry demos", href: "/#demos" },
-              { label: "Product demos", href: "/#product-demos", current: true },
+              {
+                label: "Product demos",
+                href: "/#product-demos",
+                current: true,
+              },
               { label: "Build your flow", href: "/#integrate" },
               { label: "Docs", href: siteConfig.links.docs, external: true },
               { label: "Sign in", href: siteConfig.links.console },
