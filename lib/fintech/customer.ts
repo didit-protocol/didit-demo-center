@@ -12,8 +12,22 @@ import { CUSTOMER_PREFIX } from "./alder.ts";
  * enough to read their records.
  */
 
-export const CUSTOMER_COOKIE = "alder_customer";
+export const CUSTOMER_COOKIE = "__Host-alder_customer";
 export const CUSTOMER_COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
+
+/**
+ * `__Host-` makes the browser insist on Secure, `path=/` and no Domain, so
+ * no other subdomain can set or read it. Lax, not Strict: the hosted flow's
+ * callback is a navigation from Didit back to /fintech and must carry it.
+ * Browsers treat localhost as secure, so this works in development too.
+ */
+export const CUSTOMER_COOKIE_OPTIONS = {
+  httpOnly: true,
+  secure: true,
+  sameSite: "lax",
+  path: "/",
+  maxAge: CUSTOMER_COOKIE_MAX_AGE,
+} as const;
 
 const ID = new RegExp(`^${CUSTOMER_PREFIX}[a-f0-9]{24}$`);
 

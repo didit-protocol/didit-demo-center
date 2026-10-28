@@ -322,9 +322,27 @@ export function paymentState(status: string | null | undefined): PaymentState {
   }
 }
 
-/** Onboarding statuses after which polling the decision stops. */
+/**
+ * Session statuses (`GET /v3/session/{id}/decision/`) after which the
+ * decision no longer changes on its own: polling stops, and anything but
+ * Approved, Declined or In Review needs a new session.
+ */
 export function isFinalStatus(status: string): boolean {
-  return ["Approved", "Declined", "In Review", "Expired", "Abandoned"].includes(
-    status,
-  );
+  return [
+    "Approved",
+    "Declined",
+    "In Review",
+    "Expired",
+    "Kyc Expired",
+    "Abandoned",
+  ].includes(status);
+}
+
+/**
+ * Statuses where the session waits for the customer, not for Didit: not
+ * opened yet, or sent back for a resubmission. The same hosted link
+ * continues it, so the bank reopens it instead of starting another.
+ */
+export function awaitsCustomer(status: string): boolean {
+  return ["Not Started", "Awaiting User", "Resubmitted"].includes(status);
 }

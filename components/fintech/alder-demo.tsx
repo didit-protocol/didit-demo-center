@@ -24,7 +24,7 @@ import { alder } from "@/lib/didit/demos";
 import { authErrorMessage } from "@/lib/didit/auth-errors";
 import { SIGNUP_INTENT, useDidit } from "@/lib/didit/provider";
 import { useLive } from "@/lib/didit/use-live";
-import { payeeById, ruleName } from "@/lib/fintech/alder";
+import { isFinalStatus, payeeById, ruleName } from "@/lib/fintech/alder";
 import { alderConsole } from "@/lib/fintech/console-pages";
 import {
   authEvent,
@@ -343,12 +343,15 @@ export function AlderDemo() {
     await bank.startOnboarding();
   };
 
+  /**
+   * An open session (not started, in progress, sent back for a resubmission)
+   * continues on its own hosted link; an expired or abandoned one is
+   * replaced by a new session.
+   */
   const verify = () => {
     if (!state) return;
     if (!onboarding) return void bank.startOnboarding();
-    if (!onboarding.summary || onboarding.summary.status === "Not Started")
-      return void bank.resumeOnboarding();
-    if (onboarding.summary.status === "In Progress")
+    if (!onboarding.summary || !isFinalStatus(onboarding.summary.status))
       return void bank.resumeOnboarding();
     if (!approved) return void bank.startOnboarding();
   };

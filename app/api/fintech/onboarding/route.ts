@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 
-import { siteConfig } from "@/config/site";
+import { diditUrls } from "@/lib/didit/config";
 import { didit } from "@/lib/didit/server";
 import { BANK, ONBOARDING_WORKFLOW_ID } from "@/lib/fintech/alder";
 import {
@@ -18,7 +18,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * Where the hosted flow returns when it finishes on another device: this
  * site's own /fintech, never an address from the request.
  */
-const CALLBACK = new URL("/fintech", siteConfig.url).toString();
+const CALLBACK = `${diditUrls.site}/fintech`;
 
 /**
  * KYC and AML before the IBAN: the onboarding session for this customer,
