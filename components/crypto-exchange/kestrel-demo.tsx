@@ -26,6 +26,7 @@ import {
   withdrawalStage,
 } from "@/lib/crypto-exchange/transactions";
 import { authErrorMessage } from "@/lib/didit/auth-errors";
+import { vendorDataFor } from "@/lib/didit/config";
 import { kestrel } from "@/lib/didit/demos";
 import { SIGNUP_INTENT, useDidit } from "@/lib/didit/provider";
 import { useLive } from "@/lib/didit/use-live";
@@ -494,8 +495,15 @@ export function KestrelDemo() {
           ? "Didit"
           : null
     : null;
+  // The person exists as soon as Didit knows them: a signed-in visitor before
+  // their account is read (a reload, a first open on another tab) or one whose
+  // session carries no email (a passkey) is still them, never "sign up first".
   const consoleTabs = kestrelConsole({
-    userId: account?.userId ?? null,
+    userId:
+      account?.userId ??
+      (auth?.status === "signed-in" && auth.userId
+        ? vendorDataFor(kestrel.vendorPrefix, auth.userId)
+        : null),
     email: auth?.email ?? ks.profile?.email ?? null,
     account,
     activity,

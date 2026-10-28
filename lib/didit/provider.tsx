@@ -39,6 +39,12 @@ export interface AuthView {
   signOut(redirectUrl?: string): Promise<void>;
   /** Signs the same person in again on the hosted page (their passkey). */
   reauthenticate(redirectUrl?: string): Promise<void>;
+  /**
+   * For a route that answered 401 `signed_out`: renews the session now and
+   * resolves true when it is still alive; when it is over, signs the visitor
+   * out cleanly (back to this page) so it never looks signed in.
+   */
+  renew(): Promise<boolean>;
   emailCode: {
     start(email: string): Promise<HeadlessResult>;
     verify(code: string): Promise<HeadlessResult>;
@@ -77,6 +83,13 @@ function demoOf(pathname: string | null): string | null {
   return DEMOS.find((demo) => pathname?.startsWith(demo.route))?.id ?? null;
 }
 
+/** Ends an expired session cleanly and comes back to this page. */
+function signOutHere(auth: ReturnType<typeof useAuth>) {
+  const here = `${window.location.pathname}${window.location.search}`;
+
+  auth.signOut({ redirectUrl: here }).catch(() => window.location.reload());
+}
+
 function AuthBridge({ onChange }: { onChange: (view: AuthView) => void }) {
   const auth = useAuth();
   const status: AuthView["status"] = !auth.isLoaded
@@ -104,13 +117,7 @@ function AuthBridge({ onChange }: { onChange: (view: AuthView) => void }) {
     return keepSession({
       read: session("GET"),
       renew: session("POST"),
-      onSignedOut: () => {
-        const here = `${window.location.pathname}${window.location.search}`;
-
-        auth
-          .signOut({ redirectUrl: here })
-          .catch(() => window.location.reload());
-      },
+      onSignedOut: () => signOutHere(auth),
       now: Date.now,
       setTimer: (run, ms) => window.setTimeout(run, ms),
       clearTimer: (timer) => window.clearTimeout(timer as number),
@@ -129,6 +136,25 @@ function AuthBridge({ onChange }: { onChange: (view: AuthView) => void }) {
       signIn: (redirectUrl) => auth.signIn({ redirectUrl }),
       signOut: (redirectUrl) => auth.signOut({ redirectUrl }),
       reauthenticate: (redirectUrl) => auth.reauthenticate({ redirectUrl }),
+      renew: async () => {
+        try {
+          const response = await fetch("/api/didit/session", {
+            method: "POST",
+            cache: "no-store",
+          });
+
+          // Didit unreachable: the session may be fine, the call just failed.
+          if (!response.ok) return false;
+          const state = (await response.json()) as SessionState;
+
+          if (state.signedIn) return true;
+        } catch {
+          return false;
+        }
+        signOutHere(auth);
+
+        return false;
+      },
       emailCode: {
         start: (email) => auth.emailCode.start({ email }),
         verify: (code) => auth.emailCode.verify({ code }),
