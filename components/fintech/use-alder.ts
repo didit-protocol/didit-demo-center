@@ -701,8 +701,8 @@ export function useAlder(
     const open = (check: CheckState | null): check is CheckState =>
       Boolean(
         check &&
-          SESSION_ID.test(check.sessionId) &&
-          (!check.summary || !isFinalStatus(check.summary.status)),
+        SESSION_ID.test(check.sessionId) &&
+        (!check.summary || !isFinalStatus(check.summary.status)),
       );
 
     (async () => {
@@ -729,7 +729,8 @@ export function useAlder(
         if (stepUp && held && SESSION_ID.test(stepUp.sessionId)) {
           const summary = await readSession(stepUp.sessionId);
 
-          if (isFinalStatus(summary.status)) await finishStepUp(summary.sessionId);
+          if (isFinalStatus(summary.status))
+            await finishStepUp(summary.sessionId);
         }
       } catch {
         setNotice({
