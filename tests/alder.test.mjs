@@ -291,14 +291,14 @@ test("an open onboarding reads as in progress with its start time, never as no v
     });
   const started = new Date(startedAt).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   const session = { sessionId: "c5c01e9c-461c-4726-b288-c16fb8ec41b1", startedAt };
+  const read = (status, extra = {}) => ({
+    ...projectSession({ session_id: session.sessionId, vendor_data: "alder-0f3a9c21d4e85b7a6c19e2d0", status }, "alder-0f3a9c21d4e85b7a6c19e2d0"),
+    ...extra,
+  });
   const tab = (list, id) => list.find((item) => item.id === id);
 
-  // Created, no decision to read yet.
-  for (const list of [
-    tabs(null, session),
-    tabs({ ...projectSession({ session_id: session.sessionId, vendor_data: "alder-0f3a9c21d4e85b7a6c19e2d0", status: "Not Started" }, "alder-0f3a9c21d4e85b7a6c19e2d0") }, session),
-    tabs({ ...projectSession({ session_id: session.sessionId, vendor_data: "alder-0f3a9c21d4e85b7a6c19e2d0", status: "In Progress" }, "alder-0f3a9c21d4e85b7a6c19e2d0") }, session),
-  ]) {
+  // Created with no decision to read yet, then Didit's two open statuses.
+  for (const list of [tabs(null, session), tabs(read("Not Started"), session), tabs(read("In Progress"), session)]) {
     const verification = tab(list, "verification").page;
     const person = tab(list, "person").page;
 
@@ -321,10 +321,7 @@ test("an open onboarding reads as in progress with its start time, never as no v
   }
 
   // Partial results while open are not a verdict.
-  const partial = tab(
-    tabs({ ...projectSession({ session_id: session.sessionId, vendor_data: "alder-0f3a9c21d4e85b7a6c19e2d0", status: "In Progress" }, "alder-0f3a9c21d4e85b7a6c19e2d0"), liveness: 0.98, amlHits: 0 }, session),
-    "verification",
-  ).page;
+  const partial = tab(tabs(read("In Progress", { liveness: 0.98, amlHits: 0 }), session), "verification").page;
 
   assert.ok(partial.blocks[0].checks.every((check) => check.ok === null && !check.value.startsWith("Passed")));
 

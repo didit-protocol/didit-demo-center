@@ -54,12 +54,7 @@ export type KestrelSignal =
 
 /** "verify" while the KYC modal is open, "verify-result" while its decision is read. */
 export type Busy =
-  | "verify"
-  | "verify-result"
-  | "deposit"
-  | "withdraw"
-  | "action"
-  | null;
+  "verify" | "verify-result" | "deposit" | "withdraw" | "action" | null;
 
 const STORAGE_KEY = "kestrel-demo:v2";
 

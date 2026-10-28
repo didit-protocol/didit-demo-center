@@ -133,17 +133,59 @@ export interface AlderMock {
   events: Record<string, unknown>[];
 }
 
-export async function mockAlder(page: Page): Promise<AlderMock> {
+export interface AlderMockOptions {
+  /**
+   * Start with an account already open and its onboarding session created
+   * but not finished, the way a Didit sign-up leaves it: no name yet, only
+   * the email. Nothing reads a decision until the visitor verifies.
+   */
+  pendingOnboarding?: { email: string; startedAt: number };
+}
+
+export async function mockAlder(
+  page: Page,
+  options: AlderMockOptions = {},
+): Promise<AlderMock> {
   const mock: AlderMock = {
     submitted: [],
     bodies: [],
     headers: [],
     events: [],
   };
-  let customer = false;
+  const pending = options.pendingOnboarding;
+  let customer = Boolean(pending);
   let stepUpDone = false;
   const records = new Map<string, Record<string, unknown>>();
   let count = 0;
+
+  if (pending) {
+    // use-alder's saved state (localStorage "alder-demo:v1"), set before
+    // the app reads it.
+    await page.addInitScript(
+      (stored) => {
+        if (!window.localStorage.getItem("alder-demo:v1"))
+          window.localStorage.setItem("alder-demo:v1", JSON.stringify(stored));
+      },
+      {
+        version: 1,
+        customerId: CUSTOMER,
+        name: "",
+        email: pending.email,
+        phone: "",
+        createdAt: pending.startedAt,
+        onboarding: {
+          sessionId: ONBOARDING_SESSION,
+          url: `${VERIFY}/session/e2e-onboarding`,
+          summary: null,
+          startedAt: pending.startedAt,
+        },
+        stepUp: null,
+        activity: [],
+        seeded: false,
+        takeover: null,
+      },
+    );
+  }
 
   await page.route("**/api/fintech/**", async (route) => {
     const request = route.request();

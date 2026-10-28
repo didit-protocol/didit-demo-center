@@ -11,6 +11,8 @@ import type {
 } from "../didit/console";
 import type { LiveEvent } from "../didit/live";
 
+import { IN_PROGRESS, isOpenSession, startedLabel } from "../didit/console";
+
 import { formatAmount } from "./markets";
 import {
   ASSETS,
@@ -80,6 +82,10 @@ function statusTag(status: string): Tag {
   };
 }
 
+/** The KYC session's tag: an open one is in progress, never "Not started". */
+const kycTag = (account: AccountView): Tag =>
+  isOpenSession(account.status) ? IN_PROGRESS : statusTag(account.status);
+
 const nameOf = (input: KestrelConsoleInput) =>
   input.account?.fullName ?? input.email ?? "This customer";
 
@@ -98,6 +104,14 @@ export function focusTransaction(
 }
 
 function kycChecks(account: AccountView): Check[] {
+  // Until Didit decides, no check reads as passed or as not started.
+  if (isOpenSession(account.status))
+    return account.checks.map((check) => ({
+      label: check.label,
+      value: IN_PROGRESS.label,
+      ok: null,
+    }));
+
   return account.checks.map((check) => ({
     label: check.label,
     value:
@@ -136,7 +150,12 @@ function linkedRecords(
     linked.push({
       tone: "ver",
       title: `${nameOf(input)} · KYC`,
-      detail: [statusTag(input.account.status).label, input.account.document]
+      detail: [
+        kycTag(input.account).label,
+        isOpenSession(input.account.status)
+          ? startedLabel(input.account.startedAt)
+          : input.account.document,
+      ]
         .filter(Boolean)
         .join(" · "),
     });
@@ -167,6 +186,7 @@ function linkedRecords(
 function personPage(input: KestrelConsoleInput): RecordPage | null {
   if (!input.userId && !input.email) return null;
   const name = nameOf(input);
+  const open = Boolean(input.account && isOpenSession(input.account.status));
   const tag: Tag =
     input.account?.stage === "approved"
       ? { label: "Verified", tone: "ok" }
@@ -174,7 +194,9 @@ function personPage(input: KestrelConsoleInput): RecordPage | null {
         ? { label: "In review", tone: "rev" }
         : input.account?.stage === "declined"
           ? { label: "Declined", tone: "no" }
-          : { label: "Not verified", tone: "neu" };
+          : open
+            ? IN_PROGRESS
+            : { label: "Not verified", tone: "neu" };
   const declined = input.activity.filter(
     (item) => item.view.status === "DECLINED",
   ).length;
@@ -189,6 +211,9 @@ function personPage(input: KestrelConsoleInput): RecordPage | null {
       id: input.userId ? short(input.userId) : undefined,
       initial: name.charAt(0).toUpperCase(),
       meta: [
+        open
+          ? `KYC ${startedLabel(input.account?.startedAt).toLowerCase()}`
+          : null,
         input.account?.document ?? null,
         `Last active ${time(input.events[0]?.at ?? input.now, input.now).toLowerCase()}`,
       ].filter((item): item is string => Boolean(item)),
@@ -201,7 +226,7 @@ function personPage(input: KestrelConsoleInput): RecordPage | null {
       },
       {
         label: "KYC and AML",
-        value: input.account ? statusTag(input.account.status).label : "None",
+        value: input.account ? kycTag(input.account).label : "None",
         color:
           input.account?.stage === "approved"
             ? "ok"
@@ -467,6 +492,7 @@ function verificationPage(input: KestrelConsoleInput): RecordPage | null {
   const account = input.account;
 
   if (!account) return null;
+  const open = isOpenSession(account.status);
 
   return {
     kind: "verification",
@@ -474,17 +500,40 @@ function verificationPage(input: KestrelConsoleInput): RecordPage | null {
     record: short(account.sessionId),
     head: {
       title: "KYC and AML",
-      tag: statusTag(account.status),
+      tag: kycTag(account),
       id: short(account.sessionId),
-      meta: [nameOf(input), "ID, liveness, face match and AML screening"],
+      meta: [
+        nameOf(input),
+        ...(open ? [startedLabel(account.startedAt)] : []),
+        "ID, liveness, face match and AML screening",
+      ],
     },
     kpis: [],
-    blocks: [{ kind: "checks", title: "Checks", checks: kycChecks(account) }],
+    blocks: [
+      ...(open
+        ? [
+            {
+              kind: "note" as const,
+              tone: "info" as const,
+              text: `${nameOf(input)} has opened the check and has not finished it. Didit decides when the last step is done.`,
+            },
+          ]
+        : []),
+      { kind: "checks", title: "Checks", checks: kycChecks(account) },
+    ],
     side: {
       title: "Details",
-      tag: statusTag(account.status),
+      tag: kycTag(account),
       pairs: [
         ["Workflow", "Crypto onboarding (KYC + AML)"],
+        ...(open
+          ? ([
+              [
+                "Started",
+                startedLabel(account.startedAt).replace(/^Started /, ""),
+              ],
+            ] as [string, string][])
+          : []),
         ...(account.document
           ? ([["Document", account.document]] as [string, string][])
           : []),

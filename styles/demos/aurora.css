@@ -126,9 +126,22 @@
 .ap-hero { background-image: url("/demos/aurora/ap-hero.webp"); }
 .ap-dep { cursor: pointer; }
 .ap-chip { cursor: pointer; }
-.ap-toast { position: absolute; left: 50%; top: 84px; transform: translateX(-50%); z-index: 3; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px;
-            border-radius: 12px; background: var(--ap-card-2); border: 1px solid var(--ap-line); font-size: 13px; box-shadow: 0 20px 40px -12px rgba(0, 0, 0, .7); max-width: calc(100% - 40px); }
+/* the toast sits in the flow between the top bar and the lobby, so it never covers the hero */
+.ap-toast { position: relative; z-index: 3; flex: none; align-self: center; margin: 14px 28px 0; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px;
+            border-radius: 12px; background: var(--ap-card-2); border: 1px solid var(--ap-line); font-size: 13px; box-shadow: 0 20px 40px -12px rgba(0, 0, 0, .7); max-width: calc(100% - 56px); }
 .ap-toast.is-error { border-color: rgba(255, 77, 106, .5); }
+
+/* the signed-in player: avatar and its menu */
+.ap-me { position: relative; flex: none; }
+.ap-me .ap-ava { color: #FFFFFF; }
+.ap-menu { position: absolute; right: 0; top: calc(100% + 8px); z-index: 3; width: 240px; max-width: calc(100vw - 28px); display: flex; flex-direction: column; gap: 4px; padding: 8px;
+           border-radius: 14px; background: var(--ap-card-2); border: 1px solid var(--ap-line); box-shadow: 0 20px 40px -12px rgba(0, 0, 0, .7); }
+.ap-menu-who { display: flex; flex-direction: column; gap: 2px; min-width: 0; padding: 6px 8px 10px; border-bottom: 1px solid var(--ap-line); }
+.ap-menu-who b, .ap-menu-who small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ap-menu-who b { font-size: 13.5px; font-weight: 600; }
+.ap-menu-who small { font-size: 12px; color: var(--ap-muted); }
+.ap-menu button { display: flex; align-items: center; gap: 10px; height: 38px; padding: 0 8px; border-radius: 9px; font-size: 13.5px; font-weight: 500; text-align: left; }
+.ap-menu button:hover { background: rgba(255, 255, 255, .05); }
 
 /* modals */
 .ap-layer { position: absolute; inset: 0; z-index: 4; display: grid; place-items: center; padding: 20px; }
@@ -190,7 +203,7 @@
 }
 @media (max-width: 767px) {
   .ap { grid-template-columns: minmax(0, 1fr); }
-  .ap-side, .ap-search, .ap-top .ap-chips, .ap-bell, .ap-top .ap-ava, .ap-desk-only, .ap-jack, .ap-lives-sec, .ap-hero-x p, .ap-hero-cta .is-ghost, .ap-hero-dots, .ap-row-h .ap-chips { display: none; }
+  .ap-side, .ap-search, .ap-top .ap-chips, .ap-bell, .ap-top .ap-me:not(.is-solo), .ap-desk-only, .ap-jack, .ap-lives-sec, .ap-hero-x p, .ap-hero-cta .is-ghost, .ap-hero-dots, .ap-row-h .ap-chips { display: none; }
   .ap-phone-only { display: flex; }
   .ap-top { height: 76px; padding: 0 14px; }
   .ap-top .ap-brand { padding: 0; font-size: 20px; }
@@ -199,6 +212,7 @@
   .ap-bal small { display: none; }
   .ap-bal .ap-dep { width: 36px; height: 36px; padding: 0; justify-content: center; border-radius: 10px; font-size: 18px; }
   .ap-content { padding: 14px; gap: 16px; }
+  .ap-toast { margin: 10px 14px 0; max-width: calc(100% - 28px); }
   .ap-hero { height: 168px; border-radius: 18px; }
   .ap-hero-x { gap: 8px; }
   .ap-hero-cta .ap-btn { height: 34px; padding: 0 14px; font-size: 13px; }
@@ -219,4 +233,9 @@
 }
 /* keep modals clear of the live feed, as on the boards */
 @media (min-width: 1200px) { .ap-layer { padding-right: 260px; } }
+/* while the feed is open (372px, 20px from the edge) the lobby keeps clear of it; folded into the pill, the lobby takes the full width */
+@media (min-width: 1280px) {
+  [data-app="aurora"]:has(> .lv) .ap-content { padding-right: 412px; }
+  [data-app="aurora"]:has(> .lv) .ap-games { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
 .ap-game-img { display: block; width: 100%; }

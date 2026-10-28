@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 import { completeHostedFlow, mockAlder } from "./alder-mocks";
+import { collectOwnErrors, expectNoHorizontalScroll } from "./page-health";
 
 /**
  * Alder (/fintech) end to end, on desktop and on a phone: the five steps of
@@ -172,4 +173,53 @@ test("a sign-in without the passkey is blocked and nothing moves", async ({
   expect(mock.submitted.length).toBe(before);
   await openFeed(page);
   await expect(live(page).getByText("Sign-in blocked")).toBeVisible();
+});
+
+test("the signed-in home loads with no errors of its own and no sideways scroll", async ({
+  page,
+}) => {
+  await mockAlder(page);
+  const errors = collectOwnErrors(page);
+
+  await page.goto("/fintech");
+  await openAccount(page);
+  await expect(app(page).getByRole("heading", { level: 1 })).toContainText(
+    "Lena",
+  );
+
+  expect(errors).toEqual([]);
+  await expectNoHorizontalScroll(page);
+});
+
+test("an account opened with only an email: the greeting has no email and the open check reads as in progress", async ({
+  page,
+}) => {
+  const email = "didit-demo-1793190803725@example.com";
+
+  await mockAlder(page, {
+    pendingOnboarding: { email, startedAt: Date.now() - 60_000 },
+  });
+  await page.goto("/fintech");
+
+  const title = app(page).getByRole("heading", { level: 1 });
+
+  await expect(title).toContainText("Welcome to Alder");
+  await expect(title).not.toContainText("@");
+  await expect(title).not.toContainText(email);
+
+  // The console view: the session exists, so it is in progress, not missing.
+  await foldFeed(page);
+  await goToStep(page, "Console");
+  const consoleView = page.getByTestId("console-view");
+
+  await consoleView.getByRole("tab", { name: "Verification" }).click();
+  await expect(consoleView).toContainText("KYC + AML onboarding");
+  await expect(consoleView).toContainText("In progress");
+  await expect(consoleView).toContainText(/Started \d{1,2} \w{3}, \d{2}:\d{2}/);
+  await expect(consoleView).not.toContainText("No verification yet");
+  await expect(consoleView).not.toContainText(/Not started/i);
+
+  await consoleView.getByRole("tab", { name: "Person" }).click();
+  await expect(consoleView).toContainText("identity check is in progress");
+  await expect(consoleView).not.toContainText(/Not started/i);
 });
