@@ -211,7 +211,10 @@ export async function lookupAccount(
   if (!result.ok || !result.data) {
     return {
       ok: false,
-      response: diditFailure(result, "The onboarding session could not be read."),
+      response: diditFailure(
+        result,
+        "The onboarding session could not be read.",
+      ),
     };
   }
 

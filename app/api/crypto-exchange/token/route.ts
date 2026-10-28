@@ -1,6 +1,10 @@
 import type { NextRequest } from "next/server";
 
-import { diditFailure, json, lookupAccount } from "@/lib/crypto-exchange/server";
+import {
+  diditFailure,
+  json,
+  lookupAccount,
+} from "@/lib/crypto-exchange/server";
 import { diditUrls } from "@/lib/didit/config";
 import { didit } from "@/lib/didit/server";
 

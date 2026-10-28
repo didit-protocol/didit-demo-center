@@ -65,7 +65,10 @@ export async function POST(request: NextRequest) {
   const url = result.data?.url;
 
   if (!result.ok || typeof sessionId !== "string" || typeof url !== "string") {
-    return diditFailure(result, "The verification session could not be created.");
+    return diditFailure(
+      result,
+      "The verification session could not be created.",
+    );
   }
 
   const response = json({ sessionId, url }, { status: 201 });
