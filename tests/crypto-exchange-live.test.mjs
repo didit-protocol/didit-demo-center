@@ -176,6 +176,68 @@ test("the console view opens the declined withdrawal with the wallet risk and th
   assert.equal(tabs[2].page.head.title, "KYC and AML");
 });
 
+test("an open KYC session reads as in progress with its started time, never as not started", () => {
+  // The real decision of a session Didit opened and nobody finished yet.
+  const open = toAccountView(recorded("decision-not-started"));
+  const tabs = kestrelConsole({
+    userId: "kestrel-0f6c2a51-3c4e-4d7b-9a1f-2b8e5d6c7a90",
+    email: "avery.quinn@example.com",
+    account: open,
+    activity: [],
+    events: [],
+    device: null,
+    signIn: null,
+    now: Date.parse("2026-10-13T22:00:00.000Z"),
+  });
+  const [person, , verification] = tabs.map((tab) => tab.page);
+  const started = /^Started 13 Oct, \d\d:32$/;
+
+  assert.ok(person && verification, "both pages exist once a session does");
+  assert.deepEqual(person.head.tag, { label: "In progress", tone: "rev" });
+  assert.ok(person.head.meta.some((line) => /^KYC started 13 Oct, \d\d:32$/.test(line)));
+  assert.equal(person.kpis.find((kpi) => kpi.label === "KYC and AML").value, "In progress");
+  const identity = person.blocks.find((block) => block.kind === "identity");
+
+  assert.ok(identity.checks.every((check) => check.value === "In progress" && check.ok === null));
+
+  assert.deepEqual(verification.head.tag, { label: "In progress", tone: "rev" });
+  assert.deepEqual(verification.side.tag, { label: "In progress", tone: "rev" });
+  assert.ok(verification.head.meta.some((line) => started.test(line)));
+  const checks = verification.blocks.find((block) => block.kind === "checks").checks;
+
+  assert.deepEqual(
+    checks.map((check) => check.label),
+    ["ID document", "Liveness", "Face match", "AML screening"],
+  );
+  assert.ok(checks.every((check) => check.value === "In progress" && check.ok === null));
+  assert.doesNotMatch(JSON.stringify([person, verification]), /Not started|Not run|Not verified/);
+
+  // Didit's other open status, with a check already through: still nothing reads as passed.
+  const inProgress = toAccountView({
+    ...recorded("decision-not-started"),
+    status: "In Progress",
+    id_verifications: [{ status: "Approved" }],
+    aml_screenings: [{ status: "Approved", total_hits: 0 }],
+  });
+  const page = kestrelConsole({
+    userId: "kestrel-1",
+    email: null,
+    account: inProgress,
+    activity: [],
+    events: [],
+    device: null,
+    signIn: null,
+    now: 0,
+  })[2].page;
+
+  assert.ok(
+    page.blocks
+      .find((block) => block.kind === "checks")
+      .checks.every((check) => check.value === "In progress" && check.ok === null),
+  );
+  assert.doesNotMatch(JSON.stringify(page), /No matches|Approved/);
+});
+
 test("with nothing yet, every tab says what to do instead of showing a made-up record", () => {
   const tabs = kestrelConsole({
     userId: null,

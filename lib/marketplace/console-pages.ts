@@ -92,8 +92,8 @@ export function statusTag(status: string): Tag {
 }
 
 /** True while the KYB session is open: Didit has not decided it yet. */
-const kybOpen = (kyb: KybSummary | null | undefined): kyb is KybSummary =>
-  Boolean(kyb) && statusTag(kyb!.status) === IN_PROGRESS;
+const kybOpen = (kyb: KybSummary | null | undefined) =>
+  Boolean(kyb) && statusTag(kyb?.status ?? "") === IN_PROGRESS;
 
 const isApproved = (status: string | null) =>
   (status ?? "").toLowerCase() === "approved";
@@ -204,7 +204,7 @@ function businessPage(input: NorthmarketConsoleInput): RecordPage | null {
         registry?.country ?? null,
         `Shop: ${shop.shop}`,
         kybOpen(kyb)
-          ? `KYB ${startedLabel(kyb.createdAt).replace(/^Started/, "started")}`
+          ? `KYB ${startedLabel(kyb?.createdAt).replace(/^Started/, "started")}`
           : kyb?.createdAt
             ? `Seller since ${day(kyb.createdAt)}`
             : null,

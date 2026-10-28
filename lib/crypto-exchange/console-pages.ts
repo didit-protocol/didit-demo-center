@@ -212,7 +212,10 @@ function personPage(input: KestrelConsoleInput): RecordPage | null {
       initial: name.charAt(0).toUpperCase(),
       meta: [
         open
-          ? `KYC ${startedLabel(input.account?.startedAt).toLowerCase()}`
+          ? startedLabel(input.account?.startedAt).replace(
+              /^Started/,
+              "KYC started",
+            )
           : null,
         input.account?.document ?? null,
         `Last active ${time(input.events[0]?.at ?? input.now, input.now).toLowerCase()}`,

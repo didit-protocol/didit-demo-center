@@ -700,12 +700,12 @@ export function NorthmarketDemo() {
         ) : null}
         {current === "outlet" && outlet ? (
           <OutletScreen
+            checking={market.busy === "shop"}
             device={
               didit.device
                 ? `${didit.device.browser} on ${didit.device.os}`
                 : null
             }
-            checking={market.busy === "shop"}
             failed={Boolean(signupError)}
             firstVisit={didit.device?.firstVisit ?? null}
             opened={opened}
