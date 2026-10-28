@@ -57,7 +57,7 @@ export function kybStatus(raw: string | null): StatusMeta {
         tone: "review",
         label: "In review",
         description:
-          "A compliance analyst has to look at the business before payouts unlock. Decide it in the operator view.",
+          "A compliance analyst reviews the business in the Didit console before payouts unlock.",
       };
     case "awaiting user":
       return {
@@ -178,15 +178,6 @@ export function transactionStatus(raw: string | null): StatusMeta {
 /** Payouts unlock on an approved business verification and nothing else. */
 export function payoutsUnlocked(kybRaw: string | null): boolean {
   return normalize(kybRaw ?? "") === "approved";
-}
-
-/**
- * A KYB an analyst can decide from the operator view. The status endpoint
- * only moves a session that is already decided or In Review; one still
- * waiting on its key people has to wait for them.
- */
-export function kybDecidable(kybRaw: string | null): boolean {
-  return normalize(kybRaw ?? "") === "in review";
 }
 
 /**
