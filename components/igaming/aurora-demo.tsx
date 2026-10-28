@@ -633,7 +633,8 @@ export function AuroraDemo() {
     ageCheck: state?.age
       ? {
           sessionId: state.age.sessionId,
-          startedAt: state.age.startedAt ?? null,
+          // The age check opens right after sign-up.
+          startedAt: state.age.startedAt ?? state.createdAt,
         }
       : null,
     kycCheck: state?.kyc

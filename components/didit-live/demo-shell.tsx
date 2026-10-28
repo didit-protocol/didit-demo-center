@@ -5,12 +5,12 @@ import type { LiveEvent } from "@/lib/didit/live";
 
 import * as React from "react";
 
-import { useDidit } from "@/lib/didit/provider";
-
 import { type CalloutSpec, Callouts } from "./callouts";
 import { type ConsoleTab, ConsoleView } from "./console-view";
 import { DemoBar, type DemoBarProps } from "./demo-bar";
 import { LiveFeed, type ProductTile } from "./live-feed";
+
+import { useDidit } from "@/lib/didit/provider";
 
 /**
  * One industry demo inside the Demo Center: the dark bar, the customer app

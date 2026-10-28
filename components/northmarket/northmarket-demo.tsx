@@ -19,6 +19,7 @@ import {
 import { useNorthmarket } from "./use-northmarket";
 
 import { DemoShell } from "@/components/didit-live/demo-shell";
+import { authErrorMessage } from "@/lib/didit/auth-errors";
 import { STEPS } from "@/lib/didit/config";
 import { northmarket } from "@/lib/didit/demos";
 import { ago } from "@/lib/didit/live";
@@ -76,7 +77,10 @@ export function NorthmarketDemo() {
   } | null>(null);
   const [authBusy, setAuthBusy] = React.useState(false);
   const [authError, setAuthError] = React.useState<string | null>(null);
+  // The second shop's sign-up check, when it did not go through.
+  const [signupError, setSignupError] = React.useState<string | null>(null);
   const opening = React.useRef(false);
+  const resumed = React.useRef(false);
   const stepParam = React.useRef<string | null>(null);
 
   const auth = didit.auth;
@@ -92,6 +96,8 @@ export function NorthmarketDemo() {
     : null;
   const kyb = first?.kyb ?? null;
   const approved = kyb?.status.toLowerCase() === "approved";
+  // Known before anyone clicks: without a KYB workflow the check cannot start.
+  const kybAvailable = view?.availability.kyb !== false;
   const company = first ? companyName(kyb, first.company) : null;
   const current: Screen =
     screen ?? (!first ? "signup" : outlet ? "outlet" : "hub");
@@ -161,14 +167,28 @@ export function NorthmarketDemo() {
 
   const openShop = async (shop: string) => {
     const previous = first && second ? first.shop : null;
+
+    // This page checks the new shop's sign-up itself; nothing to resume.
+    resumed.current = true;
     const result = await market.openShop(shop || SELLER.shop);
 
     window.sessionStorage.removeItem(PENDING_SHOP);
+    if (!result.ok && "seller" in result && previous) {
+      // The second shop opened but its sign-up check did not go through:
+      // its page offers the check again.
+      setSignupError(result.error);
+      window.sessionStorage.removeItem(SECOND_KEY);
+      setSecond(false);
+      setScreen("outlet");
+
+      return;
+    }
     if (!result.ok) {
       setToast({ tone: "error", text: result.error });
 
       return;
     }
+    setSignupError(null);
     push(
       transactionEvents(result.data.signup, {
         shop: result.data.seller.shop,
@@ -195,6 +215,28 @@ export function NorthmarketDemo() {
       opening.current = false;
     });
   }, [authOn, view, auth?.status, auth?.userId]);
+
+  /* ── A second shop whose sign-up was never checked (a reload, a failure) ── */
+
+  const checkOutletSignup = async () => {
+    if (!outlet) return;
+    setSignupError(null);
+    const result = await market.checkSignup(outlet);
+
+    if (!result.ok) return setSignupError(result.error);
+    push(
+      transactionEvents(result.data, {
+        shop: outlet.shop,
+        previous: first?.shop ?? null,
+      }),
+    );
+  };
+
+  React.useEffect(() => {
+    if (!outlet || outlet.signup || market.busy || resumed.current) return;
+    resumed.current = true;
+    void checkOutletSignup();
+  }, [outlet?.id, outlet?.signup, market.busy]);
 
   /* ── Decisions that arrived while the visitor was away ── */
 
@@ -255,11 +297,7 @@ export function NorthmarketDemo() {
 
       return false;
     } catch (problem) {
-      setAuthError(
-        problem instanceof Error
-          ? problem.message
-          : "The code could not be sent.",
-      );
+      setAuthError(authErrorMessage(problem, "start"));
 
       return false;
     } finally {
@@ -279,9 +317,7 @@ export function NorthmarketDemo() {
       if (result.status !== "signed_in")
         setAuthError("That code did not work. Check it and try again.");
     } catch (problem) {
-      setAuthError(
-        problem instanceof Error ? problem.message : "That code did not work.",
-      );
+      setAuthError(authErrorMessage(problem, "verify"));
     } finally {
       setAuthBusy(false);
     }
@@ -300,7 +336,7 @@ export function NorthmarketDemo() {
   const owner = kyb?.people.find((person) => person.kycUrl) ?? null;
 
   const verifyBusiness = async () => {
-    if (!first) return;
+    if (!first || (!kybAvailable && !kyb)) return;
     const result =
       owner?.kycUrl && !kyb?.url
         ? await market.checkOwner(first.id, owner.kycUrl)
@@ -354,15 +390,31 @@ export function NorthmarketDemo() {
   };
 
   const restart = async () => {
-    await market.reset();
-    live.clear();
-    for (const key of [SECOND_KEY, SEEN_KEY, PENDING_SHOP, OWN_SIGNUP])
-      window.sessionStorage.removeItem(key);
-    setSecond(false);
-    setSeen(new Set());
-    setScreen(null);
-    setConsoleOpen(false);
-    if (authOn && signedIn) await auth?.signOut("/marketplace");
+    // Still signed in once the shops are gone: no shop opens on its own.
+    opening.current = true;
+    try {
+      await market.reset();
+      live.clear();
+      for (const key of [SECOND_KEY, SEEN_KEY, PENDING_SHOP, OWN_SIGNUP])
+        window.sessionStorage.removeItem(key);
+      setSecond(false);
+      setSeen(new Set());
+      setScreen("signup");
+      setToast(null);
+      setAuthError(null);
+      setSignupError(null);
+      resumed.current = false;
+      setConsoleOpen(false);
+      if (authOn && signedIn) await auth?.signOut("/marketplace");
+    } finally {
+      opening.current = false;
+    }
+  };
+
+  /** Another screen: a message from the last one does not follow. */
+  const go = (next: Screen) => {
+    setToast(null);
+    setScreen(next);
   };
 
   const openConsole = (open: boolean, tab?: string) => {
@@ -395,6 +447,8 @@ export function NorthmarketDemo() {
 
   function onStep(target: StepId) {
     setConsoleOpen(false);
+    // A message belongs to the step it came from.
+    setToast(null);
     if (target === "console") return openConsole(true);
     if (!first) {
       setScreen("signup");
@@ -412,7 +466,8 @@ export function NorthmarketDemo() {
         break;
       case "verify":
         setScreen("hub");
-        if (!approved && !market.busy) void verifyBusiness();
+        if (!approved && !market.busy && (kybAvailable || kyb))
+          void verifyBusiness();
         break;
       case "transact":
         setScreen("checkout");
@@ -451,7 +506,7 @@ export function NorthmarketDemo() {
         ? `KYB approved · ${owners} ${owners === 1 ? "owner" : "owners"}`
         : "KYB approved",
     });
-  } else if (current === "hub" && !kyb && !market.busy) {
+  } else if (current === "hub" && !kyb && !market.busy && kybAvailable) {
     callouts.push({
       id: "payouts",
       anchor: "verify",
@@ -600,7 +655,7 @@ export function NorthmarketDemo() {
         onLogIn={() =>
           authOn ? void auth?.signIn("/marketplace") : setScreen("signup")
         }
-        onSellerHub={() => setScreen(first ? "hub" : "signup")}
+        onSellerHub={() => go(first ? "hub" : "signup")}
       >
         {current === "signup" ? (
           <SignUpScreen
@@ -620,10 +675,11 @@ export function NorthmarketDemo() {
             canContinue={Boolean(kyb?.url)}
             company={company ?? first.company}
             kyb={kyb?.status ?? null}
+            kybAvailable={kybAvailable}
             owner={kyb?.url ? null : (owner?.name ?? null)}
             payoutDay={nextPayoutDay(Date.now())}
             shop={first.shop}
-            onBuyerView={() => setScreen("checkout")}
+            onBuyerView={() => go("checkout")}
             onVerify={() => void verifyBusiness()}
           />
         ) : null}
@@ -637,7 +693,7 @@ export function NorthmarketDemo() {
             order={order}
             sellerShop={first?.shop ?? SELLER.shop}
             verifiedSeller={approved ? company : null}
-            onChange={() => setScreen(first ? "hub" : "signup")}
+            onChange={() => go(first ? "hub" : "signup")}
             onPlace={() => void placeOrder()}
             onSelfie={() => held && void confirmAge(held)}
           />
@@ -649,11 +705,14 @@ export function NorthmarketDemo() {
                 ? `${didit.device.browser} on ${didit.device.os}`
                 : null
             }
+            checking={market.busy === "shop"}
+            failed={Boolean(signupError)}
             firstVisit={didit.device?.firstVisit ?? null}
             opened={opened}
             previous={first?.shop ?? SELLER.shop}
             shop={outlet.shop}
             signup={outletSignup}
+            onRetry={() => void checkOutletSignup()}
           />
         ) : null}
       </Store>

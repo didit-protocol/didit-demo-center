@@ -10,6 +10,7 @@ import {
   History,
   Home,
   Layers,
+  LogOut,
   Medal,
   Radio,
   Search,
@@ -151,18 +152,95 @@ function Sidebar({
 
 export interface Account {
   initial: string;
-  balance: number;
+  name: string;
+  email: string | null;
+  /** Null until the age check opens the cashier. */
+  balance: number | null;
+}
+
+/** The signed-in player's avatar and its menu, with Sign out. */
+function AccountMenu({
+  account,
+  onSignOut,
+}: {
+  account: Account;
+  onSignOut(): void;
+}) {
+  const [open, setOpen] = React.useState(false);
+  const ref = React.useRef<HTMLSpanElement>(null);
+
+  React.useEffect(() => {
+    if (!open) return;
+    const close = (event: Event) => {
+      if (
+        event instanceof KeyboardEvent
+          ? event.key === "Escape"
+          : !ref.current?.contains(event.target as Node)
+      )
+        setOpen(false);
+    };
+
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("keydown", close);
+
+    return () => {
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("keydown", close);
+    };
+  }, [open]);
+
+  return (
+    <span
+      ref={ref}
+      className={`ap-me${account.balance === null ? " is-solo" : ""}`}
+    >
+      <button
+        aria-expanded={open}
+        aria-haspopup="menu"
+        aria-label={`Account: ${account.name}`}
+        className="ap-ava"
+        data-testid="aurora-account"
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+      >
+        {account.initial}
+      </button>
+      {open ? (
+        <span aria-label="Account" className="ap-menu" role="menu">
+          <span className="ap-menu-who">
+            <b>{account.name}</b>
+            {account.email && account.email !== account.name ? (
+              <small>{account.email}</small>
+            ) : null}
+          </span>
+          <button
+            role="menuitem"
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              onSignOut();
+            }}
+          >
+            <LogOut aria-hidden size={16} />
+            Sign out
+          </button>
+        </span>
+      ) : null}
+    </span>
+  );
 }
 
 function TopBar({
   account,
   onSignUp,
   onSignIn,
+  onSignOut,
   onDeposit,
 }: {
   account: Account | null;
   onSignUp(): void;
   onSignIn(): void;
+  onSignOut(): void;
   onDeposit(): void;
 }) {
   return (
@@ -181,26 +259,26 @@ function TopBar({
       <span className="ap-top-r">
         {account ? (
           <>
-            <span className="ap-bal" data-callout="balance">
-              <span>
-                <small>Balance</small>
-                <span data-testid="aurora-balance">
-                  {formatMoney(account.balance)}
+            {account.balance !== null ? (
+              <span className="ap-bal" data-callout="balance">
+                <span>
+                  <small>Balance</small>
+                  <span data-testid="aurora-balance">
+                    {formatMoney(account.balance)}
+                  </span>
                 </span>
+                <button className="ap-dep" type="button" onClick={onDeposit}>
+                  <span className="ap-desk-only">Deposit</span>
+                  <span aria-label="Deposit" className="ap-phone-only">
+                    +
+                  </span>
+                </button>
               </span>
-              <button className="ap-dep" type="button" onClick={onDeposit}>
-                <span className="ap-desk-only">Deposit</span>
-                <span aria-label="Deposit" className="ap-phone-only">
-                  +
-                </span>
-              </button>
-            </span>
+            ) : null}
             <span aria-hidden className="ap-bell">
               <Bell size={17} />
             </span>
-            <span aria-hidden className="ap-ava">
-              {account.initial}
-            </span>
+            <AccountMenu account={account} onSignOut={onSignOut} />
           </>
         ) : (
           <>
@@ -389,6 +467,7 @@ export function Casino({
   onTerms,
   onGame,
   onResponsible,
+  onSignOut,
   children,
 }: {
   account: Account | null;
@@ -401,6 +480,7 @@ export function Casino({
   onTerms(): void;
   onGame(name: string): void;
   onResponsible(): void;
+  onSignOut(): void;
   children?: React.ReactNode;
 }) {
   return (
@@ -411,6 +491,7 @@ export function Casino({
           account={account}
           onDeposit={onDeposit}
           onSignIn={onSignIn}
+          onSignOut={onSignOut}
           onSignUp={onSignUp}
         />
         {toast ? (
@@ -423,7 +504,7 @@ export function Casino({
         ) : null}
         <div className="ap-content">
           <Lobby
-            signedIn={account !== null}
+            signedIn={account !== null && account.balance !== null}
             onClaim={onClaim}
             onGame={onGame}
             onTerms={onTerms}

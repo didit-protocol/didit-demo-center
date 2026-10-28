@@ -510,8 +510,8 @@ export function ConsoleView({
                 <button
                   key={item.id}
                   aria-selected={item.id === current.id}
-                  data-tab={item.id}
                   className={`${TONE_CLASS[item.tone]}${item.id === current.id ? " is-on" : ""}`}
+                  data-tab={item.id}
                   role="tab"
                   type="button"
                   onClick={() => onTab(item.id)}

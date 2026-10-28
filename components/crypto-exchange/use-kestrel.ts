@@ -52,7 +52,14 @@ export type KestrelSignal =
   | { type: "verify-decided"; account: KestrelAccount }
   | { type: "transaction"; item: ActivityItem };
 
-export type Busy = "verify" | "deposit" | "withdraw" | "action" | null;
+/** "verify" while the KYC modal is open, "verify-result" while its decision is read. */
+export type Busy =
+  | "verify"
+  | "verify-result"
+  | "deposit"
+  | "withdraw"
+  | "action"
+  | null;
 
 const STORAGE_KEY = "kestrel-demo:v2";
 
@@ -277,6 +284,7 @@ export function useKestrel(
       emitRef.current({ type: "verify-started" });
       const result = await openVerification(url);
 
+      setBusy("verify-result");
       if (result.type === "failed")
         setError(result.error?.message ?? "The verification could not start.");
       await settleAccount();
