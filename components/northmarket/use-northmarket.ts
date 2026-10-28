@@ -14,7 +14,7 @@ import type {
 import * as React from "react";
 
 import { openVerification, submitTransaction } from "@/lib/didit/browser";
-import { api } from "@/lib/marketplace/client";
+import { api, withRenewal } from "@/lib/marketplace/client";
 import { ORDER_LISTING } from "@/lib/marketplace/northmarket";
 import {
   purchaseTransaction,
@@ -94,13 +94,28 @@ async function settleKyb(
   return last;
 }
 
-export function useNorthmarket() {
+/**
+ * `renew` is Didit Authentication's (lib/didit/provider): when a route
+ * answers 401 `signed_out`, the session is renewed and the call made once
+ * more, or the visitor is signed out cleanly so the page stops looking
+ * signed in. Without Authentication the routes never answer that.
+ */
+export function useNorthmarket(renew?: () => Promise<boolean>) {
   const [view, setView] = React.useState<StateView | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState<Busy>(null);
   // `busy` disables the buttons on the next render; this blocks a second
   // click that lands before it, so one click is one KYB session or one order.
   const running = React.useRef(false);
+  const renewRef = React.useRef(renew);
+
+  renewRef.current = renew;
+
+  /** A route that needs the signed-in visitor. */
+  const signedIn = <T>(
+    path: string,
+    init: { method: string; body?: unknown },
+  ) => withRenewal(() => api<T>(path, init), renewRef.current);
 
   /** Runs one step at a time; a click while one runs resolves to null. */
   const exclusive = async <T>(
@@ -140,7 +155,7 @@ export function useNorthmarket() {
     seller?: string,
   ): Promise<Outcome<TransactionSummary>> => {
     const mint = async () => {
-      const minted = await api<TokenGrant>("/token", {
+      const minted = await signedIn<TokenGrant>("/token", {
         method: "POST",
         body: { purpose, seller },
       });
@@ -184,7 +199,7 @@ export function useNorthmarket() {
     | null
   > =>
     exclusive("shop", async () => {
-      const opened = await api<{ seller: SellerView }>("/sellers", {
+      const opened = await signedIn<{ seller: SellerView }>("/sellers", {
         method: "POST",
         body: { shop },
       });
@@ -253,7 +268,7 @@ export function useNorthmarket() {
     onOpen: () => void,
   ): Promise<Outcome<KybSummary | null> | null> =>
     exclusive("kyb", async () => {
-      const started = await api<{ url: string }>(
+      const started = await signedIn<{ url: string }>(
         `/sellers/${encodeURIComponent(sellerId)}/kyb`,
         { method: "POST" },
       );

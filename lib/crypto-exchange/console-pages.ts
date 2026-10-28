@@ -86,8 +86,13 @@ function statusTag(status: string): Tag {
 const kycTag = (account: AccountView): Tag =>
   isOpenSession(account.status) ? IN_PROGRESS : statusTag(account.status);
 
-const nameOf = (input: KestrelConsoleInput) =>
-  input.account?.fullName ?? input.email ?? "This customer";
+/** The visitor's name or email; "This customer" where it starts a line. */
+const nameOf = (input: KestrelConsoleInput, fallback = "This customer") =>
+  input.account?.fullName ?? input.email ?? fallback;
+
+/** The same, inside a sentence. */
+const nameInText = (input: KestrelConsoleInput) =>
+  nameOf(input, "this customer");
 
 /** The transaction the team would open: the declined one, else the held one, else the newest. */
 export function focusTransaction(
@@ -380,7 +385,7 @@ function transactionPage(input: KestrelConsoleInput): RecordPage | null {
     blocks.push({
       kind: "note",
       tone: "hold",
-      text: `Held for ${name}: ${withdrawalStage(view) === "prove-ownership" ? "the Travel Rule asks for proof that the self-hosted wallet is theirs, then a selfie" : "a selfie matched to the face verified at sign-up"}. It is released as soon as that is done.`,
+      text: `Held for ${nameInText(input)}: ${withdrawalStage(view) === "prove-ownership" ? "the Travel Rule asks for proof that the self-hosted wallet is theirs, then a selfie" : "a selfie matched to the face verified at sign-up"}. It is released as soon as that is done.`,
     });
   }
   blocks.push(
@@ -613,7 +618,7 @@ export function kestrelConsole(input: KestrelConsoleInput): ConsoleTab[] {
       id: "person",
       label: "Person",
       tone: "auth",
-      note: `This is your Didit console. Everything ${nameOf(input)} just did in Kestrel is already here, for your team.`,
+      note: `This is your Didit console. Everything ${nameInText(input)} just did in Kestrel is already here, for your team.`,
       page: personPage(input),
       empty:
         "Sign up in Kestrel first: the person appears here as soon as Didit knows them.",

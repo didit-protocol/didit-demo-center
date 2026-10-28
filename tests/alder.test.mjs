@@ -329,3 +329,20 @@ test("an open onboarding reads as in progress with its start time, never as no v
   assert.equal(tab(tabs(null, null), "verification").page, null);
   assert.equal(tab(tabs(null, null), "person").page.head.tag.label, "Not verified");
 });
+
+test("without a customer yet the console notes say 'this customer' inside a sentence", () => {
+  const tabs = consolePages.alderConsole({
+    customer: null,
+    onboarding: null,
+    stepUp: null,
+    activity: [],
+    events: [],
+    device: null,
+    signIn: null,
+    takeover: null,
+    now: 0,
+  });
+
+  assert.match(tabs[0].note, /Everything this customer just did in Alder/);
+  assert.doesNotMatch(JSON.stringify(tabs), /[a-z,] This customer/);
+});
