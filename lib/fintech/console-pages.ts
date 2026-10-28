@@ -155,12 +155,17 @@ function onboardingStarted(input: AlderConsoleInput): string {
   );
 }
 
-function nameOf(input: AlderConsoleInput): string {
+/** The customer's name or email; "This customer" where it starts a line. */
+function nameOf(input: AlderConsoleInput, fallback = "This customer"): string {
   return (
     input.onboarding?.fullName ??
-    (input.customer?.name || input.customer?.email || "This customer")
+    (input.customer?.name || input.customer?.email || fallback)
   );
 }
+
+/** The same, inside a sentence. */
+const nameInText = (input: AlderConsoleInput) =>
+  nameOf(input, "this customer");
 
 function identityChecks(session: SessionSummary): Check[] {
   const checks: Check[] = [];
@@ -298,7 +303,7 @@ function transactionPage(input: AlderConsoleInput): RecordPage | null {
             {
               kind: "note" as const,
               tone: "hold" as const,
-              text: `Held at ${clock(when)} because it is a transfer of ${STEP_UP_AMOUNT.toLocaleString("en-US")} EUR or more to a new payee. ${BANK} asked ${name} to confirm it is them in the same screen; it is released as soon as Didit approves the step-up.`,
+              text: `Held at ${clock(when)} because it is a transfer of ${STEP_UP_AMOUNT.toLocaleString("en-US")} EUR or more to a new payee. ${BANK} asked ${nameInText(input)} to confirm it is them in the same screen; it is released as soon as Didit approves the step-up.`,
             },
           ]
         : released
@@ -633,7 +638,7 @@ function devicePage(input: AlderConsoleInput): RecordPage | null {
           {
             kind: "note",
             tone: "stop",
-            text: `A sign-in to ${nameOf(input)}'s account failed the passkey check at ${clock(input.takeover.at)}. Didit ${input.takeover.status ? `marked the event ${input.takeover.status.toLowerCase().replace(/_/g, " ")}` : "kept the account closed"} and no payment was created.`,
+            text: `A sign-in to ${nameInText(input)}'s account failed the passkey check at ${clock(input.takeover.at)}. Didit ${input.takeover.status ? `marked the event ${input.takeover.status.toLowerCase().replace(/_/g, " ")}` : "kept the account closed"} and no payment was created.`,
           },
         ]
       : [],
@@ -667,7 +672,7 @@ function heldNote(focus: ConsoleItem): string {
 }
 
 export function alderConsole(input: AlderConsoleInput): ConsoleTab[] {
-  const name = nameOf(input);
+  const name = nameInText(input);
   const focus = focusTransaction(input.activity);
 
   return [
