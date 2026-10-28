@@ -102,12 +102,12 @@ export function useNorthmarket() {
   // click that lands before it, so one click is one KYB session or one order.
   const running = React.useRef(false);
 
+  /** Runs one step at a time; a click while one runs resolves to null. */
   const exclusive = async <T>(
     kind: Exclude<Busy, null>,
     work: () => Promise<T>,
-    alreadyRunning: T,
-  ): Promise<T> => {
-    if (running.current) return alreadyRunning;
+  ): Promise<T | null> => {
+    if (running.current) return null;
     running.current = true;
     setBusy(kind);
     try {
@@ -171,10 +171,6 @@ export function useNorthmarket() {
     }
   };
 
-  const busyError = failed(
-    "Another step is still running. Wait for it to finish.",
-  );
-
   /**
    * Opens a shop and reports its sign-up to transaction monitoring. When the
    * shop opened but its sign-up did not go through, the failure carries the
@@ -185,52 +181,45 @@ export function useNorthmarket() {
   ): Promise<
     | Outcome<{ seller: SellerView; signup: TransactionSummary }>
     | { ok: false; error: string; seller: SellerView }
+    | null
   > =>
-    exclusive(
-      "shop",
-      async () => {
-        const opened = await api<{ seller: SellerView }>("/sellers", {
-          method: "POST",
-          body: { shop },
-        });
+    exclusive("shop", async () => {
+      const opened = await api<{ seller: SellerView }>("/sellers", {
+        method: "POST",
+        body: { shop },
+      });
 
-        if (!opened.ok) return failed(opened.error);
-        const seller = opened.data.seller;
-        const signup = await submit(
-          "signup",
-          (grant, random) => signupTransaction(grant, seller.shop, random),
-          seller.id,
-        );
+      if (!opened.ok) return failed(opened.error);
+      const seller = opened.data.seller;
+      const signup = await submit(
+        "signup",
+        (grant, random) => signupTransaction(grant, seller.shop, random),
+        seller.id,
+      );
 
-        await refresh();
+      await refresh();
 
-        return signup.ok
-          ? { ok: true as const, data: { seller, signup: signup.data } }
-          : { ...signup, seller };
-      },
-      busyError,
-    );
+      return signup.ok
+        ? { ok: true as const, data: { seller, signup: signup.data } }
+        : { ...signup, seller };
+    });
 
   /** Reports an open shop's sign-up again, after a failure or a reload. */
   const checkSignup = (seller: {
     id: string;
     shop: string;
-  }): Promise<Outcome<TransactionSummary>> =>
-    exclusive(
-      "shop",
-      async () => {
-        const signup = await submit(
-          "signup",
-          (grant, random) => signupTransaction(grant, seller.shop, random),
-          seller.id,
-        );
+  }): Promise<Outcome<TransactionSummary> | null> =>
+    exclusive("shop", async () => {
+      const signup = await submit(
+        "signup",
+        (grant, random) => signupTransaction(grant, seller.shop, random),
+        seller.id,
+      );
 
-        await refresh();
+      await refresh();
 
-        return signup;
-      },
-      busyError,
-    );
+      return signup;
+    });
 
   /**
    * Opens a hosted verification in the web SDK modal, then reads its outcome
@@ -262,73 +251,57 @@ export function useNorthmarket() {
   const verifyBusiness = (
     sellerId: string,
     onOpen: () => void,
-  ): Promise<Outcome<KybSummary | null>> =>
-    exclusive(
-      "kyb",
-      async () => {
-        const started = await api<{ url: string }>(
-          `/sellers/${encodeURIComponent(sellerId)}/kyb`,
-          { method: "POST" },
-        );
+  ): Promise<Outcome<KybSummary | null> | null> =>
+    exclusive("kyb", async () => {
+      const started = await api<{ url: string }>(
+        `/sellers/${encodeURIComponent(sellerId)}/kyb`,
+        { method: "POST" },
+      );
 
-        if (!started.ok) return failed(started.error);
-        onOpen();
+      if (!started.ok) return failed(started.error);
+      onOpen();
 
-        return verifyThenRead(started.data.url, () => settleKyb(sellerId));
-      },
-      busyError,
-    );
+      return verifyThenRead(started.data.url, () => settleKyb(sellerId));
+    });
 
   /** One owner's own ID check, from the KYB's key people. */
   const checkOwner = (
     sellerId: string,
     url: string,
-  ): Promise<Outcome<KybSummary | null>> =>
-    exclusive(
-      "kyb",
-      () => verifyThenRead(url, () => settleKyb(sellerId, 3)),
-      busyError,
-    );
+  ): Promise<Outcome<KybSummary | null> | null> =>
+    exclusive("kyb", () => verifyThenRead(url, () => settleKyb(sellerId, 3)));
 
   /** The 1,497 EUR order, submitted from the browser. */
   const placeOrder = (
     seller: { id: string; shop: string } | null,
-  ): Promise<Outcome<TransactionSummary>> =>
-    exclusive(
-      "order",
-      async () => {
-        const result = await submit("purchase", (grant, random) =>
-          purchaseTransaction(grant, ORDER_LISTING, seller, random),
-        );
+  ): Promise<Outcome<TransactionSummary> | null> =>
+    exclusive("order", async () => {
+      const result = await submit("purchase", (grant, random) =>
+        purchaseTransaction(grant, ORDER_LISTING, seller, random),
+      );
 
-        await refresh();
+      await refresh();
 
-        return result;
-      },
-      busyError,
-    );
+      return result;
+    });
 
   /** The step-up a held order asks for: the buyer's age check. */
   const confirmAge = async (
     order: TransactionSummary,
-  ): Promise<Outcome<TransactionSummary>> => {
+  ): Promise<Outcome<TransactionSummary> | null> => {
     const step = order.verification;
 
     if (!step) return failed("This order needs no age check.");
 
-    return exclusive(
-      "age",
-      async () => {
-        const read = await verifyThenRead(step.url, () => settle(order.uuid));
+    return exclusive("age", async () => {
+      const read = await verifyThenRead(step.url, () => settle(order.uuid));
 
-        if (!read.ok) return read;
+      if (!read.ok) return read;
 
-        return read.data
-          ? { ok: true as const, data: read.data }
-          : failed("The order could not be read back. Reload to see it.");
-      },
-      busyError,
-    );
+      return read.data
+        ? { ok: true as const, data: read.data }
+        : failed("The order could not be read back. Reload to see it.");
+    });
   };
 
   const reset = async () => {
