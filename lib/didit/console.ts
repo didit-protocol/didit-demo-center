@@ -107,3 +107,29 @@ export interface ConsoleTab {
   /** Shown instead of a page that has no data yet. */
   empty?: string;
 }
+
+/**
+ * An open verification session (Didit's "Not Started" or "In Progress"): the
+ * console shows it as in progress, never as not started next to a check.
+ */
+export const IN_PROGRESS: Tag = { label: "In progress", tone: "rev" };
+
+/** True for a session Didit has opened but not decided yet. */
+export function isOpenSession(status: string | null | undefined): boolean {
+  return status === "Not Started" || status === "In Progress";
+}
+
+/** "Started 28 Oct, 16:48" for an open session's meta line and details. */
+export function startedLabel(at: string | number | Date | null | undefined) {
+  if (at === null || at === undefined) return "Started just now";
+  const date = new Date(at);
+
+  if (Number.isNaN(date.getTime())) return "Started just now";
+
+  return `Started ${date.toLocaleString("en-GB", {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  })}`;
+}
