@@ -14,6 +14,7 @@ import {
   KeyRound,
   Search,
   ShieldCheck,
+  User,
 } from "lucide-react";
 
 import { AreaLine, CandleChart, Sparkline } from "./charts";
@@ -30,13 +31,12 @@ import {
   marketOf,
   orderBook,
 } from "@/lib/crypto-exchange/markets";
+import { accountInitials } from "@/lib/crypto-exchange/onboarding";
 import {
   shortAddress,
   statusLabel,
   withdrawalStage,
 } from "@/lib/crypto-exchange/transactions";
-
-export const AVATAR = "/demos/kestrel/p-arjun.webp";
 
 const NAV = ["Markets", "Trade", "Portfolio", "Earn", "Wallet"] as const;
 
@@ -341,6 +341,11 @@ function itemPill(item: ActivityItem): { tone: string; label: string } {
 
 export type KycBanner =
   | { kind: "verify" }
+  /** The web SDK modal is open on this page. */
+  | { kind: "open" }
+  /** The modal closed; Kestrel is reading the decision. */
+  | { kind: "checking" }
+  /** The session is open, with no decision, and nothing on screen. */
   | { kind: "processing" }
   | { kind: "review" }
   | { kind: "declined" }
@@ -370,9 +375,17 @@ function KycBar({
       "Verify your identity to deposit.",
       "EU law asks every crypto exchange to know its customers. It takes about two minutes.",
     ],
+    open: [
+      "Verifying your identity.",
+      "The check is open on this page. Finish it to unlock deposits.",
+    ],
+    checking: [
+      "Checking your verification.",
+      "Didit is reading the result. This can take a moment.",
+    ],
     processing: [
-      "Finishing your verification.",
-      "Complete it in the window that opened, or continue it here.",
+      "Your verification is not finished.",
+      "Select Continue verification to pick up where you left off.",
     ],
     review: [
       "Your verification is in review.",
@@ -598,6 +611,22 @@ function Trade(props: TradeProps) {
   );
 }
 
+/** The account in the top bar: initials, since a new account has no photo. */
+function Avatar({ name }: { name: string | null }) {
+  const initials = accountInitials(name);
+
+  return (
+    <span
+      aria-label={name ?? "Your account"}
+      className="ks-ava is-initials"
+      data-testid="kestrel-avatar"
+      role="img"
+    >
+      {initials || <User aria-hidden size={18} />}
+    </span>
+  );
+}
+
 /** A phone: the portfolio, the two actions and the holdings. */
 function PhoneHome(props: TradeProps) {
   const assets: Asset[] = ["BTC", "ETH"];
@@ -672,6 +701,7 @@ export function Exchange({
   toast,
   onSignIn,
   onSignUp,
+  onConsole,
   children,
 }: {
   signedIn: boolean;
@@ -680,6 +710,8 @@ export function Exchange({
   toast: { tone: "info" | "error"; text: string } | null;
   onSignIn(): void;
   onSignUp(): void;
+  /** A phone's way into the console view: the Demo Center bar has no room. */
+  onConsole(): void;
   children?: React.ReactNode;
 }) {
   return (
@@ -702,6 +734,15 @@ export function Exchange({
           ))}
         </nav>
         <span className="ks-nav-r">
+          <button
+            aria-label="Console view"
+            className="ks-iconbtn ks-console"
+            title="Console view"
+            type="button"
+            onClick={onConsole}
+          >
+            <DiditRing />
+          </button>
           {signedIn ? (
             <>
               <span aria-hidden className="ks-iconbtn ks-hide-phone">
@@ -723,11 +764,7 @@ export function Exchange({
                 <ArrowUp aria-hidden size={18} />
                 Withdraw
               </button>
-              <img
-                alt={trade.name ?? "Your account"}
-                className="ks-ava"
-                src={AVATAR}
-              />
+              <Avatar name={trade.name} />
             </>
           ) : (
             <>

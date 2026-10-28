@@ -9,7 +9,9 @@ import { ArrowRight } from "lucide-react";
 import { Glyph } from "./parts";
 
 import {
+  AVAILABILITY_LABEL,
   FAMILIES,
+  availability,
   familyCounts,
   productDemoRoute,
 } from "@/lib/product-demos/define";
@@ -80,16 +82,16 @@ export function ProductDemosSection() {
                 <b>{demo.title}</b>
                 <span className="pdh-blurb">{demo.blurb}</span>
                 <span className="pdh-foot">
-                  {demo.mode === "live" ? (
-                    <>
-                      <span className="pd-status is-ok">Live</span>
-                      <span className="pdh-time">{demo.time.short}</span>
-                    </>
-                  ) : (
-                    <span className="pd-status is-line">Sample decision</span>
-                  )}
+                  <span
+                    className={`pd-status is-${AVAILABILITY_LABEL[availability(demo)].kind}`}
+                  >
+                    {AVAILABILITY_LABEL[availability(demo)].card}
+                  </span>
+                  {availability(demo) === "live" && demo.mode === "live" ? (
+                    <span className="pdh-time">{demo.time.short}</span>
+                  ) : null}
                   <span className="pdh-go">
-                    {demo.mode === "live" ? "Try it" : "See it"}
+                    {availability(demo) === "live" ? "Try it" : "See it"}
                     <ArrowRight aria-hidden size={15} />
                   </span>
                 </span>

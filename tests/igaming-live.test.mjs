@@ -165,3 +165,73 @@ test("the console view shows this visitor's records, and says so when there are 
   );
   assert.equal(tabs[3].page.kpis[0].value, "2");
 });
+
+test("an open age or ID check shows as in progress with its started time, never as not started", async () => {
+  const { startedLabel } = await import("../lib/didit/console.ts");
+  const startedAt = Date.UTC(2026, 9, 28, 15, 48);
+  const started = startedLabel(startedAt);
+  const base = {
+    player: { playerId: "aurora-play-d1808cd5db4c84d057c140ac", name: "Sofia Marin", email: "sofia.marin@example.com", createdAt: startedAt },
+    age: null, kyc: null, activity: [], events: [], device: null, accounts: [], signIn: null,
+    totals: { balance: 0, depositedTotal: 0, depositedToday: 0, bets: 0, bonusClaimed: false }, now: startedAt,
+  };
+  const open = {
+    sessionId: "4a9dbd0a-2930-4c1e-8f7d-0e1c2b3a786e", workflowId: null, status: "Not Started", estimatedAge: null, documentAge: null,
+    ip: { country: "Spain", countryCode: "ES", isVpnOrTor: false, isDataCenter: false },
+    fullName: null, documentType: null, documentCountry: null, faceMatch: null, liveness: null, amlHits: null,
+  };
+  const ageCheck = { sessionId: open.sessionId, startedAt };
+  const shown = (page) => JSON.stringify(page);
+
+  // Didit has not answered yet: the session this browser opened still counts.
+  for (const input of [{ ...base, ageCheck }, { ...base, age: open, ageCheck }, { ...base, age: { ...open, status: "In Progress" }, ageCheck }]) {
+    const [person, , verification] = auroraConsole(input);
+
+    assert.ok(verification.page, "never 'No verification yet' once a session exists");
+    assert.deepEqual(person.page.head.tag, { label: "In progress", tone: "rev" });
+    const identity = person.page.blocks.find((block) => block.kind === "identity");
+
+    assert.deepEqual(identity.checks, [{ label: "Age", value: `In progress · ${started}`, ok: null }]);
+    assert.equal(identity.selfie, "Selfie · not taken yet");
+
+    const page = verification.page;
+
+    assert.equal(page.head.title, "Age estimation");
+    assert.deepEqual(page.head.tag, { label: "In progress", tone: "rev" });
+    assert.deepEqual(page.side.tag, { label: "In progress", tone: "rev" });
+    assert.ok(page.head.meta.includes(started));
+    assert.deepEqual(page.side.pairs.find(([key]) => key === "Started"), ["Started", started.replace(/^Started /, "")]);
+    assert.deepEqual(page.blocks[0].checks, [{ label: "Age", value: `In progress · ${started}`, ok: null }]);
+    for (const tab of [person, verification]) {
+      assert.doesNotMatch(shown(tab.page), /Not started|Age confirmed/);
+    }
+  }
+
+  // The ID step-up is open after an approved age check.
+  const approvedAge = { ...open, status: "Approved", estimatedAge: 27 };
+  const kycStarted = startedAt + 3_600_000;
+  const [person, , verification] = auroraConsole({
+    ...base,
+    age: approvedAge,
+    ageCheck,
+    kycCheck: { sessionId: "583b0948-6217-4404-be90-be5fe3ac1a19", startedAt: kycStarted },
+  });
+  const identity = person.page.blocks.find((block) => block.kind === "identity");
+
+  assert.deepEqual(identity.checks, [
+    { label: "ID check", value: `In progress · ${startedLabel(kycStarted)}`, ok: null },
+    { label: "Age", value: "Estimated age 27", ok: true },
+  ]);
+  assert.deepEqual(person.page.head.tag, { label: "Age checked", tone: "info" });
+  assert.equal(person.page.linked.find((linked) => linked.tone === "ver").detail, "In progress");
+  assert.equal(verification.page.head.title, "Core KYC");
+  assert.deepEqual(verification.page.head.tag, { label: "In progress", tone: "rev" });
+  assert.ok(verification.page.head.meta.includes(startedLabel(kycStarted)));
+  assert.doesNotMatch(shown(verification.page), /Not started/);
+
+  // A decided check without an age read never reads as confirmed.
+  const declined = auroraConsole({ ...base, age: { ...open, status: "Declined", ip: null } })[2].page;
+
+  assert.deepEqual(declined.blocks[0].checks, [{ label: "Age", value: "Declined", ok: false }]);
+  assert.doesNotMatch(shown(declined), /Age confirmed/);
+});

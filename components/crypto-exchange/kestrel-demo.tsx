@@ -25,6 +25,7 @@ import {
   SANCTIONED_WALLET,
   withdrawalStage,
 } from "@/lib/crypto-exchange/transactions";
+import { authErrorMessage } from "@/lib/didit/auth-errors";
 import { kestrel } from "@/lib/didit/demos";
 import { SIGNUP_INTENT, useDidit } from "@/lib/didit/provider";
 import { useLive } from "@/lib/didit/use-live";
@@ -201,9 +202,7 @@ export function KestrelDemo() {
 
       return false;
     } catch (error) {
-      setAuthError(
-        error instanceof Error ? error.message : "The code could not be sent.",
-      );
+      setAuthError(authErrorMessage(error, "start"));
 
       return false;
     } finally {
@@ -223,9 +222,7 @@ export function KestrelDemo() {
       if (result.status !== "signed_in")
         setAuthError("That code did not work. Check it and try again.");
     } catch (error) {
-      setAuthError(
-        error instanceof Error ? error.message : "That code did not work.",
-      );
+      setAuthError(authErrorMessage(error, "verify"));
     } finally {
       setAuthBusy(false);
     }
@@ -367,7 +364,7 @@ export function KestrelDemo() {
       ? "fraud"
       : modal
         ? "transact"
-        : ks.busy === "verify"
+        : ks.busy === "verify" || ks.busy === "verify-result"
           ? "verify"
           : ((
               ["signup", "verify", "transact", "fraud", "console"] as StepId[]
@@ -517,6 +514,8 @@ export function KestrelDemo() {
     "if (r.actionRequired) await startVerification({ url: r.actionRequired.url })",
   ];
 
+  // Says what is true right now: the modal open, its result being read, or
+  // an open session with nothing on screen and how to pick it up again.
   const banner: KycBanner =
     !signedIn || approved
       ? null
@@ -524,9 +523,13 @@ export function KestrelDemo() {
         ? { kind: "review" }
         : account?.stage === "declined"
           ? { kind: "declined" }
-          : account?.stage === "processing"
-            ? { kind: "processing" }
-            : { kind: "verify" };
+          : ks.busy === "verify"
+            ? { kind: "open" }
+            : ks.busy === "verify-result"
+              ? { kind: "checking" }
+              : account?.stage === "processing"
+                ? { kind: "processing" }
+                : { kind: "verify" };
 
   return (
     <DemoShell
@@ -583,6 +586,7 @@ export function KestrelDemo() {
             else openConsole(true, "transaction");
           },
         }}
+        onConsole={() => openConsole(true)}
         onSignIn={() =>
           authOn ? void auth?.signIn("/crypto-exchange") : scrollToSignUp()
         }

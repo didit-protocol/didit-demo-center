@@ -33,6 +33,8 @@ export interface CheckState {
   sessionId: string;
   url: string;
   summary: SessionSummary | null;
+  /** When this browser opened the session (absent in older saved state). */
+  startedAt?: number;
 }
 
 export interface KycState extends CheckState {
@@ -481,6 +483,7 @@ export function useAurora(
                 url: action.url,
                 transactionId: item.record.id,
                 summary: null,
+                startedAt: Date.now(),
                 listed: false,
               },
             }
@@ -617,7 +620,12 @@ export function useAurora(
 
       setState({
         ...player,
-        age: { sessionId: session.sessionId, url: session.url, summary: null },
+        age: {
+          sessionId: session.sessionId,
+          url: session.url,
+          summary: null,
+          startedAt: Date.now(),
+        },
         ageSeen: false,
       });
       openHosted("age", session.url);

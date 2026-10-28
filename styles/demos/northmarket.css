@@ -106,6 +106,8 @@
 .nm-banner .nm-btn { margin-left: auto; }
 .nm-banner > span { flex: 1; min-width: 0; }
 .nm-banner svg { flex: none; }
+.nm-banner-off { display: block; margin-top: 6px; font-style: normal; font-weight: 600; color: #9A5200; }
+.nm-banner .nm-btn:disabled { opacity: .45; cursor: not-allowed; }
 .nm-split { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: 18px; min-height: 0; }
 .nm-split .nm-card { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .nm-row .nm-th { background-size: cover; }
@@ -151,6 +153,9 @@
 /* a computer: keep the screens clear of the live feed */
 @media (min-width: 1200px) {
   .nm-signup { grid-template-columns: minmax(0, 1fr) 408px 300px; gap: 48px; }
+  /* the open feed (372px, 20px from the edge) never covers the order total */
+  [data-app="northmarket"]:has(> .lv) .nm-body.is-checkout { padding-right: 412px; }
+  [data-app="northmarket"]:has(> .lv) .nm-checkout { grid-template-columns: minmax(0, 1fr) 360px; }
 }
 @media (max-width: 1100px) {
   .nm-search { display: none; }
@@ -177,8 +182,10 @@
   .nm-title { flex-wrap: wrap; }
   .nm-title .nm-acts { margin-left: 0; width: 100%; }
   .nm-h1 { font-size: 28px; line-height: 32px; }
-  .nm-banner { flex-wrap: wrap; }
-  .nm-banner .nm-btn { margin-left: 34px; }
+  /* the text across the card, the button below it at full width */
+  .nm-banner { flex-wrap: wrap; align-items: flex-start; }
+  .nm-banner > span { flex: 1 1 calc(100% - 36px); }
+  .nm-banner .nm-btn { margin-left: 0; flex: 1 1 100%; }
   .nm-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
   .nm-kpi b { font-size: 22px; }
   .nm-listings { grid-template-columns: repeat(2, minmax(0, 1fr)); }

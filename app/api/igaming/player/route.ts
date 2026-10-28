@@ -54,3 +54,21 @@ export async function POST(request: NextRequest) {
 
   return response;
 }
+
+/**
+ * Sign out of the casino (Authentication off): the player cookie goes. The
+ * player's Didit records stay; a new sign-up is a new player on this device.
+ */
+export async function DELETE(request: NextRequest) {
+  const response = noStore({ playerId: null });
+
+  response.cookies.set(PLAYER_COOKIE, "", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: request.nextUrl.protocol === "https:",
+    path: "/",
+    maxAge: 0,
+  });
+
+  return response;
+}

@@ -127,10 +127,34 @@ export interface NorthmarketMock {
   submitted: string[];
   /** Headers of those posts (the token and the device data the SDK attaches). */
   headers: Record<string, string>[];
+  /** While true, every shop sign-up post fails (an outage at Didit). */
+  signupDown: boolean;
+  /** Sign-up posts that failed that way. */
+  failedSignups: number;
+  /** Calls that tried to start the seller KYB. */
+  kybStarts: number;
 }
 
-export async function mockNorthmarket(page: Page): Promise<NorthmarketMock> {
-  const mock: NorthmarketMock = { submitted: [], headers: [] };
+export interface NorthmarketMockOptions {
+  /**
+   * False for an environment without the seller KYB workflow: the state
+   * route says so and starting a KYB answers 503, as the server does.
+   */
+  kyb?: boolean;
+}
+
+export async function mockNorthmarket(
+  page: Page,
+  options: NorthmarketMockOptions = {},
+): Promise<NorthmarketMock> {
+  const kybLive = options.kyb ?? true;
+  const mock: NorthmarketMock = {
+    submitted: [],
+    headers: [],
+    signupDown: false,
+    failedSignups: 0,
+    kybStarts: 0,
+  };
   const sellers: {
     id: string;
     shop: string;
@@ -154,7 +178,7 @@ export async function mockNorthmarket(page: Page): Promise<NorthmarketMock> {
   };
   const kybSummary = () => (kyb ? summarizeKyb(kybDecision(kyb)) : null);
   const stateView = () => ({
-    availability: { transactions: true, kyb: true },
+    availability: { transactions: true, kyb: kybLive },
     stagingUrl: "https://demos.staging.didit.me/marketplace",
     buyer: records.size ? BUYER : null,
     sellers: sellers.map((seller, index) => ({
@@ -237,6 +261,17 @@ export async function mockNorthmarket(page: Page): Promise<NorthmarketMock> {
         : json(route, { error: "Not found." }, 404);
     }
     if (/^POST \/api\/marketplace\/sellers\/[^/]+\/kyb$/.test(key)) {
+      mock.kybStarts += 1;
+      if (!kybLive)
+        return json(
+          route,
+          {
+            error:
+              "The seller KYB workflow is not published on this environment yet, so business verification cannot start. Everything else in the demo runs.",
+            code: "kyb_workflow_missing",
+          },
+          503,
+        );
       kyb = "Not Started";
 
       return json(
@@ -257,7 +292,7 @@ export async function mockNorthmarket(page: Page): Promise<NorthmarketMock> {
 
   // No monitoring token without Didit Authentication on a signed-out page.
   await page.route("**/api/didit/events-token", (route) =>
-    json(route, { error: "Nobody is signed in." }, 401),
+    json(route, { token: null, signedIn: false }),
   );
   await page.route(`${API}/v1/events/**`, (route) =>
     json(route, { results: [] }, 202),
@@ -268,6 +303,12 @@ export async function mockNorthmarket(page: Page): Promise<NorthmarketMock> {
     const request = route.request();
     const body = JSON.stringify(request.postDataJSON());
     const purchase = body.includes('"purchase"');
+
+    if (!purchase && mock.signupDown) {
+      mock.failedSignups += 1;
+
+      return json(route, { detail: "Service unavailable." }, 503);
+    }
     const name = purchase
       ? "transaction-order-awaiting-user"
       : sellers.length > 1

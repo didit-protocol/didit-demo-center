@@ -143,6 +143,8 @@ export interface AuroraMock {
 export async function mockAurora(page: Page): Promise<AuroraMock> {
   const mock: AuroraMock = { submitted: [], bodies: [], headers: [] };
   let player = -1;
+  // Cleared by "Sign out" (DELETE /api/igaming/player clears the cookie).
+  let signedIn = false;
   let kycDone = false;
   const deposits = [0, 0];
   const bonuses = [0, 0];
@@ -158,13 +160,19 @@ export async function mockAurora(page: Page): Promise<AuroraMock> {
 
     if (key === "GET /api/igaming/player")
       return json(route, {
-        playerId: player >= 0 ? current() : null,
+        playerId: signedIn ? current() : null,
         authenticated: false,
       });
     if (key === "POST /api/igaming/player") {
       player += 1;
+      signedIn = true;
 
       return json(route, { playerId: current() });
+    }
+    if (key === "DELETE /api/igaming/player") {
+      signedIn = false;
+
+      return json(route, { playerId: null });
     }
     if (key === "POST /api/igaming/age-check")
       return json(route, {
@@ -206,10 +214,10 @@ export async function mockAurora(page: Page): Promise<AuroraMock> {
   await page.route("**/api/didit/events-token", (route) =>
     json(
       route,
-      player >= 0
+      signedIn
         ? { token: "e2e-monitoring" }
         : { error: "Nobody is signed in." },
-      player >= 0 ? 200 : 401,
+      signedIn ? 200 : 401,
     ),
   );
   await page.route(`${API}/v1/events/**`, (route) =>

@@ -106,6 +106,48 @@ export function defineProductDemo<T extends ProductDemo>(demo: T): T {
   return demo;
 }
 
+/**
+ * What a demo can do on this environment: run live, wait for its workflow
+ * (a live demo whose workflow is not published here, so Start stays off) or
+ * show its sample. The hub card, the page's status and the Start button all
+ * read this, so "Live" never sits next to a Start that cannot run.
+ */
+export type Availability = "live" | "soon" | "sample";
+
+export function availability(
+  demo: Pick<LiveDemo, "mode" | "workflow"> | Pick<SampleDemo, "mode">,
+): Availability {
+  if (demo.mode === "sample") return "sample";
+
+  return demo.workflow ? "live" : "soon";
+}
+
+/** The status each availability shows: on the hub card and on the page. */
+export const AVAILABILITY_LABEL: Record<
+  Availability,
+  { card: string; page: string; kind: "ok" | "neu" | "line" }
+> = {
+  live: { card: "Live", page: "Live demo", kind: "ok" },
+  soon: { card: "Coming soon", page: "Coming soon", kind: "neu" },
+  sample: { card: "Sample decision", page: "Sample decision", kind: "line" },
+};
+
+/**
+ * Stands in for the reader's own workflow id in the snippets: shaped like a
+ * real one, so the call reads as it will in their code.
+ */
+export const EXAMPLE_WORKFLOW_ID = "5c2e8f1a-7b3d-4e9a-a6c1-2f8d9b0e4a71";
+
+/** The session call behind a live demo, as a curl command. */
+export function sessionCurl(api: string): string[] {
+  return [
+    `curl -X POST ${api}/v3/session/ \\`,
+    ' -H "x-api-key: $DIDIT_API_KEY" \\',
+    ' -H "Content-Type: application/json" \\',
+    ` -d '{ "workflow_id": "${EXAMPLE_WORKFLOW_ID}", "vendor_data": "demo-visitor" }'`,
+  ];
+}
+
 export function familyLabel(family: Family): string {
   return FAMILIES.find((item) => item.id === family)?.label ?? family;
 }
