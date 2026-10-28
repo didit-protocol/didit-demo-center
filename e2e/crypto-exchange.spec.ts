@@ -185,6 +185,44 @@ test("a deposit is screened by the sending wallet before it is credited", async 
   ).toBeVisible();
 });
 
+test("a deposit Didit cannot take says so in a sentence and keeps the dialog open", async ({
+  page,
+}) => {
+  const errors = collectOwnErrors(page);
+
+  await mockKestrel(page, { submitStatus: 500 });
+  await page.goto("/crypto-exchange");
+  await action(page, "Deposit").click();
+  const dialog = page.getByRole("dialog", { name: /^Deposit/ });
+
+  await dialog.getByLabel("Amount").fill("0.25");
+  await dialog.getByRole("button", { name: /^Deposit \d/ }).click();
+  await expect(dialog.getByRole("alert")).toHaveText(
+    "Didit could not be reached. Check your activity, then try again.",
+  );
+  await expect(dialog).not.toContainText("status 500");
+  await expect(app(page).getByTestId("kestrel-activity-row")).toHaveCount(0);
+  expect(errors.filter((error) => !/500/.test(error))).toEqual([]);
+});
+
+test("a deposit Didit accepted stays in the activity when its record is read late", async ({
+  page,
+}) => {
+  await mockKestrel(page, { unreadableReads: 1 });
+  await page.goto("/crypto-exchange");
+  await deposit(page, "Bitcoin", "0.25");
+
+  // Didit's own decision from the submission, until the full record is read.
+  const row = app(page)
+    .getByTestId("kestrel-activity-row")
+    .filter({ visible: true })
+    .first();
+
+  await expect(row).toContainText("Deposit · 0.25 BTC");
+  // Then the full record, with the wallet screening, is read again.
+  await expect(row).toContainText("Screened");
+});
+
 test("a Travel Rule withdrawal asks for the wallet proof, then a selfie, then it is sent", async ({
   page,
 }) => {

@@ -19,6 +19,8 @@ import {
   isSettled,
   newTxnId,
   randomWallets,
+  submitErrorMessage,
+  submittedView,
 } from "@/lib/crypto-exchange/transactions";
 import {
   type TransactionToken,
@@ -57,6 +59,9 @@ export type Busy =
   "verify" | "verify-result" | "deposit" | "withdraw" | "action" | null;
 
 const STORAGE_KEY = "kestrel-demo:v2";
+
+/** Kestrel's own routes each make one or two Didit calls; past this, say so. */
+const API_TIMEOUT_MS = 20_000;
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -102,6 +107,7 @@ async function api<T>(
       ...init,
       headers: { "Content-Type": "application/json", ...(init?.headers || {}) },
       cache: "no-store",
+      signal: AbortSignal.timeout(API_TIMEOUT_MS),
     });
     const data = await response.json().catch(() => null);
 
@@ -114,17 +120,17 @@ async function api<T>(
       };
 
     return { ok: true, data: data as T };
-  } catch {
+  } catch (error) {
     return {
       ok: false,
       status: 0,
-      error: "Kestrel's server could not be reached.",
+      error:
+        (error as Error | null)?.name === "TimeoutError"
+          ? "Kestrel's server did not answer in time. Try again."
+          : "Kestrel's server could not be reached.",
     };
   }
 }
-
-const errorText = (error: unknown, fallback: string) =>
-  error instanceof Error && error.message ? error.message : fallback;
 
 /**
  * Everything Kestrel does in the browser: the account (its KYC session lives
@@ -146,6 +152,9 @@ export function useKestrel(
     (TransactionToken & { expiresAt: number }) | null
   >(null);
   const emitRef = React.useRef(emit);
+  // Set synchronously, so a double click or a second call before React
+  // re-renders cannot open two sessions or send the same transfer twice.
+  const busyRef = React.useRef(false);
 
   stateRef.current = state;
   accountRef.current = account;
@@ -222,7 +231,38 @@ export function useKestrel(
       for (const item of stored.activity)
         if (!isSettled(item)) void refreshItem(item.id);
     });
+
+    // Another tab of the demo changed the ledger or restarted: follow it.
+    const onStorage = (event: StorageEvent) => {
+      if (event.key !== STORAGE_KEY) return;
+      const next = load();
+
+      stateRef.current = next;
+      setState(next);
+      void refreshAccount();
+    };
+
+    window.addEventListener("storage", onStorage);
+
+    return () => window.removeEventListener("storage", onStorage);
   }, []);
+
+  /** Runs one user action at a time; a second one while it runs is ignored. */
+  const exclusive = React.useCallback(
+    async <T>(kind: Exclude<Busy, null>, run: () => Promise<T>) => {
+      if (busyRef.current) return null;
+      busyRef.current = true;
+      setBusy(kind);
+      setError(null);
+      try {
+        return await run();
+      } finally {
+        busyRef.current = false;
+        setBusy(null);
+      }
+    },
+    [],
+  );
 
   /* ── Sign-up and the KYC ── */
 
@@ -255,44 +295,42 @@ export function useKestrel(
     [refreshAccount],
   );
 
-  const verify = React.useCallback(async () => {
-    setBusy("verify");
-    setError(null);
-    try {
-      let url =
-        accountRef.current?.stage === "processing"
-          ? stateRef.current?.sessionUrl
-          : null;
+  const verify = React.useCallback(
+    () =>
+      exclusive("verify", async () => {
+        let url =
+          accountRef.current?.stage === "processing"
+            ? stateRef.current?.sessionUrl
+            : null;
 
-      if (!url) {
-        const created = await api<{ sessionId: string; url: string }>(
-          "/account",
-          {
-            method: "POST",
-          },
-        );
+        if (!url) {
+          const created = await api<{ sessionId: string; url: string }>(
+            "/account",
+            {
+              method: "POST",
+            },
+          );
 
-        if (!created.ok) {
-          setError(created.error);
+          if (!created.ok) {
+            setError(created.error);
 
-          return;
+            return;
+          }
+          url = created.data.url;
+          tokenRef.current = null;
+          update((current) => ({ ...current, sessionUrl: created.data.url }));
+          await refreshAccount();
         }
-        url = created.data.url;
-        tokenRef.current = null;
-        update((current) => ({ ...current, sessionUrl: created.data.url }));
-        await refreshAccount();
-      }
-      emitRef.current({ type: "verify-started" });
-      const result = await openVerification(url);
+        emitRef.current({ type: "verify-started" });
+        const result = await openVerification(url);
 
-      setBusy("verify-result");
-      if (result.type === "failed")
-        setError(result.error?.message ?? "The verification could not start.");
-      await settleAccount(result.type !== "cancelled");
-    } finally {
-      setBusy(null);
-    }
-  }, [refreshAccount, settleAccount, update]);
+        setBusy("verify-result");
+        if (result.type === "failed")
+          setError("The verification could not start. Try again.");
+        await settleAccount(result.type !== "cancelled");
+      }),
+    [exclusive, refreshAccount, settleAccount, update],
+  );
 
   /* ── Money: always submitted from the browser ── */
 
@@ -325,40 +363,50 @@ export function useKestrel(
       wallet: string,
       payload: Parameters<typeof submitTransaction>[0]["transaction"],
     ): Promise<ActivityItem | null> => {
+      let submitted: Awaited<ReturnType<typeof submitTransaction>>;
+
       try {
-        const submitted = await submitTransaction({
+        submitted = await submitTransaction({
           token: ensureToken,
           transaction: payload,
         });
-        const detail = await api<TransactionView>(
-          `/transactions/${submitted.transactionId}`,
-        );
-
-        if (!detail.ok) {
-          setError(detail.error);
-
-          return null;
-        }
-        const item: ActivityItem = {
-          id: submitted.transactionId,
-          kind,
-          asset,
-          wallet,
-          createdAt: new Date().toISOString(),
-          view: detail.data,
-        };
-
-        upsert(item);
-        emitRef.current({ type: "transaction", item });
-
-        return item;
       } catch (failure) {
-        setError(errorText(failure, "Didit did not accept the transaction."));
+        setError(submitErrorMessage(failure));
 
         return null;
       }
+      // Didit has the transfer now. If its full record cannot be read yet,
+      // the ledger keeps the decision Didit returned and reads it later.
+      const detail = await api<TransactionView>(
+        `/transactions/${submitted.transactionId}`,
+      );
+      const item: ActivityItem = {
+        id: submitted.transactionId,
+        kind,
+        asset,
+        wallet,
+        createdAt: new Date().toISOString(),
+        view: detail.ok
+          ? detail.data
+          : submittedView({
+              id: submitted.transactionId,
+              status: submitted.status,
+              travelRuleStatus: submitted.travelRuleStatus,
+              kind,
+              amount: String(payload.details.amount),
+              currency: asset,
+              wallet,
+            }),
+      };
+
+      upsert(item);
+      emitRef.current({ type: "transaction", item });
+      if (item.view.partial)
+        window.setTimeout(() => void refreshItem(item.id), 3000);
+
+      return item;
     },
-    [ensureToken, upsert],
+    [ensureToken, refreshItem, upsert],
   );
 
   const deposit = React.useCallback(
@@ -367,12 +415,11 @@ export function useKestrel(
       const fullName = accountRef.current?.fullName;
 
       if (!current || !fullName) return null;
-      setBusy("deposit");
-      setError(null);
-      try {
+
+      return exclusive("deposit", () => {
         const own = input.source === "own-wallet" || input.asset !== "ETH";
 
-        return await send(
+        return send(
           "deposit",
           input.asset,
           own ? current.wallets[input.asset] : SANCTIONED_WALLET,
@@ -385,11 +432,9 @@ export function useKestrel(
             ownWallet: current.wallets[input.asset],
           }),
         );
-      } finally {
-        setBusy(null);
-      }
+      });
     },
-    [send],
+    [exclusive, send],
   );
 
   const withdraw = React.useCallback(
@@ -402,10 +447,9 @@ export function useKestrel(
       const fullName = accountRef.current?.fullName;
 
       if (!fullName) return null;
-      setBusy("withdraw");
-      setError(null);
-      try {
-        return await send(
+
+      return exclusive("withdraw", () =>
+        send(
           "withdrawal",
           input.asset,
           input.address,
@@ -418,12 +462,10 @@ export function useKestrel(
             address: input.address,
             beneficiaryName: input.destination === "own-wallet" ? fullName : "",
           }),
-        );
-      } finally {
-        setBusy(null);
-      }
+        ),
+      );
     },
-    [send],
+    [exclusive, send],
   );
 
   /** Opens what Didit asked for (the wallet proof or the selfie), then waits for Didit to move on. */
@@ -432,13 +474,11 @@ export function useKestrel(
       const action = item.view.action;
 
       if (!action) return;
-      setBusy("action");
-      setError(null);
-      try {
+      await exclusive("action", async () => {
         const result = await openVerification(action.url);
 
         if (result.type === "failed")
-          setError(result.error?.message ?? "The Didit flow could not start.");
+          setError("The Didit flow could not start. Try again.");
         const attempts = action.type === "verification_session" ? 30 : 10;
 
         for (let attempt = 0; attempt < attempts; attempt++) {
@@ -455,11 +495,9 @@ export function useKestrel(
             return;
           }
         }
-      } finally {
-        setBusy(null);
-      }
+      });
     },
-    [refreshItem],
+    [exclusive, refreshItem],
   );
 
   const reset = React.useCallback(async () => {
