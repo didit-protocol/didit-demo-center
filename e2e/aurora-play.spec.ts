@@ -335,7 +335,7 @@ test("a hosted flow that fails to load says so, and opens on the next try", asyn
   await dialog.getByLabel("Email").fill("sofia.marin@example.com");
   await dialog.getByLabel("Date of birth").fill("1999-03-14");
   await dialog.getByRole("button", { name: "Create account" }).click();
-  await expect(page.getByRole("alert")).toContainText(
+  await expect(app(page).getByRole("alert")).toContainText(
     "The verification could not open",
   );
 
