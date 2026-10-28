@@ -219,12 +219,8 @@ test("a deposit Didit accepted stays in the activity when its record is read lat
     .first();
 
   await expect(row).toContainText("Deposit · 0.25 BTC");
-
-  // On the next load the unsettled transfer is read again, in full.
-  await page.reload();
-  await expect(
-    app(page).getByTestId("kestrel-activity-row").filter({ visible: true }).first(),
-  ).toContainText("Screened");
+  // Then the full record, with the wallet screening, is read again.
+  await expect(row).toContainText("Screened");
 });
 
 test("a Travel Rule withdrawal asks for the wallet proof, then a selfie, then it is sent", async ({

@@ -401,10 +401,12 @@ export function useKestrel(
 
       upsert(item);
       emitRef.current({ type: "transaction", item });
+      if (item.view.partial)
+        window.setTimeout(() => void refreshItem(item.id), 3000);
 
       return item;
     },
-    [ensureToken, upsert],
+    [ensureToken, refreshItem, upsert],
   );
 
   const deposit = React.useCallback(

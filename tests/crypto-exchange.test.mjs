@@ -451,4 +451,6 @@ test("a transfer Didit accepted stays in the ledger when its record cannot be re
   };
 
   assert.deepEqual(balancesOf([item, credited]).ETH, { total: 1, available: 0.5, held: 0.5 });
+  // Even an approved deposit is read again until its full record is in.
+  assert.equal(isSettled(credited), false);
 });

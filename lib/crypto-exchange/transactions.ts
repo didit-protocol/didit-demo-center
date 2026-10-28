@@ -319,6 +319,8 @@ export interface TransactionView {
   action: ActionView | null;
   stepUp: { sessionId: string; status: string } | null;
   timeline: TimelineEntry[];
+  /** Only the decision the submission returned: read the full record again. */
+  partial?: true;
 }
 
 type Raw = Record<string, unknown>;
@@ -486,6 +488,7 @@ export function submittedView(input: {
     action: null,
     stepUp: null,
     timeline: [],
+    partial: true,
   };
 }
 
@@ -710,6 +713,7 @@ export function balancesOf(
 
 /** A transfer is final once Didit and the Travel Rule have nothing left to say. */
 export function isSettled(item: Pick<ActivityItem, "kind" | "view">): boolean {
+  if (item.view.partial) return false;
   if (item.kind === "deposit")
     return ["APPROVED", "DECLINED"].includes(item.view.status);
 
