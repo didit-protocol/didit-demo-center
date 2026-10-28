@@ -1,6 +1,5 @@
 "use client";
 
-import type { DiditCall } from "@/lib/fintech/server";
 import type { TakeoverResult } from "@/lib/fintech/live-events";
 
 import * as React from "react";
@@ -8,6 +7,7 @@ import * as React from "react";
 import {
   FIRST_WEEK,
   type PaymentRequest,
+  awaitsCustomer,
   isFinalStatus,
   isInbound,
   paymentPayload,
@@ -20,6 +20,7 @@ import {
   projectTransaction,
 } from "@/lib/igaming/records";
 import { openVerification, submitTransaction } from "@/lib/didit/browser";
+import { callRoute, fetchTransaction } from "@/lib/fintech/client";
 
 /** What just happened with Didit, for the live layer. */
 export type AlderSignal =
@@ -89,12 +90,22 @@ interface Token {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-function load(): CustomerState | null {
+const SESSION_ID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function parse(raw: string | null): CustomerState | null {
   try {
-    const raw = window.localStorage.getItem(STATE_KEY);
     const parsed = raw ? (JSON.parse(raw) as CustomerState) : null;
 
     return parsed?.version === 1 ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function load(): CustomerState | null {
+  try {
+    return parse(window.localStorage.getItem(STATE_KEY));
   } catch {
     return null;
   }
@@ -119,6 +130,9 @@ export function balanceOf(activity: PaymentItem[]): number {
  * server only holds the API key and the customer cookie. Every status shown
  * comes from Didit: a session decision read through /api/fintech/sessions or
  * a payment read back from `/v1/transactions/` with the customer's token.
+ * The saved copy is only a cache: on load, anything still open is read from
+ * Didit again, so a decision that arrived while the tab was closed (or on
+ * another device) is never lost.
  */
 export function useAlder(
   emit: (signal: AlderSignal) => void = () => undefined,
@@ -156,33 +170,15 @@ export function useAlder(
   const fail = (error: unknown) =>
     setNotice({
       tone: "error",
-      text: error instanceof Error ? error.message : String(error),
+      text:
+        error instanceof Error && error.message
+          ? error.message
+          : "Something went wrong. Try again.",
     });
 
-  /** One of this app's routes; failures come back as `{ error }`. */
+  /** One of this app's routes, with a timeout and a readable error. */
   const route = React.useCallback(
-    async <T>(path: string, init?: RequestInit) => {
-      const response = await fetch(path, {
-        ...init,
-        headers: {
-          "Content-Type": "application/json",
-          ...(init?.headers || {}),
-        },
-      });
-      const data = (await response.json().catch(() => null)) as
-        (T & { error?: string; code?: string; didit?: DiditCall[] }) | null;
-
-      if (!response.ok) {
-        const error = new Error(
-          data?.error || `Request failed (${response.status}).`,
-        ) as Error & { code?: string };
-
-        error.code = data?.code;
-        throw error;
-      }
-
-      return data as T;
-    },
+    <T>(path: string, init?: RequestInit) => callRoute<T>(path, init),
     [],
   );
 
@@ -223,6 +219,24 @@ export function useAlder(
     else window.localStorage.removeItem(STATE_KEY);
   }, [state, hydrated]);
 
+  // Two tabs of the same account: the last one to change it wins, and the
+  // other follows instead of writing its older copy back over it.
+  React.useEffect(() => {
+    const follow = (event: StorageEvent) => {
+      if (event.key !== STATE_KEY) return;
+      const next = parse(event.newValue);
+      const current = stateRef.current;
+
+      if (next && current && next.customerId !== current.customerId) return;
+      stateRef.current = next;
+      setState(next);
+    };
+
+    window.addEventListener("storage", follow);
+
+    return () => window.removeEventListener("storage", follow);
+  }, []);
+
   /* ── Sessions ── */
 
   const readSession = React.useCallback(
@@ -241,7 +255,7 @@ export function useAlder(
       let summary = await readSession(sessionId);
 
       for (let attempt = 0; attempt < 4; attempt += 1) {
-        if (isFinalStatus(summary.status) || summary.status === "Not Started")
+        if (isFinalStatus(summary.status) || awaitsCustomer(summary.status))
           break;
         await sleep(2000);
         summary = await readSession(sessionId);
@@ -254,16 +268,26 @@ export function useAlder(
 
   const openHosted = React.useCallback(
     (kind: "onboarding" | "stepUp", url: string) => {
+      // A second click while the flow is open would stack a second modal.
+      if (hostedRef.current) return;
       hostedRef.current = kind;
       emitRef.current({ type: "check-started", check: kind });
-      openVerification(url).then((result) => {
-        if (result.type === "failed")
+      openVerification(url)
+        .then((result) => {
+          if (result.type === "failed")
+            setNotice({
+              tone: "error",
+              text: result.error?.message ?? "The verification flow failed.",
+            });
+          completeRef.current(result.session?.sessionId ?? null);
+        })
+        .catch(() => {
+          hostedRef.current = null;
           setNotice({
             tone: "error",
-            text: result.error?.message ?? "The verification flow failed.",
+            text: "The verification could not open. Check your connection and try again.",
           });
-        completeRef.current(result.session?.sessionId ?? null);
-      });
+        });
     },
     [],
   );
@@ -301,16 +325,8 @@ export function useAlder(
 
   /** `GET /v1/transactions/{id}/` with the customer's own token. */
   const readTransaction = React.useCallback(
-    async (id: string): Promise<TransactionRecord | null> => {
-      const token = await ensureToken();
-      const response = await fetch(`${token.baseUrl}/v1/transactions/${id}/`, {
-        headers: { "X-Transaction-Token": token.token },
-      });
-
-      if (!response.ok) return null;
-
-      return projectTransaction(await response.json().catch(() => null));
-    },
+    async (id: string): Promise<TransactionRecord | null> =>
+      projectTransaction(await fetchTransaction(await ensureToken(), id)),
     [ensureToken],
   );
 
@@ -345,8 +361,10 @@ export function useAlder(
           transaction: payload,
         });
 
+        // Didit has the payment now: a failed read-back must not report it
+        // as refused, so the submission's own answer stands in for it.
         item.record =
-          (await readTransaction(result.transactionId)) ??
+          (await readTransaction(result.transactionId).catch(() => null)) ??
           projectTransaction({
             uuid: result.transactionId,
             txn_id: payload.txnId,
@@ -401,8 +419,12 @@ export function useAlder(
     [ensureToken, readTransaction, update],
   );
 
+  /** Set while a payment is in flight: a double click sends it once. */
+  const paying = React.useRef(false);
   const pay = React.useCallback(
     async (request: PaymentRequest & { color?: string }) => {
+      if (paying.current) return null;
+      paying.current = true;
       setBusy("send");
       setNotice(null);
       try {
@@ -412,6 +434,7 @@ export function useAlder(
 
         return null;
       } finally {
+        paying.current = false;
         setBusy(null);
       }
     },
@@ -472,7 +495,7 @@ export function useAlder(
   const startOnboarding = React.useCallback(async () => {
     const customer = stateRef.current;
 
-    if (!customer) return;
+    if (!customer || hostedRef.current) return;
     setBusy("onboarding");
     setNotice(null);
     try {
@@ -661,6 +684,61 @@ export function useAlder(
     setNotice(null);
     setState(null);
   }, []);
+
+  /**
+   * On load, whatever is still open is read from Didit again: an onboarding
+   * or step-up finished on another device, in another tab or while this one
+   * was closed. Nothing waits for an event this page may have missed.
+   */
+  const refreshed = React.useRef(false);
+
+  React.useEffect(() => {
+    const customer = stateRef.current;
+
+    if (!hydrated || !customer || refreshed.current) return;
+    refreshed.current = true;
+    const { onboarding, stepUp } = customer;
+    const open = (check: CheckState | null): check is CheckState =>
+      Boolean(
+        check &&
+          SESSION_ID.test(check.sessionId) &&
+          (!check.summary || !isFinalStatus(check.summary.status)),
+      );
+
+    (async () => {
+      try {
+        if (open(onboarding)) {
+          const summary = await readSession(onboarding.sessionId);
+
+          if (summary.status !== onboarding.summary?.status) {
+            update((current) =>
+              current.onboarding?.sessionId === summary.sessionId
+                ? { ...current, onboarding: { ...current.onboarding, summary } }
+                : current,
+            );
+            if (isFinalStatus(summary.status))
+              emitRef.current({ type: "onboarding-decided", summary });
+          }
+        }
+        const held = customer.activity.some(
+          (item) =>
+            item.record?.id === stepUp?.transactionId &&
+            item.record?.status === "AWAITING_USER",
+        );
+
+        if (stepUp && held && SESSION_ID.test(stepUp.sessionId)) {
+          const summary = await readSession(stepUp.sessionId);
+
+          if (isFinalStatus(summary.status)) await finishStepUp(summary.sessionId);
+        }
+      } catch {
+        setNotice({
+          tone: "error",
+          text: "Your latest status could not be read from Didit. Reload to try again.",
+        });
+      }
+    })();
+  }, [hydrated, finishStepUp, readSession, update]);
 
   /** The hosted flow redirected back here (finished on another device). */
   const resumeFromRedirect = React.useCallback(
