@@ -1,7 +1,8 @@
 /**
  * The console view's page model: what a demo hands the console view to draw
  * a faithful console page (Person, Transaction, Business, Verification,
- * Device) from the visitor's own records. Types only.
+ * Device) from the visitor's own records, and the few labels every demo
+ * shares.
  */
 
 import type { Tone } from "./live";
