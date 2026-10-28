@@ -311,17 +311,19 @@ test("when the transaction token cannot be minted the cashier says so and nothin
   expect(mock.submitted).toEqual([]);
 });
 
-test("a hosted flow that fails to load leaves a readable error, not a stuck page", async ({
+test("a hosted flow that fails to load says so, and opens on the next try", async ({
   page,
 }) => {
   await mockAurora(page);
   // The web SDK's lazy chunk never arrives (offline, a blocked script). Its
   // file name is a hash, so it is recognised by what it contains.
+  let blocked = true;
+
   await page.route("**/_next/static/chunks/*.js", async (route) => {
     const response = await route.fetch();
     const body = await response.text();
 
-    if (body.includes("didit-sdk-styles")) return route.abort();
+    if (blocked && body.includes("didit-sdk-styles")) return route.abort();
 
     return route.fulfill({ response, body });
   });
@@ -333,7 +335,13 @@ test("a hosted flow that fails to load leaves a readable error, not a stuck page
   await dialog.getByLabel("Email").fill("sofia.marin@example.com");
   await dialog.getByLabel("Date of birth").fill("1999-03-14");
   await dialog.getByRole("button", { name: "Create account" }).click();
-  await expect(page.getByRole("status")).toContainText(
+  await expect(page.getByRole("alert")).toContainText(
     "The verification could not open",
   );
+
+  // Back online: the same age check opens, without a reload.
+  blocked = false;
+  await goToStep(page, "Verify");
+  await completeHostedFlow(page);
+  await expect(app(page).getByTestId("aurora-balance")).toBeVisible();
 });
