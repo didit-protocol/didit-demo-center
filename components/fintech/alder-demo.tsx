@@ -21,6 +21,7 @@ import { type AlderSignal, useAlder } from "./use-alder";
 
 import { DemoShell } from "@/components/didit-live/demo-shell";
 import { alder } from "@/lib/didit/demos";
+import { authErrorMessage } from "@/lib/didit/auth-errors";
 import { SIGNUP_INTENT, useDidit } from "@/lib/didit/provider";
 import { useLive } from "@/lib/didit/use-live";
 import { payeeById, ruleName } from "@/lib/fintech/alder";
@@ -47,7 +48,9 @@ const SEEN_KEY = "alder-demo:seen";
 /** Set before the passkey redirect: the held transfer and who asked. */
 const PASSKEY_KEY = "alder-demo:passkey";
 
-const firstName = (name: string) => name.trim().split(/\s+/)[0] ?? "";
+/** The first name to greet, never an email address. */
+const firstName = (name: string) =>
+  name.includes("@") ? "" : (name.trim().split(/\s+/)[0] ?? "");
 
 /**
  * /fintech: Alder, a fictional neobank, inside the Demo Center. Everything
@@ -294,9 +297,7 @@ export function AlderDemo() {
 
       return false;
     } catch (error) {
-      setAuthError(
-        error instanceof Error ? error.message : "The code could not be sent.",
-      );
+      setAuthError(authErrorMessage(error, "start"));
 
       return false;
     } finally {
@@ -317,9 +318,7 @@ export function AlderDemo() {
       if (result.status !== "signed_in")
         setAuthError("That code did not work. Check it and try again.");
     } catch (error) {
-      setAuthError(
-        error instanceof Error ? error.message : "That code did not work.",
-      );
+      setAuthError(authErrorMessage(error, "verify"));
     } finally {
       setAuthBusy(false);
     }
@@ -418,15 +417,12 @@ export function AlderDemo() {
       }),
     );
     for (const input of passkeyStarted()) live.push(input);
-    auth.reauthenticate("/fintech").catch((error: unknown) => {
+    auth.reauthenticate("/fintech").catch(() => {
       window.sessionStorage.removeItem(PASSKEY_KEY);
       setAuthBusy(false);
       setToast({
         tone: "error",
-        text:
-          error instanceof Error
-            ? error.message
-            : "Didit could not ask for your passkey.",
+        text: "Didit could not ask for your passkey. Try again in a moment.",
       });
     });
   };
@@ -601,6 +597,12 @@ export function AlderDemo() {
         }
       : null,
     onboarding: onboarding?.summary ?? null,
+    onboardingSession: onboarding
+      ? {
+          sessionId: onboarding.sessionId,
+          startedAt: onboarding.startedAt ?? null,
+        }
+      : null,
     stepUp: state?.stepUp?.summary ?? null,
     stepUpPasskey: state?.stepUp?.passkey?.method ?? null,
     activity,
@@ -663,7 +665,7 @@ export function AlderDemo() {
       </Site>
     );
   } else {
-    const hello = firstName(name);
+    const hello = firstName(onboarding?.summary?.fullName ?? state.name);
     const hour = new Date().getHours();
     const greeting =
       hour < 12

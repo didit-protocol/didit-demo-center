@@ -203,7 +203,11 @@ function businessPage(input: NorthmarketConsoleInput): RecordPage | null {
       meta: [
         registry?.country ?? null,
         `Shop: ${shop.shop}`,
-        kyb?.createdAt ? `Seller since ${day(kyb.createdAt)}` : null,
+        kybOpen(kyb)
+          ? `KYB ${startedLabel(kyb.createdAt).replace(/^Started/, "started")}`
+          : kyb?.createdAt
+            ? `Seller since ${day(kyb.createdAt)}`
+            : null,
       ].filter((item): item is string => Boolean(item)),
     },
     kpis: [
@@ -353,7 +357,7 @@ function transactionPage(input: NorthmarketConsoleInput): RecordPage | null {
             {
               kind: "note" as const,
               tone: "hold" as const,
-              text: `Waiting for the buyer's age check (${tx.verification.status}). The order goes through once it is approved.`,
+              text: "Waiting for the buyer's age check. The order goes through once it is approved.",
             },
           ]
         : []),
@@ -418,15 +422,18 @@ function verificationPage(input: NorthmarketConsoleInput): RecordPage | null {
     documents: "Company documents",
     aml: "AML screening",
   };
-  const checks: Check[] = kyb.steps.map((step) => ({
-    label: STEP[step.key],
-    value: statusTag(step.status).label,
-    ok: isApproved(step.status)
-      ? true
-      : step.status.toLowerCase() === "declined"
-        ? false
-        : null,
-  }));
+  const open = kybOpen(kyb);
+  // While the session is open no step reads as passed or as not started.
+  const checks: Check[] = kyb.steps.map((step) => {
+    const declined = step.status.toLowerCase() === "declined";
+
+    return {
+      label: STEP[step.key],
+      value:
+        open && !declined ? IN_PROGRESS.label : statusTag(step.status).label,
+      ok: declined ? false : !open && isApproved(step.status) ? true : null,
+    };
+  });
 
   return {
     kind: "verification",
@@ -436,7 +443,10 @@ function verificationPage(input: NorthmarketConsoleInput): RecordPage | null {
       title: "Seller KYB",
       tag: statusTag(kyb.status),
       id: short(kyb.sessionId),
-      meta: [companyName(kyb, shop.company), "Registry, owners, documents"],
+      meta: [
+        companyName(kyb, shop.company),
+        open ? startedLabel(kyb.createdAt) : "Registry, owners, documents",
+      ],
     },
     kpis: [],
     blocks: [
@@ -445,7 +455,7 @@ function verificationPage(input: NorthmarketConsoleInput): RecordPage | null {
         title: "Checks",
         checks: checks.length
           ? checks
-          : [{ label: "Status", value: kyb.status, ok: null }],
+          : [{ label: "Status", value: statusTag(kyb.status).label, ok: null }],
       },
     ],
     side: {
@@ -453,6 +463,14 @@ function verificationPage(input: NorthmarketConsoleInput): RecordPage | null {
       tag: statusTag(kyb.status),
       pairs: [
         ["Workflow", "Seller KYB"],
+        ...(open
+          ? [
+              [
+                "Started",
+                startedLabel(kyb.createdAt).replace(/^Started /, ""),
+              ] as [string, string],
+            ]
+          : []),
         ["Vendor data", short(shop.id)],
       ],
     },
