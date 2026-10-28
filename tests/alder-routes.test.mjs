@@ -83,8 +83,15 @@ test("opening an account sets a signed customer cookie; a forged one is nobody",
   const body = await response.json();
 
   assert.match(body.customerId, /^alder-[a-f0-9]{24}$/);
-  assert.match(response.headers.get("set-cookie"), /alder_customer=alder-/);
-  assert.match(response.headers.get("set-cookie"), /HttpOnly/i);
+  const cookie = response.headers.get("set-cookie");
+
+  // __Host-: Secure, Path=/ and no Domain, even on plain-http localhost.
+  assert.match(cookie, /^__Host-alder_customer=alder-/);
+  assert.match(cookie, /HttpOnly/i);
+  assert.match(cookie, /Secure/i);
+  assert.match(cookie, /Path=\//i);
+  assert.match(cookie, /SameSite=lax/i);
+  assert.doesNotMatch(cookie, /Domain=/i);
 
   const forged = new NextRequest("http://localhost:3000/api/fintech/customer", {
     headers: { cookie: `${CUSTOMER_COOKIE}=${CUSTOMER}.forged` },
@@ -194,6 +201,9 @@ test("the monitoring token is minted for this customer, and a disabled lane says
   assert.equal(ok.baseUrl, "https://verification.staging.didit.me");
   assert.equal(calls[0].body.vendor_data, CUSTOMER);
   assert.ok(calls[0].body.allowed_event_categories.includes("security"));
+  // One security event, five minutes: a fresh token per attempt.
+  assert.equal(calls[0].body.ttl_seconds, 300);
+  assert.equal(calls[0].body.max_uses, 1);
 
   reset({
     "POST /v3/events/sdk-token/": {
@@ -222,6 +232,80 @@ test("the customer read says authenticated only for a signed-in visitor", async 
     const visitor = await (await customerRoute.GET(request("/api/fintech/customer", { cookie: null }))).json();
 
     assert.deepEqual(visitor, { customerId: null, authenticated: false });
+  } finally {
+    delete process.env.DIDIT_PUBLISHABLE_KEY;
+  }
+  assert.equal(calls.length, 0);
+});
+
+test("onboarding refuses a body that is not the form, before calling Didit", async () => {
+  for (const body of ["not json", { email: "a@b.co", fullName: "x".repeat(81) }, { email: `${"a".repeat(120)}@b.co` }]) {
+    reset();
+    const headers = new Headers({ "Content-Type": "application/json", cookie: `${CUSTOMER_COOKIE}=${signCustomer(CUSTOMER, "test-api-key")}` });
+    const response = await onboarding.POST(
+      new NextRequest("http://localhost:3000/api/fintech/onboarding", {
+        method: "POST",
+        headers,
+        body: typeof body === "string" ? body : JSON.stringify(body),
+      }),
+    );
+
+    assert.equal(response.status, 400, JSON.stringify(body));
+    assert.equal(typeof (await response.json()).error, "string");
+    assert.equal(calls.length, 0);
+  }
+});
+
+test("when Didit is down the routes say so with a 502 and mint nothing", async () => {
+  reset({ [`GET /v3/session/${SESSION}/decision/`]: { status: 503, body: null } });
+  const minted = await token.POST(
+    request("/api/fintech/token", { method: "POST", body: { onboardingSessionId: SESSION } }),
+  );
+
+  assert.equal(minted.status, 502);
+  assert.equal((await minted.json()).error, "The identity check could not be read from Didit.");
+  assert.deepEqual(calls.map((call) => call.key), [`GET /v3/session/${SESSION}/decision/`]);
+
+  reset({ [`GET /v3/session/${SESSION}/decision/`]: { status: 503, body: null } });
+  const read = await sessions.GET(request(`/api/fintech/sessions/${SESSION}`), params(SESSION));
+
+  assert.equal(read.status, 502);
+  assert.equal((await read.json()).error, "The session could not be read from Didit.");
+
+  reset({ "POST /v3/session/": { status: 400, body: { workflow_id: ["Workflow not found."] } } });
+  const started = await onboarding.POST(
+    request("/api/fintech/onboarding", { method: "POST", body: { email: "lena.fischer@example.com" } }),
+  );
+
+  // Didit's own reason, as a 4xx: the request was wrong, not the network.
+  assert.equal(started.status, 400);
+  assert.ok((await started.json()).error);
+});
+
+test("an unknown or malformed session id never reaches Didit", async () => {
+  reset();
+  for (const id of ["../../v3/users/x", "c5c01e9c", ""]) {
+    const response = await sessions.GET(request(`/api/fintech/sessions/x`), params(id));
+
+    assert.equal(response.status, 404);
+  }
+  assert.equal(calls.length, 0);
+});
+
+test("with Authentication on, a request with no Didit session is told to sign in again", async () => {
+  reset();
+  process.env.DIDIT_PUBLISHABLE_KEY = "pk_test_alder";
+  try {
+    for (const response of [
+      await onboarding.POST(request("/api/fintech/onboarding", { method: "POST", body: { email: "a@b.co" }, cookie: null })),
+      await customerRoute.POST(request("/api/fintech/customer", { method: "POST", cookie: null })),
+    ]) {
+      const body = await response.json();
+
+      assert.equal(response.status, 401);
+      assert.equal(body.code, "no_customer");
+      assert.match(body.error, /Sign in to Alder again/);
+    }
   } finally {
     delete process.env.DIDIT_PUBLISHABLE_KEY;
   }

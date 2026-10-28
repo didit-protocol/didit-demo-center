@@ -55,8 +55,18 @@ export const STEP_UP_SESSION = String(
     .session_id,
 );
 
-/** A finished onboarding (KYC + AML), in the fields docs.didit.me documents. */
-function onboardingDecision() {
+/**
+ * The onboarding (KYC + AML), in the fields docs.didit.me documents:
+ * Approved once finished, In Progress before.
+ */
+function onboardingDecision(finished = true) {
+  if (!finished)
+    return {
+      session_id: ONBOARDING_SESSION,
+      status: "In Progress",
+      vendor_data: CUSTOMER,
+    };
+
   return {
     session_id: ONBOARDING_SESSION,
     status: "Approved",
@@ -137,9 +147,16 @@ export interface AlderMockOptions {
   /**
    * Start with an account already open and its onboarding session created
    * but not finished, the way a Didit sign-up leaves it: no name yet, only
-   * the email. Nothing reads a decision until the visitor verifies.
+   * the email. Its decision reads In Progress until the visitor finishes it.
    */
-  pendingOnboarding?: { email: string; startedAt: number };
+  pendingOnboarding?: {
+    email: string;
+    startedAt: number;
+    /** The customer finished it elsewhere (a phone, another tab). */
+    finishedElsewhere?: boolean;
+  };
+  /** Alder's onboarding route answers that Didit could not be reached. */
+  diditDown?: boolean;
 }
 
 export async function mockAlder(
@@ -155,6 +172,7 @@ export async function mockAlder(
   const pending = options.pendingOnboarding;
   let customer = Boolean(pending);
   let stepUpDone = false;
+  let onboardingDone = Boolean(pending?.finishedElsewhere);
   const records = new Map<string, Record<string, unknown>>();
   let count = 0;
 
@@ -202,6 +220,15 @@ export async function mockAlder(
 
       return json(route, { customerId: CUSTOMER });
     }
+    if (key === "POST /api/fintech/onboarding" && options.diditDown)
+      return json(
+        route,
+        {
+          error: "The Didit API could not be reached.",
+          didit: [{ method: "POST", path: "/v3/session/", status: 0 }],
+        },
+        502,
+      );
     if (key === "POST /api/fintech/onboarding")
       return json(route, {
         sessionId: ONBOARDING_SESSION,
@@ -211,7 +238,9 @@ export async function mockAlder(
     if (key.startsWith("GET /api/fintech/sessions/")) {
       const id = url.pathname.split("/").pop() ?? "";
       const decision =
-        id === STEP_UP_SESSION ? stepUpDecision() : onboardingDecision();
+        id === STEP_UP_SESSION
+          ? stepUpDecision()
+          : onboardingDecision(onboardingDone);
 
       return json(route, {
         session: projectSession(decision, CUSTOMER),
@@ -231,8 +260,10 @@ export async function mockAlder(
     return json(route, { error: "unmocked" }, 500);
   });
 
+  // The page's own monitoring token, as the route answers without Didit
+  // Authentication: no token and no error, so the console stays clean.
   await page.route("**/api/didit/events-token", (route) =>
-    json(route, { error: "Nobody is signed in." }, 401),
+    json(route, { token: null, signedIn: false }),
   );
 
   // The security event: the takeover rule declines it (add_score 90,
@@ -329,7 +360,8 @@ export async function mockAlder(
       return route.fulfill({ status: 204, body: "" });
     const onboarding = url.includes("e2e-onboarding");
 
-    if (!onboarding) stepUpDone = true;
+    if (onboarding) onboardingDone = true;
+    else stepUpDone = true;
 
     return route.fulfill({
       status: 200,

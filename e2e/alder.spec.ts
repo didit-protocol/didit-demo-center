@@ -223,3 +223,67 @@ test("an account opened with only an email: the greeting has no email and the op
   await expect(consoleView).toContainText("identity check is in progress");
   await expect(consoleView).not.toContainText(/Not started/i);
 });
+
+test("a check finished on another device is read from Didit on the next load, without reopening the flow", async ({
+  page,
+}) => {
+  const mock = await mockAlder(page, {
+    pendingOnboarding: {
+      email: "lena.fischer@example.com",
+      startedAt: Date.now() - 120_000,
+      finishedElsewhere: true,
+    },
+  });
+
+  await page.goto("/fintech");
+
+  // No hosted flow opened here: the decision came from Didit, then the
+  // account's first week went through as monitored payments.
+  await expect(app(page).getByTestId("alder-balance")).toHaveText(
+    "12,480.20 EUR",
+  );
+  await expect(page.locator('iframe[src*="didit.me"]')).toHaveCount(0);
+  expect(mock.submitted).toHaveLength(6);
+});
+
+test("when Didit cannot be reached, the customer reads why and can try again", async ({
+  page,
+}) => {
+  await mockAlder(page, { diditDown: true });
+  await page.goto("/fintech");
+
+  const form = page.getByTestId("alder-signup");
+
+  await form.getByLabel("Full name").fill("Lena Fischer");
+  await form.getByLabel("Email").fill("lena.fischer@example.com");
+  await form.getByLabel("Mobile number").fill("151 2044 7781");
+  await form.getByRole("button", { name: "Open my account" }).click();
+
+  await expect(app(page).getByRole("alert")).toHaveText(
+    "The Didit API could not be reached.",
+  );
+  await expect(app(page).getByRole("alert")).not.toContainText(/\b50\d\b/);
+  await expect(
+    app(page).getByRole("button", { name: "Verify your identity" }),
+  ).toBeEnabled();
+});
+
+test("a double click on Send submits the transfer once", async ({ page }) => {
+  const mock = await mockAlder(page);
+
+  await page.goto("/fintech");
+  await openAccount(page);
+  await foldFeed(page);
+  await goToStep(page, "Transact");
+  await page
+    .getByTestId("alder-send")
+    .getByRole("button", { name: "Send 5,000.00 EUR" })
+    .dblclick();
+
+  await expect(
+    page.getByRole("dialog", { name: "Confirm it is you" }),
+  ).toBeVisible();
+  expect(mock.submitted.filter((name) => name.startsWith("transfer"))).toEqual([
+    "transfer-held",
+  ]);
+});

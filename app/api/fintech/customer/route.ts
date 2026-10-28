@@ -4,11 +4,11 @@ import { authEnabled } from "@/lib/didit/auth";
 import { apiKey } from "@/lib/didit/config";
 import {
   CUSTOMER_COOKIE,
-  CUSTOMER_COOKIE_MAX_AGE,
+  CUSTOMER_COOKIE_OPTIONS,
   newCustomerId,
   signCustomer,
 } from "@/lib/fintech/customer";
-import { noStore, readCustomer } from "@/lib/fintech/server";
+import { noCustomer, noStore, readCustomer } from "@/lib/fintech/server";
 
 export const dynamic = "force-dynamic";
 
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     return customerId
       ? noStore({ customerId, authenticated: true })
-      : noStore({ error: "Sign up first." }, { status: 401 });
+      : noCustomer();
   }
   if (!apiKey()) {
     return noStore(
@@ -49,13 +49,11 @@ export async function POST(request: NextRequest) {
   const customerId = newCustomerId();
   const response = noStore({ customerId });
 
-  response.cookies.set(CUSTOMER_COOKIE, signCustomer(customerId, apiKey()), {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: request.nextUrl.protocol === "https:",
-    path: "/",
-    maxAge: CUSTOMER_COOKIE_MAX_AGE,
-  });
+  response.cookies.set(
+    CUSTOMER_COOKIE,
+    signCustomer(customerId, apiKey()),
+    CUSTOMER_COOKIE_OPTIONS,
+  );
 
   return response;
 }
