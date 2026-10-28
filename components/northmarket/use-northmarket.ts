@@ -112,8 +112,10 @@ export function useNorthmarket(renew?: () => Promise<boolean>) {
   renewRef.current = renew;
 
   /** A route that needs the signed-in visitor. */
-  const signedIn = <T>(path: string, init: { method: string; body?: unknown }) =>
-    withRenewal(() => api<T>(path, init), renewRef.current);
+  const signedIn = <T>(
+    path: string,
+    init: { method: string; body?: unknown },
+  ) => withRenewal(() => api<T>(path, init), renewRef.current);
 
   /** Runs one step at a time; a click while one runs resolves to null. */
   const exclusive = async <T>(

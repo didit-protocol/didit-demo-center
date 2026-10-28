@@ -164,8 +164,7 @@ function nameOf(input: AlderConsoleInput, fallback = "This customer"): string {
 }
 
 /** The same, inside a sentence. */
-const nameInText = (input: AlderConsoleInput) =>
-  nameOf(input, "this customer");
+const nameInText = (input: AlderConsoleInput) => nameOf(input, "this customer");
 
 function identityChecks(session: SessionSummary): Check[] {
   const checks: Check[] = [];
