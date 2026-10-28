@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { permanentRedirect, redirect } from "next/navigation";
 
 import "@/styles/demos/live.css";
 import "@/styles/demos/hub.css";
@@ -14,6 +14,7 @@ export const metadata: Metadata = {
   },
   description:
     "A casino, a bank, a marketplace and a crypto exchange running Didit end to end: sign-up, verification, transactions and fraud, live on the sandbox.",
+  alternates: { canonical: "/" },
 };
 
 /**
@@ -33,7 +34,8 @@ export default async function Home({
       ? routeForLegacy(params.demo)
       : null;
 
-  if (product) redirect(product);
+  // The module moved for good, so the link equity of `/?demo=<id>` moves with it.
+  if (product) permanentRedirect(product);
 
   if (params.demo || params.verificationSessionId) {
     const query = new URLSearchParams();
