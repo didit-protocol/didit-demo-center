@@ -29,7 +29,8 @@ export const metadata: Metadata = {
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
-  alternates: { canonical: siteConfig.url },
+  // No site-wide canonical: inherited, it told search engines that every page
+  // without its own was a duplicate of the home page. Each page sets its own.
   openGraph: {
     type: "website",
     url: siteConfig.url,
