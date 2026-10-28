@@ -5,7 +5,7 @@ import { siteConfig } from "@/config/site";
  *
  * Console record pages live under /console/{organization}/{application}/.
  * Neither id is in a decision or a transaction detail, so the server reads
- * them from a transaction summary (`consoleContext` in ./server) and hands
+ * them from a transaction summary (`consoleIds` in lib/didit/server) and hands
  * them to the page with the account. Without them the links open the Console
  * and the screen shows the id to search for.
  */

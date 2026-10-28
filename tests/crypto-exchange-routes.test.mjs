@@ -18,7 +18,7 @@ process.env.API_KEY = "test-api-key";
 process.env.NEXT_PUBLIC_IS_STAGING = "true";
 
 const { NextRequest } = await import("next/server");
-const { ACCOUNT_COOKIE, signAccountCookie } = await import(
+const { ACCOUNT_COOKIE, DEV_ACCOUNT_COOKIE, signAccountCookie } = await import(
   "../lib/crypto-exchange/server.ts"
 );
 const { CX_WORKFLOWS } = await import("../lib/crypto-exchange/policy.ts");
@@ -66,13 +66,19 @@ function reset(next = {}) {
 
 function request(
   path,
-  { method = "GET", body, cookie = signAccountCookie({ vendorData: USER, sessionId: SESSION }, "test-api-key") } = {},
+  {
+    method = "GET",
+    body,
+    cookie = signAccountCookie({ vendorData: USER, sessionId: SESSION }, "test-api-key"),
+    origin = "https://attacker.example",
+  } = {},
 ) {
   const headers = new Headers({ "Content-Type": "application/json" });
+  const name = origin.startsWith("https:") ? ACCOUNT_COOKIE : DEV_ACCOUNT_COOKIE;
 
-  if (cookie) headers.set("cookie", `${ACCOUNT_COOKIE}=${cookie}`);
+  if (cookie) headers.set("cookie", `${name}=${cookie}`);
 
-  return new NextRequest(`https://attacker.example${path}`, {
+  return new NextRequest(`${origin}${path}`, {
     method,
     headers,
     body: body === undefined ? undefined : JSON.stringify(body),
@@ -111,7 +117,11 @@ test("POST /account opens the KYC + AML session with this site's return URL and 
 
   const cookie = response.cookies.get(ACCOUNT_COOKIE);
 
+  assert.equal(ACCOUNT_COOKIE, "__Host-kestrel_account");
   assert.equal(cookie.httpOnly, true);
+  assert.equal(cookie.secure, true);
+  assert.equal(cookie.path, "/");
+  assert.equal(cookie.domain, undefined);
   assert.equal(cookie.sameSite, "lax");
   assert.equal(
     cookie.value,
@@ -215,7 +225,8 @@ test("POST /token mints a transaction token bound to this user", async () => {
   const data = await response.json();
 
   assert.equal(response.status, 200);
-  assert.deepEqual(calls[1].body, { vendor_data: USER, ttl_seconds: 900, max_uses: 30 });
+  // Short-lived and few uses: the browser mints a new one when it runs out.
+  assert.deepEqual(calls[1].body, { vendor_data: USER, ttl_seconds: 600, max_uses: 10 });
   assert.equal(calls[1].apiKey, "test-api-key");
   assert.deepEqual(data, { token: "sdk-tok", expiresAt: "2026-10-14T09:00:00Z", baseUrl: BASE });
 });
@@ -248,4 +259,114 @@ test("GET /transactions/{id} returns the user's own transaction and 404s anyone 
 
   assert.equal(malformed.status, 400);
   assert.equal(calls.length, 0);
+});
+
+test("local development over plain HTTP keeps the account in a cookie without the __Host- prefix", async () => {
+  reset({
+    "POST /v3/session/": {
+      status: 201,
+      body: { session_id: SESSION, url: "https://verify.staging.didit.me/session/tok" },
+    },
+  });
+  const response = await account.POST(
+    request("/api/crypto-exchange/account", { method: "POST", cookie: null, origin: "http://localhost:3000" }),
+  );
+  const cookie = response.cookies.get(DEV_ACCOUNT_COOKIE);
+
+  assert.equal(response.status, 201);
+  assert.equal(cookie.secure, false);
+  assert.equal(cookie.httpOnly, true);
+  assert.equal(response.cookies.get(ACCOUNT_COOKIE), undefined);
+});
+
+test("POST /account never replaces an account Didit already decided", async () => {
+  reset({ [DECISION]: { body: approved() } });
+  const response = await account.POST(request("/api/crypto-exchange/account", { method: "POST" }));
+
+  assert.equal(response.status, 409);
+  assert.deepEqual(await response.json(), { error: "This browser already has a Kestrel account." });
+  // Read the decision, created nothing.
+  assert.deepEqual(
+    calls.map((call) => call.key),
+    [DECISION],
+  );
+  assert.equal(response.cookies.get(ACCOUNT_COOKIE), undefined);
+});
+
+test("POST /account starts over when the onboarding was never finished", async () => {
+  reset({
+    [DECISION]: { body: notStarted() },
+    "POST /v3/session/": {
+      status: 201,
+      body: { session_id: SESSION, url: "https://verify.staging.didit.me/session/tok" },
+    },
+  });
+  const response = await account.POST(request("/api/crypto-exchange/account", { method: "POST" }));
+
+  assert.equal(response.status, 201);
+  assert.deepEqual(
+    calls.map((call) => call.key),
+    [DECISION, "POST /v3/session/"],
+  );
+});
+
+test("a refused Didit call reaches the browser as one sentence and a 502, never Didit's raw body", async () => {
+  reset({
+    "POST /v3/session/": {
+      status: 400,
+      body: { workflow_id: ["Workflow not found for this application."], vendor_data: ["x"] },
+    },
+  });
+  const created = await account.POST(request("/api/crypto-exchange/account", { method: "POST", cookie: null }));
+
+  assert.equal(created.status, 502);
+  assert.deepEqual(await created.json(), { error: "The verification session could not be created." });
+
+  // Didit cannot be reached while minting the token.
+  reset({ [DECISION]: { body: approved() } });
+  const stub = globalThis.fetch;
+
+  globalThis.fetch = async (url, init) => {
+    if (String(url).endsWith("/sdk-token/")) throw new TypeError("fetch failed");
+
+    return stub(url, init);
+  };
+  try {
+    const minted = await token.POST(request("/api/crypto-exchange/token", { method: "POST" }));
+
+    assert.equal(minted.status, 502);
+    assert.deepEqual(await minted.json(), { error: "The Didit API could not be reached." });
+  } finally {
+    globalThis.fetch = stub;
+  }
+});
+
+test("a session Didit no longer has drops the account instead of failing every request", async () => {
+  reset({ [DECISION]: { status: 404, body: { detail: "Not found." } } });
+  const response = await account.GET(request("/api/crypto-exchange/account"));
+
+  assert.deepEqual(await response.json(), { account: null });
+  assert.equal(response.cookies.get(ACCOUNT_COOKIE).value, "");
+});
+
+test("with Didit Authentication on, the account belongs to whoever is signed in", async () => {
+  process.env.DIDIT_PUBLISHABLE_KEY = "pk_test_kestrel";
+  try {
+    reset();
+    // Nobody is signed in now, so the account in this browser is not theirs.
+    const read = await account.GET(request("/api/crypto-exchange/account"));
+
+    assert.deepEqual(await read.json(), { account: null });
+    assert.equal(read.cookies.get(ACCOUNT_COOKIE).value, "");
+
+    const minted = await token.POST(request("/api/crypto-exchange/token", { method: "POST" }));
+    const created = await account.POST(request("/api/crypto-exchange/account", { method: "POST", cookie: null }));
+
+    assert.equal(minted.status, 401);
+    // No anonymous account when sign-up runs through Didit Authentication.
+    assert.equal(created.status, 401);
+    assert.equal(calls.length, 0);
+  } finally {
+    delete process.env.DIDIT_PUBLISHABLE_KEY;
+  }
 });

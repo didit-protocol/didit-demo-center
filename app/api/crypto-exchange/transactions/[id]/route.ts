@@ -1,13 +1,15 @@
 import type { NextRequest } from "next/server";
 
 import {
-  didit,
-  diditError,
+  UUID,
+  diditFailure,
   failure,
   json,
-  readAccountCookie,
+  noAccount,
+  readAccount,
 } from "@/lib/crypto-exchange/server";
 import { toTransactionView } from "@/lib/crypto-exchange/transactions";
+import { didit } from "@/lib/didit/server";
 
 export const dynamic = "force-dynamic";
 
@@ -21,23 +23,18 @@ export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string }> },
 ) {
-  const params = await context.params;
-  const cookie = readAccountCookie(request);
+  const { id } = await context.params;
+  const cookie = await readAccount(request);
 
-  if (!cookie) return failure("No Kestrel account in this browser.", 401);
-  if (!/^[0-9a-f-]{36}$/i.test(params.id)) {
-    return failure("Not a transaction id.", 400);
-  }
+  if (!cookie) return noAccount();
+  if (!UUID.test(id)) return failure("Not a transaction id.", 400);
 
-  const result = await didit("GET", `/transactions/${params.id}/`);
+  const result = await didit.transactions.get(id);
 
+  if (result.status === 404) return failure("Not found.", 404);
   if (!result.ok || !result.data) {
-    return failure(
-      diditError(result, "The transaction could not be read"),
-      result.status === 404 ? 404 : 502,
-    );
+    return diditFailure(result, "The transaction could not be read.");
   }
-
   if (result.data.vendor_data !== cookie.vendorData) {
     return failure("Not found.", 404);
   }

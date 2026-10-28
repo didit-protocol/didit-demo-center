@@ -152,8 +152,9 @@ export function newTxnId(kind: "dep" | "wd", uuid: string): string {
  * The sending wallet is the counterparty's payment method, which is the
  * address Didit screens on an inbound crypto transfer. `unknown-sender` is
  * the sanctioned wallet above (an ETH address, so ETH only); the sender's
- * name is unknown, as it would be. The subject's identity is not in the
- * payload: the SDK token binds it.
+ * name is unknown, as it would be. Who the subject is comes from the SDK
+ * token, which binds their `vendor_data`; the payload only adds their
+ * verified name, read from their approved KYC.
  */
 export function buildDepositPayload(input: {
   txnId: string;
@@ -207,7 +208,9 @@ export function buildDepositPayload(input: {
  *   select the email rail, and a demo must never email a real exchange's
  *   compliance team.
  *
- * The subject's identity is not in the payload: the SDK token binds it.
+ * Who the subject is comes from the SDK token, which binds their
+ * `vendor_data`; their verified name (from the approved KYC) is the Travel
+ * Rule originator.
  */
 export function buildWithdrawalPayload(input: {
   txnId: string;
@@ -316,6 +319,8 @@ export interface TransactionView {
   action: ActionView | null;
   stepUp: { sessionId: string; status: string } | null;
   timeline: TimelineEntry[];
+  /** Only the decision the submission returned: read the full record again. */
+  partial?: true;
 }
 
 type Raw = Record<string, unknown>;
@@ -446,6 +451,73 @@ function activityTitle(activity: Raw): string {
     text(activity.title) ??
     type.toLowerCase().replace(/_/g, " ")
   );
+}
+
+/**
+ * What the screen shows until Didit's full record is read: the decision
+ * `submitTransaction` returned, so a transfer Didit accepted is never lost
+ * because the read after it failed. It is refreshed like any unsettled one.
+ */
+export function submittedView(input: {
+  id: string;
+  status: string;
+  travelRuleStatus?: string;
+  kind: "deposit" | "withdrawal";
+  amount: string;
+  currency: string;
+  wallet: string;
+}): TransactionView {
+  return {
+    id: input.id,
+    txnId: "",
+    kind: input.kind,
+    category: "",
+    status: input.status,
+    amount: input.amount,
+    currency: input.currency,
+    usdValue: null,
+    score: 0,
+    decisionReason: null,
+    wallet: input.wallet,
+    walletType: null,
+    screening: null,
+    rules: [],
+    travelRule: input.travelRuleStatus
+      ? { status: input.travelRuleStatus, required: true }
+      : null,
+    action: null,
+    stepUp: null,
+    timeline: [],
+    partial: true,
+  };
+}
+
+/**
+ * A failed `submitTransaction`, as one sentence for the user. The web SDK
+ * throws a typed error (`type`: network, validation, invalid_token,
+ * expired_token); Kestrel's own server throws a plain one that already reads
+ * as a sentence.
+ */
+export function submitErrorMessage(error: unknown): string {
+  const failure = (error ?? {}) as { type?: unknown; message?: unknown };
+  const message =
+    typeof failure.message === "string" ? failure.message.trim() : "";
+
+  switch (failure.type) {
+    case "network":
+      return "Didit could not be reached. Check your activity, then try again.";
+    case "invalid_token":
+    case "expired_token":
+      return "Your secure session expired. Reload the page and try again.";
+    case "validation":
+      return message && !/payload failed validation/i.test(message)
+        ? `Didit did not accept this transfer: ${message}`
+        : "Didit did not accept this transfer. Check the amount and the address.";
+  }
+
+  return error instanceof Error && message
+    ? message
+    : "Didit did not accept the transaction.";
 }
 
 /* ── What the exchange does with a decision ─────────────────────────────── */
@@ -641,6 +713,7 @@ export function balancesOf(
 
 /** A transfer is final once Didit and the Travel Rule have nothing left to say. */
 export function isSettled(item: Pick<ActivityItem, "kind" | "view">): boolean {
+  if (item.view.partial) return false;
   if (item.kind === "deposit")
     return ["APPROVED", "DECLINED"].includes(item.view.status);
 

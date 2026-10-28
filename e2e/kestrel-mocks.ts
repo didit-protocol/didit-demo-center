@@ -151,6 +151,10 @@ export async function mockKestrel(
     afterOnboarding?: AccountKey;
     /** Kestrel's own sign-up already done in this browser. */
     signedUp?: boolean;
+    /** Didit answers every submission with this server error. */
+    submitStatus?: number;
+    /** Kestrel's server cannot read a transaction until it was asked this many times. */
+    unreadableReads?: number;
   } = {},
 ): Promise<KestrelMock> {
   let account = options.account === undefined ? "approved" : options.account;
@@ -225,10 +229,18 @@ export async function mockKestrel(
     });
   });
 
+  let unreadable = options.unreadableReads ?? 0;
+
   await page.route("**/api/crypto-exchange/transactions/*", async (route) => {
     record(route);
     const id = route.request().url().split("/").pop() ?? "";
     const submitted = mock.transactions.get(id);
+
+    if (submitted && unreadable > 0) {
+      unreadable -= 1;
+
+      return json(route, { error: "The Didit API could not be reached." }, 502);
+    }
 
     if (!submitted) return json(route, { error: "Not found." }, 404);
 
@@ -243,6 +255,8 @@ export async function mockKestrel(
   await page.route(`${API}/v1/transactions/`, async (route) => {
     if (route.request().method() !== "POST") return route.fallback();
     record(route);
+    if (options.submitStatus)
+      return json(route, { detail: "Internal error." }, options.submitStatus);
     const body = route.request().postDataJSON();
     const props = body?.props ?? {};
     const info = body?.info ?? {};
