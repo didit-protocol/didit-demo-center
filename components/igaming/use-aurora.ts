@@ -313,15 +313,25 @@ export function useAurora(
       hostedRef.current = kind;
       record("sdk", "SDK", "startVerification (hosted flow)", null);
       emitRef.current({ type: "check-started", check: kind });
-      openVerification(url).then((result) => {
-        if (result.type === "failed") {
+      openVerification(url).then(
+        (result) => {
+          if (result.type === "failed") {
+            setNotice({
+              tone: "error",
+              text: result.error?.message ?? "The verification flow failed.",
+            });
+          }
+          completeRef.current(result.session?.sessionId ?? null);
+        },
+        () => {
+          // The web SDK itself did not load (offline, a blocked script).
+          hostedRef.current = null;
           setNotice({
             tone: "error",
-            text: result.error?.message ?? "The verification flow failed.",
+            text: "The verification could not open. Check your connection and try again.",
           });
-        }
-        completeRef.current(result.session?.sessionId ?? null);
-      });
+        },
+      );
     },
     [record],
   );
@@ -717,7 +727,6 @@ export function useAurora(
 
           tokenRef.current = null;
           mintRef.current = null;
-    mintRef.current = null;
           player = {
             version: 1,
             playerId,
