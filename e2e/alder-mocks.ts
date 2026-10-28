@@ -260,8 +260,10 @@ export async function mockAlder(
     return json(route, { error: "unmocked" }, 500);
   });
 
+  // The page's own monitoring token, as the route answers without Didit
+  // Authentication: no token and no error, so the console stays clean.
   await page.route("**/api/didit/events-token", (route) =>
-    json(route, { error: "Nobody is signed in." }, 401),
+    json(route, { token: null, signedIn: false }),
   );
 
   // The security event: the takeover rule declines it (add_score 90,
