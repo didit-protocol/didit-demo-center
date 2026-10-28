@@ -45,7 +45,10 @@ export async function POST(request: NextRequest) {
   calls.push(decision.call);
   if (decision.status >= 500) {
     return noStore(
-      { error: "The ID verification could not be read from Didit.", didit: calls },
+      {
+        error: "The ID verification could not be read from Didit.",
+        didit: calls,
+      },
       { status: 502 },
     );
   }

@@ -75,7 +75,9 @@ export async function readPlayer(request: NextRequest): Promise<string | null> {
   // Over HTTPS only the `__Host-` cookie is trusted: a bare one could have
   // been planted by a sibling subdomain.
   const name =
-    request.nextUrl.protocol === "https:" ? SECURE_PLAYER_COOKIE : PLAYER_COOKIE;
+    request.nextUrl.protocol === "https:"
+      ? SECURE_PLAYER_COOKIE
+      : PLAYER_COOKIE;
 
   return verifyPlayer(request.cookies.get(name)?.value, apiKey());
 }

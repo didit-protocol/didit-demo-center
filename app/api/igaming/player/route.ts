@@ -63,7 +63,11 @@ export async function DELETE(request: NextRequest) {
   const response = noStore({ playerId: null });
   const secure = request.nextUrl.protocol === "https:";
 
-  response.cookies.set(playerCookieName(secure), "", playerCookieOptions(secure, 0));
+  response.cookies.set(
+    playerCookieName(secure),
+    "",
+    playerCookieOptions(secure, 0),
+  );
 
   return response;
 }
