@@ -172,6 +172,9 @@ export function NorthmarketDemo() {
     resumed.current = true;
     const result = await market.openShop(shop || SELLER.shop);
 
+    // Another step was still running: this click did nothing.
+    if (!result) return;
+
     window.sessionStorage.removeItem(PENDING_SHOP);
     if (!result.ok && "seller" in result && previous) {
       // The second shop opened but its sign-up check did not go through:
@@ -223,6 +226,7 @@ export function NorthmarketDemo() {
     setSignupError(null);
     const result = await market.checkSignup(outlet);
 
+    if (!result) return;
     if (!result.ok) return setSignupError(result.error);
     push(
       transactionEvents(result.data, {
@@ -344,6 +348,7 @@ export function NorthmarketDemo() {
             push(kybStarted(first.shop)),
           );
 
+    if (!result) return;
     if (!result.ok) setToast({ tone: "error", text: result.error });
     else if (result.data) push(kybDecided(result.data, first.company));
   };
@@ -353,6 +358,7 @@ export function NorthmarketDemo() {
       first ? { id: first.id, shop: first.shop } : null,
     );
 
+    if (!result) return;
     if (!result.ok) return setToast({ tone: "error", text: result.error });
     push(
       transactionEvents(result.data, {
@@ -366,6 +372,7 @@ export function NorthmarketDemo() {
     live.push(ageStarted());
     const result = await market.confirmAge(held);
 
+    if (!result) return;
     if (!result.ok) return setToast({ tone: "error", text: result.error });
     push(
       transactionEvents(result.data, {

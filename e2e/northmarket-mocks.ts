@@ -133,6 +133,10 @@ export interface NorthmarketMock {
   failedSignups: number;
   /** Calls that tried to start the seller KYB. */
   kybStarts: number;
+  /** While above 0, a claim answers 502 and counts down (a server blip). */
+  claimFailures: number;
+  /** Every claim call, failed ones included. */
+  claims: number;
 }
 
 export interface NorthmarketMockOptions {
@@ -154,6 +158,8 @@ export async function mockNorthmarket(
     signupDown: false,
     failedSignups: 0,
     kybStarts: 0,
+    claimFailures: 0,
+    claims: 0,
   };
   const sellers: {
     id: string;
@@ -242,6 +248,16 @@ export async function mockNorthmarket(
       });
     }
     if (key === "POST /api/marketplace/transactions") {
+      mock.claims += 1;
+      if (mock.claimFailures > 0) {
+        mock.claimFailures -= 1;
+
+        return json(
+          route,
+          { error: "The Didit API could not be reached." },
+          502,
+        );
+      }
       const { uuid } = request.postDataJSON() as { uuid: string };
       const raw = read(uuid);
 

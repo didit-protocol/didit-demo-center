@@ -34,6 +34,28 @@ export type Outcome<T> = { ok: true; data: T } | { ok: false; error: string };
 
 const failed = (error: string) => ({ ok: false, error }) as const;
 
+const messageOf = (problem: unknown, fallback: string) =>
+  problem instanceof Error && problem.message ? problem.message : fallback;
+
+/**
+ * Remembers a transaction the web SDK submitted. Claiming the same uuid twice
+ * is harmless, so a failed claim is retried once: otherwise a submitted order
+ * would be in Didit but missing from this browser's list.
+ */
+async function claim(uuid: string) {
+  const first = await api<TransactionSummary>("/transactions", {
+    method: "POST",
+    body: { uuid },
+  });
+
+  if (first.ok || (first.status >= 400 && first.status < 500)) return first;
+
+  return api<TransactionSummary>("/transactions", {
+    method: "POST",
+    body: { uuid },
+  });
+}
+
 /** Re-reads a transaction until it leaves AWAITING_USER, or time runs out. */
 async function settle(
   uuid: string,
@@ -76,6 +98,25 @@ export function useNorthmarket() {
   const [view, setView] = React.useState<StateView | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState<Busy>(null);
+  // `busy` disables the buttons on the next render; this blocks a second
+  // click that lands before it, so one click is one KYB session or one order.
+  const running = React.useRef(false);
+
+  /** Runs one step at a time; a click while one runs resolves to null. */
+  const exclusive = async <T>(
+    kind: Exclude<Busy, null>,
+    work: () => Promise<T>,
+  ): Promise<T | null> => {
+    if (running.current) return null;
+    running.current = true;
+    setBusy(kind);
+    try {
+      return await work();
+    } finally {
+      running.current = false;
+      setBusy(null);
+    }
+  };
 
   const refresh = React.useCallback(async () => {
     const result = await api<StateView>("");
@@ -120,17 +161,12 @@ export function useNorthmarket() {
         },
         transaction: build(grant, crypto.randomUUID()),
       });
-      const claimed = await api<TransactionSummary>("/transactions", {
-        method: "POST",
-        body: { uuid: result.transactionId },
-      });
+      const claimed = await claim(result.transactionId);
 
       return claimed.ok ? claimed : failed(claimed.error);
     } catch (problem) {
       return failed(
-        problem instanceof Error
-          ? problem.message
-          : "The transaction could not be submitted.",
+        messageOf(problem, "The transaction could not be submitted."),
       );
     }
   };
@@ -140,14 +176,14 @@ export function useNorthmarket() {
    * shop opened but its sign-up did not go through, the failure carries the
    * shop so the page can offer the check again (see `checkSignup`).
    */
-  const openShop = async (
+  const openShop = (
     shop: string,
   ): Promise<
     | Outcome<{ seller: SellerView; signup: TransactionSummary }>
     | { ok: false; error: string; seller: SellerView }
-  > => {
-    setBusy("shop");
-    try {
+    | null
+  > =>
+    exclusive("shop", async () => {
       const opened = await api<{ seller: SellerView }>("/sellers", {
         method: "POST",
         body: { shop },
@@ -164,20 +200,16 @@ export function useNorthmarket() {
       await refresh();
 
       return signup.ok
-        ? { ok: true, data: { seller, signup: signup.data } }
+        ? { ok: true as const, data: { seller, signup: signup.data } }
         : { ...signup, seller };
-    } finally {
-      setBusy(null);
-    }
-  };
+    });
 
   /** Reports an open shop's sign-up again, after a failure or a reload. */
-  const checkSignup = async (seller: {
+  const checkSignup = (seller: {
     id: string;
     shop: string;
-  }): Promise<Outcome<TransactionSummary>> => {
-    setBusy("shop");
-    try {
+  }): Promise<Outcome<TransactionSummary> | null> =>
+    exclusive("shop", async () => {
       const signup = await submit(
         "signup",
         (grant, random) => signupTransaction(grant, seller.shop, random),
@@ -187,18 +219,40 @@ export function useNorthmarket() {
       await refresh();
 
       return signup;
-    } finally {
-      setBusy(null);
+    });
+
+  /**
+   * Opens a hosted verification in the web SDK modal, then reads its outcome
+   * back from the server: the modal's own result is only how it closed, the
+   * decision is always Didit's.
+   */
+  const verifyThenRead = async <T>(
+    url: string,
+    read: () => Promise<T>,
+  ): Promise<Outcome<T>> => {
+    try {
+      await openVerification(url);
+    } catch (problem) {
+      return failed(
+        messageOf(
+          problem,
+          "The verification window could not open. Try again.",
+        ),
+      );
     }
+    const data = await read();
+
+    await refresh();
+
+    return { ok: true, data };
   };
 
   /** Starts (or resumes) the shop's KYB in the web SDK modal. */
-  const verifyBusiness = async (
+  const verifyBusiness = (
     sellerId: string,
     onOpen: () => void,
-  ): Promise<Outcome<KybSummary | null>> => {
-    setBusy("kyb");
-    try {
+  ): Promise<Outcome<KybSummary | null> | null> =>
+    exclusive("kyb", async () => {
       const started = await api<{ url: string }>(
         `/sellers/${encodeURIComponent(sellerId)}/kyb`,
         { method: "POST" },
@@ -206,41 +260,22 @@ export function useNorthmarket() {
 
       if (!started.ok) return failed(started.error);
       onOpen();
-      await openVerification(started.data.url);
-      const kyb = await settleKyb(sellerId);
 
-      await refresh();
-
-      return { ok: true, data: kyb };
-    } finally {
-      setBusy(null);
-    }
-  };
+      return verifyThenRead(started.data.url, () => settleKyb(sellerId));
+    });
 
   /** One owner's own ID check, from the KYB's key people. */
-  const checkOwner = async (
+  const checkOwner = (
     sellerId: string,
     url: string,
-  ): Promise<Outcome<KybSummary | null>> => {
-    setBusy("kyb");
-    try {
-      await openVerification(url);
-      const kyb = await settleKyb(sellerId, 3);
-
-      await refresh();
-
-      return { ok: true, data: kyb };
-    } finally {
-      setBusy(null);
-    }
-  };
+  ): Promise<Outcome<KybSummary | null> | null> =>
+    exclusive("kyb", () => verifyThenRead(url, () => settleKyb(sellerId, 3)));
 
   /** The 1,497 EUR order, submitted from the browser. */
-  const placeOrder = async (
+  const placeOrder = (
     seller: { id: string; shop: string } | null,
-  ): Promise<Outcome<TransactionSummary>> => {
-    setBusy("order");
-    try {
+  ): Promise<Outcome<TransactionSummary> | null> =>
+    exclusive("order", async () => {
       const result = await submit("purchase", (grant, random) =>
         purchaseTransaction(grant, ORDER_LISTING, seller, random),
       );
@@ -248,29 +283,25 @@ export function useNorthmarket() {
       await refresh();
 
       return result;
-    } finally {
-      setBusy(null);
-    }
-  };
+    });
 
   /** The step-up a held order asks for: the buyer's age check. */
   const confirmAge = async (
     order: TransactionSummary,
-  ): Promise<Outcome<TransactionSummary>> => {
-    if (!order.verification) return failed("This order needs no age check.");
-    setBusy("age");
-    try {
-      await openVerification(order.verification.url);
-      const settled = await settle(order.uuid);
+  ): Promise<Outcome<TransactionSummary> | null> => {
+    const step = order.verification;
 
-      await refresh();
+    if (!step) return failed("This order needs no age check.");
 
-      return settled
-        ? { ok: true, data: settled }
-        : failed("The order could not be read back.");
-    } finally {
-      setBusy(null);
-    }
+    return exclusive("age", async () => {
+      const read = await verifyThenRead(step.url, () => settle(order.uuid));
+
+      if (!read.ok) return read;
+
+      return read.data
+        ? { ok: true as const, data: read.data }
+        : failed("The order could not be read back. Reload to see it.");
+    });
   };
 
   const reset = async () => {
