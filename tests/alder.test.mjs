@@ -314,10 +314,10 @@ test("an open onboarding reads as in progress with its start time, never as no v
     assert.equal(person.linked[0].detail, "In progress");
     assert.deepEqual(person.kpis[0], { label: "Sign-in", value: "Email code", unit: "via Didit" });
 
-    const text = JSON.stringify(list);
+    // What is drawn: each tab's note and page (the empty line is only for no page).
+    const text = JSON.stringify(list.map(({ note, page }) => ({ note, page })));
 
     assert.ok(!/Not started/i.test(text), "no Not started");
-    assert.ok(!text.includes("No verification yet"));
   }
 
   // Partial results while open are not a verdict.

@@ -12,6 +12,7 @@ import type { LiveEvent } from "../didit/live";
 
 import { ageText, ruleName } from "./live-events";
 import { KYC_THRESHOLD, formatMoney } from "./policy";
+import { IN_PROGRESS, isOpenSession, startedLabel } from "../didit/console";
 
 /**
  * Aurora Play's console view: the Person, Transaction, Verification and
@@ -26,6 +27,12 @@ export interface DeviceAccount {
   createdAt: number;
 }
 
+/** A check this browser opened: the session id and when it started. */
+export interface OpenCheck {
+  sessionId: string;
+  startedAt: number | null;
+}
+
 export interface AuroraConsoleInput {
   player: {
     playerId: string;
@@ -35,6 +42,13 @@ export interface AuroraConsoleInput {
   } | null;
   age: SessionSummary | null;
   kyc: SessionSummary | null;
+  /**
+   * The age check and the ID check as this browser opened them, before (or
+   * while) Didit has a decision to read: an open session shows as in
+   * progress with its started time, never as no verification at all.
+   */
+  ageCheck?: OpenCheck | null;
+  kycCheck?: OpenCheck | null;
   activity: ActivityItem[];
   events: LiveEvent[];
   device: {
@@ -80,6 +94,7 @@ const percent = (value: number | null) =>
     : `${value > 1 ? value.toFixed(1) : (value * 100).toFixed(1)}%`;
 
 function statusTag(status: string): Tag {
+  if (isOpenSession(status)) return IN_PROGRESS;
   const s = status.toUpperCase().replace(/ /g, "_");
 
   if (s === "APPROVED") return { label: "Approved", tone: "ok" };
@@ -103,11 +118,36 @@ function riskOf(activity: ActivityItem[]) {
   return { value: "Low", color: "ok" as const };
 }
 
+/** A session Didit has not answered for yet: open, with no results. */
+function openSummary(check: OpenCheck): SessionSummary {
+  return {
+    sessionId: check.sessionId,
+    workflowId: null,
+    status: "Not Started",
+    estimatedAge: null,
+    documentAge: null,
+    ip: null,
+    fullName: null,
+    documentType: null,
+    documentCountry: null,
+    faceMatch: null,
+    liveness: null,
+    amlHits: null,
+  };
+}
+
+/** "In progress · Started 28 Oct, 16:48" for an open check's row. */
+const inProgress = (check: OpenCheck | null | undefined) =>
+  `${IN_PROGRESS.label} · ${startedLabel(check?.startedAt ?? null)}`;
+
 function identityChecks(input: AuroraConsoleInput): Check[] {
   const checks: Check[] = [];
   const { kyc, age } = input;
 
-  if (kyc) {
+  // An open ID check has no results yet: one row, not a verdict.
+  if (kyc && isOpenSession(kyc.status)) {
+    checks.push({ label: "ID check", value: inProgress(input.kycCheck), ok: null });
+  } else if (kyc) {
     const face = percent(kyc.faceMatch);
     const live = percent(kyc.liveness);
 
@@ -121,14 +161,21 @@ function identityChecks(input: AuroraConsoleInput): Check[] {
       checks.push({ label: "Liveness", value: `Passed · ${live}`, ok: true });
   }
   if (age) {
+    const read =
+      age.status === "Approved" ||
+      age.estimatedAge !== null ||
+      age.documentAge !== null;
+
     checks.push({
       label: "Age",
-      value: [
-        ageText(age),
-        kyc?.documentAge ? `${kyc.documentAge} on the ID` : null,
-      ]
-        .filter(Boolean)
-        .join(", "),
+      value: isOpenSession(age.status)
+        ? inProgress(input.ageCheck)
+        : [
+            read ? ageText(age) : statusTag(age.status).label,
+            kyc?.documentAge ? `${kyc.documentAge} on the ID` : null,
+          ]
+            .filter(Boolean)
+            .join(", "),
       ok:
         age.status === "Approved"
           ? true
@@ -236,7 +283,9 @@ function personPage(input: AuroraConsoleInput): RecordPage | null {
       ? { label: "Verified", tone: "ok" }
       : input.age?.status === "Approved"
         ? { label: "Age checked", tone: "info" }
-        : { label: "Not verified", tone: "neu" };
+        : isOpenSession(input.kyc?.status) || isOpenSession(input.age?.status)
+          ? IN_PROGRESS
+          : { label: "Not verified", tone: "neu" };
   const checks = identityChecks(input);
   const signIns = input.events.filter(
     (event) => event.product === "authentication",
@@ -287,9 +336,11 @@ function personPage(input: AuroraConsoleInput): RecordPage | null {
             document: input.kyc?.documentType
               ? `${(input.kyc.documentCountry ?? "").toUpperCase()} · ${input.kyc.documentType.toUpperCase()}`
               : "AGE ESTIMATION",
-            selfie: input.kyc
-              ? "Selfie · liveness passed"
-              : "Selfie · deleted after the estimate",
+            selfie: isOpenSession((input.kyc ?? input.age)!.status)
+              ? "Selfie · not taken yet"
+              : input.kyc
+                ? "Selfie · liveness passed"
+                : "Selfie · deleted after the estimate",
             checks,
           }
         : {
@@ -506,6 +557,10 @@ function verificationPage(input: AuroraConsoleInput): RecordPage | null {
   if (!session || !input.player) return null;
   const kyc = session === input.kyc;
   const checks = identityChecks(input);
+  const open = isOpenSession(session.status);
+  const started = startedLabel(
+    (kyc ? input.kycCheck : input.ageCheck)?.startedAt ?? null,
+  );
 
   return {
     kind: "verification",
@@ -518,6 +573,7 @@ function verificationPage(input: AuroraConsoleInput): RecordPage | null {
       meta: [
         input.kyc?.fullName ?? input.player.email,
         kyc ? "ID, liveness and face match" : "Selfie age estimate",
+        ...(open ? [started] : []),
       ],
     },
     kpis: [],
@@ -527,7 +583,13 @@ function verificationPage(input: AuroraConsoleInput): RecordPage | null {
         title: "Checks",
         checks: checks.length
           ? checks
-          : [{ label: "Status", value: session.status, ok: null }],
+          : [
+              {
+                label: "Status",
+                value: statusTag(session.status).label,
+                ok: null,
+              },
+            ],
       },
       ...(session.ip
         ? [
@@ -548,6 +610,12 @@ function verificationPage(input: AuroraConsoleInput): RecordPage | null {
       tag: statusTag(session.status),
       pairs: [
         ["Workflow", kyc ? "Core KYC" : "Age estimation"],
+        ...(open
+          ? ([["Started", started.replace(/^Started /, "")]] as [
+              string,
+              string,
+            ][])
+          : []),
         ["Vendor data", input.player.playerId],
       ],
     },
@@ -622,7 +690,13 @@ function devicePage(input: AuroraConsoleInput): RecordPage | null {
   };
 }
 
-export function auroraConsole(input: AuroraConsoleInput): ConsoleTab[] {
+export function auroraConsole(raw: AuroraConsoleInput): ConsoleTab[] {
+  // A check opened in this browser counts from the start, decision or not.
+  const input: AuroraConsoleInput = {
+    ...raw,
+    age: raw.age ?? (raw.ageCheck ? openSummary(raw.ageCheck) : null),
+    kyc: raw.kyc ?? (raw.kycCheck ? openSummary(raw.kycCheck) : null),
+  };
   const name = input.kyc?.fullName ?? input.player?.name ?? "this player";
 
   return [

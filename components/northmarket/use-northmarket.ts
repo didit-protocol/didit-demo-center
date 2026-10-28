@@ -135,10 +135,17 @@ export function useNorthmarket() {
     }
   };
 
-  /** Opens a shop and reports its sign-up to transaction monitoring. */
+  /**
+   * Opens a shop and reports its sign-up to transaction monitoring. When the
+   * shop opened but its sign-up did not go through, the failure carries the
+   * shop so the page can offer the check again (see `checkSignup`).
+   */
   const openShop = async (
     shop: string,
-  ): Promise<Outcome<{ seller: SellerView; signup: TransactionSummary }>> => {
+  ): Promise<
+    | Outcome<{ seller: SellerView; signup: TransactionSummary }>
+    | { ok: false; error: string; seller: SellerView }
+  > => {
     setBusy("shop");
     try {
       const opened = await api<{ seller: SellerView }>("/sellers", {
@@ -158,7 +165,28 @@ export function useNorthmarket() {
 
       return signup.ok
         ? { ok: true, data: { seller, signup: signup.data } }
-        : signup;
+        : { ...signup, seller };
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  /** Reports an open shop's sign-up again, after a failure or a reload. */
+  const checkSignup = async (seller: {
+    id: string;
+    shop: string;
+  }): Promise<Outcome<TransactionSummary>> => {
+    setBusy("shop");
+    try {
+      const signup = await submit(
+        "signup",
+        (grant, random) => signupTransaction(grant, seller.shop, random),
+        seller.id,
+      );
+
+      await refresh();
+
+      return signup;
     } finally {
       setBusy(null);
     }
@@ -256,6 +284,7 @@ export function useNorthmarket() {
     busy,
     refresh,
     openShop,
+    checkSignup,
     verifyBusiness,
     checkOwner,
     placeOrder,

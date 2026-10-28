@@ -104,7 +104,8 @@ export function toAccountView(decision: Raw): AccountView {
 
 /**
  * The top bar's avatar: up to two initials of the verified name, else of the
- * email's local part ("avery.quinn@…" is "AQ"). A new account has no photo.
+ * email's local part ("avery.quinn@…" is "AQ"); empty when neither is known.
+ * A new account has no photo.
  */
 export function accountInitials(name: string | null | undefined): string {
   const words = (name ?? "")
@@ -117,7 +118,7 @@ export function accountInitials(name: string | null | undefined): string {
       ? words[0].charAt(0) + words[words.length - 1].charAt(0)
       : (words[0] ?? "").charAt(0);
 
-  return letters.toUpperCase() || "K";
+  return letters.toUpperCase();
 }
 
 export interface AccountCopy {

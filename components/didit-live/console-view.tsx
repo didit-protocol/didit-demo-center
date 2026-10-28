@@ -424,7 +424,43 @@ export function ConsoleView({
   onTab(id: string): void;
 }) {
   const closeRef = React.useRef<HTMLButtonElement>(null);
+  const tabsRef = React.useRef<HTMLDivElement>(null);
+  const [fade, setFade] = React.useState({ start: false, end: false });
   const current = tabs.find((item) => item.id === tab) ?? tabs[0];
+
+  // On a phone the tabs scroll sideways: a fade on the side with more tabs.
+  const updateFade = React.useCallback(() => {
+    const strip = tabsRef.current;
+
+    if (!strip) return;
+    const end = strip.scrollWidth - strip.clientWidth - strip.scrollLeft;
+
+    setFade({ start: strip.scrollLeft > 1, end: end > 1 });
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    const strip = tabsRef.current;
+    const selected = strip?.querySelector<HTMLElement>(
+      `[data-tab="${current?.id}"]`,
+    );
+
+    // Keep the open tab in view, then measure what is left on either side.
+    if (strip && selected) {
+      const left = selected.offsetLeft - strip.offsetLeft;
+
+      if (left < strip.scrollLeft) strip.scrollLeft = left - 8;
+      else if (
+        left + selected.offsetWidth >
+        strip.scrollLeft + strip.clientWidth
+      )
+        strip.scrollLeft = left + selected.offsetWidth - strip.clientWidth + 8;
+    }
+    updateFade();
+    window.addEventListener("resize", updateFade);
+
+    return () => window.removeEventListener("resize", updateFade);
+  }, [open, current?.id, updateFade]);
 
   React.useEffect(() => {
     if (!open) return;
@@ -459,20 +495,32 @@ export function ConsoleView({
             console.didit.me /{" "}
             <b>{page ? `${page.section} / ${page.record}` : current.label}</b>
           </span>
-          <div className="cv-tabs" role="tablist">
-            {tabs.map((item) => (
-              <button
-                key={item.id}
-                aria-selected={item.id === current.id}
-                className={`${TONE_CLASS[item.tone]}${item.id === current.id ? " is-on" : ""}`}
-                role="tab"
-                type="button"
-                onClick={() => onTab(item.id)}
-              >
-                <i className="dot" />
-                {item.label}
-              </button>
-            ))}
+          <div
+            className="cv-tabs-wrap"
+            data-fade-end={fade.end || undefined}
+            data-fade-start={fade.start || undefined}
+          >
+            <div
+              ref={tabsRef}
+              className="cv-tabs"
+              role="tablist"
+              onScroll={updateFade}
+            >
+              {tabs.map((item) => (
+                <button
+                  key={item.id}
+                  aria-selected={item.id === current.id}
+                  data-tab={item.id}
+                  className={`${TONE_CLASS[item.tone]}${item.id === current.id ? " is-on" : ""}`}
+                  role="tab"
+                  type="button"
+                  onClick={() => onTab(item.id)}
+                >
+                  <i className="dot" />
+                  {item.label}
+                </button>
+              ))}
+            </div>
           </div>
           <button
             ref={closeRef}
