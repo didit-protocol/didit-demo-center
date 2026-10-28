@@ -26,7 +26,8 @@
  */
 
 import { SELLER_COUNTRIES } from "../lib/marketplace/catalog.ts";
-import { STAGING_WORKFLOWS } from "../lib/marketplace/config.ts";
+import { diditUrls } from "../lib/didit/config.ts";
+import { northmarket } from "../lib/didit/demos.ts";
 import {
   KYB_WORKFLOW_LABEL,
   ensureKybWorkflow,
@@ -47,7 +48,9 @@ if (process.env.NEXT_PUBLIC_IS_STAGING !== "true") {
   process.exit(1);
 }
 
-const base = "https://verification.staging.didit.me";
+// The same base URL and workflows the routes use (lib/didit).
+const base = diditUrls.api;
+const workflows = northmarket.workflows;
 
 async function call(method, path, body) {
   const response = await fetch(`${base}${path}`, {
@@ -100,7 +103,7 @@ async function ensureWorkflow() {
   const setup = await ensureKybWorkflow(call, {
     apply,
     countries: SELLER_COUNTRIES.map((country) => country.code),
-    personWorkflowUuid: STAGING_WORKFLOWS.person,
+    personWorkflowUuid: workflows.person,
   });
 
   if (setup.refusal) {
@@ -137,7 +140,7 @@ async function ensureWorkflow() {
 async function ensureRules() {
   const rules = await listAll("/v3/transactions/rules/");
 
-  for (const definition of ruleDefinitions(STAGING_WORKFLOWS.age)) {
+  for (const definition of ruleDefinitions(workflows.buyerAge)) {
     let rule = rules.find((candidate) => candidate.title === definition.title);
 
     if (!rule && !apply) {
