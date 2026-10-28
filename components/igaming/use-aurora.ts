@@ -99,8 +99,6 @@ const STATE_KEY = "aurora-play-demo:v1";
 const LOG_KEY = "aurora-play-demo:log";
 const SECOND_KEY = "aurora-play-demo:second-account";
 const MAX_LOG = 40;
-/** Every call this page makes gives up after this long, with a message. */
-const TIMEOUT_MS = 20_000;
 
 interface Token {
   token: string;
@@ -112,24 +110,6 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function readJson(response: Response) {
   return response.json().catch(() => null);
-}
-
-/** `fetch` with a deadline; a timeout or a dropped connection reads as one sentence. */
-async function fetchWithTimeout(input: string, init?: RequestInit) {
-  try {
-    return await fetch(input, {
-      ...init,
-      signal: init?.signal ?? AbortSignal.timeout(TIMEOUT_MS),
-    });
-  } catch (error) {
-    const name = (error as { name?: string } | null)?.name;
-
-    throw new Error(
-      name === "TimeoutError" || name === "AbortError"
-        ? "The request took too long. Check your connection and try again."
-        : "The request could not be sent. Check your connection and try again.",
-    );
-  }
 }
 
 function load<T>(storage: Storage | undefined, key: string): T | null {
@@ -171,10 +151,6 @@ export function useAurora(
 
   emitRef.current = emit;
   const tokenRef = React.useRef<Token | null>(null);
-  /** The token request in flight, so concurrent callers share one mint. */
-  const mintRef = React.useRef<Promise<Token> | null>(null);
-  /** A cashier action is on its way to Didit: a second click waits for it. */
-  const inFlightRef = React.useRef(false);
   const stateRef = React.useRef<PlayerState | null>(null);
   const hostedRef = React.useRef<"age" | "kyc" | null>(null);
   const completeRef = React.useRef<(sessionId: string | null) => void>(
@@ -227,7 +203,7 @@ export function useAurora(
   /** One of this app's routes; failures come back as `{ error }`. */
   const route = React.useCallback(
     async <T>(path: string, init?: RequestInit) => {
-      const response = await fetchWithTimeout(path, {
+      const response = await fetch(path, {
         ...init,
         headers: {
           "Content-Type": "application/json",
@@ -289,23 +265,6 @@ export function useAurora(
     if (hydrated) window.sessionStorage.setItem(LOG_KEY, JSON.stringify(log));
   }, [log, hydrated]);
 
-  // Another tab of the same player moved on (a deposit, a check): take its
-  // state rather than overwrite it with this tab's older copy.
-  React.useEffect(() => {
-    const onStorage = (event: StorageEvent) => {
-      if (event.key !== STATE_KEY || event.storageArea !== window.localStorage)
-        return;
-      const next = load<PlayerState>(window.localStorage, STATE_KEY);
-      const mine = stateRef.current?.playerId;
-
-      if (next?.version === 1 && mine && next.playerId === mine) setState(next);
-    };
-
-    window.addEventListener("storage", onStorage);
-
-    return () => window.removeEventListener("storage", onStorage);
-  }, []);
-
   /* ── The web SDK ── */
 
   const openHosted = React.useCallback(
@@ -313,25 +272,15 @@ export function useAurora(
       hostedRef.current = kind;
       record("sdk", "SDK", "startVerification (hosted flow)", null);
       emitRef.current({ type: "check-started", check: kind });
-      openVerification(url).then(
-        (result) => {
-          if (result.type === "failed") {
-            setNotice({
-              tone: "error",
-              text: result.error?.message ?? "The verification flow failed.",
-            });
-          }
-          completeRef.current(result.session?.sessionId ?? null);
-        },
-        () => {
-          // The web SDK itself did not load (offline, a blocked script).
-          hostedRef.current = null;
+      openVerification(url).then((result) => {
+        if (result.type === "failed") {
           setNotice({
             tone: "error",
-            text: "The verification could not open. Check your connection and try again.",
+            text: result.error?.message ?? "The verification flow failed.",
           });
-        },
-      );
+        }
+        completeRef.current(result.session?.sessionId ?? null);
+      });
     },
     [record],
   );
@@ -376,9 +325,8 @@ export function useAurora(
 
       if (!force && current && current.expiresAt - Date.now() > 60_000)
         return current;
-      if (mintRef.current) return mintRef.current;
       // The server mints only for a player whose age check Didit approved.
-      const pending: Promise<Token> = route<{
+      const minted = await route<{
         token: string;
         expiresAt: string;
         baseUrl: string;
@@ -387,26 +335,15 @@ export function useAurora(
         body: JSON.stringify({
           ageSessionId: stateRef.current?.age?.sessionId ?? null,
         }),
-      })
-        .then((minted) => {
-          const next = {
-            token: minted.token,
-            expiresAt: Date.parse(minted.expiresAt) || Date.now() + 600_000,
-            baseUrl: minted.baseUrl,
-          };
+      });
 
-          // Kept only if the player did not change while it was minted.
-          if (mintRef.current === pending) tokenRef.current = next;
+      tokenRef.current = {
+        token: minted.token,
+        expiresAt: Date.parse(minted.expiresAt) || Date.now() + 600_000,
+        baseUrl: minted.baseUrl,
+      };
 
-          return next;
-        })
-        .finally(() => {
-          if (mintRef.current === pending) mintRef.current = null;
-        });
-
-      mintRef.current = pending;
-
-      return pending;
+      return tokenRef.current;
     },
     [route],
   );
@@ -415,19 +352,11 @@ export function useAurora(
   const readTransaction = React.useCallback(
     async (id: string): Promise<TransactionRecord | null> => {
       const token = await ensureToken();
-      const path = `/v1/transactions/${encodeURIComponent(id)}/`;
-      let response: Response;
+      const path = `/v1/transactions/${id}/`;
+      const response = await fetch(`${token.baseUrl}${path}`, {
+        headers: { "X-Transaction-Token": token.token },
+      });
 
-      try {
-        response = await fetchWithTimeout(`${token.baseUrl}${path}`, {
-          headers: { "X-Transaction-Token": token.token },
-        });
-      } catch {
-        // Unreadable right now; the status already shown stays until a refresh.
-        record("browser", "GET", path, null, "network");
-
-        return null;
-      }
       record("browser", "GET", path, response.status);
       if (!response.ok) return null;
 
@@ -570,15 +499,11 @@ export function useAurora(
 
   const submit = React.useCallback(
     async (kind: CashierKind, amount: number, detail: string | null) => {
-      // A double click is one bet, one deposit, one bonus claim.
-      if (inFlightRef.current) return null;
-      inFlightRef.current = true;
       setBusy(kind);
       setNotice(null);
       try {
         return await send(kind, amount, detail);
       } finally {
-        inFlightRef.current = false;
         setBusy(null);
       }
     },
@@ -726,7 +651,6 @@ export function useAurora(
           );
 
           tokenRef.current = null;
-          mintRef.current = null;
           player = {
             version: 1,
             playerId,
@@ -797,8 +721,7 @@ export function useAurora(
   const selfExclude = React.useCallback(async () => {
     const current = stateRef.current;
 
-    if (!current || inFlightRef.current) return;
-    inFlightRef.current = true;
+    if (!current) return;
     setBusy("exclude");
     setNotice(null);
     try {
@@ -818,7 +741,6 @@ export function useAurora(
         text: error instanceof Error ? error.message : String(error),
       });
     } finally {
-      inFlightRef.current = false;
       setBusy(null);
     }
   }, [route, send, update]);
@@ -863,7 +785,6 @@ export function useAurora(
 
   const openSecondAccount = React.useCallback(() => {
     tokenRef.current = null;
-    mintRef.current = null;
     setKycPrompt(false);
     setNotice(null);
     setOperator({ console: null, player: null, loading: false });
@@ -875,7 +796,6 @@ export function useAurora(
 
   const reset = React.useCallback(() => {
     tokenRef.current = null;
-    mintRef.current = null;
     setKycPrompt(false);
     setNotice(null);
     setOperator({ console: null, player: null, loading: false });

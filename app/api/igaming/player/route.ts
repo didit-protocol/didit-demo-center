@@ -1,10 +1,9 @@
 import { NextRequest } from "next/server";
 
 import {
+  PLAYER_COOKIE,
   PLAYER_COOKIE_MAX_AGE,
   newPlayerId,
-  playerCookieName,
-  playerCookieOptions,
   signPlayer,
 } from "@/lib/igaming/player";
 import { apiKey, noStore, readPlayer } from "@/lib/igaming/server";
@@ -44,13 +43,14 @@ export async function POST(request: NextRequest) {
 
   const playerId = newPlayerId();
   const response = noStore({ playerId });
-  const secure = request.nextUrl.protocol === "https:";
 
-  response.cookies.set(
-    playerCookieName(secure),
-    signPlayer(playerId, apiKey()),
-    playerCookieOptions(secure, PLAYER_COOKIE_MAX_AGE),
-  );
+  response.cookies.set(PLAYER_COOKIE, signPlayer(playerId, apiKey()), {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: request.nextUrl.protocol === "https:",
+    path: "/",
+    maxAge: PLAYER_COOKIE_MAX_AGE,
+  });
 
   return response;
 }
@@ -61,13 +61,14 @@ export async function POST(request: NextRequest) {
  */
 export async function DELETE(request: NextRequest) {
   const response = noStore({ playerId: null });
-  const secure = request.nextUrl.protocol === "https:";
 
-  response.cookies.set(
-    playerCookieName(secure),
-    "",
-    playerCookieOptions(secure, 0),
-  );
+  response.cookies.set(PLAYER_COOKIE, "", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: request.nextUrl.protocol === "https:",
+    path: "/",
+    maxAge: 0,
+  });
 
   return response;
 }

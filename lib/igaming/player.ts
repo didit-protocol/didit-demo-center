@@ -10,30 +10,8 @@ import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
  * enough to read their records.
  */
 
-/**
- * The cookie's name. Over HTTPS it carries the `__Host-` prefix, so the
- * browser only accepts it Secure, for the whole site and from this exact
- * host (no subdomain can plant or overwrite it). Plain-HTTP localhost cannot
- * hold a `__Host-` cookie, so development keeps the bare name.
- */
 export const PLAYER_COOKIE = "aurora_player";
-export const SECURE_PLAYER_COOKIE = `__Host-${PLAYER_COOKIE}`;
 export const PLAYER_COOKIE_MAX_AGE = 60 * 60 * 24 * 30;
-
-export function playerCookieName(secure: boolean): string {
-  return secure ? SECURE_PLAYER_COOKIE : PLAYER_COOKIE;
-}
-
-/** The attributes the player cookie is always set (and cleared) with. */
-export function playerCookieOptions(secure: boolean, maxAge: number) {
-  return {
-    httpOnly: true,
-    secure,
-    sameSite: "lax" as const,
-    path: "/",
-    maxAge,
-  };
-}
 
 const PREFIX = "aurora-play-";
 

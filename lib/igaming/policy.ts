@@ -361,13 +361,6 @@ export const RULE_TITLES = {
   withdrawalWithoutPlay: "Aurora Play demo: withdrawal with no play",
 } as const;
 
-/**
- * How the server and the setup script find those lists by name. `GET
- * /v3/lists/` pages with `limit` (50 by default, newest first), so on a shared
- * application with many lists an unfiltered first page can miss them.
- */
-export const LISTS_QUERY = "?list_type=custom&limit=1000";
-
 export interface ListDefinition {
   name: string;
   description: string;

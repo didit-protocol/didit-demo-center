@@ -398,13 +398,11 @@ export function AuroraDemo() {
       if (totals.balance < 10) return setModal("cashier");
       const item = await aurora.bet(10, game);
 
-      // Null while another cashier action is still with Didit.
-      if (!item) return;
       setToast({
-        tone: item.record?.status === "APPROVED" ? "info" : "error",
-        text: item.record
+        tone: item?.record?.status === "APPROVED" ? "info" : "error",
+        text: item?.record
           ? `${game}: a 10.00 EUR spin, ${item.record.status === "APPROVED" ? "approved" : item.record.status.toLowerCase().replace(/_/g, " ")}.`
-          : (item.error ?? "The spin did not go through."),
+          : (item?.error ?? "The spin did not go through."),
       });
     });
 
