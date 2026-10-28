@@ -209,3 +209,21 @@ test("the monitoring token is minted for this customer, and a disabled lane says
   assert.equal(off.status, 403);
   assert.equal((await off.json()).code, "event_monitoring_disabled");
 });
+
+test("the customer read says authenticated only for a signed-in visitor", async () => {
+  reset();
+  const cookie = await (await customerRoute.GET(request("/api/fintech/customer"))).json();
+
+  assert.deepEqual(cookie, { customerId: CUSTOMER, authenticated: false });
+
+  // Authentication on, nobody signed in: no customer, and not authenticated.
+  process.env.DIDIT_PUBLISHABLE_KEY = "pk_test_alder";
+  try {
+    const visitor = await (await customerRoute.GET(request("/api/fintech/customer", { cookie: null }))).json();
+
+    assert.deepEqual(visitor, { customerId: null, authenticated: false });
+  } finally {
+    delete process.env.DIDIT_PUBLISHABLE_KEY;
+  }
+  assert.equal(calls.length, 0);
+});

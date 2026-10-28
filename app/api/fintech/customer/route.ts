@@ -12,11 +12,17 @@ import { noStore, readCustomer } from "@/lib/fintech/server";
 
 export const dynamic = "force-dynamic";
 
-/** The Alder customer of this browser, if there is one. */
+/**
+ * The Alder customer of this browser, if there is one. `authenticated` is
+ * true only for a visitor signed in with Didit Authentication, never just
+ * because Authentication is on.
+ */
 export async function GET(request: NextRequest) {
+  const customerId = await readCustomer(request);
+
   return noStore({
-    customerId: await readCustomer(request),
-    authenticated: authEnabled(),
+    customerId,
+    authenticated: authEnabled() && customerId !== null,
   });
 }
 
