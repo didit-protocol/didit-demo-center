@@ -23,7 +23,6 @@ export const RECORDED = {
   signupHeld: "1853582d-b64d-441e-9841-5604bbc57356",
   orderApproved: "0eb2e39d-02fa-4504-8f6a-f69dc369c479",
   orderAwaiting: "06dbbf52-e4bc-4b6a-8282-c049f1761650",
-  heldParty: "84481707-bfe1-4f07-bda6-e155888ac0af",
   orgId: "fe668b65-677a-423a-a5c0-8479e59dcbba",
   appId: "a5f3bca2-46e2-411e-90ef-a580900a57ee",
 };

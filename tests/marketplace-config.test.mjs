@@ -20,7 +20,7 @@ import {
   ruleDefinitions,
 } from "../lib/marketplace/setup.ts";
 import {
-  kybDecidable,
+  kybRestartable,
   kybStatus,
   payoutsUnlocked,
   personStatus,
@@ -197,14 +197,16 @@ test("status copy never calls an undecided record approved", () => {
   assert.equal(personStatus(null).label, "No ID check");
 });
 
-test("payouts unlock on Approved only; analysts decide In Review only", () => {
+test("payouts unlock on Approved only; only a KYB that cannot finish starts again", () => {
   for (const status of [null, "Not Started", "In Progress", "Awaiting User", "In Review", "Declined"]) {
     assert.equal(payoutsUnlocked(status), false, String(status));
   }
   assert.equal(payoutsUnlocked("Approved"), true);
-  assert.equal(kybDecidable("In Review"), true);
-  for (const status of ["Awaiting User", "Approved", "Not Started", null]) {
-    assert.equal(kybDecidable(status), false, String(status));
+  for (const status of ["Declined", "Expired", "Kyc Expired", "Abandoned"]) {
+    assert.equal(kybRestartable(status), true, status);
+  }
+  for (const status of ["Not Started", "In Progress", "Awaiting User", "In Review", "Resubmitted", "Approved", null]) {
+    assert.equal(kybRestartable(status), false, String(status));
   }
 });
 
