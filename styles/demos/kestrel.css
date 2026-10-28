@@ -84,6 +84,9 @@
 .ks-iconbtn { width: 50px; height: 44px; border-radius: 10px; display: grid; place-items: center; background: var(--ks-panel-2); border: 1px solid var(--ks-line); }
 .ks-ava { width: 34px; height: 34px; }
 .ks-nav .ks-ava { width: 36px; height: 36px; box-shadow: 0 0 0 2px var(--ks-line); }
+.ks-ava.is-initials { display: grid; place-items: center; flex: none; background: #1C2631; color: #5EE6D4; font-weight: 600; font-size: 13.5px; letter-spacing: .2px; }
+.ks-console { display: none !important; }
+.ks-console img { width: 11px; height: 16px; }
 .ks-tick span { display: inline-flex; gap: 6px; }
 
 /* Signed out: the landing with the sign-up card */
@@ -199,14 +202,20 @@
   .ks { font-size: 14px; overflow-y: auto; display: block; }
   .ks-nav { height: 56px; padding: 0 16px; position: sticky; top: 0; z-index: 2; }
   .ks-nav .ks-hide-phone, .ks-tick, .ks-trade, .ks-banner:not(.is-phone) { display: none !important; }
+  .ks-nav-r { gap: 8px; }
+  .ks-nav .ks-btn { height: 40px; padding: 0 12px; font-size: 14px; }
+  .ks-nav .ks-console { display: grid !important; width: 40px; height: 40px; }
   .ks-banner.is-phone { flex-wrap: wrap; padding: 14px 16px; }
   .ks-banner.is-phone .ks-btn { margin-left: 0; width: 100%; }
   .ks-phone { display: flex; flex-direction: column; padding: 0 0 96px; }
   .ks-land { padding: 24px 16px 96px; gap: 24px; overflow: visible; }
   .ks-hero h1 { font-size: 34px; line-height: 40px; }
   .ks-coins { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
-  .ks-coincard { padding: 10px; }
-  .ks-coincard .p { font-size: 13px; }
+  .ks-coincard { padding: 10px; min-width: 0; }
+  /* The change drops under the symbol: three cards share 390 px. */
+  .ks-coincard .h { flex-wrap: wrap; row-gap: 4px; }
+  .ks-coincard .h span:last-child { margin-left: 0; flex-basis: 100%; }
+  .ks-coincard .p { font-size: 11.5px; }
   .ks-card { padding: 20px; }
   .ks-layer { padding: 12px 8px 76px; align-items: flex-end; }
   .ks-layer .ks-modal { width: 100%; padding: 20px; }

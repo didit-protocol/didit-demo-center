@@ -10,6 +10,8 @@ import { type ConsoleTab, ConsoleView } from "./console-view";
 import { DemoBar, type DemoBarProps } from "./demo-bar";
 import { LiveFeed, type ProductTile } from "./live-feed";
 
+import { useDidit } from "@/lib/didit/provider";
+
 /**
  * One industry demo inside the Demo Center: the dark bar, the customer app
  * filling the rest of the screen, the Didit live layer floating over it, the
@@ -55,6 +57,10 @@ export function DemoShell({
   children: React.ReactNode;
 }) {
   const appRef = React.useRef<HTMLDivElement>(null);
+  const { auth } = useDidit();
+  // After a reload the demo may not know the visitor yet; Authentication does.
+  const visitor =
+    person ?? (auth?.status === "signed-in" ? (auth.email ?? null) : null);
 
   return (
     <div className="dx" data-testid="demo-shell">
@@ -72,7 +78,7 @@ export function DemoShell({
         <LiveFeed
           events={events}
           integration={integration}
-          person={person}
+          person={visitor}
           quiet={quiet}
           tiles={tiles}
           onConsole={() => onConsole(true)}

@@ -28,6 +28,7 @@ import {
 } from "../lib/crypto-exchange/transactions.ts";
 import {
   accountCopy,
+  accountInitials,
   accountStage,
   toAccountView,
 } from "../lib/crypto-exchange/onboarding.ts";
@@ -319,6 +320,7 @@ test("the onboarding decision maps to the account the exchange opens", () => {
 
   assert.equal(notStarted.stage, "processing");
   assert.equal(notStarted.fullName, null);
+  assert.equal(notStarted.startedAt, "2026-10-13T21:32:32.589632Z");
   assert.deepEqual(
     notStarted.checks.map((check) => check.label),
     ["ID document", "Liveness", "Face match", "AML screening"],
@@ -349,6 +351,16 @@ test("the onboarding decision maps to the account the exchange opens", () => {
   assert.match(review.body, /2 possible matches/);
   assert.match(review.body, /locked/);
   assert.match(accountCopy({ stage: "review", status: "In Review", amlHits: 1 }).body, /1 possible match\b/);
+});
+
+test("a new account shows initials in the top bar, from the name or else the email", () => {
+  assert.equal(accountInitials("Avery Quinn"), "AQ");
+  assert.equal(accountInitials("María José de la Cruz"), "MC");
+  assert.equal(accountInitials("avery.quinn@example.com"), "AQ");
+  assert.equal(accountInitials("didit-demo-1793190663730@example.com"), "DD");
+  assert.equal(accountInitials("  "), "");
+  assert.equal(accountInitials(null), "");
+  assert.doesNotMatch(accountCopy({ stage: "processing", status: "Not Started", amlHits: null }).body, /window/);
 });
 
 test("every rule is scoped to the demo and the step-up names its workflow", () => {

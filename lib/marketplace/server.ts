@@ -98,14 +98,17 @@ const fail = (status: number, error: string, code?: string): Reply => ({
 export interface Availability {
   /** Orders, payouts and sign-ups: an API key. */
   transactions: boolean;
-  /** Seller KYB: additionally the KYB workflow id. */
+  /**
+   * Seller KYB: additionally a KYB workflow id. The page reads this before
+   * anyone clicks, so "Verify my business" is off where the KYB cannot start.
+   */
   kyb: boolean;
 }
 
 export function availability(env: MarketEnv): Availability {
   const transactions = Boolean(env.apiKey);
 
-  return { transactions, kyb: transactions && Boolean(env.workflows.kyb) };
+  return { transactions, kyb: transactions && UUID.test(env.workflows.kyb) };
 }
 
 function notLive(env: MarketEnv): Reply | null {

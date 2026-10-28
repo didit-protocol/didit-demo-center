@@ -18,6 +18,7 @@ import {
 import { type AuroraSignal, useAurora } from "./use-aurora";
 
 import { DemoShell } from "@/components/didit-live/demo-shell";
+import { authErrorMessage } from "@/lib/didit/auth-errors";
 import { auroraPlay } from "@/lib/didit/demos";
 import { ago } from "@/lib/didit/live";
 import { SIGNUP_INTENT, useDidit } from "@/lib/didit/provider";
@@ -320,9 +321,7 @@ export function AuroraDemo() {
 
       return false;
     } catch (error) {
-      setAuthError(
-        error instanceof Error ? error.message : "The code could not be sent.",
-      );
+      setAuthError(authErrorMessage(error, "start"));
 
       return false;
     } finally {
@@ -343,9 +342,7 @@ export function AuroraDemo() {
       if (result.status !== "signed_in")
         setAuthError("That code did not work. Check it and try again.");
     } catch (error) {
-      setAuthError(
-        error instanceof Error ? error.message : "That code did not work.",
-      );
+      setAuthError(authErrorMessage(error, "verify"));
     } finally {
       setAuthBusy(false);
     }
@@ -421,6 +418,26 @@ export function AuroraDemo() {
     window.sessionStorage.setItem(SECOND_KEY, "1");
     aurora.openSecondAccount();
     setModal("signup");
+  };
+
+  // Signs the player out of the casino: Didit Authentication's session when it
+  // is on, else the casino's own player cookie. The device's account list
+  // stays, as the shared-device check needs it.
+  const signOut = async () => {
+    setModal(null);
+    setConsoleOpen(false);
+    if (authOn && auth?.status === "signed-in") {
+      // Not joined again while the hosted sign-out redirects.
+      joining.current = true;
+      aurora.reset();
+      await auth.signOut("/igaming");
+
+      return;
+    }
+    aurora.reset();
+    await fetch("/api/igaming/player", { method: "DELETE" }).catch(
+      () => undefined,
+    );
   };
 
   const restart = async () => {
@@ -613,6 +630,19 @@ export function AuroraDemo() {
       : null,
     age: state?.age?.summary ?? null,
     kyc: state?.kyc?.summary ?? null,
+    ageCheck: state?.age
+      ? {
+          sessionId: state.age.sessionId,
+          // The age check opens right after sign-up.
+          startedAt: state.age.startedAt ?? state.createdAt,
+        }
+      : null,
+    kycCheck: state?.kyc
+      ? {
+          sessionId: state.kyc.sessionId,
+          startedAt: state.kyc.startedAt ?? null,
+        }
+      : null,
     activity,
     events: live.events,
     device: didit.device,
@@ -668,10 +698,13 @@ export function AuroraDemo() {
     >
       <Casino
         account={
-          state && ageApproved
+          state || (authOn && auth?.status === "signed-in")
             ? {
-                initial: (person ?? "A").charAt(0).toUpperCase(),
-                balance: totals.balance,
+                initial: (person || "A").charAt(0).toUpperCase(),
+                name: person || "Player",
+                email: state?.email || auth?.email || null,
+                // The cashier opens once the age check is approved.
+                balance: state && ageApproved ? totals.balance : null,
               }
             : null
         }
@@ -687,6 +720,7 @@ export function AuroraDemo() {
         onSignIn={() =>
           authOn ? void auth?.signIn("/igaming") : setModal("signup")
         }
+        onSignOut={() => void signOut()}
         onSignUp={() => setModal("signup")}
         onTerms={() =>
           setToast({

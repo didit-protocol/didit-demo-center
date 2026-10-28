@@ -101,6 +101,19 @@ test("POST /player issues a signed, httpOnly player cookie; GET reads it back", 
   assert.deepEqual(await (await player.GET(forged)).json(), { playerId: null, authenticated: false });
 });
 
+test("DELETE /player signs out: the player cookie is cleared and nothing is called", async () => {
+  reset();
+  const signedOut = await player.DELETE(request("/api/igaming/player", { method: "DELETE" }));
+  const cookie = signedOut.cookies.get(PLAYER_COOKIE);
+
+  assert.equal(signedOut.status, 200);
+  assert.deepEqual(await signedOut.json(), { playerId: null });
+  assert.equal(cookie.value, "");
+  assert.equal(cookie.maxAge, 0);
+  assert.equal(cookie.httpOnly, true);
+  assert.equal(calls.length, 0);
+});
+
 test("every player route refuses a request without the cookie and calls nothing", async () => {
   reset();
   const anonymous = { cookie: null, method: "POST", body: {} };

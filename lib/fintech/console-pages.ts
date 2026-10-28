@@ -10,6 +10,8 @@ import type {
 import type { LiveEvent } from "../didit/live";
 import type { SessionSummary, TransactionRecord } from "../igaming/records";
 
+import { IN_PROGRESS, isOpenSession, startedLabel } from "../didit/console.ts";
+
 import { BANK, STEP_UP_AMOUNT, formatMoney, ruleName } from "./alder.ts";
 
 /**
@@ -40,6 +42,11 @@ export interface AlderConsoleInput {
     createdAt: number;
   } | null;
   onboarding: SessionSummary | null;
+  /**
+   * The onboarding session once Alder created it, before Didit has a decision
+   * to read: the tabs show it as in progress instead of no verification.
+   */
+  onboardingSession?: { sessionId: string; startedAt: number | null } | null;
   stepUp: SessionSummary | null;
   /** How Didit Authentication confirmed the step-up before the selfie. */
   stepUpPasskey?: string | null;
@@ -85,6 +92,7 @@ const percent = (value: number | null) =>
     : `${value > 1 ? value.toFixed(1) : (value * 100).toFixed(1)}%`;
 
 export function statusTag(status: string): Tag {
+  if (isOpenSession(status)) return IN_PROGRESS;
   const s = status.toUpperCase().replace(/ /g, "_");
 
   if (s === "APPROVED") return { label: "Approved", tone: "ok" };
@@ -117,6 +125,36 @@ export function focusTransaction(activity: ConsoleItem[]): ConsoleItem | null {
   );
 }
 
+/** The onboarding as far as Didit has it: decided, open, or not created yet. */
+function onboardingOf(input: AlderConsoleInput): SessionSummary | null {
+  if (input.onboarding) return input.onboarding;
+  const created = input.onboardingSession;
+
+  if (!created) return null;
+
+  return {
+    sessionId: created.sessionId,
+    workflowId: null,
+    status: "Not Started",
+    estimatedAge: null,
+    documentAge: null,
+    ip: null,
+    fullName: null,
+    documentType: null,
+    documentCountry: null,
+    faceMatch: null,
+    liveness: null,
+    amlHits: null,
+  };
+}
+
+/** "Started 28 Oct, 16:48" for the open onboarding. */
+function onboardingStarted(input: AlderConsoleInput): string {
+  return startedLabel(
+    input.onboardingSession?.startedAt ?? input.customer?.createdAt ?? null,
+  );
+}
+
 function nameOf(input: AlderConsoleInput): string {
   return (
     input.onboarding?.fullName ??
@@ -126,6 +164,8 @@ function nameOf(input: AlderConsoleInput): string {
 
 function identityChecks(session: SessionSummary): Check[] {
   const checks: Check[] = [];
+  // An open session's partial results are not a verdict yet.
+  const open = isOpenSession(session.status);
   const ok =
     session.status === "Approved"
       ? true
@@ -145,7 +185,12 @@ function identityChecks(session: SessionSummary): Check[] {
     });
   if (face)
     checks.push({ label: "Face match", value: `${face} · selfie vs ID`, ok });
-  if (live) checks.push({ label: "Liveness", value: `Passed · ${live}`, ok });
+  if (live)
+    checks.push({
+      label: "Liveness",
+      value: open ? live : `Passed · ${live}`,
+      ok,
+    });
   if (session.amlHits !== null)
     checks.push({
       label: "AML screening",
@@ -153,7 +198,7 @@ function identityChecks(session: SessionSummary): Check[] {
         session.amlHits === 0
           ? "No matches"
           : `${session.amlHits} possible matches`,
-      ok: session.amlHits === 0,
+      ok: open ? null : session.amlHits === 0,
     });
 
   return checks;
@@ -162,6 +207,7 @@ function identityChecks(session: SessionSummary): Check[] {
 function linkedRecords(input: AlderConsoleInput): LinkedRecord[] {
   const linked: LinkedRecord[] = [];
   const name = nameOf(input);
+  const onboarding = onboardingOf(input);
 
   if (input.stepUp)
     linked.push({
@@ -171,11 +217,11 @@ function linkedRecords(input: AlderConsoleInput): LinkedRecord[] {
         : "Selfie step-up",
       detail: `${statusTag(input.stepUp.status).label} · ${short(input.stepUp.sessionId)}`,
     });
-  if (input.onboarding)
+  if (onboarding)
     linked.push({
       tone: "ver",
       title: `${name} · KYC`,
-      detail: statusTag(input.onboarding.status).label,
+      detail: statusTag(onboarding.status).label,
     });
   if (input.device)
     linked.push({
@@ -385,11 +431,13 @@ function personPage(input: AlderConsoleInput): RecordPage | null {
 
   if (!customer) return null;
   const name = nameOf(input);
-  const approved = input.onboarding?.status === "Approved";
+  const onboarding = onboardingOf(input);
+  const approved = onboarding?.status === "Approved";
+  const open = onboarding !== null && isOpenSession(onboarding.status);
   const moved = input.activity.filter(
     (item) => item.record?.status === "APPROVED",
   ).length;
-  const checks = input.onboarding ? identityChecks(input.onboarding) : [];
+  const checks = onboarding ? identityChecks(onboarding) : [];
 
   return {
     kind: "person",
@@ -399,19 +447,22 @@ function personPage(input: AlderConsoleInput): RecordPage | null {
       title: name,
       tag: approved
         ? { label: "Verified", tone: "ok" }
-        : { label: "Not verified", tone: "neu" },
+        : open
+          ? IN_PROGRESS
+          : { label: "Not verified", tone: "neu" },
       id: short(customer.customerId),
       initial: name.charAt(0).toUpperCase(),
       meta: [
-        input.onboarding?.ip?.country ?? null,
+        onboarding?.ip?.country ?? null,
         `Joined ${day(customer.createdAt)}`,
+        open ? onboardingStarted(input) : null,
       ].filter((item): item is string => Boolean(item)),
     },
     kpis: [
       {
         label: "Sign-in",
-        value: input.signIn ?? "Demo",
-        unit: input.signIn ? "Didit Authentication" : "Alder sign-in",
+        value: input.signIn ?? "Alder form",
+        unit: input.signIn ? "via Didit" : undefined,
       },
       {
         label: "Payments",
@@ -429,9 +480,9 @@ function personPage(input: AlderConsoleInput): RecordPage | null {
         ? {
             kind: "identity",
             title: "Identity",
-            link: short(input.onboarding!.sessionId),
-            document: input.onboarding?.documentType
-              ? `${(input.onboarding.documentCountry ?? "").toUpperCase()} · ${input.onboarding.documentType.toUpperCase()}`
+            link: short(onboarding!.sessionId),
+            document: onboarding?.documentType
+              ? `${(onboarding.documentCountry ?? "").toUpperCase()} · ${onboarding.documentType.toUpperCase()}`
               : "KYC",
             selfie: "Selfie · liveness",
             checks,
@@ -439,7 +490,9 @@ function personPage(input: AlderConsoleInput): RecordPage | null {
         : {
             kind: "note",
             tone: "info",
-            text: `${name} has not finished the identity check yet.`,
+            text: open
+              ? `${name}'s identity check is in progress. ${onboardingStarted(input)}.`
+              : `${name} has not finished the identity check yet.`,
           },
       {
         kind: "timeline",
@@ -472,10 +525,11 @@ function personPage(input: AlderConsoleInput): RecordPage | null {
 }
 
 function verificationPage(input: AlderConsoleInput): RecordPage | null {
-  const session = input.onboarding;
+  const session = onboardingOf(input);
 
   if (!session || !input.customer) return null;
   const checks = identityChecks(session);
+  const open = isOpenSession(session.status);
 
   return {
     kind: "verification",
@@ -485,7 +539,12 @@ function verificationPage(input: AlderConsoleInput): RecordPage | null {
       title: "KYC + AML onboarding",
       tag: statusTag(session.status),
       id: short(session.sessionId),
-      meta: [nameOf(input), "ID, liveness, face match and AML screening"],
+      meta: [
+        nameOf(input),
+        open
+          ? onboardingStarted(input)
+          : "ID, liveness, face match and AML screening",
+      ],
     },
     kpis: [],
     blocks: [
@@ -494,7 +553,15 @@ function verificationPage(input: AlderConsoleInput): RecordPage | null {
         title: "Checks",
         checks: checks.length
           ? checks
-          : [{ label: "Status", value: session.status, ok: null }],
+          : [
+              {
+                label: "Status",
+                value: open
+                  ? `${IN_PROGRESS.label} · ${onboardingStarted(input)}`
+                  : statusTag(session.status).label,
+                ok: null,
+              },
+            ],
       },
       ...(session.ip
         ? [
@@ -515,6 +582,11 @@ function verificationPage(input: AlderConsoleInput): RecordPage | null {
       tag: statusTag(session.status),
       pairs: [
         ["Workflow", "KYC + AML"],
+        ...(open
+          ? ([
+              ["Started", onboardingStarted(input).replace(/^Started /, "")],
+            ] as [string, string][])
+          : []),
         ["Vendor data", input.customer.customerId],
       ],
     },
@@ -522,7 +594,7 @@ function verificationPage(input: AlderConsoleInput): RecordPage | null {
     nav: [
       {
         label: "All verifications",
-        count: [input.onboarding, input.stepUp].filter(Boolean).length,
+        count: [session, input.stepUp].filter(Boolean).length,
       },
       { label: "Needs review" },
     ],

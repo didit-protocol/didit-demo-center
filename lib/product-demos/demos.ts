@@ -16,7 +16,11 @@ import {
 import { pick } from "../didit/config";
 import { alder, auroraPlay, kestrel } from "../didit/demos";
 
-import { type ProductDemo, defineProductDemo } from "./define";
+import {
+  EXAMPLE_WORKFLOW_ID,
+  type ProductDemo,
+  defineProductDemo,
+} from "./define";
 
 export const coreKyc = defineProductDemo({
   id: "core-kyc",
@@ -653,7 +657,7 @@ export const businessVerification = defineProductDemo({
     request: {
       method: "POST",
       path: "/v3/session/",
-      body: '{ "workflow_id": "<your KYB workflow>", "vendor_data": "northwind", "expected_details": { "company_name": "Northwind Trading B.V.", "registry_country": "NL" } }',
+      body: `{ "workflow_id": "${EXAMPLE_WORKFLOW_ID}", "vendor_data": "northwind", "expected_details": { "company_name": "Northwind Trading B.V.", "registry_country": "NL" } }`,
     },
     response:
       '{ "session_kind": "business", "status": "Approved", "registry": { "status": "Active" } }',

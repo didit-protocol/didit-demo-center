@@ -129,7 +129,8 @@ test("the console view's Business page: registry, key people and the linked shop
   assert.deepEqual(people.rows[0], {
     name: "Alice Chen",
     role: "CEO · 35% owner",
-    status: { label: "Not started", tone: "neu" },
+    // Their own ID check is open: in progress, never "Not started".
+    status: { label: "In progress", tone: "rev" },
   });
   assert.equal(page.linked[0].title, "Ruiz Vintage Outlet");
   assert.equal(page.linked[0].detail, "Same device · payouts paused");
@@ -140,6 +141,12 @@ test("the console view's Business page: registry, key people and the linked shop
 
   assert.equal(order.head.title, "2,900.00 EUR");
   assert.equal(order.blocks[0].kind, "note");
+  // Words, never Didit's raw session status.
+  assert.equal(
+    order.blocks[0].text,
+    "Waiting for the buyer's age check. The order goes through once it is approved.",
+  );
+  assert.doesNotMatch(JSON.stringify(order), /Not Started|Not started/);
   assert.equal(order.blocks[1].rows[0].title, "Orders of 1,000 EUR or more");
 });
 
@@ -159,4 +166,53 @@ test("before any shop, every console tab says what to do instead of inventing a 
     assert.ok(tab.empty, tab.id);
   }
   assert.deepEqual(keyPeople({ ...kyb("Approved"), people: [] }), []);
+});
+
+test("an open KYB reads as in progress with its start time on the Business and Verification pages", () => {
+  const consoleInput = (summary) => ({
+    shops: [{ id: "northmarket-user_1", shop: "Ruiz Vintage", company: "Ruiz Vintage", kyb: summary }],
+    transactions: [],
+    events: [],
+    email: null,
+    device: null,
+    signIn: null,
+    now: Date.UTC(2026, 9, 27),
+  });
+
+  for (const status of ["Not Started", "In Progress"]) {
+    const summary = kyb(status);
+    // Didit fills each step only as the session reaches it.
+    summary.steps = [
+      { key: "registry", status: "Approved" },
+      { key: "people", status: "Not Started" },
+      { key: "aml", status: "" },
+    ];
+    const tabs = northmarketConsole(consoleInput(summary));
+    const business = tabs.find((tab) => tab.id === "business").page;
+    const verification = tabs.find((tab) => tab.id === "verification").page;
+
+    assert.deepEqual(business.head.tag, { label: "In progress", tone: "rev" }, status);
+    assert.ok(business.head.meta.some((item) => /^KYB started /.test(item)), status);
+    // A session exists: the page, never the "No verification yet" empty state.
+    assert.ok(verification, status);
+    assert.deepEqual(verification.head.tag, { label: "In progress", tone: "rev" });
+    assert.deepEqual(verification.side.tag, { label: "In progress", tone: "rev" });
+    assert.ok(verification.head.meta.some((item) => /^Started /.test(item)), status);
+    const checks = verification.blocks.find((block) => block.kind === "checks").checks;
+
+    for (const check of checks) {
+      assert.equal(check.value, "In progress", `${status} ${check.label}`);
+      assert.notEqual(check.ok, true, `${status} ${check.label}`);
+    }
+    assert.doesNotMatch(JSON.stringify([business, verification]), /Not started/i);
+  }
+
+  // Once Didit decides, the steps read as they are.
+  const approved = kyb("Approved");
+
+  approved.steps = [{ key: "registry", status: "Approved" }];
+  const decided = northmarketConsole(consoleInput(approved)).find((tab) => tab.id === "verification").page;
+
+  assert.deepEqual(decided.blocks[0].checks[0], { label: "Company registry", value: "Approved", ok: true });
+  assert.equal(decided.head.meta[1], "Registry, owners, documents");
 });

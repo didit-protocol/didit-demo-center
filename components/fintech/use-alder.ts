@@ -46,6 +46,8 @@ export interface CheckState {
   sessionId: string;
   url: string;
   summary: SessionSummary | null;
+  /** When Alder created the session; older saved states have none. */
+  startedAt?: number;
 }
 
 export interface StepUpState extends CheckState {
@@ -491,6 +493,7 @@ export function useAlder(
           sessionId: session.sessionId,
           url: session.url,
           summary: null,
+          startedAt: Date.now(),
         },
       }));
       openHosted("onboarding", session.url);

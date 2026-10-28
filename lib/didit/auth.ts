@@ -33,6 +33,22 @@ export function authEnv(): Record<string, string | undefined> {
   };
 }
 
+/** The `exp` of a JWT-shaped access token in ms, or null for an opaque one. */
+export function tokenExpiry(token: string | null | undefined): number | null {
+  const payload = token?.split(".")[1];
+
+  if (!payload) return null;
+  try {
+    const json = JSON.parse(
+      Buffer.from(payload, "base64url").toString("utf8"),
+    ) as { exp?: unknown };
+
+    return typeof json.exp === "number" ? json.exp * 1000 : null;
+  } catch {
+    return null;
+  }
+}
+
 export interface Visitor {
   /** The Didit Authentication user id (`sub`). */
   userId: string;

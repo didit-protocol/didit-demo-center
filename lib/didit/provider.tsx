@@ -9,6 +9,7 @@ import { useAuth } from "@didit-protocol/auth-nextjs";
 
 import { readDevice } from "./browser";
 import { DEMOS } from "./demos";
+import { type SessionState, keepSession } from "./session-keeper";
 
 /**
  * The browser side of Authentication and signals, once for every page.
@@ -62,6 +63,11 @@ const DiditContext = React.createContext<DiditContextValue>({
   refreshToken: () => undefined,
 });
 
+interface EventsToken {
+  token: string;
+  baseUrl: string;
+}
+
 export const useDidit = () => React.useContext(DiditContext);
 
 /** Set before a hosted sign-up redirect, so the return is reported as one. */
@@ -79,6 +85,38 @@ function AuthBridge({ onChange }: { onChange: (view: AuthView) => void }) {
       ? "signed-in"
       : "signed-out";
   const session = auth.session;
+
+  // Renew the access token before it expires; a failed renewal signs the
+  // visitor out, so the page never looks signed in while routes answer 401.
+  React.useEffect(() => {
+    if (status !== "signed-in") return;
+    const session = (method: "GET" | "POST") => async () => {
+      const response = await fetch("/api/didit/session", {
+        method,
+        cache: "no-store",
+      });
+
+      if (!response.ok) throw new Error(`session ${response.status}`);
+
+      return (await response.json()) as SessionState;
+    };
+
+    return keepSession({
+      read: session("GET"),
+      renew: session("POST"),
+      onSignedOut: () => {
+        const here = `${window.location.pathname}${window.location.search}`;
+
+        auth
+          .signOut({ redirectUrl: here })
+          .catch(() => window.location.reload());
+      },
+      now: Date.now,
+      setTimer: (run, ms) => window.setTimeout(run, ms),
+      clearTimer: (timer) => window.clearTimeout(timer as number),
+    });
+    // `auth` is a new object every render; one keeper per session.
+  }, [status, session?.id]);
 
   React.useEffect(() => {
     onChange({
@@ -112,7 +150,7 @@ export function DiditClientProvider({
   const pathname = usePathname();
   const [auth, setAuth] = React.useState<AuthView | null>(null);
   const [device, setDevice] = React.useState<DeviceSummary | null>(null);
-  const [tokens, setTokens] = React.useState<Record<string, string>>({});
+  const [tokens, setTokens] = React.useState<Record<string, EventsToken>>({});
   const pending = React.useRef<Record<string, DiditEvent[]>>({});
   const asked = React.useRef<Set<string>>(new Set());
 
@@ -133,12 +171,17 @@ export function DiditClientProvider({
     };
   }, []);
 
-  const send = React.useCallback((token: string, events: DiditEvent[]) => {
+  const send = React.useCallback((token: EventsToken, events: DiditEvent[]) => {
     if (!events.length) return;
     import("@didit-protocol/signals").then(({ submitEvent }) => {
       for (const event of events) {
         try {
-          submitEvent({ monitoringToken: token, event });
+          // The token's own API: staging events go to the staging API.
+          submitEvent({
+            monitoringToken: token.token,
+            event,
+            baseUrl: token.baseUrl,
+          });
         } catch {
           // A malformed event is the demo's bug, never the visitor's problem.
         }
@@ -154,9 +197,9 @@ export function DiditClientProvider({
         body: JSON.stringify({ demo }),
       })
         .then((response) => (response.ok ? response.json() : null))
-        .then((data: { token?: string } | null) => {
-          if (!data?.token) return;
-          const token = data.token;
+        .then((data: { token?: string; baseUrl?: string } | null) => {
+          if (!data?.token || !data.baseUrl) return;
+          const token = { token: data.token, baseUrl: data.baseUrl };
 
           setTokens((current) => ({ ...current, [demo]: token }));
           send(token, pending.current[demo] ?? []);

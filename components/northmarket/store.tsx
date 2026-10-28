@@ -367,6 +367,8 @@ export interface HubProps {
   company: string;
   /** The KYB's status, null before it starts. */
   kyb: string | null;
+  /** False where the seller KYB workflow is not set up: the check cannot start. */
+  kybAvailable: boolean;
   canContinue: boolean;
   /** The next key person whose own ID check is still open. */
   owner: string | null;
@@ -380,6 +382,7 @@ export function HubScreen({
   shop,
   company,
   kyb,
+  kybAvailable,
   canContinue,
   owner,
   busy,
@@ -390,6 +393,7 @@ export function HubScreen({
   const status = (kyb ?? "").toLowerCase();
   const approved = status === "approved";
   const declined = status === "declined";
+  const unavailable = !kyb && !kybAvailable;
 
   return (
     <>
@@ -447,12 +451,17 @@ export function HubScreen({
               : owner
                 ? "Each owner gets their own link. Payouts start once every check is approved."
                 : `We check ${company} in the company registry, then each owner confirms their ID. Payouts start once it is approved.`}
+            {unavailable ? (
+              <em className="nm-banner-off" data-testid="nm-kyb-off">
+                Business verification is not available here.
+              </em>
+            ) : null}
           </span>
           {!declined && (!kyb || canContinue || owner) ? (
             <button
               className="nm-btn is-ink"
               data-callout="verify"
-              disabled={busy}
+              disabled={busy || unavailable}
               type="button"
               onClick={onVerify}
             >
@@ -730,6 +739,11 @@ export interface OutletProps {
   shop: string;
   previous: string;
   signup: TransactionSummary | null;
+  /** The sign-up check is running. */
+  checking: boolean;
+  /** The sign-up check did not go through: offer it again. */
+  failed: boolean;
+  onRetry(): void;
   device: string | null;
   firstVisit: boolean | null;
   opened: string;
@@ -739,11 +753,15 @@ export function OutletScreen({
   shop,
   previous,
   signup,
+  checking,
+  failed,
+  onRetry,
   device,
   firstVisit,
   opened,
 }: OutletProps) {
   const paused = signup !== null && signup.status !== "APPROVED";
+  const retry = !signup && failed && !checking;
 
   return (
     <>
@@ -767,6 +785,17 @@ export function OutletScreen({
             {` ${previous}`}. Our team is reviewing it. Your listings stay
             online.
           </span>
+        </div>
+      ) : retry ? (
+        <div className="nm-banner is-hold" data-testid="nm-paused">
+          <AlertTriangle aria-hidden className="text-[#9A5200]" size={22} />
+          <span>
+            <b>The sign-up check did not finish</b>
+            Didit could not check the new shop&apos;s sign-up. Try it again.
+          </span>
+          <button className="nm-btn is-ink" type="button" onClick={onRetry}>
+            Try again
+          </button>
         </div>
       ) : (
         <div className="nm-banner is-hold" data-testid="nm-paused">
@@ -819,14 +848,20 @@ export function OutletScreen({
                   ? signup.rules[0]
                     ? `Rule: ${ruleName(signup.rules[0].title).toLowerCase()}`
                     : "No rule matched"
-                  : "Waiting for Didit"}
+                  : retry
+                    ? "Not checked yet"
+                    : "Waiting for Didit"}
               </span>
             </span>
-            <span className={`nm-badge ${paused ? "is-no" : "is-ok"}`}>
+            <span
+              className={`nm-badge ${paused ? "is-no" : signup ? "is-ok" : "is-hold"}`}
+            >
               {signup
                 ? signup.status.charAt(0) +
                   signup.status.slice(1).toLowerCase().replace(/_/g, " ")
-                : "Pending"}
+                : retry
+                  ? "Not checked"
+                  : "Pending"}
             </span>
           </div>
         </section>
