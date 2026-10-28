@@ -17,6 +17,7 @@
 .hub-links a:hover, .hub-links a[aria-current="page"], .hub-docs:hover { color: var(--c-heading); }
 .hub-links a[aria-current="page"] { font-weight: 500; }
 .hub-nav-r { margin-left: auto; display: inline-flex; align-items: center; gap: 10px; }
+.hub-menu { display: none; }
 .hub-docs { display: inline-flex; align-items: center; gap: 6px; margin-right: 10px; font-size: 15px; line-height: 20px; color: var(--c-text-subtle); white-space: nowrap; }
 
 /* hero: on the DS v4 wash (dd-wash) */
@@ -92,11 +93,13 @@
 /* build your own */
 .hub-band { border-radius: var(--radius-3xl); background: var(--c-plate); border: 1px solid var(--c-plate-line); padding: 52px 48px 44px; display: grid;
             grid-template-columns: minmax(0, 1fr) 560px; gap: 48px; align-items: center; }
+.hub-band > * { min-width: 0; }
 .hub-band-x .dd-h2 { max-width: 560px; }
 .hub-band-x .dd-lede { margin-top: 18px; max-width: 560px; }
 .hub-band-x .hub-cta { margin-top: 28px; }
 .hub-code { margin: 0; padding: 22px 18px; border-radius: 18px; background: var(--code-bg); color: var(--code-text); font-family: var(--dd-font); font-size: 13px; line-height: 21px;
-            white-space: pre; overflow-x: auto; }
+            white-space: pre; overflow-x: auto; min-width: 0; max-width: 100%; }
+.hub-code:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 2px; }
 .hub-code .c { color: var(--code-subtle); }
 .hub-code .k { color: var(--code-key); }
 .hub-code .s { color: var(--code-str); }
@@ -110,6 +113,7 @@
 }
 @media (max-width: 900px) {
   .hub-links { display: none; }
+  .hub-menu { display: block; }
   .hub-demos, .hub-layer { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 640px) {

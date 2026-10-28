@@ -119,6 +119,22 @@ test("without the KYB workflow id only the business verification is off", async 
   assert.equal(reply.body.code, "kyb_workflow_missing");
 });
 
+test("an id that is not a workflow uuid turns the business verification off too, and the page knows it", async () => {
+  for (const kyb of ["", "  ", "todo", "811d80dd-491e-4799-b905"]) {
+    assert.equal(availability(makeEnv({ workflows: { kyb, age: "a", person: "p" } })).kyb, false, kyb);
+  }
+  assert.equal(
+    availability(makeEnv({ workflows: { kyb: "811d80dd-491e-4799-b905-2c8007c9df78", age: "a", person: "p" } })).kyb,
+    true,
+  );
+
+  // The state route carries it, so "Verify my business" is off before a click.
+  const state = await handleState(makeEnv({ workflows: { kyb: "", age: "a", person: "p" } }), null);
+
+  assert.equal(state.status, 200);
+  assert.deepEqual(state.body.availability, { transactions: true, kyb: false });
+});
+
 test("opening a shop validates the form and caps shops per browser", async () => {
   const env = makeEnv();
 

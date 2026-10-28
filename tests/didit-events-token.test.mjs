@@ -40,3 +40,16 @@ test("the token comes with the API it belongs to (staging here)", async () => {
   assert.equal(body.baseUrl, "https://verification.staging.didit.me");
   assert.ok(calls[0].startsWith("https://verification.staging.didit.me/"));
 });
+
+test("a visitor nobody signed in gets no token, without an error status", async () => {
+  const response = await route.POST(
+    new NextRequest("http://localhost:3000/api/didit/events-token", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ demo: "aurora-play" }),
+    }),
+  );
+
+  assert.equal(response.status, 200);
+  assert.deepEqual(await response.json(), { token: null, signedIn: false });
+});

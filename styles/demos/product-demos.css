@@ -56,7 +56,21 @@
 .pd-status.is-line::before { display: none; }
 
 /* the top bar */
-.pd-top { border-bottom: 1px solid var(--pd-line); background: #FFFFFF; }
+.pd-top { position: relative; z-index: 20; border-bottom: 1px solid var(--pd-line); background: #FFFFFF; }
+.pd-menu { display: none; }
+
+/* the phone menu (components/hub/mobile-nav.tsx), on the hub and the product demo pages: the panel hangs under the bar */
+.dc-menu-btn { width: 40px; height: 40px; display: grid; place-items: center; border: 1px solid var(--c-line, #EDEDED); border-radius: 999px; background: #FFFFFF;
+  color: var(--c-heading, #1A1A1A); cursor: pointer; }
+.dc-menu-btn:hover { background: #F6F6F7; }
+.dc-menu-btn:focus-visible, .dc-menu-panel a:focus-visible { outline: 2px solid #2567FF; outline-offset: 2px; }
+.dc-menu-panel { position: absolute; left: 0; right: 0; top: 100%; padding: 4px 16px 12px; background: #FFFFFF; border-bottom: 1px solid var(--c-line, #EDEDED);
+  box-shadow: 0 16px 32px -16px rgba(10, 10, 10, .18); }
+.dc-menu-panel[hidden] { display: none; }
+.dc-menu-panel ul { margin: 0; padding: 0; list-style: none; }
+.dc-menu-panel li + li { border-top: 1px solid var(--c-line, #EDEDED); }
+.dc-menu-panel a { display: flex; align-items: center; gap: 6px; min-height: 48px; font-size: 16px; line-height: 22px; color: var(--c-heading, #1A1A1A); text-decoration: none; }
+.dc-menu-panel a[aria-current="page"] { font-weight: 500; }
 .pd-top-in { max-width: 1296px; margin: 0 auto; height: 70px; padding: 0 24px; display: flex; align-items: center; gap: 42px; }
 .pd-brand { display: inline-flex; align-items: center; gap: 14px; }
 .pd-logo { height: 24px; width: auto; display: block; }
@@ -227,6 +241,7 @@
 @media (max-width: 767px) {
   .pd-top-in { height: 56px; padding: 0 16px; gap: 12px; }
   .pd-links, .pd-docs, .pd-top-r .is-sec { display: none; }
+  .pd-menu { display: block; }
   .pd-logo { height: 20px; }
   .pd-main { padding: 16px 16px 64px; }
   .pd-eyebrow { margin-top: 28px !important; }

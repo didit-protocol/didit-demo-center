@@ -32,7 +32,9 @@ export async function POST(request: NextRequest) {
       ? await readPlayer(request)
       : null;
 
-  if (!vendorData) return reply({ error: "Nobody is signed in." }, 401);
+  // Nobody to tie events to yet: not an error, the page asks again after
+  // sign-up (a 401 here would log in the visitor's console on every load).
+  if (!vendorData) return reply({ token: null, signedIn: false });
 
   const result = await didit.events.sdkToken({ vendorData });
   const token = result.data?.monitoring_token;

@@ -10,9 +10,10 @@ import type {
 } from "../didit/console";
 import type { LiveEvent } from "../didit/live";
 
+import { IN_PROGRESS, isOpenSession, startedLabel } from "../didit/console";
+
 import { ageText, ruleName } from "./live-events";
 import { KYC_THRESHOLD, formatMoney } from "./policy";
-import { IN_PROGRESS, isOpenSession, startedLabel } from "../didit/console";
 
 /**
  * Aurora Play's console view: the Person, Transaction, Verification and
@@ -146,7 +147,11 @@ function identityChecks(input: AuroraConsoleInput): Check[] {
 
   // An open ID check has no results yet: one row, not a verdict.
   if (kyc && isOpenSession(kyc.status)) {
-    checks.push({ label: "ID check", value: inProgress(input.kycCheck), ok: null });
+    checks.push({
+      label: "ID check",
+      value: inProgress(input.kycCheck),
+      ok: null,
+    });
   } else if (kyc) {
     const face = percent(kyc.faceMatch);
     const live = percent(kyc.liveness);

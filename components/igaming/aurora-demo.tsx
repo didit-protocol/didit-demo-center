@@ -717,10 +717,10 @@ export function AuroraDemo() {
           if (nav === "promotions") claim();
         }}
         onResponsible={() => requireAccount(() => setModal("responsible"))}
-        onSignOut={() => void signOut()}
         onSignIn={() =>
           authOn ? void auth?.signIn("/igaming") : setModal("signup")
         }
+        onSignOut={() => void signOut()}
         onSignUp={() => setModal("signup")}
         onTerms={() =>
           setToast({

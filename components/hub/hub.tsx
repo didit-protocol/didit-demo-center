@@ -3,6 +3,8 @@ import type { Tone } from "@/lib/didit/live";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Fingerprint } from "lucide-react";
 
+import { MobileNav } from "./mobile-nav";
+
 import { DiditRing, TONE_CLASS, ToneIcon } from "@/components/didit-live/icons";
 import { ProductDemosSection } from "@/components/product-demos/product-demos-section";
 import { TONE_LABEL } from "@/lib/didit/live";
@@ -48,16 +50,11 @@ interface FeedEvent {
   at: string;
 }
 
-/** A still of the Didit live feed, as the demos show it. */
-function FeedStill({
-  events,
-  person,
-  foot = false,
-}: {
-  events: FeedEvent[];
-  person: string;
-  foot?: boolean;
-}) {
+/**
+ * A still of the Didit live feed, as the demos show it. A picture, so it
+ * leaves out the feed's buttons rather than drawing ones that do nothing.
+ */
+function FeedStill({ events, person }: { events: FeedEvent[]; person: string }) {
   return (
     <div aria-hidden className="lv dd hub-feed">
       <div className="lv-head">
@@ -84,14 +81,6 @@ function FeedStill({
           </div>
         ))}
       </div>
-      {foot ? (
-        <div className="lv-foot">
-          <span className="dd-btn dd-btn-primary dd-btn-sm">
-            Open the console view
-          </span>
-          <span className="dd-btn dd-btn-secondary dd-btn-sm">Code</span>
-        </div>
-      ) : null}
     </div>
   );
 }
@@ -156,6 +145,20 @@ export function Hub() {
             >
               Start free
             </a>
+            <MobileNav
+              className="hub-menu"
+              links={[
+                { label: "Industry demos", href: "#demos", current: true },
+                { label: "Product demos", href: "#product-demos" },
+                { label: "Build your flow", href: "#integrate" },
+                {
+                  label: "Docs",
+                  href: siteConfig.links.docs,
+                  external: true,
+                },
+                { label: "Sign in", href: siteConfig.links.console },
+              ]}
+            />
           </span>
         </div>
       </header>
@@ -198,7 +201,6 @@ export function Hub() {
             <Window className="w1" shot="shot-kestrel-home" />
             <Window className="w2" shot="shot-aurora-home" />
             <FeedStill
-              foot
               events={[
                 {
                   tone: "hold",
@@ -430,12 +432,18 @@ export function Hub() {
                 </a>
               </span>
             </div>
-            <pre aria-label="Install the three packages" className="hub-code">
+            {/* Scrolls inside its box on a phone; focusable so a keyboard can scroll it. */}
+            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+            <pre
+              aria-label="Install the three packages"
+              className="hub-code"
+              tabIndex={0}
+            >
               <span className="c"># what every demo here runs on</span>
               {"\n"}npm install{" "}
+              <span className="s">@didit-protocol/auth-nextjs</span> \{"\n  "}
               <span className="s">
-                @didit-protocol/auth-nextjs @didit-protocol/signals
-                @didit-protocol/sdk-web
+                @didit-protocol/signals @didit-protocol/sdk-web
               </span>
               {"\n\n"}
               <span className="k">import</span> {"{ DiditAuth }"}{" "}

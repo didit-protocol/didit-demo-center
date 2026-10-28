@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 import { completeHostedFlow, mockAurora } from "./aurora-mocks";
+import { collectOwnErrors, expectNoHorizontalScroll } from "./page-health";
 
 /**
  * Aurora Play (/igaming) end to end, on desktop and on a phone: the five
@@ -187,4 +188,80 @@ test("a second account on the same device cannot take the welcome offer again", 
   await offer.getByRole("button", { name: "Back to the lobby" }).click();
   await openFeed(page);
   await expect(live(page).getByText("Bonus held for review")).toBeVisible();
+});
+
+test("after sign-up the header shows the player and Sign out, never Log in or Sign up", async ({
+  page,
+}) => {
+  await mockAurora(page);
+  await page.goto("/igaming");
+  const top = app(page);
+  const account = top.getByRole("button", { name: "Account: Sofia Marin" });
+
+  await top.getByRole("button", { name: "Sign up", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Create your account" });
+
+  await dialog.getByLabel("Full name").fill("Sofia Marin");
+  await dialog.getByLabel("Email").fill("sofia.marin@example.com");
+  await dialog.getByLabel("Date of birth").fill("1999-03-14");
+  await dialog.getByRole("button", { name: "Create account" }).click();
+
+  // Signed in, the age check still open: the player, no balance yet.
+  await expect(account).toBeVisible();
+  await expect(
+    top.getByRole("button", { name: "Sign up", exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    top.getByRole("button", { name: "Log in", exact: true }),
+  ).toHaveCount(0);
+  await expect(top.getByTestId("aurora-balance")).toHaveCount(0);
+
+  await completeHostedFlow(page);
+  await expect(top.getByTestId("aurora-balance")).toBeVisible();
+  await expect(
+    top.getByRole("button", { name: "Sign up", exact: true }),
+  ).toHaveCount(0);
+  await expect(
+    top.getByRole("button", { name: "Log in", exact: true }),
+  ).toHaveCount(0);
+
+  // On a phone the top bar keeps the balance; the menu is on a computer.
+  if (isPhone(page)) return;
+  await account.click();
+  const menu = top.getByRole("menu", { name: "Account" });
+
+  await expect(menu).toContainText("Sofia Marin");
+  await expect(menu).toContainText("sofia.marin@example.com");
+  await menu.getByRole("menuitem", { name: "Sign out" }).click();
+
+  // Signed out: the casino clears its player cookie and shows the lobby.
+  await expect(
+    top.getByRole("button", { name: "Sign up", exact: true }),
+  ).toBeVisible();
+  await expect(account).toHaveCount(0);
+  await page.reload();
+  await expect(
+    top.getByRole("button", { name: "Sign up", exact: true }),
+  ).toBeVisible();
+  await expect(top.getByTestId("aurora-balance")).toHaveCount(0);
+});
+
+test("the signed-in lobby loads with no errors and no horizontal scroll", async ({
+  page,
+}) => {
+  await mockAurora(page);
+  await page.goto("/igaming");
+  await app(page).getByRole("button", { name: "Sign up", exact: true }).click();
+  await signUp(page, "Sofia Marin", "sofia.marin@example.com");
+
+  // The signed-in home, loaded fresh.
+  const errors = collectOwnErrors(page);
+
+  await page.reload();
+  await expect(app(page).getByTestId("aurora-balance")).toBeVisible();
+  await expect(
+    app(page).getByRole("button", { name: "Account: Sofia Marin" }),
+  ).toBeAttached();
+  await expectNoHorizontalScroll(page);
+  expect(errors).toEqual([]);
 });
