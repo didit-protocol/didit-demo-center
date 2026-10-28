@@ -4,13 +4,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import {
-  deviceFingerprint,
   isMarketplaceTransaction,
   subjectVendor,
-  summarizeDevice,
   summarizeKyb,
-  summarizeMemberships,
-  summarizeNotes,
   summarizeTransaction,
 } from "../lib/marketplace/summaries.ts";
 
@@ -76,60 +72,6 @@ test("the subject is the APPLICANT party, not the counterparty shop", () => {
   );
   assert.ok(isMarketplaceTransaction(raw));
   assert.ok(!isMarketplaceTransaction({ ...raw, props: { demo_app: "fintech" } }));
-});
-
-test("the device summary shortens the device id and hides the IP host", () => {
-  const raw = fixture("transaction-signup-held");
-  const full = deviceFingerprint(raw);
-  const device = summarizeDevice(raw);
-
-  assert.equal(full, "heORv5s26Ljg7zJNnFuJvg");
-  assert.equal(device.deviceId, "heOR…uJvg");
-  assert.match(device.ip, /\.x$/);
-  assert.equal(device.isDataCenter, true);
-  assert.ok(!JSON.stringify(device).includes(full));
-});
-
-test("both recorded sign-ups came from the same device", () => {
-  assert.equal(
-    deviceFingerprint(fixture("transaction-signup-approved")),
-    deviceFingerprint(fixture("transaction-signup-held")),
-  );
-});
-
-test("network memberships and notes reduce to what the operator view shows", () => {
-  assert.deepEqual(summarizeMemberships(fixture("party-networks-empty")), []);
-  assert.deepEqual(
-    summarizeMemberships({
-      results: [
-        {
-          network: {
-            uuid: "1b2c3d4e-0000-4000-8000-000000000000",
-            network_id: "N-0042",
-            name: "Shared IP cluster",
-            status: "active",
-            risk: { score: 71, band: "high" },
-            member_counts: { users: 3, businesses: 2 },
-          },
-          signal_types: ["IP_ADDRESS"],
-        },
-      ],
-    }),
-    [
-      {
-        id: "1b2c3d4e-0000-4000-8000-000000000000",
-        number: "N-0042",
-        name: "Shared IP cluster",
-        status: "active",
-        riskBand: "high",
-        signalTypes: ["IP_ADDRESS"],
-        members: 5,
-      },
-    ],
-  );
-  assert.deepEqual(summarizeNotes(fixture("transaction-notes-held")), [
-    "Another shop signed up from this device in the last 30 days.",
-  ]);
 });
 
 test("the KYB summary keeps the business picture and drops personal data", () => {

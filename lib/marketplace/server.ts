@@ -17,12 +17,7 @@
 import type { ConsoleTarget } from "./console-links.ts";
 import type { MarketWorkflows } from "./config.ts";
 import type { MarketState, SellerRecord } from "./state.ts";
-import type {
-  DeviceSummary,
-  KybSummary,
-  NetworkMembership,
-  TransactionSummary,
-} from "./summaries.ts";
+import type { KybSummary, TransactionSummary } from "./summaries.ts";
 
 import { callDidit } from "../didit/server.ts";
 
@@ -38,16 +33,11 @@ import {
   withSeller,
   withTransaction,
 } from "./state.ts";
-import { kybDecidable, payoutsUnlocked } from "./status.ts";
+import { kybRestartable, payoutsUnlocked } from "./status.ts";
 import {
-  deviceFingerprint,
   isMarketplaceTransaction,
-  subjectParty,
   subjectVendor,
-  summarizeDevice,
   summarizeKyb,
-  summarizeMemberships,
-  summarizeNotes,
   summarizeTransaction,
 } from "./summaries.ts";
 
@@ -594,7 +584,7 @@ export async function handleStartKyb(
   sellerId: string,
   options: { origin: string | null; fallbackOrigin: string; language: string },
 ): Promise<Reply> {
-  const blocked = notLive(env) ?? kybNotLive(env);
+  const blocked = notLive(env) ?? signedOut(env) ?? kybNotLive(env);
 
   if (blocked) return blocked;
 
@@ -613,12 +603,11 @@ export async function handleStartKyb(
         body: { sessionId: seller.sid, url: decision.kyb.url, resumed: true },
       };
     }
-    if (
-      decision.kyb &&
-      !["declined", "expired", "abandoned", "kyc expired"].includes(
-        decision.kyb.status.toLowerCase(),
-      )
-    ) {
+    if (!decision.kyb) {
+      // Unknown is not "finished": never open a second session on a guess.
+      return fail(502, decision.error ?? "KYB unavailable.");
+    }
+    if (!kybRestartable(decision.kyb.status)) {
       return fail(
         409,
         "This business verification is already submitted. Follow it in the status card.",
@@ -682,76 +671,7 @@ export async function handleKyb(
   return { status: 200, body: { kyb: decision.kyb } };
 }
 
-/**
- * POST /api/marketplace/sellers/{id}/kyb/decision - an analyst approves or
- * declines a KYB that is In Review, through the real status endpoint.
- */
-export async function handleDecideKyb(
-  env: MarketEnv,
-  state: MarketState | null,
-  sellerId: string,
-  input: unknown,
-): Promise<Reply> {
-  const blocked = notLive(env);
-
-  if (blocked) return blocked;
-
-  const seller = state?.sellers.find((s) => s.id === sellerId);
-
-  if (!seller?.sid) return fail(404, "That shop has no business verification.");
-
-  const decision = isRecord(input) ? input.status : null;
-
-  if (decision !== "Approved" && decision !== "Declined") {
-    return fail(400, "Decide Approved or Declined.");
-  }
-
-  const before = await readDecision(env, seller.sid);
-
-  if (!before.kyb) return fail(502, before.error ?? "KYB unavailable.");
-  if (!kybDecidable(before.kyb.status)) {
-    return fail(
-      409,
-      `Only a verification that is In Review can be decided. This one is ${before.kyb.status || "not finished"}.`,
-      "not_in_review",
-    );
-  }
-
-  const updated = await didit(
-    env,
-    "PATCH",
-    `/v3/session/${seller.sid}/update-status/`,
-    {
-      new_status: decision,
-      comment: `Decided from the ${BRAND.name} operator view (Didit demo centre).`,
-    },
-  );
-
-  if (!updated.ok) return upstream(updated, "The decision could not be saved.");
-
-  const after = await readDecision(env, seller.sid);
-
-  return { status: 200, body: { kyb: after.kyb ?? before.kyb } };
-}
-
-/* ── Operator view ───────────────────────────────────────────────── */
-
-export interface OperatorView {
-  transaction: TransactionSummary;
-  device: DeviceSummary;
-  notes: string[];
-  /** `null` when the lookup could not run (no console ids, no party). */
-  networks: NetworkMembership[] | null;
-  networkNote: string | null;
-  /** Other shops opened in THIS browser that used the same device. */
-  sharedWith: { shop: string; company: string }[];
-  links: {
-    transaction: ConsoleLink;
-    transactions: ConsoleLink;
-    kyb: ConsoleLink | null;
-    networks: ConsoleLink[];
-  };
-}
+/* ── Console links ───────────────────────────────────────────────── */
 
 const consoleIdCache = new Map<string, { orgId: string; appId: string }>();
 
@@ -795,99 +715,4 @@ export async function resolveConsoleIds(
 /** For tests: forget the ids read from the API. */
 export function clearConsoleIdCache() {
   consoleIdCache.clear();
-}
-
-/** GET /api/marketplace/transactions/{uuid}/operator - the analyst's view. */
-export async function handleOperator(
-  env: MarketEnv,
-  state: MarketState | null,
-  uuid: string,
-): Promise<Reply> {
-  const blocked = notLive(env);
-
-  if (blocked) return blocked;
-  if (!state || !ownsTransaction(state, uuid)) {
-    return fail(404, "That transaction does not belong to this browser.");
-  }
-
-  const { raw, result } = await readTransaction(env, uuid);
-
-  if (!raw) return upstream(result, "The transaction could not be read.");
-
-  const ids = await resolveConsoleIds(env);
-  const target = consoleTarget(env, ids);
-  const party = subjectParty(raw);
-  const subject = subjectVendor(raw);
-  const fingerprint = deviceFingerprint(raw);
-  const device = summarizeDevice(raw);
-
-  const [notesResult, networksResult, others] = await Promise.all([
-    didit(env, "GET", `/v3/transactions/${uuid}/notes/`),
-    ids && party?.uuid
-      ? didit(
-          env,
-          "GET",
-          `/v3/organization/${ids.orgId}/application/${ids.appId}/transactions/${uuid}/parties/${String(party.uuid)}/networks/`,
-        )
-      : Promise.resolve(null),
-    // The other shops this browser opened, and the device each signed up from.
-    Promise.all(
-      state.sellers
-        .filter((seller) => seller.id !== subject && seller.signup)
-        .map(async (seller) => {
-          const other = await readTransaction(env, seller.signup as string);
-
-          return {
-            seller,
-            fingerprint: other.raw ? deviceFingerprint(other.raw) : null,
-          };
-        }),
-    ),
-  ]);
-
-  const networks =
-    networksResult && networksResult.ok
-      ? summarizeMemberships(networksResult.data)
-      : null;
-
-  let networkNote: string | null = null;
-
-  if (networks === null) {
-    networkNote = ids
-      ? "The network lookup did not answer for this transaction."
-      : "Set DIDIT_CONSOLE_ORG_ID and DIDIT_CONSOLE_APP_ID to look up networks.";
-  } else if (networks.length === 0) {
-    networkNote =
-      device.isDataCenter || device.isVpn
-        ? "No network yet. Networks never link accounts through a data-centre or VPN address, and this connection is one, so here the device rule is the signal."
-        : "No network yet. Networks are built in the background from shared IPs, faces and documents; reload in a minute.";
-  }
-
-  const seller = state.sellers.find((s) => s.id === subject);
-
-  const view: OperatorView = {
-    transaction: summarizeTransaction(raw),
-    device,
-    notes: notesResult.ok ? summarizeNotes(notesResult.data) : [],
-    networks,
-    networkNote,
-    sharedWith: others
-      .filter((other) => fingerprint && other.fingerprint === fingerprint)
-      .map((other) => ({
-        shop: other.seller.shop,
-        company: other.seller.company,
-      })),
-    links: {
-      transaction: consoleLink(target, { kind: "transaction", id: uuid }),
-      transactions: consoleLink(target, { kind: "transactions" }),
-      kyb: seller?.sid
-        ? consoleLink(target, { kind: "kyb", id: seller.sid })
-        : null,
-      networks: (networks ?? []).map((network) =>
-        consoleLink(target, { kind: "network", id: network.id }),
-      ),
-    },
-  };
-
-  return { status: 200, body: view };
 }

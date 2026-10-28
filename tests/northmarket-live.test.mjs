@@ -150,6 +150,24 @@ test("the console view's Business page: registry, key people and the linked shop
   assert.equal(order.blocks[1].rows[0].title, "Orders of 1,000 EUR or more");
 });
 
+test("a sign-up held for another reason is not called a shared device", () => {
+  const held = { ...tx("signup-held"), tags: [] };
+  const tabs = northmarketConsole({
+    shops: [
+      { id: "northmarket-user_1", shop: "Ruiz Vintage", company: "Ruiz Vintage", kyb: kyb("Approved") },
+      { id: "northmarket-user_2", shop: "Ruiz Vintage Outlet", company: "Ruiz Vintage Outlet", kyb: null },
+    ],
+    transactions: [held],
+    events: [],
+    email: null,
+    device: null,
+    signIn: null,
+    now: Date.UTC(2026, 9, 27),
+  });
+
+  assert.doesNotMatch(JSON.stringify(tabs), /payouts paused|Payouts are paused/i);
+});
+
 test("before any shop, every console tab says what to do instead of inventing a record", () => {
   const tabs = northmarketConsole({
     shops: [],

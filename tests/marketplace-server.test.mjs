@@ -9,9 +9,7 @@ import {
   availability,
   clearConsoleIdCache,
   handleClaim,
-  handleDecideKyb,
   handleOpenShop,
-  handleOperator,
   handleStartKyb,
   handleState,
   handleToken,
@@ -381,122 +379,95 @@ test("an open KYB is resumed instead of starting a second one", async () => {
   assert.ok(!api.calls.some((call) => call.method === "POST"));
 });
 
-test("an analyst can only decide a KYB that is In Review", async () => {
-  const state = stateWith({
-    sellers: [seller(RECORDED.firstShop, { sid: KYB_SID })],
+const KYB_START = { origin: null, fallbackOrigin: "https://demos.staging.didit.me", language: "en" };
+
+test("a KYB whose decision cannot be read is not started a second time", async () => {
+  const api = fakeApi({
+    [decision(KYB_SID)]: [503, { detail: "Service unavailable." }],
+    "POST /v3/session/": [201, { session_id: crypto.randomUUID(), url: "https://verify.staging.didit.me/session/x" }],
   });
-
-  const waiting = fakeApi({ [decision(KYB_SID)]: kybWith("Awaiting User") });
-  const refused = await handleDecideKyb(makeEnv({ fetch: waiting.fetch }), state, RECORDED.firstShop, {
-    status: "Approved",
-  });
-
-  assert.equal(refused.status, 409);
-  assert.equal(refused.body.code, "not_in_review");
-  assert.ok(!waiting.calls.some((call) => call.method === "PATCH"));
-
-  let current = "In Review";
-  const review = fakeApi({
-    [decision(KYB_SID)]: () => [200, kybWith(current)],
-    [`PATCH /v3/session/${KYB_SID}/update-status/`]: (call) => {
-      current = call.body.new_status;
-
-      return [200, { status: current }];
-    },
-  });
-  const decided = await handleDecideKyb(makeEnv({ fetch: review.fetch }), state, RECORDED.firstShop, {
-    status: "Approved",
-  });
-
-  assert.equal(decided.status, 200);
-  assert.equal(decided.body.kyb.status, "Approved");
-  assert.equal(review.calls.find((call) => call.method === "PATCH").body.new_status, "Approved");
-  assert.equal(
-    (await handleDecideKyb(makeEnv(), state, RECORDED.firstShop, { status: "Maybe" })).status,
-    400,
+  const reply = await handleStartKyb(
+    makeEnv({ fetch: api.fetch }),
+    stateWith({ sellers: [seller(RECORDED.firstShop, { sid: KYB_SID })] }),
+    RECORDED.firstShop,
+    KYB_START,
   );
+
+  assert.equal(reply.status, 502);
+  assert.equal(reply.state, undefined);
+  assert.ok(!api.calls.some((call) => call.method === "POST"));
 });
 
-test("the operator view links the second shop to the first through the device", async () => {
-  const api = fakeApi({
-    [tx(RECORDED.signupHeld)]: fixture("transaction-signup-held"),
-    [tx(RECORDED.signupApproved)]: fixture("transaction-signup-approved"),
-    [`GET /v3/transactions/${RECORDED.signupHeld}/notes/`]: fixture("transaction-notes-held"),
-    "GET /v3/transactions/?limit=1": fixture("transactions-list-first"),
-    [`GET /v3/organization/${RECORDED.orgId}/application/${RECORDED.appId}/transactions/${RECORDED.signupHeld}/parties/${RECORDED.heldParty}/networks/`]:
-      fixture("party-networks-empty"),
-  });
-  const state = stateWith({
-    sellers: [
-      seller(RECORDED.firstShop, { signup: RECORDED.signupApproved }),
-      seller(RECORDED.secondShop, { shop: "Kestrel Goods", company: "Kestrel Commerce", signup: RECORDED.signupHeld }),
-    ],
-    tx: [RECORDED.signupApproved, RECORDED.signupHeld],
-  });
-  const reply = await handleOperator(makeEnv({ fetch: api.fetch }), state, RECORDED.signupHeld);
+test("only a KYB that can no longer finish is started again", async () => {
+  for (const [status, restarts] of [
+    ["Declined", true],
+    ["Expired", true],
+    ["Abandoned", true],
+    ["In Review", false],
+    ["Approved", false],
+  ]) {
+    const api = fakeApi({
+      [decision(KYB_SID)]: kybWith(status),
+      "POST /v3/session/": [201, { session_id: "7a2d0c4e-1b3f-4e5a-8c6d-9e0f1a2b3c4d", url: "https://verify.staging.didit.me/session/x" }],
+    });
+    const reply = await handleStartKyb(
+      makeEnv({ fetch: api.fetch }),
+      stateWith({ sellers: [seller(RECORDED.firstShop, { sid: KYB_SID })] }),
+      RECORDED.firstShop,
+      KYB_START,
+    );
 
-  assert.equal(reply.status, 200);
+    assert.equal(reply.status, restarts ? 201 : 409, status);
+    assert.equal(api.calls.some((call) => call.method === "POST"), restarts, status);
+  }
+});
 
-  const view = reply.body;
-
-  assert.equal(view.transaction.status, "IN_REVIEW");
-  assert.deepEqual(view.sharedWith, [{ shop: "Atelier Nord", company: "Acme Corporation Limited" }]);
-  assert.deepEqual(view.networks, []);
-  assert.match(view.networkNote, /data-centre or VPN/);
-  assert.deepEqual(view.notes, ["Another shop signed up from this device in the last 30 days."]);
-  assert.equal(view.device.deviceId, "heOR…uJvg");
-  assert.equal(
-    view.links.transaction.href,
-    `https://business.staging.didit.me/console/${RECORDED.orgId}/${RECORDED.appId}/transactions/detail/${RECORDED.signupHeld}`,
+test("with Authentication on, a signed-out visitor cannot start a KYB", async () => {
+  const api = fakeApi({});
+  const reply = await handleStartKyb(
+    makeEnv({ fetch: api.fetch, visitor: null }),
+    stateWith({ sellers: [seller(RECORDED.firstShop)] }),
+    RECORDED.firstShop,
+    KYB_START,
   );
-  assert.equal(view.links.transaction.direct, true);
-  // Never another visitor's identifier, never the raw device id.
-  assert.ok(!JSON.stringify(view).includes("heORv5s26Ljg7zJNnFuJvg"));
+
+  assert.equal(reply.status, 401);
+  assert.equal(reply.body.code, "signed_out");
+  assert.equal(api.calls.length, 0);
 });
 
 test("configured console ids win over the ones read from the API", async () => {
-  const api = fakeApi({
-    [tx(RECORDED.orderApproved)]: fixture("transaction-order-approved"),
-    [`GET /v3/transactions/${RECORDED.orderApproved}/notes/`]: { results: [] },
-    [`GET /v3/organization/org-from-env/application/app-from-env/transactions/${RECORDED.orderApproved}/parties/b71a9fc9-65f7-4a7e-a4a9-c15fafcbc7f5/networks/`]:
-      { results: [] },
-  });
-  const env = makeEnv({
-    fetch: api.fetch,
-    console: { origin: "https://business.staging.didit.me", orgId: "org-from-env", appId: "app-from-env" },
-  });
-  const reply = await handleOperator(
-    env,
-    stateWith({ buyer: RECORDED.buyer, tx: [RECORDED.orderApproved] }),
-    RECORDED.orderApproved,
+  const api = fakeApi({ [decision(KYB_SID)]: kybWith("In Review") });
+  const reply = await handleState(
+    makeEnv({
+      fetch: api.fetch,
+      console: { origin: "https://business.staging.didit.me", orgId: "org-from-env", appId: "app-from-env" },
+    }),
+    stateWith({ sellers: [seller(RECORDED.firstShop, { sid: KYB_SID })] }),
   );
 
   assert.equal(reply.status, 200);
   assert.ok(!api.calls.some((call) => call.path.startsWith("/v3/transactions/?")));
-  assert.match(reply.body.links.transactions.href, /\/console\/org-from-env\/app-from-env\/transactions$/);
-  assert.deepEqual(reply.body.sharedWith, []);
+  assert.match(
+    reply.body.sellers[0].kybLink.href,
+    new RegExp(`/console/org-from-env/app-from-env/kyb/verifications/${KYB_SID}$`),
+  );
 });
 
-test("the operator view asks the API for the console ids once per request", async () => {
+test("without console ids the KYB link honestly lands on the console home", async () => {
   const api = fakeApi({
-    [tx(RECORDED.orderApproved)]: fixture("transaction-order-approved"),
-    [`GET /v3/transactions/${RECORDED.orderApproved}/notes/`]: { results: [] },
+    [decision(KYB_SID)]: kybWith("In Review"),
     // No row to read the ids from, so nothing is cached either.
     "GET /v3/transactions/?limit=1": { count: 0, next: null, results: [] },
   });
-  const reply = await handleOperator(
+  const reply = await handleState(
     makeEnv({ fetch: api.fetch }),
-    stateWith({ buyer: RECORDED.buyer, tx: [RECORDED.orderApproved] }),
-    RECORDED.orderApproved,
+    stateWith({ sellers: [seller(RECORDED.firstShop, { sid: KYB_SID })] }),
   );
 
   assert.equal(reply.status, 200);
-  assert.equal(
-    api.calls.filter((call) => call.path === "/v3/transactions/?limit=1").length,
-    1,
-  );
-  assert.match(reply.body.networkNote, /DIDIT_CONSOLE_ORG_ID/);
-  assert.equal(reply.body.links.transaction.direct, false);
+  assert.equal(api.calls.filter((call) => call.path === "/v3/transactions/?limit=1").length, 1);
+  assert.deepEqual(reply.body.sellers[0].kybLink, { href: "https://business.staging.didit.me/", direct: false });
 });
 
 test("the page state lists this browser's shops and transactions, newest first", async () => {

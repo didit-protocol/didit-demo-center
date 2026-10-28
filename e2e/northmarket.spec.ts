@@ -282,6 +282,56 @@ test("a second shop whose sign-up check failed offers it again, and resumes it a
   expect(mock.submitted.at(-1)).toBe("transaction-signup-held");
 });
 
+test("a double click on Verify my business starts one KYB, not two", async ({
+  page,
+}) => {
+  const mock = await mockNorthmarket(page);
+
+  await page.goto("/marketplace");
+  await foldFeed(page);
+  await page.getByRole("button", { name: "Open my shop" }).click();
+  await expect(
+    app(page).getByRole("heading", { name: "Ruiz Vintage" }),
+  ).toBeVisible();
+  await foldFeed(page);
+  await page.getByRole("button", { name: "Verify my business" }).dblclick();
+  await completeHostedFlow(page);
+  await expect(page.getByTestId("nm-payouts")).toContainText("Payouts are on");
+  expect(mock.kybStarts).toBe(1);
+  // The second click is ignored, not reported as an error.
+  await expect(app(page).locator(".nm-toast.is-error")).toHaveCount(0);
+});
+
+test("an order whose claim fails once is retried and still shows its hold", async ({
+  page,
+}) => {
+  const mock = await mockNorthmarket(page);
+
+  await page.goto("/marketplace");
+  await foldFeed(page);
+  await page.getByRole("button", { name: "Open my shop" }).click();
+  await expect(
+    app(page).getByRole("heading", { name: "Ruiz Vintage" }),
+  ).toBeVisible();
+  const before = mock.claims;
+
+  mock.claimFailures = 1;
+  await foldFeed(page);
+  await goToStep(page, "Transact");
+  await foldFeed(page);
+  await app(page)
+    .getByRole("button", { name: "Place order · 1,497 EUR" })
+    .click();
+  await expect(page.getByTestId("nm-hold")).toContainText(
+    "Confirm your age to finish this order",
+  );
+  // One order submitted to Didit, claimed on the second try.
+  expect(mock.submitted.filter((name) => name.includes("order"))).toHaveLength(
+    1,
+  );
+  expect(mock.claims - before).toBe(2);
+});
+
 test("restart returns to the sign-up screen", async ({ page }) => {
   // The restart button is in the computer's bar.
   test.skip(isPhone(page), "The phone bar has no restart button");

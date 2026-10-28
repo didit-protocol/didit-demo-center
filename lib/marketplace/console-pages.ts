@@ -98,8 +98,15 @@ const kybOpen = (kyb: KybSummary | null | undefined) =>
 const isApproved = (status: string | null) =>
   (status ?? "").toLowerCase() === "approved";
 
+/**
+ * A sign-up the shared-device rule held: Didit tagged it (lib/marketplace/
+ * setup.ts) and did not approve it. Read from the decision, never inferred
+ * from the status alone: a sign-up can be held for other reasons too.
+ */
 const SHARED = (tx: TransactionSummary) =>
-  tx.kind === "signup" && tx.status !== "APPROVED";
+  tx.kind === "signup" &&
+  tx.status !== "APPROVED" &&
+  tx.tags.some((tag) => tag.startsWith("SHARED_DEVICE"));
 
 /** "ubo" and "shareholder" say what "35% owner" says; "CEO" stays as is. */
 function roleLabel(role: string, owns: boolean): string | null {

@@ -1,10 +1,9 @@
 // The one-time setup of the seller KYB workflow (lib/marketplace/setup.ts,
 // scripts/marketplace-setup.mjs) and where the page reads its id from
-// (lib/marketplace/config.ts).
+// (lib/didit/demos.ts, through lib/marketplace/route.ts).
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { STAGING_WORKFLOWS, marketWorkflows } from "../lib/marketplace/config.ts";
 import {
   KYB_WORKFLOW_LABEL,
   ensureKybWorkflow,
@@ -16,7 +15,7 @@ import {
 const OPTIONS = {
   apply: true,
   countries: ["ES", "GB"],
-  personWorkflowUuid: STAGING_WORKFLOWS.person,
+  personWorkflowUuid: "2db28cd2-7713-405f-89ad-144613b7086e",
 };
 // The answer POST /v3/workflows/ gives an application at its limit
 // (applications/serializers/verification_settings.py).
@@ -101,7 +100,7 @@ test("a missing workflow is created once, with the KYB definition", async () => 
     ["KYB_REGISTRY", "KYB_KEY_PEOPLE", "KYB_DOCUMENTS"],
   );
   assert.deepEqual(Object.keys(post.body.features[0].config.kyb_registry_countries_config), ["ES", "GB"]);
-  assert.equal(post.body.features[1].config.kyb_officer_verification_workflow, STAGING_WORKFLOWS.person);
+  assert.equal(post.body.features[1].config.kyb_officer_verification_workflow, OPTIONS.personWorkflowUuid);
 });
 
 test("at the workflow limit the application's existing KYB workflow is used", async () => {
@@ -186,16 +185,6 @@ test("only the limit message counts as the limit", () => {
   assert.ok(isWorkflowLimitError(LIMIT_REFUSAL));
   assert.equal(isWorkflowLimitError({ features: ["This field is required."] }), false);
   assert.equal(isWorkflowLimitError(null), false);
-});
-
-test("the KYB workflow id comes from the environment", () => {
-  assert.deepEqual(marketWorkflows(" 0f6c1a2e-1111-4222-8333-444455556666 \n"), {
-    ...STAGING_WORKFLOWS,
-    kyb: "0f6c1a2e-1111-4222-8333-444455556666",
-  });
-  assert.equal(marketWorkflows(undefined).kyb, "");
-  assert.equal(marketWorkflows("").kyb, "");
-  assert.equal(marketWorkflows(undefined).age, STAGING_WORKFLOWS.age);
 });
 
 test("the routes take their workflows from the Northmarket config", async () => {
