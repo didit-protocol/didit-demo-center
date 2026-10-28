@@ -14,7 +14,7 @@ import type {
 import * as React from "react";
 
 import { openVerification, submitTransaction } from "@/lib/didit/browser";
-import { type ApiResult, api } from "@/lib/marketplace/client";
+import { api, withRenewal } from "@/lib/marketplace/client";
 import { ORDER_LISTING } from "@/lib/marketplace/northmarket";
 import {
   purchaseTransaction,
@@ -112,17 +112,8 @@ export function useNorthmarket(renew?: () => Promise<boolean>) {
   renewRef.current = renew;
 
   /** A route that needs the signed-in visitor. */
-  const signedIn = async <T>(
-    path: string,
-    init: { method: string; body?: unknown },
-  ): Promise<ApiResult<T>> => {
-    const first = await api<T>(path, init);
-
-    if (first.ok || first.code !== "signed_out" || !renewRef.current)
-      return first;
-
-    return (await renewRef.current()) ? api<T>(path, init) : first;
-  };
+  const signedIn = <T>(path: string, init: { method: string; body?: unknown }) =>
+    withRenewal(() => api<T>(path, init), renewRef.current);
 
   /** Runs one step at a time; a click while one runs resolves to null. */
   const exclusive = async <T>(

@@ -272,3 +272,48 @@ test("Kestrel's copy has no em dashes and never names a screening provider", () 
   assert.equal(all(inputs).includes("—"), false);
   assert.doesNotMatch(all(inputs), /merkle|chainalysis|elliptic|trm/i);
 });
+
+test("a signed-in visitor with no email and no name yet is still the Person, in plain running text", () => {
+  // A passkey sign-up: Didit knows the visitor, their session carries no email.
+  const open = toAccountView(recorded("decision-not-started"));
+  const tabs = kestrelConsole({
+    userId: "kestrel-0f6c2a51-3c4e-4d7b-9a1f-2b8e5d6c7a90",
+    email: null,
+    account: open,
+    activity: [],
+    events: [],
+    device: { persistentId: "d_9b20aa11", firstVisit: true, botScore: 0.05, browser: "Chrome", os: "macOS" },
+    signIn: "Passkey",
+    now: Date.parse("2026-10-13T22:00:00.000Z"),
+  });
+  const person = tabs[0];
+
+  assert.ok(person.page, "the Person page, never 'Sign up in Kestrel first'");
+  assert.deepEqual(person.page.head.tag, { label: "In progress", tone: "rev" });
+  assert.deepEqual(
+    person.page.kpis.find((kpi) => kpi.label === "Sign-in"),
+    { label: "Sign-in", value: "Passkey", unit: "Didit" },
+  );
+  assert.ok(person.page.side.pairs.some(([key]) => key === "Device"));
+  assert.ok(person.page.linked.some((record) => /KYC$/.test(record.title) && /^In progress/.test(record.detail)));
+  assert.equal(
+    person.note,
+    "This is your Didit console. Everything this customer just did in Kestrel is already here, for your team.",
+  );
+  assert.doesNotMatch(JSON.stringify(tabs.map((tab) => tab.note)), /Everything This/);
+
+  // With an email, the note names them.
+  const named = kestrelConsole({
+    userId: "kestrel-1",
+    email: "avery.quinn@example.com",
+    account: null,
+    activity: [],
+    events: [],
+    device: null,
+    signIn: "Email code",
+    now: 0,
+  })[0];
+
+  assert.match(named.note, /Everything avery\.quinn@example\.com just did in Kestrel/);
+  assert.equal(named.page.head.title, "avery.quinn@example.com");
+});

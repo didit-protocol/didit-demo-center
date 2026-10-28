@@ -55,3 +55,21 @@ export async function api<T>(
     };
   }
 }
+
+/**
+ * A call that needs the signed-in visitor. When it answers 401 `signed_out`
+ * (the access token is gone), `renew` renews the Didit session, or signs the
+ * visitor out cleanly and resolves false; the call is made once more only
+ * when the session is alive again. Without `renew` (Authentication off) the
+ * routes never answer `signed_out`.
+ */
+export async function withRenewal<T>(
+  call: () => Promise<ApiResult<T>>,
+  renew: (() => Promise<boolean>) | undefined,
+): Promise<ApiResult<T>> {
+  const first = await call();
+
+  if (first.ok || first.code !== "signed_out" || !renew) return first;
+
+  return (await renew()) ? call() : first;
+}
