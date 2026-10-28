@@ -272,8 +272,8 @@ test("a second shop whose sign-up check failed offers it again, and resumes it a
   // Try again while it is still down: the retry stays.
   await foldFeed(page);
   await banner.getByRole("button", { name: "Try again" }).click();
+  await expect.poll(() => mock.failedSignups).toBeGreaterThan(failed);
   await expect(banner.getByRole("button", { name: "Try again" })).toBeVisible();
-  expect(mock.failedSignups).toBeGreaterThan(failed);
 
   // After a reload the page checks the sign-up on its own.
   mock.signupDown = false;
