@@ -272,3 +272,63 @@ test("the customer cookie is signed and only holds an Alder id", () => {
   assert.equal(customer.verifyCustomer(cookie.replace(id, "alder-000000000000000000000000"), "secret"), null);
   assert.equal(customer.verifyCustomer("aurora-play-0123.sig", "secret"), null);
 });
+
+test("an open onboarding reads as in progress with its start time, never as no verification", () => {
+  const createdAt = Date.UTC(2026, 9, 28, 15, 40);
+  const startedAt = Date.UTC(2026, 9, 28, 15, 48);
+  const tabs = (onboarding, onboardingSession) =>
+    consolePages.alderConsole({
+      customer: { customerId: "alder-0f3a9c21d4e85b7a6c19e2d0", name: "", email: "lena.fischer@example.com", createdAt },
+      onboarding,
+      onboardingSession,
+      stepUp: null,
+      activity: [],
+      events: [],
+      device: null,
+      signIn: "Email code",
+      takeover: null,
+      now: startedAt,
+    });
+  const started = new Date(startedAt).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  const session = { sessionId: "c5c01e9c-461c-4726-b288-c16fb8ec41b1", startedAt };
+  const tab = (list, id) => list.find((item) => item.id === id);
+
+  // Created, no decision to read yet.
+  for (const list of [
+    tabs(null, session),
+    tabs({ ...projectSession({ session_id: session.sessionId, vendor_data: "alder-0f3a9c21d4e85b7a6c19e2d0", status: "Not Started" }, "alder-0f3a9c21d4e85b7a6c19e2d0") }, session),
+    tabs({ ...projectSession({ session_id: session.sessionId, vendor_data: "alder-0f3a9c21d4e85b7a6c19e2d0", status: "In Progress" }, "alder-0f3a9c21d4e85b7a6c19e2d0") }, session),
+  ]) {
+    const verification = tab(list, "verification").page;
+    const person = tab(list, "person").page;
+
+    assert.ok(verification, "the Verification tab has a page");
+    assert.deepEqual(verification.head.tag, { label: "In progress", tone: "rev" });
+    assert.ok(verification.head.meta.includes(`Started ${started}`));
+    assert.deepEqual(verification.blocks[0].checks, [{ label: "Status", value: `In progress · Started ${started}`, ok: null }]);
+    assert.ok(verification.side.pairs.some(([key, value]) => key === "Started" && value === started));
+
+    assert.deepEqual(person.head.tag, { label: "In progress", tone: "rev" });
+    assert.ok(person.head.meta.includes(`Started ${started}`));
+    assert.equal(person.blocks[0].text, `lena.fischer@example.com's identity check is in progress. Started ${started}.`);
+    assert.equal(person.linked[0].detail, "In progress");
+    assert.deepEqual(person.kpis[0], { label: "Sign-in", value: "Email code", unit: "via Didit" });
+
+    const text = JSON.stringify(list);
+
+    assert.ok(!/Not started/i.test(text), "no Not started");
+    assert.ok(!text.includes("No verification yet"));
+  }
+
+  // Partial results while open are not a verdict.
+  const partial = tab(
+    tabs({ ...projectSession({ session_id: session.sessionId, vendor_data: "alder-0f3a9c21d4e85b7a6c19e2d0", status: "In Progress" }, "alder-0f3a9c21d4e85b7a6c19e2d0"), liveness: 0.98, amlHits: 0 }, session),
+    "verification",
+  ).page;
+
+  assert.ok(partial.blocks[0].checks.every((check) => check.ok === null && !check.value.startsWith("Passed")));
+
+  // Before the session exists the tab says so.
+  assert.equal(tab(tabs(null, null), "verification").page, null);
+  assert.equal(tab(tabs(null, null), "person").page.head.tag.label, "Not verified");
+});

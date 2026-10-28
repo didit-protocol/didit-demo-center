@@ -23,6 +23,8 @@ export interface AccountView {
   document: string | null;
   checks: { label: string; status: string | null }[];
   amlHits: number | null;
+  /** When Didit opened the session (`created_at`), for an open session. */
+  startedAt: string | null;
 }
 
 type Raw = Record<string, unknown>;
@@ -96,7 +98,26 @@ export function toAccountView(decision: Raw): AccountView {
       { label: "AML screening", status: text(aml.status) },
     ],
     amlHits: typeof aml.total_hits === "number" ? aml.total_hits : null,
+    startedAt: text(decision.created_at),
   };
+}
+
+/**
+ * The top bar's avatar: up to two initials of the verified name, else of the
+ * email's local part ("avery.quinn@…" is "AQ"). A new account has no photo.
+ */
+export function accountInitials(name: string | null | undefined): string {
+  const words = (name ?? "")
+    .trim()
+    .replace(/@.*$/, "")
+    .split(/[\s._-]+/)
+    .filter((word) => /^\p{L}/u.test(word));
+  const letters =
+    words.length > 1
+      ? words[0].charAt(0) + words[words.length - 1].charAt(0)
+      : (words[0] ?? "").charAt(0);
+
+  return letters.toUpperCase() || "K";
 }
 
 export interface AccountCopy {
@@ -130,7 +151,7 @@ export function accountCopy(
     case "processing":
       return {
         title: "Finishing your verification",
-        body: "Your verification has not finished yet. Complete it in the window that opened, or check again in a moment.",
+        body: "Your verification has not finished yet. Continue it from your account to pick up where you left off.",
       };
     default:
       return {

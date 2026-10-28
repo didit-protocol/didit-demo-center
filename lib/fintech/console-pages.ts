@@ -10,8 +10,9 @@ import type {
 import type { LiveEvent } from "../didit/live";
 import type { SessionSummary, TransactionRecord } from "../igaming/records";
 
-import { BANK, STEP_UP_AMOUNT, formatMoney, ruleName } from "./alder.ts";
 import { IN_PROGRESS, isOpenSession, startedLabel } from "../didit/console.ts";
+
+import { BANK, STEP_UP_AMOUNT, formatMoney, ruleName } from "./alder.ts";
 
 /**
  * Alder's console view: the Transaction, Person, Verification and Device

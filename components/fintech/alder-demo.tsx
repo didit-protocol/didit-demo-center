@@ -113,9 +113,10 @@ export function AlderDemo() {
   const authOn = didit.authEnabled;
   const onboarding = state?.onboarding ?? null;
   const approved = onboarding?.summary?.status === "Approved";
-  const name =
-    onboarding?.summary?.fullName ??
-    (state?.name || state?.email || auth?.email || "");
+  /** The person's own name, as read from their ID or typed at sign-up. */
+  const fullName = onboarding?.summary?.fullName ?? state?.name ?? "";
+  /** Who this is anywhere an email will do: the avatar and the live feed. */
+  const name = fullName || state?.email || auth?.email || "";
   const signIn = authOn
     ? auth?.methods.includes("passkey")
       ? "Passkey"
@@ -665,7 +666,7 @@ export function AlderDemo() {
       </Site>
     );
   } else {
-    const hello = firstName(onboarding?.summary?.fullName ?? state.name);
+    const hello = firstName(fullName);
     const hour = new Date().getHours();
     const greeting =
       hour < 12
@@ -793,7 +794,7 @@ export function AlderDemo() {
           <HomeView
             activity={activity}
             balance={balance}
-            name={name || "Alder customer"}
+            name={fullName || "Alder customer"}
             onAddMoney={() =>
               setToast({
                 tone: "info",
