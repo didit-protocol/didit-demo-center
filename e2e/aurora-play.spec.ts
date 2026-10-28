@@ -259,9 +259,12 @@ test("the signed-in lobby loads with no errors and no horizontal scroll", async 
 
   await page.reload();
   await expect(app(page).getByTestId("aurora-balance")).toBeVisible();
-  await expect(
-    app(page).getByRole("button", { name: "Account: Sofia Marin" }),
-  ).toBeAttached();
+  // On a phone the avatar is folded away next to the balance, so it is
+  // checked in the DOM rather than in the accessibility tree.
+  await expect(app(page).getByTestId("aurora-account")).toHaveAttribute(
+    "aria-label",
+    "Account: Sofia Marin",
+  );
   await expectNoHorizontalScroll(page);
   expect(errors).toEqual([]);
 });
