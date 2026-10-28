@@ -73,11 +73,75 @@ export function readState(
   );
 }
 
-/** The chrome's language cookie, which the hosted flow follows too. */
+/** The languages a hosted session accepts (`language` on POST /v3/session/). */
+const SESSION_LANGUAGES: readonly string[] = [
+  "en",
+  "ar",
+  "bg",
+  "bn",
+  "bs",
+  "ca",
+  "cnr",
+  "cs",
+  "da",
+  "de",
+  "el",
+  "es",
+  "et",
+  "fa",
+  "fi",
+  "fr",
+  "he",
+  "hi",
+  "hr",
+  "hu",
+  "hy",
+  "id",
+  "it",
+  "ja",
+  "ka",
+  "kk",
+  "ko",
+  "ky",
+  "lt",
+  "lv",
+  "mk",
+  "mn",
+  "ms",
+  "nl",
+  "no",
+  "pl",
+  "pt-BR",
+  "pt",
+  "ro",
+  "ru",
+  "sk",
+  "sl",
+  "so",
+  "sq",
+  "sr",
+  "sv",
+  "th",
+  "tr",
+  "uk",
+  "uz",
+  "vi",
+  "zh-CN",
+  "zh-TW",
+  "zh",
+];
+
+/**
+ * The chrome's language cookie, which the hosted flow follows too, as one of
+ * the codes Didit accepts: `pt-BR` as is, `de-AT` as `de`, anything else `en`.
+ */
 export function readLanguage(request: NextRequest): string {
   const value = request.cookies.get("NEXT_LOCALE")?.value ?? "en";
+  const base = value.split("-")[0].toLowerCase();
 
-  return /^[a-z]{2}(-[A-Za-z]{2})?$/.test(value) ? value : "en";
+  if (SESSION_LANGUAGES.includes(value)) return value;
+
+  return SESSION_LANGUAGES.includes(base) ? base : "en";
 }
 
 export async function readBody(request: NextRequest): Promise<unknown> {
@@ -111,11 +175,10 @@ export function respond(
   if (reply.state === null) {
     response.cookies.set(name, "", { ...options, maxAge: 0 });
   } else {
-    response.cookies.set(
-      name,
-      sealState(reply.state, stateKey(env.apiKey)),
-      { ...options, maxAge: STATE_MAX_AGE },
-    );
+    response.cookies.set(name, sealState(reply.state, stateKey(env.apiKey)), {
+      ...options,
+      maxAge: STATE_MAX_AGE,
+    });
   }
 
   return response;

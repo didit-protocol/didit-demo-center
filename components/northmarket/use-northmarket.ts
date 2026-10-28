@@ -171,7 +171,9 @@ export function useNorthmarket() {
     }
   };
 
-  const busyError = failed("Another step is still running. Wait for it to finish.");
+  const busyError = failed(
+    "Another step is still running. Wait for it to finish.",
+  );
 
   /**
    * Opens a shop and reports its sign-up to transaction monitoring. When the
@@ -243,7 +245,10 @@ export function useNorthmarket() {
       await openVerification(url);
     } catch (problem) {
       return failed(
-        messageOf(problem, "The verification window could not open. Try again."),
+        messageOf(
+          problem,
+          "The verification window could not open. Try again.",
+        ),
       );
     }
     const data = await read();

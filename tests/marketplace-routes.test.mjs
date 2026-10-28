@@ -7,7 +7,9 @@ import assert from "node:assert/strict";
 await import("./helpers/register.mjs");
 
 const { NextRequest } = await import("next/server");
-const { readState, respond } = await import("../lib/marketplace/route.ts");
+const { readLanguage, readState, respond } = await import(
+  "../lib/marketplace/route.ts"
+);
 const { api, API_TIMEOUT_MS } = await import("../lib/marketplace/client.ts");
 const { sealState, stateKey } = await import("../lib/marketplace/state.ts");
 const { TEST_KEY, makeEnv, seller, stateWith } = await import(
@@ -123,4 +125,22 @@ test("a route's own error reaches the page as its sentence and code", async (t) 
     error: "Sign in to Northmarket first.",
     code: "signed_out",
   });
+});
+
+test("the hosted flow's language is always one Didit accepts", () => {
+  const withLocale = (locale) =>
+    readLanguage(
+      request("https://demos.staging.didit.me/api/marketplace", {
+        cookie: `NEXT_LOCALE=${locale}`,
+      }),
+    );
+
+  assert.equal(withLocale("es"), "es");
+  assert.equal(withLocale("pt-BR"), "pt-BR");
+  assert.equal(withLocale("zh-TW"), "zh-TW");
+  assert.equal(withLocale("de-AT"), "de");
+  assert.equal(withLocale("en-US"), "en");
+  assert.equal(withLocale("xx"), "en");
+  assert.equal(withLocale("<script>"), "en");
+  assert.equal(readLanguage(request("https://demos.staging.didit.me/api/marketplace")), "en");
 });
