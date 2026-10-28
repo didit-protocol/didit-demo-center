@@ -1,0 +1,650 @@
+{
+  "post": {
+    "uuid": "afef5299-3b67-494b-a661-8c989fda7e47",
+    "environment": "live",
+    "transaction_number": 215,
+    "txn_id": "al-transfer-mvqpw1il-mvqpw4f4",
+    "txn_date": "2026-10-27T13:24:32.341081Z",
+    "zone_id": null,
+    "transaction_type": "finance",
+    "action_type": "transfer",
+    "direction": "OUTBOUND",
+    "status": "AWAITING_USER",
+    "source": "LIVE",
+    "amount": "5000",
+    "currency": "EUR",
+    "currency_type": "fiat",
+    "amount_in_default_currency": null,
+    "default_currency_code": null,
+    "preferred_currency_amount": "5596.253876609004135206",
+    "preferred_currency_code": "USD",
+    "payment_details": null,
+    "payment_txn_id": null,
+    "score": 0,
+    "severity": null,
+    "decision_reason_code": null,
+    "decision_reason_label": null,
+    "vendor_data": "alder-e2e-mvqpw1il",
+    "metadata": {
+      "subject": {
+        "full_name": "Lena Fischer",
+        "vendor_data": "alder-e2e-mvqpw1il",
+        "device_context": {
+          "metadata": {
+            "accept_language": "*",
+            "composite_server_id": "0fd0ad7093e60298674cc6c60617e0d4"
+          },
+          "platform": "desktop",
+          "os_family": "Mac OS X",
+          "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+          "device_brand": "Apple",
+          "device_model": "Mac",
+          "browser_family": "Safari",
+          "accept_language": "*",
+          "network_context": {
+            "ip_address": "203.0.113.7"
+          }
+        }
+      },
+      "counterparty": {
+        "full_name": "Jonas Koch",
+        "entity_type": "individual",
+        "payment_method": {
+          "account_id": "DE44 •••• 4931",
+          "method_type": "bank_account"
+        }
+      }
+    },
+    "props": {
+      "bank": "Alder",
+      "demo_app": "fintech",
+      "new_payee": true,
+      "is_data_center": true
+    },
+    "tags": [
+      {
+        "uuid": "1d311695-7d72-4c43-9033-3dad0e641f4e",
+        "name": "NEW_PAYEE_STEP_UP",
+        "color": "#007AFE",
+        "description": null,
+        "source": "custom"
+      }
+    ],
+    "parties": [
+      {
+        "uuid": "254764cf-c238-43b0-ad4a-0b782c7b4131",
+        "role": "APPLICANT",
+        "entity_type": "individual",
+        "kind": "USER",
+        "vendor_data": "alder-e2e-mvqpw1il",
+        "full_name": "Lena Fischer",
+        "first_name": null,
+        "last_name": null,
+        "country_code": null,
+        "dob": null,
+        "address": {},
+        "institution_info": {},
+        "device": {
+          "metadata": {
+            "accept_language": "*",
+            "composite_server_id": "0fd0ad7093e60298674cc6c60617e0d4"
+          },
+          "platform": "desktop",
+          "os_family": "Mac OS X",
+          "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+          "device_brand": "Apple",
+          "device_model": "Mac",
+          "browser_family": "Safari",
+          "accept_language": "*",
+          "network_context": {
+            "isp": "Google LLC",
+            "ip_city": "Example City",
+            "ip_state": "Example State",
+            "latitude": 45.59455871582031,
+            "longitude": -121.17868041992188,
+            "time_zone": "America/Los_Angeles",
+            "asn_number": 396982,
+            "ip_address": "203.0.113.7",
+            "ip_country": "United States",
+            "organization": "Google LLC",
+            "is_vpn_or_tor": false,
+            "is_data_center": true,
+            "ip_country_code": "US",
+            "asn_organization": "Google LLC",
+            "time_zone_offset": "-0700"
+          }
+        },
+        "external_party_snapshot": null
+      },
+      {
+        "uuid": "1c9d31f5-8d40-4864-b850-f0cb1e56ddc2",
+        "role": "COUNTERPARTY",
+        "entity_type": "individual",
+        "kind": "EXTERNAL",
+        "vendor_data": null,
+        "full_name": "Jonas Koch",
+        "first_name": null,
+        "last_name": null,
+        "country_code": null,
+        "dob": null,
+        "address": {},
+        "institution_info": {},
+        "device": {},
+        "external_party_snapshot": {
+          "address": {},
+          "country": null,
+          "full_name": "Jonas Koch",
+          "last_name": null,
+          "first_name": null,
+          "entity_type": "individual",
+          "vendor_data": null,
+          "date_of_birth": null,
+          "device_context": {},
+          "institution_details": {}
+        }
+      }
+    ],
+    "payment_methods": [
+      {
+        "uuid": "fac90986-a056-4c4a-b89f-b1685e1f2534",
+        "payment_method_type": "bank_account",
+        "label": null,
+        "fingerprint": "fc0aaa44df404edb5acdebcfc5095f4ee04af2776b2c4c55e24957ac117da876",
+        "account_id": "DE44 •••• 4931",
+        "issuing_country": null,
+        "owner_kind": "EXTERNAL",
+        "vendor_data": null,
+        "owner_name": "Jonas Koch",
+        "institution_info": {},
+        "details": {
+          "account_id": "DE44 •••• 4931",
+          "method_type": "bank_account"
+        },
+        "external_owner_snapshot": {
+          "country": null,
+          "full_name": "Jonas Koch",
+          "entity_type": "individual",
+          "vendor_data": null
+        },
+        "role": "DESTINATION"
+      }
+    ],
+    "documents": [],
+    "activities": [
+      {
+        "uuid": "2264a479-4d25-46b2-b7de-f82a8872bcee",
+        "activity_type": "TRANSACTION_CREATED",
+        "source": "TRANSACTION",
+        "status": "AWAITING_USER",
+        "title": "transfer",
+        "description": null,
+        "metadata": {
+          "amount": "5000.000000000000000000",
+          "currency": "EUR",
+          "direction": "OUTBOUND",
+          "action_type": "transfer"
+        },
+        "occurred_at": "2026-10-27T13:24:32.345004Z"
+      }
+    ],
+    "alerts": [],
+    "rule_runs": [
+      {
+        "uuid": "e0442b08-5568-4a8d-acb5-1527fa5e3437",
+        "rule": "1dc67bf0-c815-4ce8-acad-5c74508246f4",
+        "rule_title": "Sender != Receiver (verify)",
+        "rule_description": "",
+        "rule_category": "velocity",
+        "matched": true,
+        "is_test": true,
+        "mode": "TEST",
+        "severity": null,
+        "score_delta": 0,
+        "status_target": null,
+        "action_summary": null,
+        "metadata": {
+          "conditions": [
+            {
+              "field": "subject_payment_method_account_id",
+              "matched": true,
+              "operator": "ne",
+              "group_index": 0,
+              "group_logic": "OR",
+              "field_source": null,
+              "current_value": null,
+              "expected_value": "counterparty_payment_method_account_id",
+              "_groups_overall": true
+            }
+          ],
+          "scope_match": true,
+          "aggregations": []
+        },
+        "created_at": "2026-10-27T13:24:32.697153Z"
+      },
+      {
+        "uuid": "4e81f9ff-1ef5-46a2-aeca-ba77bd552e0d",
+        "rule": "1e981d73-e908-43cd-b176-c34f395c37d5",
+        "rule_title": "Alder demo: 5,000 EUR or more to a new payee",
+        "rule_description": "Alder: a transfer of 5,000 EUR or more to a new payee is held until the customer confirms it is them. Only matches the /fintech demo's own customers.",
+        "rule_category": "finance",
+        "matched": true,
+        "is_test": false,
+        "mode": "ACTIVE",
+        "severity": null,
+        "score_delta": 0,
+        "status_target": "AWAITING_USER",
+        "action_summary": "change_status:AWAITING_USER; add_tag:NEW_PAYEE_STEP_UP",
+        "metadata": {
+          "conditions": [
+            {
+              "field": "subject_vendor_data",
+              "matched": true,
+              "operator": "contains",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "alder-e2e-mvqpw1il",
+              "expected_value": "alder-"
+            },
+            {
+              "field": "custom_values.demo_app",
+              "matched": true,
+              "operator": "eq",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "fintech",
+              "expected_value": "fintech"
+            },
+            {
+              "field": "custom_values.new_payee",
+              "matched": true,
+              "operator": "eq",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": true,
+              "expected_value": true
+            },
+            {
+              "field": "currency",
+              "matched": true,
+              "operator": "eq",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "EUR",
+              "expected_value": "EUR"
+            },
+            {
+              "field": "amount",
+              "matched": true,
+              "operator": "gte",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "5000.000000000000000000",
+              "expected_value": 5000
+            }
+          ],
+          "scope_match": true,
+          "aggregations": []
+        },
+        "created_at": "2026-10-27T13:24:32.447902Z"
+      }
+    ],
+    "provider_results": [],
+    "travel_rule": null,
+    "network_snapshot": null,
+    "remediation": {
+      "session_id": "5c6f7628-9e4c-46da-9653-e076292c250a",
+      "session_token": "uZvPnfsfuyA4",
+      "url": "https://verify.staging.didit.me/session/uZvPnfsfuyA4",
+      "status": "Not Started"
+    },
+    "action_required": {
+      "type": "verification_session",
+      "url": "https://verify.staging.didit.me/session/uZvPnfsfuyA4",
+      "session_id": "5c6f7628-9e4c-46da-9653-e076292c250a",
+      "session_token": "uZvPnfsfuyA4",
+      "status": "Not Started"
+    },
+    "cost_breakdown": {
+      "total_price": 0.02,
+      "items": [
+        {
+          "usage_type": "transaction_monitoring",
+          "price": 0.02,
+          "details": {
+            "product": "transactions"
+          },
+          "created_at": "2026-10-27T13:24:32.714173Z"
+        }
+      ]
+    }
+  },
+  "get": {
+    "uuid": "afef5299-3b67-494b-a661-8c989fda7e47",
+    "environment": "live",
+    "transaction_number": 215,
+    "txn_id": "al-transfer-mvqpw1il-mvqpw4f4",
+    "txn_date": "2026-10-27T13:24:32.341081Z",
+    "zone_id": null,
+    "transaction_type": "finance",
+    "action_type": "transfer",
+    "direction": "OUTBOUND",
+    "status": "AWAITING_USER",
+    "source": "LIVE",
+    "amount": "5000",
+    "currency": "EUR",
+    "currency_type": "fiat",
+    "amount_in_default_currency": null,
+    "default_currency_code": null,
+    "preferred_currency_amount": "5596.253876609004135206",
+    "preferred_currency_code": "USD",
+    "payment_details": null,
+    "payment_txn_id": null,
+    "score": 0,
+    "severity": null,
+    "decision_reason_code": null,
+    "decision_reason_label": null,
+    "vendor_data": "alder-e2e-mvqpw1il",
+    "metadata": {
+      "subject": {
+        "full_name": "Lena Fischer",
+        "vendor_data": "alder-e2e-mvqpw1il",
+        "device_context": {
+          "metadata": {
+            "accept_language": "*",
+            "composite_server_id": "0fd0ad7093e60298674cc6c60617e0d4"
+          },
+          "platform": "desktop",
+          "os_family": "Mac OS X",
+          "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+          "device_brand": "Apple",
+          "device_model": "Mac",
+          "browser_family": "Safari",
+          "accept_language": "*",
+          "network_context": {
+            "ip_address": "203.0.113.7"
+          }
+        }
+      },
+      "counterparty": {
+        "full_name": "Jonas Koch",
+        "entity_type": "individual",
+        "payment_method": {
+          "account_id": "DE44 •••• 4931",
+          "method_type": "bank_account"
+        }
+      }
+    },
+    "props": {
+      "bank": "Alder",
+      "demo_app": "fintech",
+      "new_payee": true,
+      "is_data_center": true
+    },
+    "tags": [
+      {
+        "uuid": "1d311695-7d72-4c43-9033-3dad0e641f4e",
+        "name": "NEW_PAYEE_STEP_UP",
+        "color": "#007AFE",
+        "description": null,
+        "source": "custom"
+      }
+    ],
+    "parties": [
+      {
+        "uuid": "254764cf-c238-43b0-ad4a-0b782c7b4131",
+        "role": "APPLICANT",
+        "entity_type": "individual",
+        "kind": "USER",
+        "vendor_data": "alder-e2e-mvqpw1il",
+        "full_name": "Lena Fischer",
+        "first_name": null,
+        "last_name": null,
+        "country_code": null,
+        "dob": null,
+        "address": {},
+        "institution_info": {},
+        "device": {
+          "metadata": {
+            "accept_language": "*",
+            "composite_server_id": "0fd0ad7093e60298674cc6c60617e0d4"
+          },
+          "platform": "desktop",
+          "os_family": "Mac OS X",
+          "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+          "device_brand": "Apple",
+          "device_model": "Mac",
+          "browser_family": "Safari",
+          "accept_language": "*",
+          "network_context": {
+            "isp": "Google LLC",
+            "ip_city": "Example City",
+            "ip_state": "Example State",
+            "latitude": 45.59455871582031,
+            "longitude": -121.17868041992188,
+            "time_zone": "America/Los_Angeles",
+            "asn_number": 396982,
+            "ip_address": "203.0.113.7",
+            "ip_country": "United States",
+            "organization": "Google LLC",
+            "is_vpn_or_tor": false,
+            "is_data_center": true,
+            "ip_country_code": "US",
+            "asn_organization": "Google LLC",
+            "time_zone_offset": "-0700"
+          }
+        },
+        "external_party_snapshot": null
+      },
+      {
+        "uuid": "1c9d31f5-8d40-4864-b850-f0cb1e56ddc2",
+        "role": "COUNTERPARTY",
+        "entity_type": "individual",
+        "kind": "EXTERNAL",
+        "vendor_data": null,
+        "full_name": "Jonas Koch",
+        "first_name": null,
+        "last_name": null,
+        "country_code": null,
+        "dob": null,
+        "address": {},
+        "institution_info": {},
+        "device": {},
+        "external_party_snapshot": {
+          "address": {},
+          "country": null,
+          "full_name": "Jonas Koch",
+          "last_name": null,
+          "first_name": null,
+          "entity_type": "individual",
+          "vendor_data": null,
+          "date_of_birth": null,
+          "device_context": {},
+          "institution_details": {}
+        }
+      }
+    ],
+    "payment_methods": [
+      {
+        "uuid": "fac90986-a056-4c4a-b89f-b1685e1f2534",
+        "payment_method_type": "bank_account",
+        "label": null,
+        "fingerprint": "fc0aaa44df404edb5acdebcfc5095f4ee04af2776b2c4c55e24957ac117da876",
+        "account_id": "DE44 •••• 4931",
+        "issuing_country": null,
+        "owner_kind": "EXTERNAL",
+        "vendor_data": null,
+        "owner_name": "Jonas Koch",
+        "institution_info": {},
+        "details": {
+          "account_id": "DE44 •••• 4931",
+          "method_type": "bank_account"
+        },
+        "external_owner_snapshot": {
+          "country": null,
+          "full_name": "Jonas Koch",
+          "entity_type": "individual",
+          "vendor_data": null
+        },
+        "role": "DESTINATION"
+      }
+    ],
+    "documents": [],
+    "activities": [
+      {
+        "uuid": "2264a479-4d25-46b2-b7de-f82a8872bcee",
+        "activity_type": "TRANSACTION_CREATED",
+        "source": "TRANSACTION",
+        "status": "AWAITING_USER",
+        "title": "transfer",
+        "description": null,
+        "metadata": {
+          "amount": "5000.000000000000000000",
+          "currency": "EUR",
+          "direction": "OUTBOUND",
+          "action_type": "transfer"
+        },
+        "occurred_at": "2026-10-27T13:24:32.345004Z"
+      }
+    ],
+    "alerts": [],
+    "rule_runs": [
+      {
+        "uuid": "e0442b08-5568-4a8d-acb5-1527fa5e3437",
+        "rule": "1dc67bf0-c815-4ce8-acad-5c74508246f4",
+        "rule_title": "Sender != Receiver (verify)",
+        "rule_description": "",
+        "rule_category": "velocity",
+        "matched": true,
+        "is_test": true,
+        "mode": "TEST",
+        "severity": null,
+        "score_delta": 0,
+        "status_target": null,
+        "action_summary": null,
+        "metadata": {
+          "conditions": [
+            {
+              "field": "subject_payment_method_account_id",
+              "matched": true,
+              "operator": "ne",
+              "group_index": 0,
+              "group_logic": "OR",
+              "field_source": null,
+              "current_value": null,
+              "expected_value": "counterparty_payment_method_account_id",
+              "_groups_overall": true
+            }
+          ],
+          "scope_match": true,
+          "aggregations": []
+        },
+        "created_at": "2026-10-27T13:24:32.697153Z"
+      },
+      {
+        "uuid": "4e81f9ff-1ef5-46a2-aeca-ba77bd552e0d",
+        "rule": "1e981d73-e908-43cd-b176-c34f395c37d5",
+        "rule_title": "Alder demo: 5,000 EUR or more to a new payee",
+        "rule_description": "Alder: a transfer of 5,000 EUR or more to a new payee is held until the customer confirms it is them. Only matches the /fintech demo's own customers.",
+        "rule_category": "finance",
+        "matched": true,
+        "is_test": false,
+        "mode": "ACTIVE",
+        "severity": null,
+        "score_delta": 0,
+        "status_target": "AWAITING_USER",
+        "action_summary": "change_status:AWAITING_USER; add_tag:NEW_PAYEE_STEP_UP",
+        "metadata": {
+          "conditions": [
+            {
+              "field": "subject_vendor_data",
+              "matched": true,
+              "operator": "contains",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "alder-e2e-mvqpw1il",
+              "expected_value": "alder-"
+            },
+            {
+              "field": "custom_values.demo_app",
+              "matched": true,
+              "operator": "eq",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "fintech",
+              "expected_value": "fintech"
+            },
+            {
+              "field": "custom_values.new_payee",
+              "matched": true,
+              "operator": "eq",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": true,
+              "expected_value": true
+            },
+            {
+              "field": "currency",
+              "matched": true,
+              "operator": "eq",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "EUR",
+              "expected_value": "EUR"
+            },
+            {
+              "field": "amount",
+              "matched": true,
+              "operator": "gte",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "5000.000000000000000000",
+              "expected_value": 5000
+            }
+          ],
+          "scope_match": true,
+          "aggregations": []
+        },
+        "created_at": "2026-10-27T13:24:32.447902Z"
+      }
+    ],
+    "provider_results": [],
+    "travel_rule": null,
+    "network_snapshot": null,
+    "remediation": {
+      "session_id": "5c6f7628-9e4c-46da-9653-e076292c250a",
+      "session_token": "uZvPnfsfuyA4",
+      "url": "https://verify.staging.didit.me/session/uZvPnfsfuyA4",
+      "status": "Not Started"
+    },
+    "action_required": {
+      "type": "verification_session",
+      "url": "https://verify.staging.didit.me/session/uZvPnfsfuyA4",
+      "session_id": "5c6f7628-9e4c-46da-9653-e076292c250a",
+      "session_token": "uZvPnfsfuyA4",
+      "status": "Not Started"
+    },
+    "cost_breakdown": {
+      "total_price": 0.02,
+      "items": [
+        {
+          "usage_type": "transaction_monitoring",
+          "price": 0.02,
+          "details": {
+            "product": "transactions"
+          },
+          "created_at": "2026-10-27T13:24:32.714173Z"
+        }
+      ]
+    }
+  }
+}
