@@ -43,7 +43,7 @@ const apply = activate || args.has("--apply");
 
 if (process.env.NEXT_PUBLIC_IS_STAGING !== "true") {
   console.error(
-    "The marketplace demo runs on staging only (NEXT_PUBLIC_IS_STAGING=true): a KYB registry search with UBOs is billed per company on production.",
+    "This setup creates the staging seller KYB workflow and rules (NEXT_PUBLIC_IS_STAGING=true). Production uses the published workflow in lib/didit/demos.ts.",
   );
   process.exit(1);
 }
