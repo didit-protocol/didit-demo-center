@@ -2,12 +2,11 @@ import type { ConsoleContext } from "./policy";
 
 import { NextRequest, NextResponse } from "next/server";
 
-import { PLAYER_COOKIE, verifyPlayer } from "./player";
-import { PLAYER_PREFIX } from "./policy";
+import { PLAYER_COOKIE, SECURE_PLAYER_COOKIE, verifyPlayer } from "./player";
+import { LISTS_QUERY, PLAYER_PREFIX } from "./policy";
 
-import { siteConfig } from "@/config/site";
 import { authEnabled, visitorVendorData } from "@/lib/didit/auth";
-import { apiKey as sharedApiKey } from "@/lib/didit/config";
+import { diditUrls, apiKey as sharedApiKey } from "@/lib/didit/config";
 import {
   type DiditCall,
   type DiditResult as SharedResult,
@@ -73,7 +72,12 @@ export function noStore(data: unknown, init?: ResponseInit) {
 export async function readPlayer(request: NextRequest): Promise<string | null> {
   if (authEnabled()) return visitorVendorData(PLAYER_PREFIX);
 
-  return verifyPlayer(request.cookies.get(PLAYER_COOKIE)?.value, apiKey());
+  // Over HTTPS only the `__Host-` cookie is trusted: a bare one could have
+  // been planted by a sibling subdomain.
+  const name =
+    request.nextUrl.protocol === "https:" ? SECURE_PLAYER_COOKIE : PLAYER_COOKIE;
+
+  return verifyPlayer(request.cookies.get(name)?.value, apiKey());
 }
 
 export function noPlayer() {
@@ -89,7 +93,7 @@ export async function consoleContext(
 ): Promise<ConsoleContext | null> {
   const ids = await consoleIds(calls);
 
-  return ids ? { base: siteConfig.links.console, ...ids } : null;
+  return ids ? { base: diditUrls.console, ...ids } : null;
 }
 
 const listCache = new Map<string, string>();
@@ -102,7 +106,7 @@ export async function listId(
   const cached = listCache.get(name);
 
   if (cached) return cached;
-  const result = await didit("GET", "/v3/lists/?page_size=200");
+  const result = await didit("GET", `/v3/lists/${LISTS_QUERY}`);
 
   calls.push(result.call);
   const found = (

@@ -5,11 +5,13 @@ import { diditErrorMessage, projectSession } from "@/lib/igaming/records";
 import {
   type DiditCall,
   didit,
+  gateway,
   listId,
   noPlayer,
   noStore,
   readPlayer,
 } from "@/lib/igaming/server";
+import { didit as diditClient } from "@/lib/didit/server";
 
 export const dynamic = "force-dynamic";
 
@@ -38,9 +40,15 @@ export async function POST(request: NextRequest) {
     return noStore({ error: "Unknown session." }, { status: 404 });
   }
 
-  const decision = await didit("GET", `/v3/session/${sessionId}/decision/`);
+  const decision = gateway(await diditClient.sessions.decision(sessionId));
 
   calls.push(decision.call);
+  if (decision.status >= 500) {
+    return noStore(
+      { error: "The ID verification could not be read from Didit.", didit: calls },
+      { status: 502 },
+    );
+  }
   const session = decision.ok ? projectSession(decision.data, playerId) : null;
 
   if (!session) {
