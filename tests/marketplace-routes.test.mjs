@@ -157,3 +157,36 @@ test("the hosted flow's language is always one Didit accepts", () => {
     "en",
   );
 });
+
+test("a route that answers signed_out renews the session once, or leaves the visitor signed out", async () => {
+  const { withRenewal } = await import("../lib/marketplace/client.ts");
+  const signedOut = { ok: false, status: 401, error: "Sign in to Northmarket first.", code: "signed_out" };
+  const granted = { ok: true, data: { token: "t" } };
+
+  // Renewed: the same call once more, and its answer.
+  let calls = 0;
+  let renewals = 0;
+  const renewed = await withRenewal(
+    async () => (calls++ === 0 ? signedOut : granted),
+    async () => (renewals++, true),
+  );
+
+  assert.deepEqual(renewed, granted);
+  assert.equal(calls, 2);
+  assert.equal(renewals, 1);
+
+  // The session is over: no second call, the visitor is signed out by `renew`.
+  calls = 0;
+  const over = await withRenewal(async () => (calls++, signedOut), async () => false);
+
+  assert.deepEqual(over, signedOut);
+  assert.equal(calls, 1);
+
+  // Any other failure, or Authentication off, never renews.
+  const failure = { ok: false, status: 502, error: "Didit could not be reached." };
+  let asked = false;
+
+  assert.deepEqual(await withRenewal(async () => failure, async () => (asked = true)), failure);
+  assert.equal(asked, false);
+  assert.deepEqual(await withRenewal(async () => signedOut, undefined), signedOut);
+});
