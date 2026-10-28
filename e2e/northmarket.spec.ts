@@ -298,6 +298,8 @@ test("a double click on Verify my business starts one KYB, not two", async ({
   await completeHostedFlow(page);
   await expect(page.getByTestId("nm-payouts")).toContainText("Payouts are on");
   expect(mock.kybStarts).toBe(1);
+  // The second click is ignored, not reported as an error.
+  await expect(app(page).locator(".nm-toast.is-error")).toHaveCount(0);
 });
 
 test("an order whose claim fails once is retried and still shows its hold", async ({
