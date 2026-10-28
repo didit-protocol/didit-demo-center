@@ -189,6 +189,16 @@ export function kybDecidable(kybRaw: string | null): boolean {
   return normalize(kybRaw ?? "") === "in review";
 }
 
+/**
+ * A KYB that can no longer be completed, so the shop may start a new one.
+ * Every other status is either still open (resume it) or decided.
+ */
+export function kybRestartable(kybRaw: string | null): boolean {
+  return ["declined", "expired", "abandoned", "kyc expired"].includes(
+    normalize(kybRaw ?? ""),
+  );
+}
+
 /** Transactions whose status can still move on its own. */
 export function transactionSettling(raw: string | null): boolean {
   return normalize(raw ?? "") === "awaiting user";

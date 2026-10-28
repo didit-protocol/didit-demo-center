@@ -38,7 +38,7 @@ import {
   withSeller,
   withTransaction,
 } from "./state.ts";
-import { kybDecidable, payoutsUnlocked } from "./status.ts";
+import { kybDecidable, kybRestartable, payoutsUnlocked } from "./status.ts";
 import {
   deviceFingerprint,
   isMarketplaceTransaction,
@@ -594,7 +594,7 @@ export async function handleStartKyb(
   sellerId: string,
   options: { origin: string | null; fallbackOrigin: string; language: string },
 ): Promise<Reply> {
-  const blocked = notLive(env) ?? kybNotLive(env);
+  const blocked = notLive(env) ?? signedOut(env) ?? kybNotLive(env);
 
   if (blocked) return blocked;
 
@@ -613,12 +613,11 @@ export async function handleStartKyb(
         body: { sessionId: seller.sid, url: decision.kyb.url, resumed: true },
       };
     }
-    if (
-      decision.kyb &&
-      !["declined", "expired", "abandoned", "kyc expired"].includes(
-        decision.kyb.status.toLowerCase(),
-      )
-    ) {
+    if (!decision.kyb) {
+      // Unknown is not "finished": never open a second session on a guess.
+      return fail(502, decision.error ?? "KYB unavailable.");
+    }
+    if (!kybRestartable(decision.kyb.status)) {
       return fail(
         409,
         "This business verification is already submitted. Follow it in the status card.",
