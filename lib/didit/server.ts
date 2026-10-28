@@ -212,7 +212,13 @@ export const didit = {
      * from the event.
      */
     sdkToken(
-      input: { vendorData: string; categories?: string[] },
+      input: {
+        vendorData: string;
+        categories?: string[];
+        ttlSeconds?: number;
+        /** Events the token may submit; unlimited within its lifetime when unset. */
+        maxUses?: number;
+      },
       env?: DiditEnv,
     ) {
       return callDidit<{ monitoring_token?: string; expires_at?: string }>(
@@ -220,7 +226,8 @@ export const didit = {
         "/v3/events/sdk-token/",
         {
           vendor_data: input.vendorData,
-          ttl_seconds: 1800,
+          ttl_seconds: input.ttlSeconds ?? 1800,
+          ...(input.maxUses ? { max_uses: input.maxUses } : {}),
           allowed_event_categories: input.categories ?? [
             "auth",
             "session",

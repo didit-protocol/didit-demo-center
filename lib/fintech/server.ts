@@ -43,8 +43,21 @@ export async function readCustomer(
   return verifyCustomer(request.cookies.get(CUSTOMER_COOKIE)?.value, apiKey());
 }
 
+/**
+ * No customer on this request. With Authentication on that means the Didit
+ * session ended (signed out, or it expired in another tab), so the visitor
+ * is told to sign in again rather than to open an account they already have.
+ */
 export function noCustomer() {
-  return noStore({ error: "Open your Alder account first." }, { status: 401 });
+  return noStore(
+    {
+      error: authEnabled()
+        ? "Your sign-in has ended. Sign in to Alder again."
+        : "Open your Alder account first.",
+      code: "no_customer",
+    },
+    { status: 401 },
+  );
 }
 
 /** A failed Didit call, with Didit's own reason. */
