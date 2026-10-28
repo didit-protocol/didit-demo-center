@@ -7,14 +7,12 @@ import assert from "node:assert/strict";
 await import("./helpers/register.mjs");
 
 const { NextRequest } = await import("next/server");
-const { readLanguage, readState, respond } = await import(
-  "../lib/marketplace/route.ts"
-);
+const { readLanguage, readState, respond } =
+  await import("../lib/marketplace/route.ts");
 const { api, API_TIMEOUT_MS } = await import("../lib/marketplace/client.ts");
 const { sealState, stateKey } = await import("../lib/marketplace/state.ts");
-const { TEST_KEY, makeEnv, seller, stateWith } = await import(
-  "./marketplace-helpers.mjs"
-);
+const { TEST_KEY, makeEnv, seller, stateWith } =
+  await import("./marketplace-helpers.mjs");
 
 const env = makeEnv();
 const state = stateWith({ sellers: [seller("mkt-seller-9e7b751f882f")] });
@@ -45,7 +43,10 @@ test("behind an https proxy the cookie is the __Host- one too", () => {
     { status: 200, body: {}, state },
   );
 
-  assert.match(response.headers.get("set-cookie"), /^__Host-northmarket_state=.*; Secure/i);
+  assert.match(
+    response.headers.get("set-cookie"),
+    /^__Host-northmarket_state=.*; Secure/i,
+  );
 });
 
 test("a plain-http dev server keeps the bare name, which it can set", () => {
@@ -92,7 +93,10 @@ test("clearing the state expires the same cookie", () => {
     { status: 200, body: {}, state: null },
   );
 
-  assert.match(response.headers.get("set-cookie"), /^__Host-northmarket_state=;.*Max-Age=0/i);
+  assert.match(
+    response.headers.get("set-cookie"),
+    /^__Host-northmarket_state=;.*Max-Age=0/i,
+  );
 });
 
 test("a browser call that never answers ends with a timeout the page can show", async (t) => {
@@ -103,7 +107,10 @@ test("a browser call that never answers ends with a timeout the page can show", 
     throw new DOMException("The operation timed out.", "TimeoutError");
   });
 
-  const result = await api("/sellers", { method: "POST", body: { shop: "Atelier" } });
+  const result = await api("/sellers", {
+    method: "POST",
+    body: { shop: "Atelier" },
+  });
 
   assert.ok(seen[0] instanceof AbortSignal);
   assert.ok(API_TIMEOUT_MS > 20_000, "longer than one Didit call");
@@ -116,7 +123,10 @@ test("a browser call that never answers ends with a timeout the page can show", 
 
 test("a route's own error reaches the page as its sentence and code", async (t) => {
   t.mock.method(globalThis, "fetch", async () =>
-    Response.json({ error: "Sign in to Northmarket first.", code: "signed_out" }, { status: 401 }),
+    Response.json(
+      { error: "Sign in to Northmarket first.", code: "signed_out" },
+      { status: 401 },
+    ),
   );
 
   assert.deepEqual(await api("/token", { method: "POST", body: {} }), {
@@ -142,5 +152,8 @@ test("the hosted flow's language is always one Didit accepts", () => {
   assert.equal(withLocale("en-US"), "en");
   assert.equal(withLocale("xx"), "en");
   assert.equal(withLocale("<script>"), "en");
-  assert.equal(readLanguage(request("https://demos.staging.didit.me/api/marketplace")), "en");
+  assert.equal(
+    readLanguage(request("https://demos.staging.didit.me/api/marketplace")),
+    "en",
+  );
 });
