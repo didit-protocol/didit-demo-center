@@ -1,6 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 import { completeHostedFlow, mockKestrel } from "./kestrel-mocks";
+import { collectOwnErrors, expectNoHorizontalScroll } from "./page-health";
 
 /**
  * Kestrel (/crypto-exchange) end to end, on desktop and on a phone: the five
@@ -42,6 +43,19 @@ const action = (page: Page, name: string) =>
     .getByRole("button", { name, exact: true })
     .filter({ visible: true })
     .first();
+
+/** The console view: the Demo Center bar on a computer, Kestrel's top bar on a phone. */
+async function openConsoleView(page: Page) {
+  await page
+    .getByRole("button", { name: "Console view", exact: true })
+    .filter({ visible: true })
+    .click();
+  const consoleView = page.getByTestId("console-view");
+
+  await expect(consoleView).toBeVisible();
+
+  return consoleView;
+}
 
 async function deposit(
   page: Page,
@@ -265,6 +279,120 @@ test("a withdrawal to a sanctioned wallet is declined, and the console view show
   await expect(consoleView).toContainText("95 / 100");
   await expect(consoleView).toContainText("Sanctioned wallet");
   await expect(consoleView).toContainText("No ETH left the platform.");
+});
+
+test("the signed-in home loads with no errors of its own and no sideways scroll", async ({
+  page,
+}) => {
+  await mockKestrel(page);
+  const errors = collectOwnErrors(page);
+
+  await page.goto("/crypto-exchange");
+  await expect(action(page, "Deposit")).toBeVisible();
+  // A new account has no photo: the top bar shows its initials.
+  const avatar = app(page).getByTestId("kestrel-avatar");
+
+  await expect(avatar).toHaveText("AQ");
+  await expect(avatar).toHaveAttribute("aria-label", "Avery Quinn");
+  await expect(app(page).locator("header img.ks-ava")).toHaveCount(0);
+
+  expect(errors).toEqual([]);
+  await expectNoHorizontalScroll(page);
+});
+
+test("the coin cards keep their change inside on the landing", async ({
+  page,
+}) => {
+  await mockKestrel(page, { account: null });
+  await page.goto("/crypto-exchange");
+
+  const cards = app(page).locator(".ks-coincard");
+
+  await expect(cards).toHaveCount(3);
+  for (let index = 0; index < 3; index++) {
+    const card = cards.nth(index);
+    const change = card.locator(".h > span").last();
+    const outer = await card.boundingBox();
+    const inner = await change.boundingBox();
+
+    expect(outer && inner).toBeTruthy();
+    expect(inner!.x).toBeGreaterThanOrEqual(outer!.x);
+    expect(inner!.x + inner!.width).toBeLessThanOrEqual(
+      outer!.x + outer!.width,
+    );
+  }
+  await expectNoHorizontalScroll(page);
+});
+
+test("the banner says the check is open while the modal is, and how to resume after it closes", async ({
+  page,
+}) => {
+  await mockKestrel(page, { account: null });
+  await page.goto("/crypto-exchange");
+  const card = page.getByRole("form", { name: "Create your account" });
+
+  await card.getByLabel("Email").fill("avery.quinn@example.com");
+  await card.getByRole("button", { name: "Create account" }).click();
+  await expect(
+    page.locator('iframe[src*="/session/e2e-onboarding"]'),
+  ).toBeVisible();
+
+  const banner = page.getByRole("status").filter({ visible: true }).filter({
+    hasText: /verif/i,
+  });
+
+  await expect(banner).toContainText("The check is open on this page.");
+  await expect(banner).not.toContainText("window");
+  await expect(
+    app(page).getByRole("button", { name: "Continue verification" }),
+  ).toHaveCount(0);
+
+  // Closed without a decision: the session stays open, and the banner says how to pick it up.
+  await page.getByRole("button", { name: "Close verification" }).click();
+  await page.getByRole("button", { name: "Exit", exact: true }).click();
+  await expect(banner).toContainText("Your verification is not finished.", {
+    timeout: 30_000,
+  });
+  await expect(banner).toContainText("Select Continue verification");
+  await expect(
+    banner.getByRole("button", { name: "Continue verification" }),
+  ).toBeVisible();
+});
+
+test("an open KYC session after a reload: the banner, the feed's person and the console view", async ({
+  page,
+}) => {
+  await mockKestrel(page, { account: "processing" });
+  await page.goto("/crypto-exchange");
+
+  const banner = page
+    .getByRole("status")
+    .filter({ visible: true })
+    .filter({ hasText: "Your verification is not finished." });
+
+  await expect(banner).toBeVisible();
+  await expect(banner).not.toContainText("window");
+  await expect(
+    banner.getByRole("button", { name: "Continue verification" }),
+  ).toBeVisible();
+  await expect(app(page).getByTestId("kestrel-avatar")).toHaveText("AQ");
+  await openFeed(page);
+  await expect(live(page)).toContainText("avery.quinn@example.com");
+  await expect(live(page)).not.toContainText("No one signed in yet");
+
+  // Opened from the top bar, the phone's too: the session is in progress, never missing.
+  const consoleView = await openConsoleView(page);
+
+  await consoleView.getByRole("tab", { name: "Verification" }).click();
+  await expect(consoleView).toContainText("In progress");
+  await expect(consoleView).toContainText(/Started \d{1,2} \w{3}, \d\d:\d\d/);
+  await expect(consoleView).not.toContainText("Not started");
+  await expect(consoleView).not.toContainText("No verification yet");
+  await consoleView.getByRole("tab", { name: "Person" }).click();
+  await expect(consoleView).toContainText("In progress");
+  await expect(consoleView).toContainText("KYC started");
+  await expect(consoleView).not.toContainText("Not started");
+  await expect(consoleView).not.toContainText("Not verified");
 });
 
 test("the hub links to the crypto exchange", async ({ page }) => {

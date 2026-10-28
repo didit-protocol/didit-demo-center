@@ -3,6 +3,7 @@ import type { DemoStep, ProductDemo } from "@/lib/product-demos/define";
 import Link from "next/link";
 import { ArrowUpRight, ChevronRight } from "lucide-react";
 
+import { MobileNav } from "@/components/hub/mobile-nav";
 import { siteConfig } from "@/config/site";
 import { familyLabel } from "@/lib/product-demos/define";
 
@@ -52,7 +53,7 @@ export function TopBar() {
           <Link aria-current="page" href="/#product-demos">
             Product demos
           </Link>
-          <Link href="/#how">Build your flow</Link>
+          <Link href="/#integrate">Build your flow</Link>
         </nav>
         <span className="pd-top-r">
           <a
@@ -69,6 +70,16 @@ export function TopBar() {
           <a className="pd-btn is-pri is-sm" href={siteConfig.links.console}>
             Start free
           </a>
+          <MobileNav
+            className="pd-menu"
+            links={[
+              { label: "Industry demos", href: "/#demos" },
+              { label: "Product demos", href: "/#product-demos", current: true },
+              { label: "Build your flow", href: "/#integrate" },
+              { label: "Docs", href: siteConfig.links.docs, external: true },
+              { label: "Sign in", href: siteConfig.links.console },
+            ]}
+          />
         </span>
       </div>
     </header>

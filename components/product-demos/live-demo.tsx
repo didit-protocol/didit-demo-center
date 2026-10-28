@@ -1,7 +1,6 @@
 "use client";
 
 import type { ConsoleTab } from "@/lib/didit/console";
-import type { LiveDemo as Live } from "@/lib/product-demos/define";
 
 import * as React from "react";
 import { ArrowRight, ImageUp, Loader2, SquareTerminal } from "lucide-react";
@@ -16,6 +15,12 @@ import { openVerification } from "@/lib/didit/browser";
 import { diditUrls } from "@/lib/didit/config";
 import { useDidit } from "@/lib/didit/provider";
 import { useLive } from "@/lib/didit/use-live";
+import {
+  AVAILABILITY_LABEL,
+  type LiveDemo as Live,
+  availability,
+  sessionCurl,
+} from "@/lib/product-demos/define";
 import {
   type DecisionView,
   consolePage,
@@ -69,7 +74,10 @@ export function LiveDemo({ demo }: { demo: Live }) {
   const [tab, setTab] = React.useState("person");
   const busy =
     phase === "starting" || phase === "verifying" || phase === "reading";
-  const blocked = !demo.workflow || (demo.requiresPortrait && !portrait);
+  // The status next to the title reads the same condition as Start.
+  const status = AVAILABILITY_LABEL[availability(demo)];
+  const blocked =
+    availability(demo) !== "live" || (demo.requiresPortrait && !portrait);
 
   /** Reads the decision, waiting a little while Didit finishes it. */
   const finish = React.useCallback(
@@ -292,8 +300,8 @@ export function LiveDemo({ demo }: { demo: Live }) {
             : demo.lede}
         </p>
         <div className="pd-meta">
-          <Status kind="ok" label="Live demo" />
-          {view ? null : <span>{demo.time.long}</span>}
+          <Status kind={status.kind} label={status.page} />
+          {view || !demo.workflow ? null : <span>{demo.time.long}</span>}
           <span>Free in the sandbox</span>
         </div>
 
@@ -423,10 +431,8 @@ export function LiveDemo({ demo }: { demo: Live }) {
               id="api-call"
               label="The call behind this demo"
               lines={[
-                "# the call behind this demo",
-                `curl -X POST ${diditUrls.api}/v3/session/ \\`,
-                ' -H "x-api-key: $DIDIT_API_KEY" \\',
-                ` -d '{ "workflow_id": "<${demo.id} workflow>", "vendor_data": "demo-visitor" }'`,
+                "# the call behind this demo, with your workflow id",
+                ...sessionCurl(diditUrls.api),
                 "",
                 "# then, in the browser",
                 "await startVerification({ url })",
