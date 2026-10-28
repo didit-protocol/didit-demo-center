@@ -3,8 +3,8 @@ import { NextRequest } from "next/server";
 import { AGE_WORKFLOW_ID, OPERATOR_NAME } from "@/lib/igaming/policy";
 import { diditErrorMessage } from "@/lib/igaming/records";
 import { gateway, noPlayer, noStore, readPlayer } from "@/lib/igaming/server";
+import { diditUrls } from "@/lib/didit/config";
 import { didit as diditClient } from "@/lib/didit/server";
-import { siteConfig } from "@/config/site";
 
 export const dynamic = "force-dynamic";
 
@@ -16,7 +16,7 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * the caller chose would let anyone mint a genuine Didit link that lands on
  * their own site afterwards.
  */
-const CALLBACK = new URL("/igaming", siteConfig.url).toString();
+const CALLBACK = new URL("/igaming", diditUrls.site).toString();
 
 /**
  * Registration: create the adaptive age-check session for this player.

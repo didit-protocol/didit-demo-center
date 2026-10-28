@@ -19,7 +19,14 @@ type Sdk = (typeof import("@didit-protocol/sdk-web"))["DiditSdk"];
 let sdkPromise: Promise<Sdk> | null = null;
 
 export function loadSdk(): Promise<Sdk> {
-  sdkPromise ??= import("@didit-protocol/sdk-web").then((mod) => mod.DiditSdk);
+  sdkPromise ??= import("@didit-protocol/sdk-web").then(
+    (mod) => mod.DiditSdk,
+    (error) => {
+      // A failed download is not cached: the next attempt loads it again.
+      sdkPromise = null;
+      throw error;
+    },
+  );
 
   return sdkPromise;
 }
