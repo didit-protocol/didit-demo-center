@@ -1,0 +1,501 @@
+{
+  "translation_v1": {
+    "chrome": {
+      "header": {
+        "nav": {
+          "products": "Products",
+          "solutions": {
+            "cards": {
+              "verifyBusiness": {
+                "iconLabel": "Business Verification (KYB)"
+              }
+            }
+          },
+          "developers": {
+            "primary": {
+              "terminal": {
+                "readyOpenDashboard": "→ ready in 5 min · open dashboard",
+                "integrateDidit": "> integrate Didit verification",
+                "sessionScaffolded": "✓ /v3/session/ scaffolded",
+                "readingMcp": "↻ reading mcp://didit.me",
+                "webhookReady": "✓ webhook handler ready",
+                "mcpConnected": "✓ MCP server connected",
+                "claude": "$ claude"
+              },
+              "quickstartIconLabel": "Quickstart"
+            }
+          },
+          "resources": {
+            "foundersCard": {
+              "imageAlt": "Alejandro Rosas (left) and Alberto Rosas (right), Didit co-founders",
+              "iconLabel": "About Didit"
+            }
+          },
+          "pricing": "Pricing",
+          "image": {
+            "alt": {
+              "didit": "Didit"
+            }
+          },
+          "labels": {
+            "solutions": "Solutions",
+            "developers": "Developers",
+            "resources": "Resources",
+            "pricing": "Pricing"
+          }
+        },
+        "products": {
+          "cards": {
+            "userVerification": {
+              "title": "User Verification",
+              "description": "KYC bundle · $0.33"
+            },
+            "businessVerification": {
+              "title": "Business Verification",
+              "description": "KYB · from $2.00"
+            },
+            "transactionMonitoring": {
+              "title": "Transaction Monitoring",
+              "description": "Real-time rules · $0.02/tx"
+            },
+            "walletScreening": {
+              "title": "Wallet Screening (KYT)",
+              "description": "On-chain wallet risk · $0.15"
+            }
+          },
+          "modules": {
+            "headingDocuments": "Documents & Contact",
+            "headingBiometrics": "Biometrics & Risk",
+            "idVerification": "ID Verification",
+            "nfcVerification": "NFC Verification",
+            "proofOfAddress": "Proof of Address",
+            "databaseValidation": "Database Validation",
+            "questionnaires": "Custom Questionnaires",
+            "emailVerification": "Email Verification",
+            "phoneVerification": "Phone Verification",
+            "liveness": "Liveness",
+            "faceMatch": "Face Match 1:1",
+            "faceSearch": "Face Search 1:N",
+            "biometricAuth": "Biometric Authentication",
+            "ageEstimation": "Age Estimation",
+            "ipAnalysis": "Device & IP Analysis",
+            "walletScreening": "Wallet Screening (KYT)",
+            "seeAll": "See all 25+ modules"
+          },
+          "viewAll": "Browse all products"
+        },
+        "solutions": {
+          "cards": {
+            "onboardCustomer": {
+              "title": "User Verification (KYC)",
+              "description": "Free KYC for up to 500 verifications a month, forever. ID, liveness, and face match in one bundle.",
+              "iconLabel": "User Verification (KYC)"
+            },
+            "verifyBusiness": {
+              "title": "Business Verification (KYB)",
+              "description": "Registry, beneficial owners, officers, and entity AML. Every UBO gets a linked KYC session out of the box."
+            },
+            "stopFraud": {
+              "title": "Transaction Monitoring",
+              "description": "Real-time rule engine for fiat and crypto. Case management, SAR workflow, and auto-remediation to a linked KYC.",
+              "iconLabel": "Stop fraud"
+            },
+            "complyAml": {
+              "title": "Comply with AML",
+              "description": "Screen against 1,300+ sanctions, PEP, and adverse-media lists. Daily ongoing monitoring at $0.07 per user / year.",
+              "iconLabel": "Comply with AML"
+            },
+            "authentication": {
+              "title": "Authentication",
+              "description": "Liveness, biometric auth, IP and device"
+            },
+            "verification": {
+              "title": "Verification",
+              "description": "KYC, KYB, document, and registry checks"
+            },
+            "monitoring": {
+              "title": "Monitoring",
+              "description": "Ongoing AML, transaction rules, wallet KYT"
+            },
+            "amlCompliance": {
+              "title": "AML & compliance",
+              "description": "Sanctions, PEP, adverse media, ongoing"
+            }
+          },
+          "byUseCase": {
+            "heading": "Use cases",
+            "fullKycOnboarding": "Full KYC onboarding",
+            "ageVerification": "Age verification",
+            "cryptoOnramp": "Crypto on-ramp KYC + KYT",
+            "accountTakeover": "Stop account takeovers",
+            "multiAccountAbuse": "Block multi-account abuse",
+            "proofOfHuman": "Proof of human",
+            "gigWorker": "Onboard gig workers",
+            "botDetection": "Block bots",
+            "passwordRecovery": "Password recovery",
+            "seeAll": "All use cases"
+          },
+          "byIndustry": {
+            "heading": "By industry",
+            "fintech": "Fintech",
+            "crypto": "Crypto",
+            "igaming": "iGaming",
+            "marketplaces": "Marketplaces",
+            "mobility": "Mobility",
+            "seeAll": "View all industries",
+            "fintechDesc": "Neobanks · payments · lending · brokerage",
+            "cryptoDesc": "Exchanges · wallets · on / off-ramps · VASPs",
+            "igamingDesc": "Sportsbooks · casinos · lottery · fantasy sports",
+            "marketplacesDesc": "Gig · delivery · creator · e-commerce",
+            "mobilityDesc": "Ride-hail · fleets · last-mile delivery"
+          },
+          "byModule": {
+            "heading": "By module",
+            "freeKyc": "Free KYC",
+            "governmentChecks": "Government checks",
+            "biometricAuthentication": "Biometric Authentication",
+            "walletScreening": "Wallet Screening (KYT)",
+            "ageEstimation": "Age Estimation",
+            "ipAnalysis": "Device & IP Analysis",
+            "idVerification": "ID Verification",
+            "whiteLabel": "White Label",
+            "liveness": "Liveness",
+            "faceMatch": "Face Match",
+            "seeAll": "All 25+ modules"
+          },
+          "viewAll": "Browse the full catalogue"
+        },
+        "developers": {
+          "primary": {
+            "docs": "Documentation",
+            "apiReference": "API Reference",
+            "mcpServer": "MCP Server",
+            "quickstart": "Quickstart"
+          },
+          "quickstartCard": {
+            "description": "Integrate Didit in 5 minutes. Grab a sandbox key, POST your first session, verify the webhook, one curl walkthrough.",
+            "cta": "Read the quickstart",
+            "eyebrow": "INTEGRATE IN 5 MIN"
+          },
+          "buildLinks": {
+            "heading": "Build",
+            "sessionsApi": "Sessions API",
+            "webhooks": "Webhooks",
+            "sdks": "SDKs",
+            "openApi": "OpenAPI / Postman",
+            "agentSkills": "Agent Skills",
+            "codingAgentIntegration": "Coding Agent Integration"
+          },
+          "ship": {
+            "integrationPrompt": "Integration prompt",
+            "heading": "Ship",
+            "sandbox": "Sandbox",
+            "changelog": "Changelog",
+            "status": "Service Status"
+          },
+          "viewAll": "Developer hub"
+        },
+        "resources": {
+          "hero": {
+            "academy": "Academy",
+            "blog": "Blog",
+            "successStories": "Success Stories",
+            "helpCenter": "Help Center",
+            "demoCenter": "Demo Center",
+            "roiCalculator": "ROI Calculator"
+          },
+          "foundersCard": {
+            "title": "Meet the founders",
+            "description": "Alejandro and Alberto Rosas, twin brothers from Barcelona building the infrastructure for identity and fraud.",
+            "cta": "Read about Didit"
+          },
+          "read": {
+            "heading": "Read & explore"
+          },
+          "company": {
+            "heading": "Company",
+            "about": "About us",
+            "careers": "Careers",
+            "securityCompliance": "Security & Compliance",
+            "contact": "Contact"
+          },
+          "viewAll": "All resources"
+        },
+        "ctas": {
+          "signIn": "Sign in",
+          "signUp": "Sign up",
+          "startFree": "Start free",
+          "talkToUs": "Talk to us",
+          "learnMore": "Learn more"
+        },
+        "localeSwitcherLabel": "Language"
+      },
+      "announcementBar": {
+        "slot1": {
+          "text": "Didit Raises <amt>$7.5M</amt> to Build the Infrastructure for Identity and Fraud",
+          "ctaLabel": "Read the announcement",
+          "href": "/blog/didit-7-5m-seed-infrastructure-identity-fraud/"
+        },
+        "slot2": {
+          "text": "Spain's financial regulator recognised Didit as safer than in-person.",
+          "ctaLabel": "Read the report",
+          "href": "/security-compliance#regulator"
+        },
+        "slot3": {
+          "text": "Wallet screening at $0.15 per check, or bring your own screening provider.",
+          "ctaLabel": "See wallet screening",
+          "href": "/products/wallet-screening"
+        },
+        "slot4": {
+          "text": "KYB and Transaction Monitoring pricing is live.",
+          "ctaLabel": "See pricing",
+          "href": "/pricing"
+        },
+        "slot5": {
+          "text": "$0.33 per full KYC. 500 free every month.",
+          "ctaLabel": "Start free",
+          "href": "https://business.didit.me"
+        }
+      },
+      "footer": {
+        "askAi": {
+          "eyebrow": "Ask an AI to summarise this page",
+          "openIn": "Open this page in {provider}"
+        },
+        "tagline": "One API for identity and fraud.",
+        "cols": {
+          "products": {
+            "heading": "Products",
+            "userVerification": "User Verification (KYC)",
+            "businessVerification": "Business Verification (KYB)",
+            "transactionMonitoring": "Transaction Monitoring",
+            "walletScreening": "Wallet Screening (KYT)",
+            "amlScreening": "AML Screening",
+            "idVerification": "ID Verification",
+            "liveness": "Liveness",
+            "faceMatch1to1": "Face Match 1:1",
+            "faceSearch1toN": "Face Search 1:N",
+            "biometricAuth": "Biometric Authentication",
+            "ageEstimation": "Age Estimation",
+            "nfcReading": "NFC Reading",
+            "databaseValidation": "Database Validation",
+            "ipAnalysis": "Device & IP Analysis",
+            "emailVerification": "Email Verification",
+            "phoneVerification": "Phone Verification",
+            "workflowOrchestrator": "Workflow Orchestrator",
+            "whiteLabel": "White Label",
+            "seeAllModules": "All products"
+          },
+          "solutions": {
+            "heading": "Solutions",
+            "fullKycOnboarding": "Full KYC onboarding",
+            "ageVerification": "Age verification",
+            "cryptoOnramp": "Crypto on-ramp KYC + KYT",
+            "accountTakeover": "Stop account takeovers",
+            "multiAccountAbuse": "Block multi-account abuse",
+            "proofOfHuman": "Proof of human",
+            "botDetection": "Block bots",
+            "gigWorkerVerification": "Gig worker verification",
+            "igamingResponsibleGaming": "iGaming responsible gaming",
+            "micaCrypto": "MiCA crypto user verification",
+            "cryptoTravelRule": "Crypto Travel Rule",
+            "uboVerification": "UBO verification (6AMLD)",
+            "bnplUnderwriting": "BNPL underwriting",
+            "psd3Sca": "PSD3 SCA",
+            "marketplaceSellerKyb": "Marketplace seller KYB",
+            "employeeOnboarding": "Employee onboarding",
+            "nfcEpassport": "NFC ePassport onboarding",
+            "passwordRecovery": "Password recovery",
+            "seeAll": "All use cases"
+          },
+          "industries": {
+            "heading": "Industries",
+            "fintech": "Fintech",
+            "crypto": "Crypto / Web3",
+            "marketplaces": "Marketplaces",
+            "mobility": "Mobility",
+            "gambling": "iGaming / Gambling",
+            "banking": "Banking",
+            "insurance": "Insurance",
+            "ecommerce": "E-commerce",
+            "telecom": "Telecom",
+            "seeAll": "All industries"
+          },
+          "developers": {
+            "heading": "Developers",
+            "documentation": "Documentation",
+            "apiReference": "API Reference",
+            "quickstart": "Quickstart, 5 min",
+            "integrationPrompt": "Integration prompt",
+            "mcp": "MCP Server",
+            "agentSkills": "Agent Skills",
+            "sdks": "SDKs",
+            "sandbox": "Sandbox (free)",
+            "changelog": "Changelog",
+            "status": "Service Status",
+            "demoCenter": "Demo Center"
+          },
+          "comparePricing": {
+            "heading": "Pricing & Compare",
+            "pricing": "Pricing",
+            "roiCalculator": "ROI Calculator",
+            "sumsub": "vs Sumsub",
+            "veriff": "vs Veriff",
+            "onfido": "vs Onfido",
+            "jumio": "vs Jumio",
+            "persona": "vs Persona",
+            "stripeIdentity": "vs Stripe Identity",
+            "allSwitch": "All competitor comparisons",
+            "countries": "Countries supported",
+            "supportedDocuments": "Supported documents"
+          },
+          "resources": {
+            "heading": "Resources",
+            "securityCompliance": "Security & Compliance",
+            "supportedDocuments": "Supported Documents",
+            "roiCalculator": "ROI Calculator",
+            "status": "Service Status",
+            "demoCenter": "Demo Center"
+          },
+          "company": {
+            "heading": "Company",
+            "about": "About us",
+            "blog": "Blog",
+            "successStories": "Success Stories",
+            "securityCompliance": "Security & Compliance",
+            "contact": "Contact",
+            "getDemo": "Get a demo",
+            "careers": "Careers",
+            "brand": "Brand kit",
+            "support": "Support",
+            "helpCenter": "Help Center"
+          },
+          "backedby": {
+            "investors": {
+              "name": {
+                "yCombinator": "Y Combinator"
+              }
+            }
+          }
+        },
+        "trustStrip": "SOC 2 · ISO 27001 · iBeta PAD L1 · GDPR · eIDAS 2.0 · MiCA · AMLD6 · DORA-aligned",
+        "regulatorMicroline": "Recognised by Spain's Tesoro, Banco de España, and SEPBLAC as safer than in-person verification.",
+        "regulatorReadReport": "Read the report",
+        "backedBy": "Backed by",
+        "g2Aria": "Didit is rated 4.9 out of 5 on G2",
+        "g2Tagline": "Infrastructure for identity and fraud",
+        "hq": "San Francisco, USA · Headquarters",
+        "legal": {
+          "copyright": "© 2026 Didit",
+          "privacy": "Privacy",
+          "cookies": "Cookies",
+          "businessTerms": "Terms for Business",
+          "subProcessors": "Sub-processors",
+          "contact": "Contact"
+        },
+        "social": {
+          "labels": {
+            "linkedin": "LinkedIn",
+            "x": "X (Twitter)",
+            "github": "GitHub"
+          },
+          "ariaLabel": "Didit on {network}"
+        }
+      }
+    },
+    "localeswitcher": {
+      "language": "Language",
+      "ariaLabel": {
+        "language": "Language",
+        "languageColumn1": "Language (column 1)",
+        "languageColumn2": "Language (column 2)",
+        "changeLanguage": "Change language. Current language: {current}."
+      }
+    },
+    "ui": {
+      "navbar": {
+        "image": {
+          "sizes": {
+            "minWidth1024px480px": "(min-width: 1024px) 480px, 100vw"
+          },
+          "alt": {
+            "didit": "Didit"
+          }
+        },
+        "dropdownPanel": {
+          "imageBackgroundVariant": {
+            "description": "Image-background variant, used for the Resources\n                  // menu's \"Meet the founders\" card. Next/Image fills\n                  // the card; a left-aligned stacked text block\n                  // (title + description + CTA) sits low in the\n                  // bottom-left corner so the photo dominates ~80%\n                  // of the card. No dark gradient overlay, text\n                  // legibility carried by a tight text-shadow on\n                  // the canvas-white type. Per Alberto: \"remove the\n                  // opacity below and make it like before on the\n                  // left aligned just make sure it starts more in\n                  // the bottom as before.\""
+          },
+          "titleRow": {
+            "description": "Title row, icon inline LEFT of the title (no chip\n                    background, no ring, no shadow). Uses the same icon\n                    family `/pricing` uses via ConsoleModuleIcon (which\n                    mirrors the fe-application-console workflow-feature-\n                    icon registry); falls back to the iconSrc mask\n                    when `moduleKey` is absent."
+          },
+          "accentSideColumn": {
+            "description": "`accent` on a side-column link renders it in Didit\n                  // Blue with a trailing arrow, used for \"See all 25+\n                  // modules\", \"All 15 industries\", \"Browse all …\" style\n                  // entries so they read as explore-more CTAs rather\n                  // than regular module links."
+          },
+          "subtleDarkening": {
+            "description": "Subtle bottom-only darkening, just enough to\n                        anchor the text without dimming the upper\n                        portion of the photo. h-[55%] starts well\n                        below the founders' faces."
+          },
+          "accentVariant": {
+            "description": "Accent variant, wrap the link in a Didit Blue pill so it\n            // reads as a high-conversion call-out."
+          },
+          "heroStrip": {
+            "heading": "Hero strip, gradient cards in a single horizontal row."
+          },
+          "linkColumnsRow": {
+            "heading": "Link columns row, Modules · Use cases · Industries."
+          }
+        },
+        "searchDidit": "Search Didit",
+        "closeSearch": "Close search",
+        "openMenu": "Open menu",
+        "closeMenu": "Close menu"
+      },
+      "topBar": {
+        "announcementAriaLabel": "Announcement",
+        "dismissAnnouncementAriaLabel": "Dismiss announcement"
+      },
+      "navTerminalCard": {
+        "diditZsh": "~/didit · zsh",
+        "navTerminalCard": {
+          "live": "LIVE"
+        }
+      },
+      "logoContextMenu": {
+        "aria": "Didit brand assets",
+        "eyebrow": "Brand kit",
+        "copyLogo": "Copy logo as SVG",
+        "copied": "Copied",
+        "downloadSvg": "Download logo (SVG)",
+        "downloadPng": "Download logo (PNG)",
+        "downloadMark": "Download symbol (SVG)",
+        "copyColor": "Copy brand color",
+        "guidelines": "Brand guidelines"
+      },
+      "footer": {
+        "legalTagline": "Identity infrastructure for teams that need trust."
+      },
+      "backedBy": {
+        "label": "Backed by"
+      }
+    },
+    "blog": {
+      "archive": {
+        "eyebrow": "Blog archive",
+        "title": "Browse every <blue>Didit article</blue>.",
+        "titleAccent": "Didit article",
+        "description": "Every published article about identity and fraud, organized into lightweight pages for quick browsing.",
+        "browseAll": "Browse all articles",
+        "navigationAria": "Blog archive pages",
+        "pageOf": "Page {page} of {total}",
+        "range": "Articles {start}–{end}",
+        "articleCount": "{count} articles",
+        "metadata": {
+          "title": "Blog archive | Didit",
+          "pageTitle": "Blog archive, page {page} | Didit",
+          "description": "Browse the complete Didit blog archive for practical articles on identity verification, fraud prevention, compliance, product updates, and company news.",
+          "pageDescription": "Browse page {page} of Didit's blog archive for articles on identity verification, fraud prevention, compliance, product updates, and company news."
+        }
+      }
+    }
+  }
+}
