@@ -259,10 +259,10 @@ test("when Didit cannot be reached, the customer reads why and can try again", a
   await form.getByLabel("Mobile number").fill("151 2044 7781");
   await form.getByRole("button", { name: "Open my account" }).click();
 
-  await expect(page.getByRole("alert")).toHaveText(
+  await expect(app(page).getByRole("alert")).toHaveText(
     "The Didit API could not be reached.",
   );
-  await expect(page.getByRole("alert")).not.toContainText(/\b50\d\b/);
+  await expect(app(page).getByRole("alert")).not.toContainText(/\b50\d\b/);
   await expect(
     app(page).getByRole("button", { name: "Verify your identity" }),
   ).toBeEnabled();
