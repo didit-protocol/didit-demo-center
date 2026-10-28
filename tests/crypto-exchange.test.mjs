@@ -20,8 +20,11 @@ import {
   parseAmount,
   randomBtcAddress,
   randomEvmAddress,
+  isSettled,
   riskBand,
   ruleName,
+  submitErrorMessage,
+  submittedView,
   toTransactionView,
   withdrawalHoldsFunds,
   withdrawalStage,
@@ -395,4 +398,57 @@ test("every rule is scoped to the demo and the step-up names its workflow", () =
   assert.equal(TRAVEL_RULE_SETTINGS.is_enabled, true);
   assert.equal(TRAVEL_RULE_SETTINGS.is_discoverable, false);
   assert.equal(TRAVEL_RULE_SETTINGS.vasp_attribution_enabled, false);
+});
+
+test("a failed submission reads as one sentence, never the SDK's error code", () => {
+  const sdkError = (type, message) => Object.assign(new Error(message), { type });
+
+  assert.equal(
+    submitErrorMessage(sdkError("network", "Request failed with status 500.")),
+    "Didit could not be reached. Check your activity, then try again.",
+  );
+  assert.equal(
+    submitErrorMessage(sdkError("expired_token", "The transaction token has expired.")),
+    "Your secure session expired. Reload the page and try again.",
+  );
+  assert.equal(
+    submitErrorMessage(sdkError("validation", "The transaction payload failed validation.")),
+    "Didit did not accept this transfer. Check the amount and the address.",
+  );
+  assert.equal(
+    submitErrorMessage(sdkError("validation", "Amount must be positive.")),
+    "Didit did not accept this transfer: Amount must be positive.",
+  );
+  // Kestrel's own server already speaks in sentences.
+  assert.equal(
+    submitErrorMessage(new Error("Your account must be approved before you can move funds.")),
+    "Your account must be approved before you can move funds.",
+  );
+  assert.equal(submitErrorMessage(null), "Didit did not accept the transaction.");
+});
+
+test("a transfer Didit accepted stays in the ledger when its record cannot be read yet", () => {
+  const view = submittedView({
+    id: "00000000-0000-4000-8000-000000000001",
+    status: "AWAITING_USER",
+    travelRuleStatus: "AWAITING_COUNTERPARTY",
+    kind: "withdrawal",
+    amount: "0.5",
+    currency: "ETH",
+    wallet: "0xb69303df0fc354d3202ec3233425c755483d3f28",
+  });
+  const item = { id: view.id, kind: "withdrawal", asset: "ETH", wallet: view.wallet, createdAt: "", view };
+
+  assert.equal(view.status, "AWAITING_USER");
+  // No action yet, so it holds the funds and is read again later.
+  assert.equal(withdrawalStage(view), "step-up-unavailable");
+  assert.equal(isSettled(item), false);
+  const credited = {
+    ...item,
+    id: "deposit",
+    kind: "deposit",
+    view: submittedView({ ...view, id: "deposit", status: "APPROVED", kind: "deposit", amount: "1" }),
+  };
+
+  assert.deepEqual(balancesOf([item, credited]).ETH, { total: 1, available: 0.5, held: 0.5 });
 });
