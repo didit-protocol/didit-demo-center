@@ -171,142 +171,159 @@ export function useNorthmarket() {
     }
   };
 
+  const busyError = failed("Another step is still running. Wait for it to finish.");
+
   /**
    * Opens a shop and reports its sign-up to transaction monitoring. When the
    * shop opened but its sign-up did not go through, the failure carries the
    * shop so the page can offer the check again (see `checkSignup`).
    */
-  const openShop = async (
+  const openShop = (
     shop: string,
   ): Promise<
     | Outcome<{ seller: SellerView; signup: TransactionSummary }>
     | { ok: false; error: string; seller: SellerView }
-  > => {
-    setBusy("shop");
-    try {
-      const opened = await api<{ seller: SellerView }>("/sellers", {
-        method: "POST",
-        body: { shop },
-      });
+  > =>
+    exclusive(
+      "shop",
+      async () => {
+        const opened = await api<{ seller: SellerView }>("/sellers", {
+          method: "POST",
+          body: { shop },
+        });
 
-      if (!opened.ok) return failed(opened.error);
-      const seller = opened.data.seller;
-      const signup = await submit(
-        "signup",
-        (grant, random) => signupTransaction(grant, seller.shop, random),
-        seller.id,
-      );
+        if (!opened.ok) return failed(opened.error);
+        const seller = opened.data.seller;
+        const signup = await submit(
+          "signup",
+          (grant, random) => signupTransaction(grant, seller.shop, random),
+          seller.id,
+        );
 
-      await refresh();
+        await refresh();
 
-      return signup.ok
-        ? { ok: true, data: { seller, signup: signup.data } }
-        : { ...signup, seller };
-    } finally {
-      setBusy(null);
-    }
-  };
+        return signup.ok
+          ? { ok: true as const, data: { seller, signup: signup.data } }
+          : { ...signup, seller };
+      },
+      busyError,
+    );
 
   /** Reports an open shop's sign-up again, after a failure or a reload. */
-  const checkSignup = async (seller: {
+  const checkSignup = (seller: {
     id: string;
     shop: string;
-  }): Promise<Outcome<TransactionSummary>> => {
-    setBusy("shop");
+  }): Promise<Outcome<TransactionSummary>> =>
+    exclusive(
+      "shop",
+      async () => {
+        const signup = await submit(
+          "signup",
+          (grant, random) => signupTransaction(grant, seller.shop, random),
+          seller.id,
+        );
+
+        await refresh();
+
+        return signup;
+      },
+      busyError,
+    );
+
+  /**
+   * Opens a hosted verification in the web SDK modal, then reads its outcome
+   * back from the server: the modal's own result is only how it closed, the
+   * decision is always Didit's.
+   */
+  const verifyThenRead = async <T>(
+    url: string,
+    read: () => Promise<T>,
+  ): Promise<Outcome<T>> => {
     try {
-      const signup = await submit(
-        "signup",
-        (grant, random) => signupTransaction(grant, seller.shop, random),
-        seller.id,
+      await openVerification(url);
+    } catch (problem) {
+      return failed(
+        messageOf(problem, "The verification window could not open. Try again."),
       );
-
-      await refresh();
-
-      return signup;
-    } finally {
-      setBusy(null);
     }
+    const data = await read();
+
+    await refresh();
+
+    return { ok: true, data };
   };
 
   /** Starts (or resumes) the shop's KYB in the web SDK modal. */
-  const verifyBusiness = async (
+  const verifyBusiness = (
     sellerId: string,
     onOpen: () => void,
-  ): Promise<Outcome<KybSummary | null>> => {
-    setBusy("kyb");
-    try {
-      const started = await api<{ url: string }>(
-        `/sellers/${encodeURIComponent(sellerId)}/kyb`,
-        { method: "POST" },
-      );
+  ): Promise<Outcome<KybSummary | null>> =>
+    exclusive(
+      "kyb",
+      async () => {
+        const started = await api<{ url: string }>(
+          `/sellers/${encodeURIComponent(sellerId)}/kyb`,
+          { method: "POST" },
+        );
 
-      if (!started.ok) return failed(started.error);
-      onOpen();
-      await openVerification(started.data.url);
-      const kyb = await settleKyb(sellerId);
+        if (!started.ok) return failed(started.error);
+        onOpen();
 
-      await refresh();
-
-      return { ok: true, data: kyb };
-    } finally {
-      setBusy(null);
-    }
-  };
+        return verifyThenRead(started.data.url, () => settleKyb(sellerId));
+      },
+      busyError,
+    );
 
   /** One owner's own ID check, from the KYB's key people. */
-  const checkOwner = async (
+  const checkOwner = (
     sellerId: string,
     url: string,
-  ): Promise<Outcome<KybSummary | null>> => {
-    setBusy("kyb");
-    try {
-      await openVerification(url);
-      const kyb = await settleKyb(sellerId, 3);
-
-      await refresh();
-
-      return { ok: true, data: kyb };
-    } finally {
-      setBusy(null);
-    }
-  };
+  ): Promise<Outcome<KybSummary | null>> =>
+    exclusive(
+      "kyb",
+      () => verifyThenRead(url, () => settleKyb(sellerId, 3)),
+      busyError,
+    );
 
   /** The 1,497 EUR order, submitted from the browser. */
-  const placeOrder = async (
+  const placeOrder = (
     seller: { id: string; shop: string } | null,
-  ): Promise<Outcome<TransactionSummary>> => {
-    setBusy("order");
-    try {
-      const result = await submit("purchase", (grant, random) =>
-        purchaseTransaction(grant, ORDER_LISTING, seller, random),
-      );
+  ): Promise<Outcome<TransactionSummary>> =>
+    exclusive(
+      "order",
+      async () => {
+        const result = await submit("purchase", (grant, random) =>
+          purchaseTransaction(grant, ORDER_LISTING, seller, random),
+        );
 
-      await refresh();
+        await refresh();
 
-      return result;
-    } finally {
-      setBusy(null);
-    }
-  };
+        return result;
+      },
+      busyError,
+    );
 
   /** The step-up a held order asks for: the buyer's age check. */
   const confirmAge = async (
     order: TransactionSummary,
   ): Promise<Outcome<TransactionSummary>> => {
-    if (!order.verification) return failed("This order needs no age check.");
-    setBusy("age");
-    try {
-      await openVerification(order.verification.url);
-      const settled = await settle(order.uuid);
+    const step = order.verification;
 
-      await refresh();
+    if (!step) return failed("This order needs no age check.");
 
-      return settled
-        ? { ok: true, data: settled }
-        : failed("The order could not be read back.");
-    } finally {
-      setBusy(null);
-    }
+    return exclusive(
+      "age",
+      async () => {
+        const read = await verifyThenRead(step.url, () => settle(order.uuid));
+
+        if (!read.ok) return read;
+
+        return read.data
+          ? { ok: true as const, data: read.data }
+          : failed("The order could not be read back. Reload to see it.");
+      },
+      busyError,
+    );
   };
 
   const reset = async () => {
