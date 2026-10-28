@@ -53,7 +53,7 @@ async function didit(method, pathname, body) {
 const results = (data) => (Array.isArray(data) ? data : data?.results ?? []);
 
 async function ensureList(definition) {
-  const existing = results(await didit("GET", "/v3/lists/?page_size=200")).find(
+  const existing = results(await didit("GET", `/v3/lists/${policy.LISTS_QUERY}`)).find(
     (list) => list.name === definition.name,
   );
   const { entries, ...listBody } = definition;
@@ -74,7 +74,7 @@ async function ensureList(definition) {
   if (entries.length === 0) return listId;
 
   const present = new Set(
-    results(await didit("GET", `/v3/lists/${listId}/entries/?page_size=500`)).map(
+    results(await didit("GET", `/v3/lists/${listId}/entries/?limit=1000`)).map(
       (entry) => String(entry.value).toUpperCase(),
     ),
   );
@@ -110,7 +110,7 @@ async function main() {
     kycWorkflowId: policy.KYC_WORKFLOW_ID,
   });
   const installed = results(
-    await didit("GET", "/v3/transactions/rules/?page_size=500"),
+    await didit("GET", "/v3/transactions/rules/?limit=500"),
   );
 
   console.log("");

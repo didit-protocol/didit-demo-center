@@ -15,7 +15,7 @@ process.env.API_KEY = "test-api-key";
 process.env.NEXT_PUBLIC_IS_STAGING = "true";
 
 const { NextRequest } = await import("next/server");
-const { PLAYER_COOKIE, signPlayer } = await import("../lib/igaming/player.ts");
+const { PLAYER_COOKIE, SECURE_PLAYER_COOKIE, signPlayer } = await import("../lib/igaming/player.ts");
 const policy = await import("../lib/igaming/policy.ts");
 
 const route = (name) => import(`../app/api/igaming/${name}/route.ts`);
@@ -99,6 +99,37 @@ test("POST /player issues a signed, httpOnly player cookie; GET reads it back", 
   });
 
   assert.deepEqual(await (await player.GET(forged)).json(), { playerId: null, authenticated: false });
+});
+
+test("over HTTPS the player cookie is __Host-, Secure and HttpOnly, and a bare one is not trusted", async () => {
+  reset();
+  const created = await player.POST(new NextRequest("https://demos.didit.me/api/igaming/player", { method: "POST" }));
+  const { playerId } = await created.json();
+  const cookie = created.cookies.get(SECURE_PLAYER_COOKIE);
+
+  assert.equal(SECURE_PLAYER_COOKIE, `__Host-${PLAYER_COOKIE}`);
+  assert.equal(created.cookies.get(PLAYER_COOKIE), undefined);
+  assert.equal(cookie.secure, true);
+  assert.equal(cookie.httpOnly, true);
+  assert.equal(cookie.sameSite, "lax");
+  assert.equal(cookie.path, "/");
+  assert.equal(cookie.domain, undefined, "__Host- cookies carry no Domain");
+
+  const read = (name) =>
+    player.GET(
+      new NextRequest("https://demos.didit.me/api/igaming/player", {
+        headers: { cookie: `${name}=${signPlayer(playerId, "test-api-key")}` },
+      }),
+    );
+
+  assert.equal((await (await read(SECURE_PLAYER_COOKIE)).json()).playerId, playerId);
+  // A bare cookie over HTTPS may have been planted by another subdomain.
+  assert.equal((await (await read(PLAYER_COOKIE)).json()).playerId, null);
+
+  const signedOut = await player.DELETE(new NextRequest("https://demos.didit.me/api/igaming/player", { method: "DELETE" }));
+
+  assert.equal(signedOut.cookies.get(SECURE_PLAYER_COOKIE).maxAge, 0);
+  assert.equal(signedOut.cookies.get(SECURE_PLAYER_COOKIE).secure, true);
 });
 
 test("DELETE /player signs out: the player cookie is cleared and nothing is called", async () => {
@@ -249,7 +280,7 @@ test("GET /sessions/{id} returns the projection only to the session's player", a
 });
 
 test("POST /verified lists the player only after an approved ID verification", async () => {
-  const listsPath = "GET /v3/lists/?page_size=200";
+  const listsPath = `GET /v3/lists/${policy.LISTS_QUERY}`;
   const lists = { body: { results: [{ uuid: "verified-list", name: policy.LIST_NAMES.verified }] } };
 
   // The age check is not the ID workflow: nothing is written.
@@ -285,7 +316,7 @@ test("POST /verified lists the player only after an approved ID verification", a
   });
   assert.deepEqual(
     data.didit.map((call) => `${call.method} ${call.path}`),
-    [`GET /v3/session/${SESSION}/decision/`, "GET /v3/lists/?page_size=200", "POST /v3/lists/verified-list/entries/"],
+    [`GET /v3/session/${SESSION}/decision/`, `GET /v3/lists/${policy.LISTS_QUERY}`, "POST /v3/lists/verified-list/entries/"],
   );
 
   // Already listed: Didit's duplicate answer counts as success, and the list
@@ -301,6 +332,14 @@ test("POST /verified lists the player only after an approved ID verification", a
 
   assert.equal(again.status, 200);
   assert.ok(!calls.some((call) => call.key === listsPath));
+
+  // Didit unreachable: an honest 502, never "unknown session", nothing written.
+  reset({ [`GET /v3/session/${SESSION}/decision/`]: { status: 503, body: { detail: "down" } } });
+  const down = await verified.POST(request("/api/igaming/verified", { method: "POST", body: { sessionId: SESSION } }));
+
+  assert.equal(down.status, 502);
+  assert.match((await down.json()).error, /could not be read from Didit/);
+  assert.deepEqual(calls.map((call) => call.key), [`GET /v3/session/${SESSION}/decision/`]);
 
   // Anything that is not a session id never reaches Didit.
   reset();

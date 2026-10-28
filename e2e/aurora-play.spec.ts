@@ -265,3 +265,72 @@ test("the signed-in lobby loads with no errors and no horizontal scroll", async 
   await expectNoHorizontalScroll(page);
   expect(errors).toEqual([]);
 });
+
+test("a double click on the welcome offer submits one bonus claim", async ({
+  page,
+}) => {
+  const mock = await mockAurora(page);
+
+  await page.goto("/igaming");
+  await app(page).getByRole("button", { name: "Sign up" }).click();
+  await signUp(page, "Sofia Marin", "sofia.marin@example.com");
+  await app(page).getByRole("button", { name: "Claim now" }).dblclick();
+  await expect(page.getByRole("status")).toContainText("Welcome offer added");
+  expect(mock.submitted).toEqual(["bonus-approved"]);
+});
+
+test("when the transaction token cannot be minted the cashier says so and nothing is submitted", async ({
+  page,
+}) => {
+  const mock = await mockAurora(page);
+
+  await page.goto("/igaming");
+  await app(page).getByRole("button", { name: "Sign up" }).click();
+  await signUp(page, "Sofia Marin", "sofia.marin@example.com");
+  // Registered last, so it answers before the mock's token route.
+  await page.route("**/api/igaming/token", (route) =>
+    route.fulfill({
+      status: 502,
+      contentType: "application/json",
+      body: JSON.stringify({
+        error: "The Didit API could not be reached.",
+        didit: [
+          { method: "POST", path: "/v3/transactions/sdk-token/", status: 0 },
+        ],
+      }),
+    }),
+  );
+  await app(page).getByRole("button", { name: "Deposit", exact: true }).click();
+  await deposit(page, "500");
+  await expect(page.getByTestId("aurora-cashier-result")).toContainText(
+    "The Didit API could not be reached.",
+  );
+  expect(mock.submitted).toEqual([]);
+});
+
+test("a hosted flow that fails to load leaves a readable error, not a stuck page", async ({
+  page,
+}) => {
+  await mockAurora(page);
+  // The web SDK's lazy chunk never arrives (offline, a blocked script). Its
+  // file name is a hash, so it is recognised by what it contains.
+  await page.route("**/_next/static/chunks/*.js", async (route) => {
+    const response = await route.fetch();
+    const body = await response.text();
+
+    if (body.includes("didit-sdk-styles")) return route.abort();
+
+    return route.fulfill({ response, body });
+  });
+  await page.goto("/igaming");
+  await app(page).getByRole("button", { name: "Sign up" }).click();
+  const dialog = page.getByRole("dialog", { name: "Create your account" });
+
+  await dialog.getByLabel("Full name").fill("Sofia Marin");
+  await dialog.getByLabel("Email").fill("sofia.marin@example.com");
+  await dialog.getByLabel("Date of birth").fill("1999-03-14");
+  await dialog.getByRole("button", { name: "Create account" }).click();
+  await expect(page.getByRole("status")).toContainText(
+    "The verification could not open",
+  );
+});
