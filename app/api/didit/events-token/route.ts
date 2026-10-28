@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { authEnabled, visitorVendorData } from "@/lib/didit/auth";
+import { diditUrls } from "@/lib/didit/config";
 import { DEMOS } from "@/lib/didit/demos";
 import { didit, diditMessage } from "@/lib/didit/server";
 import { readPlayer } from "@/lib/igaming/server";
@@ -48,6 +49,8 @@ export async function POST(request: NextRequest) {
 
   return reply({
     token,
+    // Where the signals SDK posts: staging events go to the staging API.
+    baseUrl: diditUrls.api,
     expiresAt: result.data?.expires_at ?? null,
     vendorData,
     didit: [result.call],
