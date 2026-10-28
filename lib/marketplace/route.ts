@@ -5,10 +5,10 @@ import { randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 
 import {
-  STATE_COOKIE,
   STATE_MAX_AGE,
   openState,
   sealState,
+  stateCookieName,
   stateKey,
   type MarketState,
 } from "./state.ts";
@@ -53,6 +53,14 @@ export async function marketEnv(): Promise<MarketEnv> {
   };
 }
 
+/** True when the browser reached this server over https (directly or via a proxy). */
+function isSecure(request: NextRequest): boolean {
+  return (
+    request.headers.get("x-forwarded-proto") === "https" ||
+    request.nextUrl.protocol === "https:"
+  );
+}
+
 export function readState(
   request: NextRequest,
   env: MarketEnv,
@@ -60,7 +68,7 @@ export function readState(
   if (!env.apiKey) return null;
 
   return openState(
-    request.cookies.get(STATE_COOKIE)?.value,
+    request.cookies.get(stateCookieName(isSecure(request)))?.value,
     stateKey(env.apiKey),
   );
 }
@@ -88,21 +96,23 @@ export function respond(
 
   if (reply.state === undefined || !env.apiKey) return response;
 
+  const secure = isSecure(request);
+  const name = stateCookieName(secure);
+  // HttpOnly: no script reads it. Lax: it still arrives when the hosted
+  // verification redirects back to /marketplace. Path=/ is what `__Host-`
+  // requires; only the /api/marketplace routes ever read it.
   const options = {
     httpOnly: true,
     sameSite: "lax" as const,
-    secure:
-      request.headers.get("x-forwarded-proto") === "https" ||
-      request.nextUrl.protocol === "https:",
-    // Only the demo's own routes ever read it.
-    path: "/api/marketplace",
+    secure,
+    path: "/",
   };
 
   if (reply.state === null) {
-    response.cookies.set(STATE_COOKIE, "", { ...options, maxAge: 0 });
+    response.cookies.set(name, "", { ...options, maxAge: 0 });
   } else {
     response.cookies.set(
-      STATE_COOKIE,
+      name,
       sealState(reply.state, stateKey(env.apiKey)),
       { ...options, maxAge: STATE_MAX_AGE },
     );

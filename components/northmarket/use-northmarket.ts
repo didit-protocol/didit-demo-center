@@ -34,6 +34,28 @@ export type Outcome<T> = { ok: true; data: T } | { ok: false; error: string };
 
 const failed = (error: string) => ({ ok: false, error }) as const;
 
+const messageOf = (problem: unknown, fallback: string) =>
+  problem instanceof Error && problem.message ? problem.message : fallback;
+
+/**
+ * Remembers a transaction the web SDK submitted. Claiming the same uuid twice
+ * is harmless, so a failed claim is retried once: otherwise a submitted order
+ * would be in Didit but missing from this browser's list.
+ */
+async function claim(uuid: string) {
+  const first = await api<TransactionSummary>("/transactions", {
+    method: "POST",
+    body: { uuid },
+  });
+
+  if (first.ok || (first.status >= 400 && first.status < 500)) return first;
+
+  return api<TransactionSummary>("/transactions", {
+    method: "POST",
+    body: { uuid },
+  });
+}
+
 /** Re-reads a transaction until it leaves AWAITING_USER, or time runs out. */
 async function settle(
   uuid: string,
@@ -76,6 +98,25 @@ export function useNorthmarket() {
   const [view, setView] = React.useState<StateView | null>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState<Busy>(null);
+  // `busy` disables the buttons on the next render; this blocks a second
+  // click that lands before it, so one click is one KYB session or one order.
+  const running = React.useRef(false);
+
+  const exclusive = async <T>(
+    kind: Exclude<Busy, null>,
+    work: () => Promise<T>,
+    alreadyRunning: T,
+  ): Promise<T> => {
+    if (running.current) return alreadyRunning;
+    running.current = true;
+    setBusy(kind);
+    try {
+      return await work();
+    } finally {
+      running.current = false;
+      setBusy(null);
+    }
+  };
 
   const refresh = React.useCallback(async () => {
     const result = await api<StateView>("");
@@ -120,17 +161,12 @@ export function useNorthmarket() {
         },
         transaction: build(grant, crypto.randomUUID()),
       });
-      const claimed = await api<TransactionSummary>("/transactions", {
-        method: "POST",
-        body: { uuid: result.transactionId },
-      });
+      const claimed = await claim(result.transactionId);
 
       return claimed.ok ? claimed : failed(claimed.error);
     } catch (problem) {
       return failed(
-        problem instanceof Error
-          ? problem.message
-          : "The transaction could not be submitted.",
+        messageOf(problem, "The transaction could not be submitted."),
       );
     }
   };

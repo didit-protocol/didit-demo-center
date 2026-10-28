@@ -9,7 +9,18 @@ import { createHash, createHmac, timingSafeEqual } from "node:crypto";
  * visitor sees their own records and never anyone else's, and because the
  * cookie is signed they cannot swap another id in.
  */
-export const STATE_COOKIE = "marketplace_demo";
+export const STATE_COOKIE = "northmarket_state";
+
+/**
+ * The name it is written under. On https it carries the `__Host-` prefix, so
+ * the browser only accepts it Secure, for this exact host and for Path=/:
+ * no subdomain can plant or overwrite it. A plain-http local dev server
+ * cannot set a `__Host-` cookie, so there it keeps the bare name, the same
+ * way Didit Authentication names its own cookies.
+ */
+export function stateCookieName(secure: boolean): string {
+  return secure ? `__Host-${STATE_COOKIE}` : STATE_COOKIE;
+}
 
 /** A week, the same as a hosted session's default expiry. */
 export const STATE_MAX_AGE = 7 * 24 * 60 * 60;
