@@ -63,7 +63,7 @@ const STEP_IDS = STEPS.map((item) => item.id) as StepId[];
 export function NorthmarketDemo() {
   const didit = useDidit();
   const live = useLive(northmarket.id);
-  const market = useNorthmarket();
+  const market = useNorthmarket(didit.auth?.renew);
   const router = useRouter();
   const searchParams = useSearchParams();
   const [screen, setScreen] = React.useState<Screen | null>(null);
@@ -99,8 +99,13 @@ export function NorthmarketDemo() {
   // Known before anyone clicks: without a KYB workflow the check cannot start.
   const kybAvailable = view?.availability.kyb !== false;
   const company = first ? companyName(kyb, first.company) : null;
-  const current: Screen =
-    screen ?? (!first ? "signup" : outlet ? "outlet" : "hub");
+  // With Authentication on, a session that ended (expired, signed out in
+  // another tab) reads as signed out: no buyer or seller in the header and
+  // the sign-in in front, until they sign in again and their shop is back.
+  const sessionOver = authOn && auth?.status === "signed-out";
+  const current: Screen = sessionOver
+    ? "signup"
+    : (screen ?? (!first ? "signup" : outlet ? "outlet" : "hub"));
 
   const push = (inputs: LiveInput[]) => {
     for (const input of inputs) live.push(input);
@@ -457,12 +462,14 @@ export function NorthmarketDemo() {
     // A message belongs to the step it came from.
     setToast(null);
     if (target === "console") return openConsole(true);
-    if (!first) {
+    if (!first || sessionOver) {
       setScreen("signup");
       if (target !== "signup")
         setToast({
           tone: "info",
-          text: "Open your shop first: it takes a passkey and a shop name.",
+          text: sessionOver
+            ? "Sign in to Northmarket first."
+            : "Open your shop first: it takes a passkey and a shop name.",
         });
 
       return;
