@@ -17,6 +17,7 @@ import { useDidit } from "@/lib/didit/provider";
 import { useLive } from "@/lib/didit/use-live";
 import {
   AVAILABILITY_LABEL,
+  EXAMPLE_WORKFLOW_ID,
   type LiveDemo as Live,
   availability,
   sessionCurl,
@@ -187,7 +188,7 @@ export function LiveDemo({ demo }: { demo: Live }) {
 
   const integration = [
     "// the server creates the session for the signed-in user",
-    `const { url } = await didit.sessions.create({ workflow: "${demo.id}", user })`,
+    `const { url } = await didit.sessions.create({ workflowId: "${EXAMPLE_WORKFLOW_ID}", vendorData: user.id })`,
     "// the browser opens the verification modal",
     "await startVerification({ url })",
   ];

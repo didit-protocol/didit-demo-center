@@ -231,23 +231,29 @@ export function useKestrel(
     [update],
   );
 
-  /** The decision can trail the flow by a few seconds. */
-  const settleAccount = React.useCallback(async () => {
-    let current = await refreshAccount();
+  /**
+   * The decision can trail the flow by a few seconds; a flow the visitor
+   * closed is read once, since it stays open until they come back to it.
+   */
+  const settleAccount = React.useCallback(
+    async (wait = true) => {
+      let current = await refreshAccount();
 
-    for (
-      let attempt = 0;
-      attempt < 6 && current?.stage === "processing";
-      attempt++
-    ) {
-      await sleep(2500);
-      current = await refreshAccount();
-    }
-    if (current && current.stage !== "processing")
-      emitRef.current({ type: "verify-decided", account: current });
+      for (
+        let attempt = 0;
+        wait && attempt < 6 && current?.stage === "processing";
+        attempt++
+      ) {
+        await sleep(2500);
+        current = await refreshAccount();
+      }
+      if (current && current.stage !== "processing")
+        emitRef.current({ type: "verify-decided", account: current });
 
-    return current;
-  }, [refreshAccount]);
+      return current;
+    },
+    [refreshAccount],
+  );
 
   const verify = React.useCallback(async () => {
     setBusy("verify");
@@ -282,7 +288,7 @@ export function useKestrel(
       setBusy("verify-result");
       if (result.type === "failed")
         setError(result.error?.message ?? "The verification could not start.");
-      await settleAccount();
+      await settleAccount(result.type !== "cancelled");
     } finally {
       setBusy(null);
     }

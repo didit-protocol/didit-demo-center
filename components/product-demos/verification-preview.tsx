@@ -10,7 +10,9 @@ import { diditUrls } from "@/lib/didit/config";
 /*
  * The first screen of the redesigned verification modal this demo opens,
  * drawn from its config. A preview: the real modal is Didit's web SDK, and
- * "Continue on this computer" starts the demo like "Start the demo" does.
+ * its Continue button starts the demo like "Start the demo" does. A phone
+ * gets the phone's version of the screen: no code to scan, and "Continue"
+ * rather than "Continue on this computer".
  */
 export function VerificationPreview({
   demo,
@@ -66,7 +68,7 @@ export function VerificationPreview({
             </ul>
             <div className="pd-vm-foot">
               <button disabled={disabled} type="button" onClick={onStart}>
-                Continue on this computer
+                Continue<span className="pd-vm-wide"> on this computer</span>
               </button>
               <small>
                 By continuing you accept the End User Terms. Didit demos uses

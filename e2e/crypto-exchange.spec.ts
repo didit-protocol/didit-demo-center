@@ -337,9 +337,7 @@ test("the banner says the check is open while the modal is, and how to resume af
     page.locator('iframe[src*="/session/e2e-onboarding"]'),
   ).toBeVisible();
 
-  const banner = page.getByRole("status").filter({ visible: true }).filter({
-    hasText: /verif/i,
-  });
+  const banner = app(page).locator(".ks-banner").filter({ visible: true });
 
   await expect(banner).toContainText("The check is open on this page.");
   await expect(banner).not.toContainText("window");
@@ -351,7 +349,7 @@ test("the banner says the check is open while the modal is, and how to resume af
   await page.getByRole("button", { name: "Close verification" }).click();
   await page.getByRole("button", { name: "Exit", exact: true }).click();
   await expect(banner).toContainText("Your verification is not finished.", {
-    timeout: 30_000,
+    timeout: 15_000,
   });
   await expect(banner).toContainText("Select Continue verification");
   await expect(
@@ -365,8 +363,8 @@ test("an open KYC session after a reload: the banner, the feed's person and the 
   await mockKestrel(page, { account: "processing" });
   await page.goto("/crypto-exchange");
 
-  const banner = page
-    .getByRole("status")
+  const banner = app(page)
+    .locator(".ks-banner")
     .filter({ visible: true })
     .filter({ hasText: "Your verification is not finished." });
 
