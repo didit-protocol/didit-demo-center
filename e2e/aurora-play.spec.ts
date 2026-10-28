@@ -312,10 +312,16 @@ test("a hosted flow that fails to load leaves a readable error, not a stuck page
   page,
 }) => {
   await mockAurora(page);
-  // The web SDK's chunk never arrives (offline, a blocked script).
-  await page.route(/\/_next\/static\/chunks\/.*sdk-web.*\.js$/, (route) =>
-    route.abort(),
-  );
+  // The web SDK's lazy chunk never arrives (offline, a blocked script). Its
+  // file name is a hash, so it is recognised by what it contains.
+  await page.route("**/_next/static/chunks/*.js", async (route) => {
+    const response = await route.fetch();
+    const body = await response.text();
+
+    if (body.includes("didit-sdk-styles")) return route.abort();
+
+    return route.fulfill({ response, body });
+  });
   await page.goto("/igaming");
   await app(page).getByRole("button", { name: "Sign up" }).click();
   const dialog = page.getByRole("dialog", { name: "Create your account" });
