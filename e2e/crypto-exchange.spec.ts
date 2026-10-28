@@ -431,6 +431,44 @@ test("an open KYC session after a reload: the banner, the feed's person and the 
   await expect(consoleView).not.toContainText("Not verified");
 });
 
+test("the console view's Person tab shows the visitor from the first open, on its default tab and after a reload", async ({
+  page,
+}) => {
+  await mockKestrel(page, { account: "processing" });
+  await page.goto("/crypto-exchange");
+  await expect(app(page).getByTestId("kestrel-avatar")).toHaveText("AQ");
+
+  for (const reload of [false, true]) {
+    if (reload) {
+      await page.reload();
+      await expect(app(page).getByTestId("kestrel-avatar")).toHaveText("AQ");
+    }
+    // Opens on the Transaction tab: no transfer yet, so it says so.
+    const consoleView = await openConsoleView(page);
+
+    await expect(
+      consoleView.getByRole("tab", { name: "Transaction" }),
+    ).toHaveAttribute("aria-selected", "true");
+    await expect(consoleView).toContainText("No transaction yet");
+
+    await consoleView.getByRole("tab", { name: "Person" }).click();
+    await expect(consoleView).not.toContainText("Sign up in Kestrel first");
+    await expect(consoleView).toContainText(
+      "Everything avery.quinn@example.com just did in Kestrel",
+    );
+    await expect(consoleView).not.toContainText("Everything This customer");
+    await expect(consoleView).toContainText("In progress");
+    await expect(consoleView).toContainText("KYC started");
+    await expect(consoleView).toContainText("Kestrel");
+    await expect(consoleView).toContainText("own sign-in");
+
+    await consoleView.getByRole("tab", { name: "Verification" }).click();
+    await expect(consoleView).toContainText("In progress");
+    await page.keyboard.press("Escape");
+    await expect(consoleView).toBeHidden();
+  }
+});
+
 test("the hub links to the crypto exchange", async ({ page }) => {
   await page.goto("/");
   const card = page.locator('a[href="/crypto-exchange"]').first();
