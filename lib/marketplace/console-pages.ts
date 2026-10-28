@@ -10,6 +10,8 @@ import type {
 import type { LiveEvent } from "../didit/live.ts";
 import type { KybSummary, TransactionSummary } from "./summaries.ts";
 
+import { IN_PROGRESS, startedLabel } from "../didit/console.ts";
+
 import { companyName, ruleName } from "./live-events.ts";
 import { eur } from "./northmarket.ts";
 
@@ -72,18 +74,26 @@ const clock = (at: number, now: number) => {
     : `${date.toLocaleDateString("en-US", { month: "short", day: "numeric" })}, ${time}`;
 };
 
-/** A session or transaction status as a console tag. */
+/**
+ * A session or transaction status as a console tag. An open session (Didit's
+ * "Not Started" or "In Progress") reads as in progress, never as not started.
+ */
 export function statusTag(status: string): Tag {
   const value = status.trim().toLowerCase().replace(/_/g, " ");
   const label = value ? value.charAt(0).toUpperCase() + value.slice(1) : "";
 
   if (value === "approved") return { label: "Approved", tone: "ok" };
   if (value === "declined") return { label: "Declined", tone: "no" };
-  if (["in review", "awaiting user", "in progress"].includes(value))
+  if (value === "not started" || value === "in progress") return IN_PROGRESS;
+  if (["in review", "awaiting user"].includes(value))
     return { label, tone: "rev" };
 
-  return { label: label || "Not started", tone: "neu" };
+  return { label: label || "Waiting", tone: "neu" };
 }
+
+/** True while the KYB session is open: Didit has not decided it yet. */
+const kybOpen = (kyb: KybSummary | null | undefined): kyb is KybSummary =>
+  Boolean(kyb) && statusTag(kyb!.status) === IN_PROGRESS;
 
 const isApproved = (status: string | null) =>
   (status ?? "").toLowerCase() === "approved";

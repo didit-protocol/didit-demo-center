@@ -33,8 +33,8 @@ export function authEnv(): Record<string, string | undefined> {
   };
 }
 
-export /** The `exp` of a JWT-shaped access token in ms, or null for an opaque one. */
-function tokenExpiry(token: string | null | undefined): number | null {
+/** The `exp` of a JWT-shaped access token in ms, or null for an opaque one. */
+export function tokenExpiry(token: string | null | undefined): number | null {
   const payload = token?.split(".")[1];
 
   if (!payload) return null;

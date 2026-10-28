@@ -22,8 +22,19 @@ const proxy = publishableKey()
     )
   : null;
 
+/** The browser's session keeper renews here (app/api/didit/session). */
+const RENEW_PATH = "/api/didit/session";
+
 export default function middleware(request: NextRequest) {
-  return proxy ? proxy(request) : NextResponse.next();
+  if (!proxy) return NextResponse.next();
+  // Without its access token the proxy rotates the refresh token now, a
+  // minute before the old one expires, instead of on the next burst of calls.
+  if (request.method === "POST" && request.nextUrl.pathname === RENEW_PATH) {
+    request.cookies.delete("__Host-didit_at");
+    request.cookies.delete("didit_at");
+  }
+
+  return proxy(request);
 }
 
 export const config = {

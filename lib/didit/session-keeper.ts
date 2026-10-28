@@ -39,7 +39,10 @@ export const RETRY_MS = 30_000;
 export function renewDelay(expiresAt: number | null, now: number): number {
   if (expiresAt === null) return RENEW_EVERY_MS;
 
-  return Math.max(0, Math.min(RENEW_EVERY_MS, expiresAt - RENEW_BEFORE_MS - now));
+  return Math.max(
+    0,
+    Math.min(RENEW_EVERY_MS, expiresAt - RENEW_BEFORE_MS - now),
+  );
 }
 
 /** Starts keeping the session alive; returns `stop`. */
@@ -84,4 +87,3 @@ export function keepSession(env: KeeperEnv): () => void {
     if (timer !== null) env.clearTimer(timer);
   };
 }
-
