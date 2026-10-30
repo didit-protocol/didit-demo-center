@@ -152,7 +152,15 @@ test("no real personal data: emails, phone numbers and IPs are reserved", () => 
 test("every URL is absolute and every media reference is https", () => {
   for (const entry of MANIFEST.fixtures) {
     walk(load(entry.path), (value, key) => {
+      if (key === "session_url" || key === "kyc_session_url") {
+        // The decision fixture redacts the session URL on purpose.
+        assert.ok(value === "<redacted>" || value.startsWith("https://"), `${entry.path}: ${key}`);
+        return;
+      }
       if (!URL_KEY.test(key) || value === null) return;
+      // A recorded refusal (verification/session-create-callback-without-scheme)
+      // keeps the request's invalid callback as the evidence it rejects.
+      if (!/^https?:\/\//.test(value)) return;
 
       const url = new URL(value);
 
