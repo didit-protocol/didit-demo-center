@@ -114,7 +114,7 @@
             "nationality": "USA",
             "position": "CEO",
             "date_of_birth": "1990-01-01",
-            "phone_number": "+34612345678",
+            "phone_number": "+34600000000",
             "source": "USER",
             "requires_verification": true,
             "is_skipped": false,
