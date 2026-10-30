@@ -1,0 +1,218 @@
+{
+  "uuid": "1853582d-b64d-441e-9841-5604bbc57356",
+  "environment": "live",
+  "transaction_number": 35,
+  "txn_id": "mkt-signup-0d8b514622ac4a1f9d03",
+  "txn_date": "2026-10-13T21:51:19.936053Z",
+  "zone_id": "UTC",
+  "transaction_type": "userPlatformEvent",
+  "action_type": "seller_signup",
+  "direction": "INBOUND",
+  "status": "IN_REVIEW",
+  "source": "LIVE",
+  "amount": "0",
+  "currency": "EUR",
+  "currency_type": null,
+  "amount_in_default_currency": null,
+  "default_currency_code": null,
+  "preferred_currency_amount": "0",
+  "preferred_currency_code": "USD",
+  "payment_details": "Seller sign-up: Kestrel Goods",
+  "payment_txn_id": null,
+  "score": 70,
+  "severity": null,
+  "decision_reason_code": null,
+  "decision_reason_label": null,
+  "vendor_data": "mkt-seller-3628d6dddc2a",
+  "metadata": {
+    "subject": {
+      "full_name": "Kestrel Commerce",
+      "entity_type": "company",
+      "vendor_data": "mkt-seller-3628d6dddc2a",
+      "device_context": {
+        "metadata": {
+          "bot_score": 0,
+          "webview_kind": "browser",
+          "accept_language": "en-US,en;q=0.9",
+          "composite_server_id": "9d73387e58fad7e6bed1157ce5de8563"
+        },
+        "platform": "desktop",
+        "os_family": "Linux",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+        "fingerprint": "heORv5s26Ljg7zJNnFuJvg",
+        "browser_family": "Chrome",
+        "composite_hash": "JJeUspChiRksZgjz6c9S-w",
+        "accept_language": "en-US,en;q=0.9",
+        "network_context": {
+          "ip_address": "203.0.113.7"
+        },
+        "persistent_device_id": "heORv5s26Ljg7zJNnFuJvg"
+      }
+    },
+    "counterparty": {}
+  },
+  "props": {
+    "role": "seller",
+    "shop": "Kestrel Goods",
+    "demo_app": "marketplace",
+    "is_data_center": true
+  },
+  "tags": [
+    {
+      "uuid": "7da3b347-53fe-4a56-b64f-ba687f7e7665",
+      "name": "SHARED_DEVICE",
+      "color": "#007AFE",
+      "description": null,
+      "source": "custom"
+    }
+  ],
+  "parties": [
+    {
+      "uuid": "84481707-bfe1-4f07-bda6-e155888ac0af",
+      "role": "APPLICANT",
+      "entity_type": "company",
+      "kind": "BUSINESS",
+      "vendor_data": "mkt-seller-3628d6dddc2a",
+      "full_name": "Kestrel Commerce",
+      "first_name": null,
+      "last_name": null,
+      "country_code": null,
+      "dob": null,
+      "address": {},
+      "institution_info": {},
+      "device": {
+        "metadata": {
+          "bot_score": 0,
+          "webview_kind": "browser",
+          "accept_language": "en-US,en;q=0.9",
+          "composite_server_id": "9d73387e58fad7e6bed1157ce5de8563"
+        },
+        "platform": "desktop",
+        "os_family": "Linux",
+        "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+        "fingerprint": "heORv5s26Ljg7zJNnFuJvg",
+        "browser_family": "Chrome",
+        "composite_hash": "JJeUspChiRksZgjz6c9S-w",
+        "accept_language": "en-US,en;q=0.9",
+        "network_context": {
+          "isp": "Google LLC",
+          "ip_city": "The Dalles",
+          "ip_state": "Oregon",
+          "latitude": 45.59455871582031,
+          "longitude": -121.17868041992188,
+          "time_zone": "America/Los_Angeles",
+          "asn_number": 396982,
+          "ip_address": "203.0.113.7",
+          "ip_country": "United States",
+          "organization": "Google LLC",
+          "is_vpn_or_tor": false,
+          "is_data_center": true,
+          "ip_country_code": "US",
+          "asn_organization": "Google LLC",
+          "time_zone_offset": "-0700"
+        },
+        "persistent_device_id": "heORv5s26Ljg7zJNnFuJvg"
+      },
+      "external_party_snapshot": null
+    }
+  ],
+  "payment_methods": [],
+  "documents": [],
+  "activities": [
+    {
+      "uuid": "2f311d1e-136a-425f-a16b-1bccfe53bcfc",
+      "activity_type": "TRANSACTION_CREATED",
+      "source": "TRANSACTION",
+      "status": "IN_REVIEW",
+      "title": "seller_signup",
+      "description": null,
+      "metadata": {
+        "amount": "0E-18",
+        "currency": "EUR",
+        "direction": "INBOUND",
+        "action_type": "seller_signup"
+      },
+      "occurred_at": "2026-10-13T21:51:19.939860Z"
+    }
+  ],
+  "alerts": [],
+  "rule_runs": [
+    {
+      "uuid": "216e8054-7ae6-460c-ac4f-56ff2a255723",
+      "rule": "90633201-6df5-4c9e-b7ea-babdd5d38d00",
+      "rule_title": "Marketplace demo: second shop on one device",
+      "rule_description": "A seller signing up from a device another shop already signed up from is held for review.",
+      "rule_category": "fraud",
+      "matched": true,
+      "is_test": false,
+      "mode": "ACTIVE",
+      "severity": null,
+      "score_delta": 70,
+      "status_target": "IN_REVIEW",
+      "action_summary": "score +70; change_status:IN_REVIEW; add_tag:SHARED_DEVICE; add_note",
+      "metadata": {
+        "conditions": [
+          {
+            "field": "custom_values.demo_app",
+            "matched": true,
+            "operator": "eq",
+            "group_index": null,
+            "group_logic": "AND",
+            "field_source": null,
+            "current_value": "marketplace",
+            "expected_value": "marketplace"
+          },
+          {
+            "field": "subject_device_fingerprint",
+            "matched": true,
+            "operator": "exists",
+            "group_index": null,
+            "group_logic": "AND",
+            "field_source": null,
+            "current_value": "heORv5s26Ljg7zJNnFuJvg",
+            "expected_value": true
+          }
+        ],
+        "scope_match": true,
+        "aggregations": [
+          {
+            "field": "subject_vendor_data",
+            "metric": "distinct_count",
+            "window": "30d",
+            "filters": {
+              "action_type": "seller_signup",
+              "subject_device_fingerprint": "__current__"
+            },
+            "matched": true,
+            "operator": "gte",
+            "computed_value": 2,
+            "expected_value": 2,
+            "sample_references": [
+              "mkt-signup-0d8b514622ac4a1f9d03",
+              "mkt-signup-0e9b79eb8b0148ec8721"
+            ]
+          }
+        ]
+      },
+      "created_at": "2026-10-13T21:51:20.064748Z"
+    }
+  ],
+  "provider_results": [],
+  "travel_rule": null,
+  "network_snapshot": null,
+  "remediation": null,
+  "action_required": null,
+  "cost_breakdown": {
+    "total_price": 0.02,
+    "items": [
+      {
+        "usage_type": "transaction_monitoring",
+        "price": 0.02,
+        "details": {
+          "product": "transactions"
+        },
+        "created_at": "2026-10-13T21:51:20.087008Z"
+      }
+    ]
+  }
+}
