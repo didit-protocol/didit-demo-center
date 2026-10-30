@@ -1,0 +1,767 @@
+{
+  "uuid": "500f6e28-a6e2-4af7-8669-e41882b1797f",
+  "environment": "live",
+  "transaction_number": 26,
+  "txn_id": "kestrel-wd-c80673b6-a75a-4d45-b7ff-812e6ec53720",
+  "txn_date": "2026-10-13T21:39:32.619321Z",
+  "zone_id": null,
+  "transaction_type": "travelRule",
+  "action_type": "withdrawal",
+  "direction": "OUTBOUND",
+  "status": "DECLINED",
+  "source": "LIVE",
+  "amount": "0.2",
+  "currency": "ETH",
+  "currency_type": "crypto",
+  "amount_in_default_currency": null,
+  "default_currency_code": null,
+  "preferred_currency_amount": "501.67840453333966",
+  "preferred_currency_code": "USD",
+  "payment_details": null,
+  "payment_txn_id": null,
+  "score": 150,
+  "severity": null,
+  "decision_reason_code": null,
+  "decision_reason_label": null,
+  "vendor_data": "kestrel-proof-62dc5aea-52b4-48bd-a2e6-973a26fdf7e7",
+  "metadata": {
+    "subject": {
+      "full_name": "Avery Quinn",
+      "entity_type": "individual",
+      "vendor_data": "kestrel-proof-62dc5aea-52b4-48bd-a2e6-973a26fdf7e7"
+    },
+    "counterparty": {
+      "full_name": "Unknown recipient",
+      "entity_type": "individual",
+      "payment_method": {
+        "account_id": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "method_type": "crypto_wallet"
+      }
+    }
+  },
+  "props": {
+    "demo_app": "crypto-exchange",
+    "wallet_risk": "sanctioned",
+    "sanctions_hit": true,
+    "is_data_center": true,
+    "aml_risk_factors": [
+      "Sanctions / Multi-Regime Designated",
+      "Sanctions / Multi-Regime Designated",
+      "Sanctions / Multi-Regime Sectoral",
+      "Sanctions / Multi-Regime Sectoral",
+      "Theft / Hack"
+    ],
+    "pep_counterparty": null,
+    "travel_rule_rail": "",
+    "wallet_risk_score": 95,
+    "wallet_sanctioned": true,
+    "aml_screening_type": "WALLET_SCREENING",
+    "travel_rule_regime": "eu",
+    "travel_rule_status": "COUNTERPARTY_VASP_NOT_FOUND",
+    "aml_screening_status": "COMPLETED",
+    "aml_counterparty_count": 2,
+    "withdrawal_destination": "address",
+    "aml_high_risk_exposure_pct": 50.73,
+    "aml_sanctions_exposure_pct": 50.71
+  },
+  "tags": [],
+  "parties": [
+    {
+      "uuid": "bda80a36-5e16-42b8-be5c-df68e0d71882",
+      "role": "APPLICANT",
+      "entity_type": "individual",
+      "kind": "USER",
+      "vendor_data": "kestrel-proof-62dc5aea-52b4-48bd-a2e6-973a26fdf7e7",
+      "full_name": "Avery Quinn",
+      "first_name": null,
+      "last_name": null,
+      "country_code": null,
+      "dob": null,
+      "address": {},
+      "institution_info": {},
+      "device": {},
+      "external_party_snapshot": null
+    },
+    {
+      "uuid": "f84e4e48-523e-4925-9c78-26a29fd85d6d",
+      "role": "COUNTERPARTY",
+      "entity_type": "individual",
+      "kind": "EXTERNAL",
+      "vendor_data": null,
+      "full_name": "Unknown recipient",
+      "first_name": null,
+      "last_name": null,
+      "country_code": null,
+      "dob": null,
+      "address": {},
+      "institution_info": {},
+      "device": {},
+      "external_party_snapshot": {
+        "address": {},
+        "country": null,
+        "full_name": "Unknown recipient",
+        "last_name": null,
+        "first_name": null,
+        "entity_type": "individual",
+        "vendor_data": null,
+        "date_of_birth": null,
+        "device_context": {},
+        "institution_details": {}
+      }
+    }
+  ],
+  "payment_methods": [
+    {
+      "uuid": "c7aefc37-d738-456b-866b-969c71474d8a",
+      "payment_method_type": "crypto_wallet",
+      "label": null,
+      "fingerprint": "6217c1ee8c60da71de8b842d0ec99ef9a50e9182ca99f28534499cf3088c4860",
+      "account_id": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+      "issuing_country": null,
+      "owner_kind": "EXTERNAL",
+      "vendor_data": null,
+      "owner_name": null,
+      "institution_info": {},
+      "details": {
+        "account_id": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "method_type": "crypto_wallet"
+      },
+      "external_owner_snapshot": {
+        "country": null,
+        "full_name": null,
+        "entity_type": "individual",
+        "vendor_data": null
+      },
+      "role": "DESTINATION"
+    }
+  ],
+  "documents": [],
+  "activities": [
+    {
+      "uuid": "6d5463b0-a902-44b7-9e11-4d13f55ef44c",
+      "activity_type": "TRANSACTION_CREATED",
+      "source": "TRANSACTION",
+      "status": "DECLINED",
+      "title": "withdrawal",
+      "description": null,
+      "metadata": {
+        "amount": "0.200000000000000000",
+        "currency": "ETH",
+        "direction": "OUTBOUND",
+        "action_type": "withdrawal"
+      },
+      "occurred_at": "2026-10-13T21:39:32.623143Z"
+    }
+  ],
+  "alerts": [],
+  "rule_runs": [
+    {
+      "uuid": "b62afd6c-576a-4b32-8099-9ac22f69f0ea",
+      "rule": "1dc67bf0-c815-4ce8-acad-5c74508246f4",
+      "rule_title": "Sender != Receiver (verify)",
+      "rule_description": "",
+      "rule_category": "velocity",
+      "matched": true,
+      "is_test": true,
+      "mode": "TEST",
+      "severity": null,
+      "score_delta": 0,
+      "status_target": null,
+      "action_summary": null,
+      "metadata": {
+        "conditions": [
+          {
+            "field": "subject_payment_method_account_id",
+            "matched": true,
+            "operator": "ne",
+            "group_index": 0,
+            "group_logic": "OR",
+            "field_source": null,
+            "current_value": null,
+            "expected_value": "counterparty_payment_method_account_id",
+            "_groups_overall": true
+          }
+        ],
+        "scope_match": true,
+        "aggregations": []
+      },
+      "created_at": "2026-10-13T21:39:33.232011Z"
+    },
+    {
+      "uuid": "a7c61de8-cb8d-48b6-97cd-9ff268208e45",
+      "rule": "f44d4b12-9169-496d-89b8-9abb53983176",
+      "rule_title": "Wallet risk: sanctioned wallet (crypto exchange demo)",
+      "rule_description": "Declines a Kestrel transfer when the other side's wallet is itself attributed to a sanctioned entity. Demo-scoped copy of the library's sanctions counterparty rule.",
+      "rule_category": "crypto_monitoring",
+      "matched": true,
+      "is_test": false,
+      "mode": "ACTIVE",
+      "severity": null,
+      "score_delta": 90,
+      "status_target": "DECLINED",
+      "action_summary": "score +90; change_status:DECLINED",
+      "metadata": {
+        "conditions": [
+          {
+            "field": "custom_values.demo_app",
+            "matched": true,
+            "operator": "eq",
+            "group_index": null,
+            "group_logic": "AND",
+            "field_source": null,
+            "current_value": "crypto-exchange",
+            "expected_value": "crypto-exchange"
+          },
+          {
+            "field": "custom_values.wallet_sanctioned",
+            "matched": true,
+            "operator": "eq",
+            "group_index": null,
+            "group_logic": "AND",
+            "field_source": null,
+            "current_value": true,
+            "expected_value": true
+          }
+        ],
+        "scope_match": true,
+        "aggregations": []
+      },
+      "created_at": "2026-10-13T21:39:33.222971Z"
+    },
+    {
+      "uuid": "22f25890-37e2-4ad1-9f34-45e34628649f",
+      "rule": "fbc08042-5335-492f-9cf6-463bf9e697ee",
+      "rule_title": "Wallet risk: high-risk exposure (crypto exchange demo)",
+      "rule_description": "Holds a Kestrel deposit or withdrawal for review when wallet screening scores the other side's wallet 75 or above. Demo-scoped copy of the library's high-risk wallet exposure rule.",
+      "rule_category": "crypto_monitoring",
+      "matched": true,
+      "is_test": false,
+      "mode": "ACTIVE",
+      "severity": null,
+      "score_delta": 60,
+      "status_target": "IN_REVIEW",
+      "action_summary": "score +60; change_status:IN_REVIEW",
+      "metadata": {
+        "conditions": [
+          {
+            "field": "custom_values.demo_app",
+            "matched": true,
+            "operator": "eq",
+            "group_index": null,
+            "group_logic": "AND",
+            "field_source": null,
+            "current_value": "crypto-exchange",
+            "expected_value": "crypto-exchange"
+          },
+          {
+            "field": "custom_values.wallet_risk_score",
+            "matched": true,
+            "operator": "gte",
+            "group_index": null,
+            "group_logic": "AND",
+            "field_source": null,
+            "current_value": 95,
+            "expected_value": 75
+          }
+        ],
+        "scope_match": true,
+        "aggregations": []
+      },
+      "created_at": "2026-10-13T21:39:33.215442Z"
+    }
+  ],
+  "provider_results": [
+    {
+      "uuid": "f9d8a92c-e38e-4bfc-b1cd-0975ab249a45",
+      "provider": "merklescience",
+      "result_type": "WALLET_SCREENING",
+      "status": "SCREENED",
+      "severity": "CRITICAL",
+      "score": 95,
+      "summary": "Merkle Science risk: Critical (5/5). SANCTIONS HIT. Dominant risk: sanctioned. Driven by: the address is attributed to Sanctions / Multi-Regime Designated (LAZARUS GROUP(Entity related to North Korea)- OFAC Sanctioned - 09/13/2019)",
+      "payload": {
+        "note": "provider payload removed from the fixture; the demo never reads it"
+      },
+      "created_at": "2026-10-13T21:39:33.077166Z"
+    }
+  ],
+  "travel_rule": {
+    "uuid": "c8856650-8732-42be-bdd8-c8bd6c3084ea",
+    "status": "COUNTERPARTY_VASP_NOT_FOUND",
+    "protocol": null,
+    "required": true,
+    "obligations_count": 0,
+    "originator_data": {
+      "name": "Avery Quinn"
+    },
+    "beneficiary_data": {
+      "name": "Unknown recipient",
+      "chain": "ETH",
+      "wallet_address": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96"
+    },
+    "metadata": {}
+  },
+  "network_snapshot": {
+    "uuid": "998e2546-983b-4cbc-9994-2d94daf06f73",
+    "nodes": [
+      {
+        "id": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "label": "0x098B...2f96",
+        "metadata": {
+          "fee_usd": null,
+          "full_address": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+          "screening_type": "WALLET_SCREENING",
+          "block_timestamp": null,
+          "total_value_usd": null,
+          "transaction_hash": null
+        },
+        "is_target": true,
+        "node_type": "wallet",
+        "risk_level": "critical"
+      },
+      {
+        "id": "sof-0-defi",
+        "label": "Axie Infinity: Ronin Bridge",
+        "metadata": {
+          "hops": null,
+          "country": "",
+          "category": "defi",
+          "is_direct": true,
+          "amount_usd": 541018048,
+          "percentage": 96.73242,
+          "entity_type": "DeFi",
+          "exposure_type": "direct",
+          "entity_subtype": "Bridges",
+          "exposure_direction": "incoming",
+          "provider_entity_id": "118410",
+          "provider_entity_type_id": "33",
+          "provider_entity_subtype_id": "143"
+        },
+        "is_target": false,
+        "node_type": "entity",
+        "risk_level": "low"
+      },
+      {
+        "id": "sof-1-sanctioned",
+        "label": "Suspected LAZARUS GROUP(Entity related to North Korea)- OFAC Sanctioned - 09/13/2019",
+        "metadata": {
+          "hops": null,
+          "country": "KP",
+          "category": "sanctioned",
+          "is_direct": true,
+          "amount_usd": 10972112,
+          "percentage": 1.961781,
+          "entity_type": "Sanctions",
+          "exposure_type": "direct",
+          "entity_subtype": "Multi-Regime Sectoral",
+          "exposure_direction": "incoming",
+          "provider_entity_id": null,
+          "provider_entity_type_id": "30",
+          "provider_entity_subtype_id": "157"
+        },
+        "is_target": false,
+        "node_type": "entity",
+        "risk_level": "high"
+      },
+      {
+        "id": "sof-2-defi",
+        "label": "UniswapV3:Router",
+        "metadata": {
+          "hops": null,
+          "country": "",
+          "category": "defi",
+          "is_direct": false,
+          "amount_usd": 7134363.64,
+          "percentage": 1.275603,
+          "entity_type": "DeFi",
+          "exposure_type": "indirect",
+          "entity_subtype": "Decentralized Exchange - AMM",
+          "exposure_direction": "incoming",
+          "provider_entity_id": "40669",
+          "provider_entity_type_id": "33",
+          "provider_entity_subtype_id": "138"
+        },
+        "is_target": false,
+        "node_type": "entity",
+        "risk_level": "low"
+      },
+      {
+        "id": "sof-3-stolen_funds",
+        "label": "Euler Finance Exploit",
+        "metadata": {
+          "hops": null,
+          "country": "",
+          "category": "stolen_funds",
+          "is_direct": true,
+          "amount_usd": 165807.02,
+          "percentage": 0.029646,
+          "entity_type": "Theft",
+          "exposure_type": "direct",
+          "entity_subtype": "Hack",
+          "exposure_direction": "incoming",
+          "provider_entity_id": "105341",
+          "provider_entity_type_id": "27",
+          "provider_entity_subtype_id": "116"
+        },
+        "is_target": false,
+        "node_type": "entity",
+        "risk_level": "high"
+      },
+      {
+        "id": "sof-4-exchange_licensed",
+        "label": "Binance.com",
+        "metadata": {
+          "hops": null,
+          "country": "SC",
+          "category": "exchange_licensed",
+          "is_direct": true,
+          "amount_usd": 3061.4,
+          "percentage": 0.000547,
+          "entity_type": "Exchange",
+          "exposure_type": "direct",
+          "entity_subtype": "Mandatory KYC and AML",
+          "exposure_direction": "incoming",
+          "provider_entity_id": "115884",
+          "provider_entity_type_id": "18",
+          "provider_entity_subtype_id": "74"
+        },
+        "is_target": false,
+        "node_type": "entity",
+        "risk_level": "low"
+      },
+      {
+        "id": "sof-5-exchange_unlicensed",
+        "label": "Fixedfloat",
+        "metadata": {
+          "hops": null,
+          "country": "MH",
+          "category": "exchange_unlicensed",
+          "is_direct": true,
+          "amount_usd": 16,
+          "percentage": 3e-06,
+          "entity_type": "Exchange",
+          "exposure_type": "direct",
+          "entity_subtype": "Optional KYC and AML",
+          "exposure_direction": "incoming",
+          "provider_entity_id": "106713",
+          "provider_entity_type_id": "18",
+          "provider_entity_subtype_id": "75"
+        },
+        "is_target": false,
+        "node_type": "entity",
+        "risk_level": "low"
+      },
+      {
+        "id": "sof-6-gambling_unlicensed",
+        "label": "Sorare.com",
+        "metadata": {
+          "hops": null,
+          "country": "",
+          "category": "gambling_unlicensed",
+          "is_direct": true,
+          "amount_usd": 0.16,
+          "percentage": 0,
+          "entity_type": "Gambling",
+          "exposure_type": "direct",
+          "entity_subtype": "Crypto only",
+          "exposure_direction": "incoming",
+          "provider_entity_id": "104142",
+          "provider_entity_type_id": "22",
+          "provider_entity_subtype_id": "102"
+        },
+        "is_target": false,
+        "node_type": "entity",
+        "risk_level": "low"
+      },
+      {
+        "id": "sof-7-scam",
+        "label": "Fake_Phishing",
+        "metadata": {
+          "hops": null,
+          "country": "",
+          "category": "scam",
+          "is_direct": true,
+          "amount_usd": 0.03,
+          "percentage": 0,
+          "entity_type": "Scam",
+          "exposure_type": "direct",
+          "entity_subtype": "Spam",
+          "exposure_direction": "incoming",
+          "provider_entity_id": "118953",
+          "provider_entity_type_id": "24",
+          "provider_entity_subtype_id": "106"
+        },
+        "is_target": false,
+        "node_type": "entity",
+        "risk_level": "high"
+      },
+      {
+        "id": "dof-0-sanctioned",
+        "label": "LAZARUS GROUP(Entity related to North Korea)- OFAC Sanctioned - 09/13/2019",
+        "metadata": {
+          "hops": null,
+          "country": "KP",
+          "category": "sanctioned",
+          "is_direct": true,
+          "amount_usd": 453913374.5,
+          "percentage": 79.90678,
+          "entity_type": "Sanctions",
+          "exposure_type": "direct",
+          "entity_subtype": "Multi-Regime Designated",
+          "exposure_direction": "outgoing",
+          "provider_entity_id": null,
+          "provider_entity_type_id": "30",
+          "provider_entity_subtype_id": "153"
+        },
+        "is_target": false,
+        "node_type": "entity",
+        "risk_level": "high"
+      },
+      {
+        "id": "dof-1-sanctioned",
+        "label": "Suspected LAZARUS GROUP(Entity related to North Korea)- OFAC Sanctioned - 09/13/2019",
+        "metadata": {
+          "hops": null,
+          "country": "KP",
+          "category": "sanctioned",
+          "is_direct": true,
+          "amount_usd": 106806555,
+          "percentage": 18.802195,
+          "entity_type": "Sanctions",
+          "exposure_type": "direct",
+          "entity_subtype": "Multi-Regime Sectoral",
+          "exposure_direction": "outgoing",
+          "provider_entity_id": null,
+          "provider_entity_type_id": "30",
+          "provider_entity_subtype_id": "157"
+        },
+        "is_target": false,
+        "node_type": "entity",
+        "risk_level": "high"
+      },
+      {
+        "id": "dof-2-defi",
+        "label": "Uniswap V3: USDC/WETH (Liquidity Pool)",
+        "metadata": {
+          "hops": null,
+          "country": "US",
+          "category": "defi",
+          "is_direct": false,
+          "amount_usd": 7330109.18,
+          "percentage": 1.29039,
+          "entity_type": "DeFi",
+          "exposure_type": "indirect",
+          "entity_subtype": "Decentralized Exchange - AMM",
+          "exposure_direction": "outgoing",
+          "provider_entity_id": "51617",
+          "provider_entity_type_id": "33",
+          "provider_entity_subtype_id": "138"
+        },
+        "is_target": false,
+        "node_type": "entity",
+        "risk_level": "low"
+      },
+      {
+        "id": "dof-3-stolen_funds",
+        "label": "Euler Finance Exploit",
+        "metadata": {
+          "hops": null,
+          "country": "",
+          "category": "stolen_funds",
+          "is_direct": true,
+          "amount_usd": 3602.73,
+          "percentage": 0.000634,
+          "entity_type": "Theft",
+          "exposure_type": "direct",
+          "entity_subtype": "Hack",
+          "exposure_direction": "outgoing",
+          "provider_entity_id": "105341",
+          "provider_entity_type_id": "27",
+          "provider_entity_subtype_id": "116"
+        },
+        "is_target": false,
+        "node_type": "entity",
+        "risk_level": "high"
+      }
+    ],
+    "edges": [
+      {
+        "amount": 541018048,
+        "source": "sof-0-defi",
+        "target": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "currency": "USD",
+        "metadata": {
+          "hops": null,
+          "category": "defi",
+          "exposure_type": "direct",
+          "provider_entity_id": "118410"
+        },
+        "direction": "inbound"
+      },
+      {
+        "amount": 10972112,
+        "source": "sof-1-sanctioned",
+        "target": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "currency": "USD",
+        "metadata": {
+          "hops": null,
+          "category": "sanctioned",
+          "exposure_type": "direct",
+          "provider_entity_id": null
+        },
+        "direction": "inbound"
+      },
+      {
+        "amount": 7134363.64,
+        "source": "sof-2-defi",
+        "target": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "currency": "USD",
+        "metadata": {
+          "hops": null,
+          "category": "defi",
+          "exposure_type": "indirect",
+          "provider_entity_id": "40669"
+        },
+        "direction": "inbound"
+      },
+      {
+        "amount": 165807.02,
+        "source": "sof-3-stolen_funds",
+        "target": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "currency": "USD",
+        "metadata": {
+          "hops": null,
+          "category": "stolen_funds",
+          "exposure_type": "direct",
+          "provider_entity_id": "105341"
+        },
+        "direction": "inbound"
+      },
+      {
+        "amount": 3061.4,
+        "source": "sof-4-exchange_licensed",
+        "target": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "currency": "USD",
+        "metadata": {
+          "hops": null,
+          "category": "exchange_licensed",
+          "exposure_type": "direct",
+          "provider_entity_id": "115884"
+        },
+        "direction": "inbound"
+      },
+      {
+        "amount": 16,
+        "source": "sof-5-exchange_unlicensed",
+        "target": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "currency": "USD",
+        "metadata": {
+          "hops": null,
+          "category": "exchange_unlicensed",
+          "exposure_type": "direct",
+          "provider_entity_id": "106713"
+        },
+        "direction": "inbound"
+      },
+      {
+        "amount": 0.16,
+        "source": "sof-6-gambling_unlicensed",
+        "target": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "currency": "USD",
+        "metadata": {
+          "hops": null,
+          "category": "gambling_unlicensed",
+          "exposure_type": "direct",
+          "provider_entity_id": "104142"
+        },
+        "direction": "inbound"
+      },
+      {
+        "amount": 0.03,
+        "source": "sof-7-scam",
+        "target": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "currency": "USD",
+        "metadata": {
+          "hops": null,
+          "category": "scam",
+          "exposure_type": "direct",
+          "provider_entity_id": "118953"
+        },
+        "direction": "inbound"
+      },
+      {
+        "amount": 453913374.5,
+        "source": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "target": "dof-0-sanctioned",
+        "currency": "USD",
+        "metadata": {
+          "hops": null,
+          "category": "sanctioned",
+          "exposure_type": "direct",
+          "provider_entity_id": null
+        },
+        "direction": "outbound"
+      },
+      {
+        "amount": 106806555,
+        "source": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "target": "dof-1-sanctioned",
+        "currency": "USD",
+        "metadata": {
+          "hops": null,
+          "category": "sanctioned",
+          "exposure_type": "direct",
+          "provider_entity_id": null
+        },
+        "direction": "outbound"
+      },
+      {
+        "amount": 7330109.18,
+        "source": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "target": "dof-2-defi",
+        "currency": "USD",
+        "metadata": {
+          "hops": null,
+          "category": "defi",
+          "exposure_type": "indirect",
+          "provider_entity_id": "51617"
+        },
+        "direction": "outbound"
+      },
+      {
+        "amount": 3602.73,
+        "source": "0x098B716B8Aaf21512996dC57EB0615e2383E2f96",
+        "target": "dof-3-stolen_funds",
+        "currency": "USD",
+        "metadata": {
+          "hops": null,
+          "category": "stolen_funds",
+          "exposure_type": "direct",
+          "provider_entity_id": "105341"
+        },
+        "direction": "outbound"
+      }
+    ],
+    "metrics": {
+      "fee_usd": null,
+      "provider": "merklescience",
+      "severity": "CRITICAL",
+      "risk_score": 95,
+      "total_edges": 12,
+      "total_nodes": 13,
+      "sanctions_hit": true,
+      "screening_type": "WALLET_SCREENING",
+      "block_timestamp": null,
+      "total_value_usd": null,
+      "omitted_incoming": 0,
+      "omitted_outgoing": 0
+    }
+  },
+  "remediation": null,
+  "action_required": {
+    "type": "wallet_ownership",
+    "url": "https://verify.staging.didit.me/wallet-ownership/REDACTED_TOKEN",
+    "widget_session_id": "9f81882a-dc5b-4f21-8ad2-ceb87938b957",
+    "expires_at": "2026-10-13T22:39:33.119946+00:00"
+  }
+}
