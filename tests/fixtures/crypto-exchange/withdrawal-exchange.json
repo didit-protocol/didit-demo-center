@@ -301,12 +301,12 @@
   },
   "remediation": {
     "session_id": "66b03170-e99a-4538-bb9c-98359cf8b323",
-    "url": "https://verify.staging.didit.me/session/r_M0j7XVwkZM",
+    "url": "https://verify.staging.didit.me/session/REDACTED_TOKEN",
     "status": "Not Started"
   },
   "action_required": {
     "type": "wallet_ownership",
-    "url": "https://verify.staging.didit.me/wallet-ownership/t_roPl9_InsE_0lTOT1K6VtTLkddIVP9",
+    "url": "https://verify.staging.didit.me/wallet-ownership/REDACTED_TOKEN",
     "widget_session_id": "e9074c2c-63fa-47e0-a284-cc2d9bb66319",
     "expires_at": "2026-10-13T22:39:31.843238+00:00"
   }

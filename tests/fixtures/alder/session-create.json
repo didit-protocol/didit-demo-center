@@ -3,8 +3,8 @@
   "body": {
     "session_id": "c5c01e9c-461c-4726-b288-c16fb8ec41b1",
     "session_number": 10041,
-    "session_token": "ncr1sVpt6LVp",
-    "url": "https://verify.staging.didit.me/session/ncr1sVpt6LVp",
+    "session_token": "REDACTED_TOKEN",
+    "url": "https://verify.staging.didit.me/session/REDACTED_TOKEN",
     "vendor_data": "alder-e2e-mvqpw1il",
     "multi_account_segment": "",
     "metadata": null,

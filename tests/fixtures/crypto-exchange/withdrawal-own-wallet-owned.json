@@ -301,12 +301,12 @@
   },
   "remediation": {
     "session_id": "afbf06c8-a3dc-4f53-b75b-d79bca808aa7",
-    "url": "https://verify.staging.didit.me/session/Gz23ptrbsFzd",
+    "url": "https://verify.staging.didit.me/session/REDACTED_TOKEN",
     "status": "Not Started"
   },
   "action_required": {
     "type": "verification_session",
-    "url": "https://verify.staging.didit.me/session/Gz23ptrbsFzd",
+    "url": "https://verify.staging.didit.me/session/REDACTED_TOKEN",
     "session_id": "afbf06c8-a3dc-4f53-b75b-d79bca808aa7",
     "status": "Not Started"
   }

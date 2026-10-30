@@ -760,7 +760,7 @@
   "remediation": null,
   "action_required": {
     "type": "wallet_ownership",
-    "url": "https://verify.staging.didit.me/wallet-ownership/piYDp5ul0x4wW4-c7Oze1NiES-FpTJxg",
+    "url": "https://verify.staging.didit.me/wallet-ownership/REDACTED_TOKEN",
     "widget_session_id": "9f81882a-dc5b-4f21-8ad2-ceb87938b957",
     "expires_at": "2026-10-13T22:39:33.119946+00:00"
   }
