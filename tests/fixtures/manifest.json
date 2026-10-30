@@ -9,6 +9,18 @@
     "cases",
     "relationships"
   ],
+  "counts": {
+    "fixtures": 29,
+    "byFamily": {
+      "products": 4,
+      "users": 23,
+      "sessions": 7,
+      "transactions": 21,
+      "vasps": 8,
+      "cases": 15,
+      "relationships": 16
+    }
+  },
   "fixtures": [
     {
       "path": "alder/card-approved.json",
