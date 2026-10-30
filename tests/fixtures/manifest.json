@@ -1,0 +1,282 @@
+{
+  "version": 1,
+  "families": [
+    "products",
+    "users",
+    "sessions",
+    "transactions",
+    "vasps",
+    "cases",
+    "relationships"
+  ],
+  "fixtures": [
+    {
+      "path": "alder/card-approved.json",
+      "families": [
+        "users",
+        "transactions",
+        "cases"
+      ],
+      "sha256": "ef002babd453b6af00288a8d83f8fb4dba415527cc589be95c9ee2f66b77b4ee"
+    },
+    {
+      "path": "alder/salary-approved.json",
+      "families": [
+        "users",
+        "transactions"
+      ],
+      "sha256": "a4d98759dbff803ba6856985712606fba407b94f4047e66228586da2ee7a6563"
+    },
+    {
+      "path": "alder/session-create.json",
+      "families": [
+        "sessions"
+      ],
+      "sha256": "8e60d7eb8d67d139c52d2d1e0dd52523f4c7f10ed598698a7916f0542cc60d53"
+    },
+    {
+      "path": "alder/transfer-held.json",
+      "families": [
+        "users",
+        "transactions",
+        "cases",
+        "relationships"
+      ],
+      "sha256": "8022283cee1edfe71be66a29cc33249596ef63e63f36e845b249323eb1b087d0"
+    },
+    {
+      "path": "alder/transfer-known-approved.json",
+      "families": [
+        "users",
+        "transactions",
+        "cases",
+        "relationships"
+      ],
+      "sha256": "917e2860eb18c8f36bec1ed6e196ecc0eb27bba607b6c8567127612277442537"
+    },
+    {
+      "path": "crypto-exchange/decision-not-started.json",
+      "families": [
+        "sessions",
+        "users"
+      ],
+      "sha256": "5056708c96eec0658b07821846c908c54123d22d7be5a89b753c95840d171ad0"
+    },
+    {
+      "path": "crypto-exchange/deposit-own-wallet-btc.json",
+      "families": [
+        "transactions",
+        "vasps",
+        "users",
+        "relationships"
+      ],
+      "sha256": "1c81f3e91d1675f32d1f88822dd84d6296a9bb56364541dbfdf31b6f72c7a31d"
+    },
+    {
+      "path": "crypto-exchange/deposit-own-wallet.json",
+      "families": [
+        "transactions",
+        "vasps",
+        "users",
+        "relationships"
+      ],
+      "sha256": "b0dab944f450b2aade6e887cb45c172b178b24d1d025dd74332fbb104442906a"
+    },
+    {
+      "path": "crypto-exchange/deposit-unknown-sender.json",
+      "families": [
+        "transactions",
+        "vasps",
+        "users",
+        "relationships"
+      ],
+      "sha256": "63bf130546d075b494b79c0dbffb2b89bb21cb48226fdd17413cf215c0426fbf"
+    },
+    {
+      "path": "crypto-exchange/withdrawal-exchange.json",
+      "families": [
+        "transactions",
+        "vasps",
+        "users",
+        "relationships",
+        "cases"
+      ],
+      "sha256": "0924abce71b25b0d945d094a86b840d12853417ac1b942ec95957d49ef760d6d"
+    },
+    {
+      "path": "crypto-exchange/withdrawal-own-wallet-approved.derived.json",
+      "families": [
+        "transactions",
+        "vasps",
+        "users",
+        "relationships",
+        "cases"
+      ],
+      "sha256": "a09a8decdd3084ac08be7599e949495fe68160ba9eecbb678407417f7532c5ac"
+    },
+    {
+      "path": "crypto-exchange/withdrawal-own-wallet-owned.json",
+      "families": [
+        "transactions",
+        "vasps",
+        "users",
+        "relationships",
+        "cases"
+      ],
+      "sha256": "08c6ed8ca7dacaa394525ba582bc0d6d7545fe844cb240a87f7665119ec3ebc3"
+    },
+    {
+      "path": "crypto-exchange/withdrawal-own-wallet.json",
+      "families": [
+        "transactions",
+        "vasps",
+        "users",
+        "relationships",
+        "cases"
+      ],
+      "sha256": "bb373ffd85d11c76f7665c04af0bbc6e0b90a4c96ced4590da5d4bd89fcd7055"
+    },
+    {
+      "path": "crypto-exchange/withdrawal-sanctioned.json",
+      "families": [
+        "transactions",
+        "vasps",
+        "users",
+        "relationships",
+        "cases"
+      ],
+      "sha256": "16b325d5fb96f1b5187a1fc821746e1adcd250f14a0aae07ee91b1e82bc86699"
+    },
+    {
+      "path": "igaming/bonus-approved.json",
+      "families": [
+        "users",
+        "transactions",
+        "cases"
+      ],
+      "sha256": "800853029d5c6e7258b0d50deaa219140da05eb4e6f38d6394d8d5925a91e76a"
+    },
+    {
+      "path": "igaming/bonus-shared-device.json",
+      "families": [
+        "users",
+        "transactions",
+        "cases",
+        "relationships"
+      ],
+      "sha256": "5550c214d2812781cbdbf07bbe43db299bb024b9fe1845dd649446779888041e"
+    },
+    {
+      "path": "igaming/deposit-approved.json",
+      "families": [
+        "users",
+        "transactions"
+      ],
+      "sha256": "5b0a54e6fa272a305142f3f3c8336cbb49840670ee98c1a52b9cf10d308967d6"
+    },
+    {
+      "path": "igaming/deposit-held.json",
+      "families": [
+        "users",
+        "transactions",
+        "cases",
+        "relationships"
+      ],
+      "sha256": "e41a54b8a7e4c456ed098715957b50618f5786c75c6464be9b78a55ec3f64555"
+    },
+    {
+      "path": "marketplace/kyb-decision-docs-example.json",
+      "families": [
+        "products",
+        "sessions",
+        "users",
+        "relationships"
+      ],
+      "sha256": "54c9381ee8556c78eb1bd5a0159ef738abf787b326433e8a78eecded67bded9c"
+    },
+    {
+      "path": "marketplace/sdk-token.json",
+      "families": [
+        "products",
+        "sessions"
+      ],
+      "sha256": "0675cf4243f083dea19c99443d4d55aafda3d92d2ce2d7542cc0a7b2ceb835c0"
+    },
+    {
+      "path": "marketplace/transaction-order-approved.json",
+      "families": [
+        "users",
+        "transactions",
+        "cases",
+        "relationships"
+      ],
+      "sha256": "efb6ba62d191683e0157ceccb3efd28d6c0a10fa863edf926fd661dde4500bd0"
+    },
+    {
+      "path": "marketplace/transaction-order-awaiting-user.json",
+      "families": [
+        "users",
+        "transactions",
+        "cases",
+        "relationships"
+      ],
+      "sha256": "9041f86cac27ab7b4cf10b44cba36c28f2e438c86daf9ecaeee5864c53baf349"
+    },
+    {
+      "path": "marketplace/transaction-signup-approved.json",
+      "families": [
+        "users",
+        "transactions",
+        "cases"
+      ],
+      "sha256": "028c016a51ef1698417af188510e1fb9c8d4d52240c1dc1b446227f53772d88d"
+    },
+    {
+      "path": "marketplace/transaction-signup-held.json",
+      "families": [
+        "users",
+        "transactions",
+        "cases"
+      ],
+      "sha256": "f50ad7f4b9e41cbbbaab0ac468fac63159155abef98fe5732b103906733da769"
+    },
+    {
+      "path": "marketplace/transactions-list-first.json",
+      "families": [
+        "transactions",
+        "relationships"
+      ],
+      "sha256": "2c9866e3bbea4b12c3a87a004eea94ad813147558b432429b9afd54dee54ee3a"
+    },
+    {
+      "path": "product-demos/liveness.json",
+      "families": [
+        "products",
+        "sessions",
+        "users"
+      ],
+      "sha256": "04bdb8b277b68ea538f1871a17d8bceb55b0c232120a64980cadfc83b95b6729"
+    },
+    {
+      "path": "verification/session-create-callback-without-scheme.json",
+      "families": [
+        "sessions"
+      ],
+      "sha256": "ece32669af65dcaf286140a1b991a4d8b189feb8f923e06fd27ce896b4835497"
+    },
+    {
+      "path": "verification/session-create-production-workflow-on-staging.json",
+      "families": [
+        "sessions"
+      ],
+      "sha256": "6fa87e7f810bec875d1ef0d57ca9f23818623dd6cf90973d9d66b6b8b712860a"
+    },
+    {
+      "path": "verification/workflow-create-limit-reached.json",
+      "families": [
+        "products"
+      ],
+      "sha256": "ca2ac15fad6ad268ae9786e28a361e6cece6058afdfee80966e14efccf174096"
+    }
+  ]
+}
