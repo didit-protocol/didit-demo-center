@@ -276,15 +276,15 @@
     "network_snapshot": null,
     "remediation": {
       "session_id": "583b0948-6217-4404-be90-be5fe3ac1a19",
-      "session_token": "Th0SBD0lEJ7P",
-      "url": "https://verify.staging.didit.me/session/Th0SBD0lEJ7P",
+      "session_token": "REDACTED_TOKEN",
+      "url": "https://verify.staging.didit.me/session/REDACTED_TOKEN",
       "status": "Not Started"
     },
     "action_required": {
       "type": "verification_session",
-      "url": "https://verify.staging.didit.me/session/Th0SBD0lEJ7P",
+      "url": "https://verify.staging.didit.me/session/REDACTED_TOKEN",
       "session_id": "583b0948-6217-4404-be90-be5fe3ac1a19",
-      "session_token": "Th0SBD0lEJ7P",
+      "session_token": "REDACTED_TOKEN",
       "status": "Not Started"
     },
     "cost_breakdown": {
@@ -578,15 +578,15 @@
     "network_snapshot": null,
     "remediation": {
       "session_id": "583b0948-6217-4404-be90-be5fe3ac1a19",
-      "session_token": "Th0SBD0lEJ7P",
-      "url": "https://verify.staging.didit.me/session/Th0SBD0lEJ7P",
+      "session_token": "REDACTED_TOKEN",
+      "url": "https://verify.staging.didit.me/session/REDACTED_TOKEN",
       "status": "Not Started"
     },
     "action_required": {
       "type": "verification_session",
-      "url": "https://verify.staging.didit.me/session/Th0SBD0lEJ7P",
+      "url": "https://verify.staging.didit.me/session/REDACTED_TOKEN",
       "session_id": "583b0948-6217-4404-be90-be5fe3ac1a19",
-      "session_token": "Th0SBD0lEJ7P",
+      "session_token": "REDACTED_TOKEN",
       "status": "Not Started"
     },
     "cost_breakdown": {
