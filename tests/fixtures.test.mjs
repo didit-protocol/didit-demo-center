@@ -170,3 +170,176 @@ test("every URL is absolute and every media reference is https", () => {
     });
   }
 });
+
+const MEDIA_URL_KEY = /(?:^|_)(?:file|image|media|document|portrait|certificate|video)(?:_url)?$/i;
+const RESERVED_HOST = /(?:^|\.)(?:example|test|invalid|localhost)$/i;
+const STABLE_ID_KEYS = new Set(["uuid", "session_id", "sessionId", "txn_id", "vendor_data", "payment_txn_id"]);
+
+function fixtureAt(rel) {
+  return load(rel);
+}
+
+function isRecordContainer(value) {
+  return value && typeof value === "object" && !Array.isArray(value);
+}
+
+test("the manifest counts match the fixtures it lists", () => {
+  const { counts } = MANIFEST;
+
+  assert.equal(counts.fixtures, MANIFEST.fixtures.length);
+  assert.equal(counts.fixtures, fixtureFiles().length);
+  assert.deepEqual(Object.keys(counts.byFamily).sort(), [...MANIFEST.families].sort());
+
+  for (const family of MANIFEST.families) {
+    const actual = MANIFEST.fixtures.filter((entry) => entry.families.includes(family)).length;
+
+    assert.ok(actual > 0, family);
+    assert.equal(counts.byFamily[family], actual, family);
+  }
+
+  assert.equal(
+    Object.values(counts.byFamily).reduce((total, count) => total + count, 0),
+    MANIFEST.fixtures.reduce((total, entry) => total + entry.families.length, 0),
+  );
+});
+
+test("a transaction keeps its identity between the request and the deep answer", () => {
+  for (const entry of MANIFEST.fixtures) {
+    const fixture = fixtureAt(entry.path);
+
+    if (!isRecordContainer(fixture) || !isRecordContainer(fixture.post) || !isRecordContainer(fixture.get))
+      continue;
+
+    for (const key of ["uuid", "txn_id", "transaction_number", "transaction_type", "vendor_data"]) {
+      if (key in fixture.post || key in fixture.get)
+        assert.deepEqual(fixture.get[key], fixture.post[key], `${entry.path}: ${key}`);
+    }
+  }
+});
+
+test("related fixtures across KYC, KYB, transactions and lists agree", () => {
+  const session = fixtureAt("alder/session-create.json").body;
+
+  for (const name of ["card-approved", "salary-approved", "transfer-held", "transfer-known-approved"]) {
+    const transaction = fixtureAt(`alder/${name}.json`).post;
+
+    assert.equal(transaction.vendor_data, session.vendor_data, name);
+    assert.equal(transaction.metadata.subject.vendor_data, session.vendor_data, name);
+  }
+
+  const liveness = fixtureAt("product-demos/liveness.json");
+  const sessionIds = [liveness.create.sessionId, liveness.started.session_id, liveness.approved.session_id];
+
+  assert.equal(new Set(sessionIds).size, 1);
+  assert.equal(
+    liveness.started.linked_records.earlier_verifications.vendor_user_id,
+    liveness.approved.linked_records.earlier_verifications.vendor_user_id,
+  );
+
+  const withdrawal = fixtureAt("crypto-exchange/withdrawal-own-wallet.json");
+
+  for (const name of ["withdrawal-own-wallet-owned", "withdrawal-own-wallet-approved.derived"]) {
+    const variant = fixtureAt(`crypto-exchange/${name}.json`);
+
+    assert.equal(variant.txn_id, withdrawal.txn_id, name);
+    assert.equal(variant.uuid, withdrawal.uuid, name);
+    assert.equal(variant.remediation.session_id, withdrawal.remediation.session_id, name);
+  }
+
+  const kyb = fixtureAt("marketplace/kyb-decision-docs-example.json");
+  const company = kyb.registry_checks[0].company;
+
+  for (const person of [...company.officers, ...company.beneficial_owners])
+    assert.match(person.kyc_session_url, /\/session\/REDACTED_TOKEN$/, person.name);
+
+  const tagIds = new Set();
+
+  for (const entry of MANIFEST.fixtures.filter((fixture) => fixture.path.startsWith("igaming/"))) {
+    const fixture = fixtureAt(entry.path);
+
+    for (const side of ["post", "get"])
+      for (const tag of fixture[side]?.tags ?? []) tagIds.add(tag.uuid);
+  }
+
+  const first = fixtureAt("marketplace/transactions-list-first.json");
+
+  for (const result of first.results)
+    for (const tag of result.tags) assert.ok(tagIds.has(tag.uuid), `list tag ${tag.uuid} has no transaction`);
+});
+
+test("the deep answers keep the nested records the console reads", () => {
+  const liveness = fixtureAt("product-demos/liveness.json");
+
+  for (const side of ["started", "approved"]) {
+    const session = liveness[side];
+
+    assert.ok(isRecordContainer(session.decision_trace), side);
+    assert.ok(isRecordContainer(session.linked_records), side);
+    assert.ok(Array.isArray(session.ip_analyses), side);
+    assert.ok(Array.isArray(session.features), side);
+  }
+  assert.ok(liveness.approved.liveness_checks.length > 0);
+
+  const kyb = fixtureAt("marketplace/kyb-decision-docs-example.json");
+  const company = kyb.registry_checks[0].company;
+
+  assert.ok(company.officers.length > 0);
+  assert.ok(company.beneficial_owners.length > 0);
+  assert.ok(company.registered_address);
+  assert.ok(kyb.document_verifications.length > 0);
+  assert.ok(kyb.key_people_checks.length > 0);
+});
+
+test("every media reference is a synthetic marker, never a real file host", () => {
+  for (const entry of MANIFEST.fixtures) {
+    walk(fixtureAt(entry.path), (value, key) => {
+      if (!MEDIA_URL_KEY.test(key) || !/^https?:\/\//.test(value)) return;
+
+      const { hostname } = new URL(value);
+
+      assert.ok(RESERVED_HOST.test(hostname), `${entry.path}: ${key} points at ${hostname}`);
+    });
+  }
+});
+
+test("reloading the set is deterministic and its repeats deduplicate", () => {
+  function records() {
+    const found = [];
+
+    for (const entry of MANIFEST.fixtures)
+      walk(fixtureAt(entry.path), (value, key) => {
+        if (typeof value === "string" && value && value !== "REDACTED_TOKEN" && STABLE_ID_KEYS.has(key))
+          found.push(`${key}=${value}`);
+      });
+
+    return found.sort();
+  }
+
+  const first = records();
+  const second = records();
+
+  assert.deepEqual(second, first);
+  assert.ok(first.length > MANIFEST.fixtures.length);
+
+  const unique = new Set(first);
+
+  // The variants intentionally repeat one record's ids; deduplication is by identity.
+  assert.ok(unique.size < first.length);
+  assert.equal(new Set(second).size, unique.size);
+
+  // One transaction id names one record: no two fixtures give it different uuids.
+  const uuidByTxn = new Map();
+
+  for (const entry of MANIFEST.fixtures) {
+    const fixture = fixtureAt(entry.path);
+    const containers = [fixture, fixture.post, fixture.get].filter(isRecordContainer);
+
+    for (const container of containers) {
+      if (typeof container.txn_id !== "string" || typeof container.uuid !== "string") continue;
+      const uuid = uuidByTxn.get(container.txn_id);
+
+      assert.ok(!uuid || uuid === container.uuid, `${entry.path}: ${container.txn_id} has two uuids`);
+      uuidByTxn.set(container.txn_id, container.uuid);
+    }
+  }
+});
