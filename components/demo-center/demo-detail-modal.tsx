@@ -242,8 +242,8 @@ export function DemoDetailModal({
                   {demo.backendChecks.join(" and ")}{" "}
                   {demo.backendChecks.length > 1 ? "are" : "is"} a backend-only
                   check: it runs automatically once its inputs exist, with no
-                  step in the flow, and it is billed from the first check with
-                  no free tier. This demo shows the decision it produces rather
+                  step in the flow, and it is billed from the first check.
+                  This demo shows the decision it produces rather
                   than screening a real person every time the page is opened.
                 </p>
               </div>
@@ -360,7 +360,7 @@ export function DemoDetailModal({
                 returns{" "}
                 <span className="font-mono">session_kind: business</span>.
                 Standalone modules are separate server-to-server endpoints,
-                priced outside the workflow free tier.
+                priced separately from the workflow features.
               </p>
             </div>
             {demo.request && (
