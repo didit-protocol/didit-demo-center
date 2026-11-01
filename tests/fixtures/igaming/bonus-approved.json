@@ -1,0 +1,410 @@
+{
+  "post": {
+    "uuid": "284c2013-cf1a-4d86-82f9-db7034922a15",
+    "environment": "live",
+    "transaction_number": 207,
+    "txn_id": "ap-bonus_claim-57c140ac-mvqloy58",
+    "txn_date": "2026-10-27T11:26:59.156791Z",
+    "zone_id": null,
+    "transaction_type": "gamblingBonusChange",
+    "action_type": "bonus_claim",
+    "direction": "INBOUND",
+    "status": "APPROVED",
+    "source": "LIVE",
+    "amount": "20",
+    "currency": "EUR",
+    "currency_type": null,
+    "amount_in_default_currency": null,
+    "default_currency_code": null,
+    "preferred_currency_amount": "22.385015506436016541",
+    "preferred_currency_code": "USD",
+    "payment_details": null,
+    "payment_txn_id": null,
+    "score": 40,
+    "severity": null,
+    "decision_reason_code": null,
+    "decision_reason_label": null,
+    "vendor_data": "aurora-play-d1808cd5db4c84d057c140ac",
+    "metadata": {
+      "subject": {
+        "full_name": "Sofia Marin",
+        "vendor_data": "aurora-play-d1808cd5db4c84d057c140ac",
+        "device_context": {
+          "metadata": {
+            "bot_score": 0.5,
+            "webview_kind": "browser",
+            "composite_server_id": "3f850630b22d3ed6dd2f422777373c92"
+          },
+          "platform": "desktop",
+          "os_family": "Linux",
+          "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/148.0.7778.96 Safari/537.36",
+          "fingerprint": "Coydy2js3OZZMFVJgaOTmw",
+          "browser_family": "HeadlessChrome",
+          "composite_hash": "g-K-7Il59GlG1BeCT-jY8g",
+          "network_context": {
+            "ip_address": "203.0.113.7"
+          },
+          "persistent_device_id": "Coydy2js3OZZMFVJgaOTmw"
+        }
+      },
+      "counterparty": {}
+    },
+    "props": {
+      "demo_app": "igaming",
+      "operator": "Aurora Play",
+      "is_data_center": true
+    },
+    "tags": [
+      {
+        "uuid": "ced71a6f-57c4-41c7-b617-c6cea2a9f532",
+        "name": "UNLICENSED_MARKET",
+        "color": "#007AFE",
+        "description": null,
+        "source": "custom"
+      }
+    ],
+    "parties": [
+      {
+        "uuid": "e0b04d7c-93cd-409a-aee6-d1bd5dfd2dfc",
+        "role": "APPLICANT",
+        "entity_type": "individual",
+        "kind": "USER",
+        "vendor_data": "aurora-play-d1808cd5db4c84d057c140ac",
+        "full_name": "Sofia Marin",
+        "first_name": null,
+        "last_name": null,
+        "country_code": null,
+        "dob": null,
+        "address": {},
+        "institution_info": {},
+        "device": {
+          "metadata": {
+            "bot_score": 0.5,
+            "webview_kind": "browser",
+            "composite_server_id": "3f850630b22d3ed6dd2f422777373c92"
+          },
+          "platform": "desktop",
+          "os_family": "Linux",
+          "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/148.0.7778.96 Safari/537.36",
+          "fingerprint": "Coydy2js3OZZMFVJgaOTmw",
+          "browser_family": "HeadlessChrome",
+          "composite_hash": "g-K-7Il59GlG1BeCT-jY8g",
+          "network_context": {
+            "isp": "Google LLC",
+            "ip_city": "Example City",
+            "ip_state": "Example State",
+            "latitude": 45.59455871582031,
+            "longitude": -121.17868041992188,
+            "time_zone": "America/Los_Angeles",
+            "asn_number": 396982,
+            "ip_address": "203.0.113.7",
+            "ip_country": "United States",
+            "organization": "Google LLC",
+            "is_vpn_or_tor": false,
+            "is_data_center": true,
+            "ip_country_code": "US",
+            "asn_organization": "Google LLC",
+            "time_zone_offset": "-0700"
+          },
+          "persistent_device_id": "Coydy2js3OZZMFVJgaOTmw"
+        },
+        "external_party_snapshot": null
+      }
+    ],
+    "payment_methods": [],
+    "documents": [],
+    "activities": [
+      {
+        "uuid": "9b28a243-bc74-465f-90e2-dba955ba128c",
+        "activity_type": "TRANSACTION_CREATED",
+        "source": "TRANSACTION",
+        "status": "APPROVED",
+        "title": "bonus_claim",
+        "description": null,
+        "metadata": {
+          "amount": "20.000000000000000000",
+          "currency": "EUR",
+          "direction": "INBOUND",
+          "action_type": "bonus_claim"
+        },
+        "occurred_at": "2026-10-27T11:26:59.160844Z"
+      }
+    ],
+    "alerts": [],
+    "rule_runs": [
+      {
+        "uuid": "5f93ad6d-c326-4ea9-a566-71e8380a6314",
+        "rule": "62d6bf16-5ad0-4d70-bf1d-c2e07f83a90d",
+        "rule_title": "Aurora Play demo: cashier used outside licensed markets",
+        "rule_description": "Cashier activity from an IP outside \"Aurora Play demo: licensed markets\" adds risk score. With other signals it crosses the review threshold.",
+        "rule_category": "igaming",
+        "matched": true,
+        "is_test": false,
+        "mode": "ACTIVE",
+        "severity": null,
+        "score_delta": 40,
+        "status_target": null,
+        "action_summary": "score +40; add_tag:UNLICENSED_MARKET",
+        "metadata": {
+          "conditions": [
+            {
+              "field": "subject_vendor_data",
+              "matched": true,
+              "operator": "contains",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "aurora-play-d1808cd5db4c84d057c140ac",
+              "expected_value": "aurora-play-"
+            },
+            {
+              "field": "subject_ip_country",
+              "matched": true,
+              "operator": "exists",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "USA",
+              "expected_value": true
+            },
+            {
+              "field": "subject_ip_country",
+              "matched": true,
+              "operator": "not_in",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "USA",
+              "expected_value": "df40f1ca-1183-49b8-bba5-ed996ce5e99c"
+            }
+          ],
+          "scope_match": true,
+          "aggregations": []
+        },
+        "created_at": "2026-10-27T11:26:59.254299Z"
+      }
+    ],
+    "provider_results": [],
+    "travel_rule": null,
+    "network_snapshot": null,
+    "remediation": null,
+    "action_required": null,
+    "cost_breakdown": {
+      "total_price": 0.02,
+      "items": [
+        {
+          "usage_type": "transaction_monitoring",
+          "price": 0.02,
+          "details": {
+            "product": "transactions"
+          },
+          "created_at": "2026-10-27T11:26:59.365093Z"
+        }
+      ]
+    }
+  },
+  "get": {
+    "uuid": "284c2013-cf1a-4d86-82f9-db7034922a15",
+    "environment": "live",
+    "transaction_number": 207,
+    "txn_id": "ap-bonus_claim-57c140ac-mvqloy58",
+    "txn_date": "2026-10-27T11:26:59.156791Z",
+    "zone_id": null,
+    "transaction_type": "gamblingBonusChange",
+    "action_type": "bonus_claim",
+    "direction": "INBOUND",
+    "status": "APPROVED",
+    "source": "LIVE",
+    "amount": "20",
+    "currency": "EUR",
+    "currency_type": null,
+    "amount_in_default_currency": null,
+    "default_currency_code": null,
+    "preferred_currency_amount": "22.385015506436016541",
+    "preferred_currency_code": "USD",
+    "payment_details": null,
+    "payment_txn_id": null,
+    "score": 40,
+    "severity": null,
+    "decision_reason_code": null,
+    "decision_reason_label": null,
+    "vendor_data": "aurora-play-d1808cd5db4c84d057c140ac",
+    "metadata": {
+      "subject": {
+        "full_name": "Sofia Marin",
+        "vendor_data": "aurora-play-d1808cd5db4c84d057c140ac",
+        "device_context": {
+          "metadata": {
+            "bot_score": 0.5,
+            "webview_kind": "browser",
+            "composite_server_id": "3f850630b22d3ed6dd2f422777373c92"
+          },
+          "platform": "desktop",
+          "os_family": "Linux",
+          "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/148.0.7778.96 Safari/537.36",
+          "fingerprint": "Coydy2js3OZZMFVJgaOTmw",
+          "browser_family": "HeadlessChrome",
+          "composite_hash": "g-K-7Il59GlG1BeCT-jY8g",
+          "network_context": {
+            "ip_address": "203.0.113.7"
+          },
+          "persistent_device_id": "Coydy2js3OZZMFVJgaOTmw"
+        }
+      },
+      "counterparty": {}
+    },
+    "props": {
+      "demo_app": "igaming",
+      "operator": "Aurora Play",
+      "is_data_center": true
+    },
+    "tags": [
+      {
+        "uuid": "ced71a6f-57c4-41c7-b617-c6cea2a9f532",
+        "name": "UNLICENSED_MARKET",
+        "color": "#007AFE",
+        "description": null,
+        "source": "custom"
+      }
+    ],
+    "parties": [
+      {
+        "uuid": "e0b04d7c-93cd-409a-aee6-d1bd5dfd2dfc",
+        "role": "APPLICANT",
+        "entity_type": "individual",
+        "kind": "USER",
+        "vendor_data": "aurora-play-d1808cd5db4c84d057c140ac",
+        "full_name": "Sofia Marin",
+        "first_name": null,
+        "last_name": null,
+        "country_code": null,
+        "dob": null,
+        "address": {},
+        "institution_info": {},
+        "device": {
+          "metadata": {
+            "bot_score": 0.5,
+            "webview_kind": "browser",
+            "composite_server_id": "3f850630b22d3ed6dd2f422777373c92"
+          },
+          "platform": "desktop",
+          "os_family": "Linux",
+          "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/148.0.7778.96 Safari/537.36",
+          "fingerprint": "Coydy2js3OZZMFVJgaOTmw",
+          "browser_family": "HeadlessChrome",
+          "composite_hash": "g-K-7Il59GlG1BeCT-jY8g",
+          "network_context": {
+            "isp": "Google LLC",
+            "ip_city": "Example City",
+            "ip_state": "Example State",
+            "latitude": 45.59455871582031,
+            "longitude": -121.17868041992188,
+            "time_zone": "America/Los_Angeles",
+            "asn_number": 396982,
+            "ip_address": "203.0.113.7",
+            "ip_country": "United States",
+            "organization": "Google LLC",
+            "is_vpn_or_tor": false,
+            "is_data_center": true,
+            "ip_country_code": "US",
+            "asn_organization": "Google LLC",
+            "time_zone_offset": "-0700"
+          },
+          "persistent_device_id": "Coydy2js3OZZMFVJgaOTmw"
+        },
+        "external_party_snapshot": null
+      }
+    ],
+    "payment_methods": [],
+    "documents": [],
+    "activities": [
+      {
+        "uuid": "9b28a243-bc74-465f-90e2-dba955ba128c",
+        "activity_type": "TRANSACTION_CREATED",
+        "source": "TRANSACTION",
+        "status": "APPROVED",
+        "title": "bonus_claim",
+        "description": null,
+        "metadata": {
+          "amount": "20.000000000000000000",
+          "currency": "EUR",
+          "direction": "INBOUND",
+          "action_type": "bonus_claim"
+        },
+        "occurred_at": "2026-10-27T11:26:59.160844Z"
+      }
+    ],
+    "alerts": [],
+    "rule_runs": [
+      {
+        "uuid": "5f93ad6d-c326-4ea9-a566-71e8380a6314",
+        "rule": "62d6bf16-5ad0-4d70-bf1d-c2e07f83a90d",
+        "rule_title": "Aurora Play demo: cashier used outside licensed markets",
+        "rule_description": "Cashier activity from an IP outside \"Aurora Play demo: licensed markets\" adds risk score. With other signals it crosses the review threshold.",
+        "rule_category": "igaming",
+        "matched": true,
+        "is_test": false,
+        "mode": "ACTIVE",
+        "severity": null,
+        "score_delta": 40,
+        "status_target": null,
+        "action_summary": "score +40; add_tag:UNLICENSED_MARKET",
+        "metadata": {
+          "conditions": [
+            {
+              "field": "subject_vendor_data",
+              "matched": true,
+              "operator": "contains",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "aurora-play-d1808cd5db4c84d057c140ac",
+              "expected_value": "aurora-play-"
+            },
+            {
+              "field": "subject_ip_country",
+              "matched": true,
+              "operator": "exists",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "USA",
+              "expected_value": true
+            },
+            {
+              "field": "subject_ip_country",
+              "matched": true,
+              "operator": "not_in",
+              "group_index": null,
+              "group_logic": "AND",
+              "field_source": null,
+              "current_value": "USA",
+              "expected_value": "df40f1ca-1183-49b8-bba5-ed996ce5e99c"
+            }
+          ],
+          "scope_match": true,
+          "aggregations": []
+        },
+        "created_at": "2026-10-27T11:26:59.254299Z"
+      }
+    ],
+    "provider_results": [],
+    "travel_rule": null,
+    "network_snapshot": null,
+    "remediation": null,
+    "action_required": null,
+    "cost_breakdown": {
+      "total_price": 0.02,
+      "items": [
+        {
+          "usage_type": "transaction_monitoring",
+          "price": 0.02,
+          "details": {
+            "product": "transactions"
+          },
+          "created_at": "2026-10-27T11:26:59.365093Z"
+        }
+      ]
+    }
+  }
+}
