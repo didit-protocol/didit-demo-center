@@ -1,0 +1,5 @@
+[   10874ms] [INFO] [SessionWebSocket] Closing connection @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[   10875ms] [WARNING] WebSocket connection to 'wss://verification.staging.didit.me/ws/session_status/?session_token=kVAulVzwaeb2&device_events=1&device_id=didit-fp-9a1226ea30e07b71' failed: WebSocket is closed before the connection is established. @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[   10877ms] [LOG] [getInitialAppStepAction] currentStep OCR @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[   10879ms] [LOG] [getInitialAppStepAction] status Not Started @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[   10979ms] [LOG] [useAppStepsNavigation] navigateToSessionStart @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
