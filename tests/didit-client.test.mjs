@@ -15,7 +15,7 @@ const config = await import("../lib/didit/config.ts");
 const server = await import("../lib/didit/server.ts");
 const live = await import("../lib/didit/live.ts");
 const demos = await import("../lib/didit/demos.ts");
-const { describeAgent, stepUpOf } = await import("../lib/didit/browser.ts");
+const { describeAgent, stepUpOf, warmVerification } = await import("../lib/didit/browser.ts");
 
 function recorder(answer = () => ({ status: 200, body: {} })) {
   const calls = [];
@@ -203,4 +203,35 @@ test("the browser helpers: step-ups and device names", () => {
     describeAgent("Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1"),
     { browser: "Safari", os: "iOS" },
   );
+});
+
+test("warming the web SDK waits for idle and stays off on Save-Data and 2G", () => {
+  const original = { navigator: globalThis.navigator, window: globalThis.window };
+  const scheduled = [];
+  const cancelled = [];
+  const setup = (connection) => {
+    Object.defineProperty(globalThis, "navigator", { value: { connection }, configurable: true });
+    globalThis.window = {
+      requestIdleCallback: (run, options) => (scheduled.push({ run, options }), scheduled.length),
+      cancelIdleCallback: (handle) => cancelled.push(handle),
+    };
+  };
+
+  try {
+    for (const connection of [{ saveData: true }, { effectiveType: "2g" }, { effectiveType: "slow-2g" }]) {
+      setup(connection);
+      warmVerification();
+      assert.equal(scheduled.length, 0, JSON.stringify(connection));
+    }
+
+    setup({ effectiveType: "4g", saveData: false });
+    const cancel = warmVerification();
+    assert.equal(scheduled.length, 1);
+    assert.equal(scheduled[0].options.timeout, 2000);
+    cancel();
+    assert.deepEqual(cancelled, [1]);
+  } finally {
+    Object.defineProperty(globalThis, "navigator", { value: original.navigator, configurable: true });
+    globalThis.window = original.window;
+  }
 });

@@ -14,6 +14,7 @@ import { LiveFeed } from "@/components/didit-live/live-feed";
 import { openVerification } from "@/lib/didit/browser";
 import { diditUrls } from "@/lib/didit/config";
 import { useDidit } from "@/lib/didit/provider";
+import { WarmFlow } from "@/lib/didit/warm-flow";
 import { useLive } from "@/lib/didit/use-live";
 import {
   AVAILABILITY_LABEL,
@@ -287,6 +288,7 @@ export function LiveDemo({ demo }: { demo: Live }) {
       data-phase={phase}
       data-testid="product-demo"
     >
+      <WarmFlow />
       <div className="pd-left">
         <Crumbs demo={demo} />
         <Eyebrow demo={demo} />
