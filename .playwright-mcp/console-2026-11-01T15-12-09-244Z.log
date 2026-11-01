@@ -3,3 +3,4 @@
 [   10503ms] [LOG] [getInitialAppStepAction] currentStep OCR @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
 [   10504ms] [LOG] [getInitialAppStepAction] status Not Started @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
 [   10537ms] [LOG] [useAppStepsNavigation] navigateToSessionStart @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[   11102ms] [INFO] [SessionWebSocket] opened @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
