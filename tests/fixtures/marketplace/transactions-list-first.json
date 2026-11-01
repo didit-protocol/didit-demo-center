@@ -1,0 +1,60 @@
+{
+  "count": 40,
+  "next": "http://verification.staging.didit.me/v3/transactions/?limit=1&offset=1",
+  "previous": null,
+  "results": [
+    {
+      "uuid": "876d8d01-a15d-4625-a7a7-04f8293027a0",
+      "transaction_number": 40,
+      "txn_id": "ap-bonus-claim-5f783c11-mv77vzsc",
+      "transaction_type": "gamblingBonusChange",
+      "action_type": "bonus_claim",
+      "status": "IN_REVIEW",
+      "source": "LIVE",
+      "direction": "INBOUND",
+      "amount": "20",
+      "currency": "EUR",
+      "currency_type": null,
+      "preferred_currency_amount": "22.3827432988528665",
+      "preferred_currency_code": "USD",
+      "payment_details": null,
+      "txn_date": "2026-10-13T21:52:56.204215Z",
+      "created_at": "2026-10-13T21:52:56.208155Z",
+      "score": 100,
+      "severity": null,
+      "decision_reason_code": null,
+      "decision_reason_label": null,
+      "tags": [
+        {
+          "uuid": "e2ca2529-fff0-4762-bc9b-c5bdd793074b",
+          "name": "BONUS_ABUSE",
+          "color": "#007AFE",
+          "description": null,
+          "source": "custom"
+        },
+        {
+          "uuid": "ced71a6f-57c4-41c7-b617-c6cea2a9f532",
+          "name": "UNLICENSED_MARKET",
+          "color": "#007AFE",
+          "description": null,
+          "source": "custom"
+        }
+      ],
+      "subject_name": "Sam Second",
+      "subject_vendor_data": "aurora-play-5f783c1136b27902d74632de",
+      "subject_type": "user",
+      "subject_uuid": "53605d1d-3142-4651-8a2b-c5f5b3eca02f",
+      "counterparty_name": null,
+      "counterparty_vendor_data": null,
+      "counterparty_country": null,
+      "subject_country": null,
+      "assigned_to_name": null,
+      "travel_rule_status": null,
+      "application_id": "a5f3bca2-46e2-411e-90ef-a580900a57ee",
+      "application_name": "Demo Application",
+      "organization_id": "fe668b65-677a-423a-a5c0-8479e59dcbba",
+      "organization_name": "Didit Corporation"
+    }
+  ],
+  "total_transactions": 40
+}

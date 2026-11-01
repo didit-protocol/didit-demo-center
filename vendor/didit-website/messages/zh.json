@@ -1,0 +1,501 @@
+{
+  "translation_v1": {
+    "chrome": {
+      "header": {
+        "nav": {
+          "products": "产品",
+          "pricing": "定价",
+          "image": {
+            "alt": {
+              "didit": "Didit"
+            }
+          },
+          "solutions": {
+            "cards": {
+              "verifyBusiness": {
+                "iconLabel": "企业验证 (KYB)"
+              }
+            }
+          },
+          "developers": {
+            "primary": {
+              "terminal": {
+                "readyOpenDashboard": "→ 5 分钟内就绪 · 打开控制台",
+                "integrateDidit": "> 集成 Didit 验证",
+                "sessionScaffolded": "✓ /v3/session/ 已搭建",
+                "readingMcp": "↻ 读取 mcp://didit.me",
+                "webhookReady": "✓ webhook 处理程序就绪",
+                "mcpConnected": "✓ MCP 服务器已连接",
+                "claude": "$ claude"
+              },
+              "quickstartIconLabel": "快速入门"
+            }
+          },
+          "resources": {
+            "foundersCard": {
+              "imageAlt": "Didit 联合创始人 Alejandro Rosas（左）和 Alberto Rosas（右）",
+              "iconLabel": "关于 Didit"
+            }
+          },
+          "labels": {
+            "solutions": "解决方案",
+            "developers": "开发者",
+            "resources": "资源",
+            "pricing": "定价"
+          }
+        },
+        "solutions": {
+          "cards": {
+            "monitoring": {
+              "title": "监控",
+              "description": "持续 AML、交易规则、钱包 KYT"
+            },
+            "amlCompliance": {
+              "title": "AML 与合规",
+              "description": "制裁、PEP、负面媒体、持续监控"
+            },
+            "onboardCustomer": {
+              "title": "用户验证 (KYC)",
+              "description": "每月免费 KYC 验证高达 500 次，永久有效。身份、活体和人脸比对一站式捆绑。",
+              "iconLabel": "用户验证 (KYC)"
+            },
+            "verifyBusiness": {
+              "title": "企业验证 (KYB)",
+              "description": "注册信息、受益所有人、高管和实体 AML。每个 UBO 都能获得开箱即用的关联 KYC 会话。"
+            },
+            "stopFraud": {
+              "title": "交易监控",
+              "description": "实时规则引擎，支持法币和加密货币。提供案件管理、SAR 工作流和关联 KYC 的自动修复。",
+              "iconLabel": "阻止欺诈"
+            },
+            "complyAml": {
+              "title": "遵守 AML 规定",
+              "description": "对照 1,300 多个制裁、PEP 和负面媒体名单进行筛选。每日持续监控，每用户每年仅需 $0.07。",
+              "iconLabel": "遵守 AML 规定"
+            },
+            "authentication": {
+              "title": "身份验证",
+              "description": "活体检测、生物识别认证、IP 和设备分析"
+            },
+            "verification": {
+              "title": "验证",
+              "description": "KYC、KYB、证件和注册信息核查"
+            }
+          },
+          "byUseCase": {
+            "heading": "用例",
+            "fullKycOnboarding": "完整 KYC 入驻",
+            "ageVerification": "年龄验证",
+            "cryptoOnramp": "加密货币入金 KYC + KYT",
+            "accountTakeover": "阻止账户盗用",
+            "multiAccountAbuse": "阻止多账户滥用",
+            "proofOfHuman": "真人证明",
+            "gigWorker": "注册零工",
+            "botDetection": "拦截机器人",
+            "passwordRecovery": "密码恢复",
+            "seeAll": "所有用例"
+          },
+          "byIndustry": {
+            "heading": "按行业",
+            "fintech": "金融科技",
+            "crypto": "加密货币",
+            "marketplaces": "市场平台",
+            "mobility": "出行",
+            "seeAll": "查看所有行业",
+            "fintechDesc": "数字银行 · 支付 · 借贷 · 证券",
+            "cryptoDesc": "交易所 · 钱包 · 出入金 · VASP",
+            "marketplacesDesc": "零工 · 配送 · 创作者 · 电商",
+            "mobilityDesc": "网约车 · 车队 · 最后一公里配送",
+            "igaming": "iGaming",
+            "igamingDesc": "体育博彩 · 赌场 · 彩票 · 梦幻体育"
+          },
+          "byModule": {
+            "heading": "按模块",
+            "freeKyc": "免费 KYC",
+            "governmentChecks": "政府检查",
+            "biometricAuthentication": "生物识别认证",
+            "walletScreening": "钱包筛选 (KYT)",
+            "ageEstimation": "年龄估算",
+            "ipAnalysis": "设备与 IP 分析",
+            "idVerification": "身份验证",
+            "whiteLabel": "白标",
+            "liveness": "活体检测",
+            "faceMatch": "人脸比对",
+            "seeAll": "所有 25+ 模块"
+          },
+          "viewAll": "浏览完整目录"
+        },
+        "developers": {
+          "primary": {
+            "docs": "文档",
+            "apiReference": "API 参考",
+            "mcpServer": "MCP 服务器",
+            "quickstart": "快速入门"
+          },
+          "quickstartCard": {
+            "description": "5 分钟集成 Didit。获取沙盒密钥，POST 您的第一个会话，验证 webhook, 完整 curl 演练。",
+            "cta": "阅读快速入门",
+            "eyebrow": "5 分钟集成"
+          },
+          "buildLinks": {
+            "heading": "构建",
+            "sessionsApi": "会话 API",
+            "webhooks": "Webhooks",
+            "sdks": "SDKs",
+            "openApi": "OpenAPI / Postman",
+            "agentSkills": "Agent 技能",
+            "codingAgentIntegration": "编码 Agent 集成"
+          },
+          "ship": {
+            "integrationPrompt": "集成提示",
+            "heading": "发布",
+            "sandbox": "沙盒",
+            "changelog": "更新日志",
+            "status": "服务状态"
+          },
+          "viewAll": "开发者中心"
+        },
+        "resources": {
+          "hero": {
+            "blog": "博客",
+            "successStories": "成功案例",
+            "helpCenter": "帮助中心",
+            "demoCenter": "演示中心",
+            "roiCalculator": "投资回报率计算器",
+            "academy": "Academy"
+          },
+          "foundersCard": {
+            "title": "认识创始人",
+            "description": "Alejandro 和 Alberto Rosas, 来自巴塞罗那的双胞胎兄弟，致力于构建身份和欺诈基础设施。",
+            "cta": "了解 Didit"
+          },
+          "read": {
+            "heading": "阅读与探索"
+          },
+          "company": {
+            "heading": "公司",
+            "about": "关于我们",
+            "careers": "职业发展",
+            "securityCompliance": "安全与合规",
+            "contact": "联系我们"
+          },
+          "viewAll": "所有资源"
+        },
+        "ctas": {
+          "signIn": "登录",
+          "signUp": "注册",
+          "startFree": "免费开始",
+          "talkToUs": "联系我们",
+          "learnMore": "了解更多"
+        },
+        "localeSwitcherLabel": "语言",
+        "products": {
+          "cards": {
+            "userVerification": {
+              "title": "用户验证",
+              "description": "KYC 套餐 · $0.33"
+            },
+            "businessVerification": {
+              "title": "企业验证",
+              "description": "KYB · 起价 $2.00"
+            },
+            "transactionMonitoring": {
+              "title": "交易监控",
+              "description": "实时规则 · $0.02/笔交易"
+            },
+            "walletScreening": {
+              "title": "钱包筛选 (KYT)",
+              "description": "链上钱包风险 · $0.15"
+            }
+          },
+          "modules": {
+            "headingDocuments": "证件与联系方式",
+            "headingBiometrics": "生物识别与风险",
+            "idVerification": "身份验证",
+            "nfcVerification": "NFC 验证",
+            "proofOfAddress": "地址证明",
+            "databaseValidation": "数据库验证",
+            "questionnaires": "自定义问卷",
+            "emailVerification": "邮箱验证",
+            "phoneVerification": "手机验证",
+            "liveness": "活体检测",
+            "faceMatch": "人脸比对 1:1",
+            "faceSearch": "人脸搜索 1:N",
+            "biometricAuth": "生物识别认证",
+            "ageEstimation": "年龄估算",
+            "ipAnalysis": "设备与 IP 分析",
+            "walletScreening": "钱包筛选 (KYT)",
+            "seeAll": "查看所有 25+ 模块"
+          },
+          "viewAll": "浏览所有产品"
+        }
+      },
+      "announcementBar": {
+        "slot1": {
+          "text": "Didit 融资 <amt>750 万美元</amt>，打造身份与欺诈基础设施",
+          "ctaLabel": "阅读公告",
+          "href": "/blog/didit-7-5m-seed-infrastructure-identity-fraud-zh/"
+        },
+        "slot2": {
+          "text": "西班牙金融监管机构认可 Didit 比线下验证更安全。",
+          "ctaLabel": "阅读报告",
+          "href": "/security-compliance#regulator"
+        },
+        "slot3": {
+          "text": "钱包筛选，每次检查 $0.15, 也可接入您自己的筛选服务商。",
+          "ctaLabel": "查看钱包筛选",
+          "href": "/products/wallet-screening"
+        },
+        "slot4": {
+          "text": "KYB 和交易监控定价已上线。",
+          "ctaLabel": "查看定价",
+          "href": "/pricing"
+        },
+        "slot5": {
+          "text": "全套 KYC 仅需 $0.33。每月免费 500 次。",
+          "ctaLabel": "免费开始",
+          "href": "https://business.didit.me"
+        }
+      },
+      "footer": {
+        "tagline": "一个用于身份和欺诈的 API。",
+        "cols": {
+          "products": {
+            "heading": "产品",
+            "userVerification": "用户验证 (KYC)",
+            "businessVerification": "企业验证 (KYB)",
+            "transactionMonitoring": "交易监控",
+            "walletScreening": "钱包筛选 (KYT)",
+            "amlScreening": "AML 筛选",
+            "idVerification": "身份验证",
+            "liveness": "活体检测",
+            "faceMatch1to1": "人脸 1:1 比对",
+            "faceSearch1toN": "人脸搜索 1:N",
+            "biometricAuth": "生物识别认证",
+            "ageEstimation": "年龄估算",
+            "nfcReading": "NFC 读取",
+            "databaseValidation": "数据库验证",
+            "ipAnalysis": "设备与 IP 分析",
+            "emailVerification": "邮箱验证",
+            "phoneVerification": "电话验证",
+            "workflowOrchestrator": "工作流编排器",
+            "whiteLabel": "白标",
+            "seeAllModules": "所有产品"
+          },
+          "solutions": {
+            "heading": "解决方案",
+            "fullKycOnboarding": "完整 KYC 入驻",
+            "ageVerification": "年龄验证",
+            "cryptoOnramp": "加密货币入金 KYC + KYT",
+            "accountTakeover": "阻止账户盗用",
+            "multiAccountAbuse": "阻止多账户滥用",
+            "proofOfHuman": "人类证明",
+            "botDetection": "阻止机器人",
+            "gigWorkerVerification": "零工验证",
+            "igamingResponsibleGaming": "iGaming 负责任博彩",
+            "micaCrypto": "MiCA 加密用户验证",
+            "cryptoTravelRule": "加密货币旅行规则",
+            "uboVerification": "UBO 验证 (6AMLD)",
+            "bnplUnderwriting": "BNPL 承保",
+            "psd3Sca": "PSD3 SCA",
+            "marketplaceSellerKyb": "市场卖家 KYB",
+            "employeeOnboarding": "员工入职",
+            "nfcEpassport": "NFC 电子护照入驻",
+            "passwordRecovery": "密码恢复",
+            "seeAll": "所有用例"
+          },
+          "industries": {
+            "heading": "行业",
+            "fintech": "金融科技",
+            "crypto": "加密货币 / Web3",
+            "marketplaces": "市场",
+            "mobility": "出行",
+            "gambling": "iGaming / 博彩",
+            "banking": "银行",
+            "insurance": "保险",
+            "ecommerce": "电子商务",
+            "telecom": "电信",
+            "seeAll": "所有行业"
+          },
+          "developers": {
+            "heading": "开发者",
+            "documentation": "文档",
+            "apiReference": "API 参考",
+            "quickstart": "快速入门, 5 分钟",
+            "integrationPrompt": "集成提示",
+            "mcp": "MCP 服务器",
+            "agentSkills": "代理技能",
+            "sdks": "SDKs",
+            "sandbox": "沙盒 (免费)",
+            "changelog": "更新日志",
+            "status": "服务状态",
+            "demoCenter": "演示中心"
+          },
+          "comparePricing": {
+            "heading": "定价与对比",
+            "pricing": "定价",
+            "roiCalculator": "投资回报率计算器",
+            "sumsub": "对比 Sumsub",
+            "veriff": "对比 Veriff",
+            "onfido": "对比 Onfido",
+            "jumio": "对比 Jumio",
+            "persona": "对比 Persona",
+            "stripeIdentity": "对比 Stripe Identity",
+            "allSwitch": "所有竞品对比",
+            "countries": "支持国家/地区",
+            "supportedDocuments": "支持的证件"
+          },
+          "resources": {
+            "heading": "资源",
+            "securityCompliance": "安全与合规",
+            "supportedDocuments": "支持的证件",
+            "roiCalculator": "投资回报率计算器",
+            "status": "服务状态",
+            "demoCenter": "演示中心"
+          },
+          "company": {
+            "heading": "公司",
+            "about": "关于我们",
+            "blog": "博客",
+            "successStories": "成功案例",
+            "securityCompliance": "安全与合规",
+            "contact": "联系我们",
+            "getDemo": "获取演示",
+            "careers": "招聘",
+            "brand": "品牌素材",
+            "support": "支持",
+            "helpCenter": "帮助中心"
+          },
+          "backedby": {
+            "investors": {
+              "name": {
+                "yCombinator": "Y Combinator"
+              }
+            }
+          }
+        },
+        "askAi": {
+          "eyebrow": "让 AI 总结此页面",
+          "openIn": "在 {provider} 中打开此页面"
+        },
+        "trustStrip": "SOC 2 · ISO 27001 · iBeta PAD L1 · GDPR · eIDAS 2.0 · MiCA · AMLD6 · DORA-aligned",
+        "regulatorMicroline": "经西班牙财政部、西班牙银行和SEPBLAC认可，比线下验证更安全。",
+        "regulatorReadReport": "阅读报告",
+        "backedBy": "投资方",
+        "hq": "美国旧金山 · 总部",
+        "legal": {
+          "copyright": "© 2026 Didit",
+          "privacy": "隐私政策",
+          "cookies": "Cookie政策",
+          "businessTerms": "商业条款",
+          "subProcessors": "子处理方",
+          "contact": "联系我们"
+        },
+        "social": {
+          "labels": {
+            "linkedin": "领英",
+            "x": "X (Twitter)",
+            "github": "GitHub"
+          },
+          "ariaLabel": "Didit在{network}"
+        },
+        "g2Aria": "Didit 在 G2 上的评分为 4.9（满分 5 分）",
+        "g2Tagline": "身份与欺诈基础设施"
+      }
+    },
+    "localeswitcher": {
+      "language": "语言",
+      "ariaLabel": {
+        "language": "语言",
+        "languageColumn1": "语言（第 1 列）",
+        "languageColumn2": "语言（第 2 列）",
+        "changeLanguage": "更改语言。当前语言：{current}。"
+      }
+    },
+    "ui": {
+      "navbar": {
+        "image": {
+          "sizes": {
+            "minWidth1024px480px": "(min-width: 1024px) 480px, 100vw"
+          },
+          "alt": {
+            "didit": "Didit"
+          }
+        },
+        "dropdownPanel": {
+          "subtleDarkening": {
+            "description": "微妙的底部变暗, 刚好足以固定文本，而不会使照片上半部分变暗。h-[55%] 从创始人面部下方开始。"
+          },
+          "accentVariant": {
+            "description": "强调变体, 将链接包裹在 Didit 蓝色胶囊中，使其成为高转化率的号召性用语。"
+          },
+          "heroStrip": {
+            "heading": "英雄条, 单行水平渐变卡片。"
+          },
+          "linkColumnsRow": {
+            "heading": "链接列行, 模块 · 用例 · 行业。"
+          },
+          "imageBackgroundVariant": {
+            "description": "图片背景变体, 用于资源菜单中的“认识创始人”卡片。Next/Image 填充卡片；左对齐的堆叠文本块（标题 + 描述 + CTA）位于左下角，使照片占据卡片约 80% 的区域。无深色渐变叠加, 文本可读性通过画布白色字体上的紧密文本阴影实现。根据 Alberto 的建议：“移除下方的不透明度，并使其像以前一样左对齐，只需确保它像以前一样更靠下。”"
+          },
+          "titleRow": {
+            "description": "标题行, 图标位于标题左侧（无芯片背景、无圆环、无阴影）。使用与 `/pricing` 相同的图标系列，通过 ConsoleModuleIcon（它镜像 fe-application-console workflow-feature-icon 注册表）；当 `moduleKey` 不存在时，回退到 iconSrc 掩码。"
+          },
+          "accentSideColumn": {
+            "description": "侧边栏链接上的 `accent` 会使其以 Didit 蓝色显示并带有一个尾随箭头, 用于“查看所有 25+ 模块”、“所有 15 个行业”、“浏览所有…”等条目，使其更像是探索更多内容的 CTA，而非普通模块链接。"
+          }
+        },
+        "searchDidit": "搜索 Didit",
+        "closeSearch": "关闭搜索",
+        "openMenu": "打开菜单",
+        "closeMenu": "关闭菜单"
+      },
+      "topBar": {
+        "announcementAriaLabel": "公告",
+        "dismissAnnouncementAriaLabel": "关闭公告"
+      },
+      "navTerminalCard": {
+        "diditZsh": "~/didit · zsh",
+        "navTerminalCard": {
+          "live": "实时"
+        }
+      },
+      "logoContextMenu": {
+        "aria": "Didit 品牌资源",
+        "eyebrow": "品牌套件",
+        "copyLogo": "复制 SVG 格式徽标",
+        "copied": "已复制",
+        "downloadSvg": "下载徽标（SVG）",
+        "downloadPng": "下载徽标（PNG）",
+        "downloadMark": "下载符号（SVG）",
+        "copyColor": "复制品牌色",
+        "guidelines": "品牌指南"
+      },
+      "footer": {
+        "legalTagline": "为需要信任的团队提供身份基础设施。"
+      },
+      "backedBy": {
+        "label": "投资方"
+      }
+    },
+    "blog": {
+      "archive": {
+        "eyebrow": "博客归档",
+        "title": "浏览所有<blue>Didit 文章</blue>。",
+        "titleAccent": "Didit 文章",
+        "description": "所有关于身份和欺诈的已发布文章均整理为轻量分页，便于快速浏览。",
+        "browseAll": "浏览全部文章",
+        "navigationAria": "博客归档页",
+        "pageOf": "第 {page} 页，共 {total} 页",
+        "range": "文章 {start}–{end}",
+        "articleCount": "{count} 篇文章",
+        "metadata": {
+          "title": "博客归档 | Didit",
+          "pageTitle": "博客归档，第 {page} 页 | Didit",
+          "description": "浏览完整的 Didit 博客归档，查阅身份核验、欺诈防控、合规要求、产品更新与公司动态的实用文章。归档按页整理产品发布、欺诈研究以及 eIDAS 2.0、MiCA、AMLD6 等身份标准内容，便于快速找到并继续阅读每篇文章以及相关主题内容。",
+          "pageDescription": "浏览 Didit 博客归档第 {page} 页，查阅身份核验、欺诈防控、合规要求、产品更新与公司动态文章。本页按时间整理产品发布、欺诈研究以及 eIDAS 2.0、MiCA、AMLD6 等身份标准内容，便于继续浏览完整归档以及对应文章主题。"
+        }
+      }
+    }
+  }
+}
