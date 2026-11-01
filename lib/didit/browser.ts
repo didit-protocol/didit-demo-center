@@ -31,6 +31,36 @@ export function loadSdk(): Promise<Sdk> {
   return sdkPromise;
 }
 
+interface NetworkInformation {
+  saveData?: boolean;
+  effectiveType?: string;
+}
+
+/**
+ * Downloads the web SDK while the page is idle, so Start does not wait for
+ * it after the session is created. Nothing is sent to Didit: no session is
+ * created ahead of a click. It stays off on Save-Data and 2G.
+ */
+export function warmVerification(): () => void {
+  const connection = (
+    navigator as Navigator & { connection?: NetworkInformation }
+  ).connection;
+
+  if (connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType ?? ""))
+    return () => undefined;
+
+  const load = () => void loadSdk().catch(() => undefined);
+
+  if (typeof window.requestIdleCallback === "function") {
+    const handle = window.requestIdleCallback(load, { timeout: 2000 });
+
+    return () => window.cancelIdleCallback(handle);
+  }
+  const timer = window.setTimeout(load, 300);
+
+  return () => window.clearTimeout(timer);
+}
+
 /**
  * Opens a hosted verification session in the web SDK modal and resolves with
  * how it ended. The session is always created on the server for the

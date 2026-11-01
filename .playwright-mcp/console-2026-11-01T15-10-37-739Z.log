@@ -1,0 +1,10 @@
+[    5373ms] [INFO] [SessionWebSocket] Closing connection @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[    5374ms] [WARNING] WebSocket connection to 'wss://verification.staging.didit.me/ws/session_status/?session_token=kVAulVzwaeb2&device_events=1&device_id=didit-fp-8817f5290a493390' failed: WebSocket is closed before the connection is established. @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[    5374ms] [LOG] [getInitialAppStepAction] currentStep OCR @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[    5374ms] [LOG] [getInitialAppStepAction] status Not Started @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[    5381ms] [LOG] [useAppStepsNavigation] navigateToSessionStart @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[    5807ms] [INFO] speedMbpsFromVerificationApi: 1.0826431718061673 returning {photoMaxSizeKb: 300, videoMaxSizeKb: 2000, loadDocumentModel: true, loadFaceModel: true} @ https://verify.staging.didit.me/_next/static/chunks/5087.d90234f002415767.js:11
+[    5808ms] [INFO] speedMbpsFromNextApi: 1.1702857142857144 returning {photoMaxSizeKb: 300, videoMaxSizeKb: 2000, loadDocumentModel: true, loadFaceModel: true} @ https://verify.staging.didit.me/_next/static/chunks/5087.d90234f002415767.js:11
+[    5828ms] [INFO] [SessionWebSocket] opened @ https://verify.staging.didit.me/_next/static/chunks/5087.d90234f002415767.js:11
+[    5848ms] [INFO] [SessionWebSocket] Received: {current_step: OCR, current_step_v2: OCR, current_node_id: feature_ocr} @ https://verify.staging.didit.me/_next/static/chunks/5087.d90234f002415767.js:11
+[    5848ms] [INFO] [Welcome] Session update received: {current_step: OCR, current_step_v2: OCR, current_node_id: feature_ocr} @ https://verify.staging.didit.me/_next/static/chunks/5087.d90234f002415767.js:11

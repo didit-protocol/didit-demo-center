@@ -10,6 +10,7 @@ import { useAuth } from "@didit-protocol/auth-nextjs";
 import { readDevice } from "./browser";
 import { DEMOS } from "./demos";
 import { type SessionState, keepSession } from "./session-keeper";
+import { WarmFlow } from "./warm-flow";
 
 /**
  * The browser side of Authentication and signals, once for every page.
@@ -292,6 +293,7 @@ export function DiditClientProvider({
   return (
     <DiditContext.Provider value={value}>
       {authEnabled ? <AuthBridge onChange={setAuth} /> : null}
+      {demo ? <WarmFlow /> : null}
       {children}
     </DiditContext.Provider>
   );
