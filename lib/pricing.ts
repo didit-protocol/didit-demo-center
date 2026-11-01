@@ -15,43 +15,34 @@ import { docs } from "./docs";
 
 export const PRICING_URL = docs("getting-started/pricing");
 
-/** Features with 500 free checks per organisation per month. */
-export const FREE_TIER_FEATURES = [
-  "ID Verification",
-  "Passive Liveness",
-  "Face Match 1:1",
-  "Device & IP Analysis",
-] as const;
-
-export const FREE_TIER_MONTHLY = 500;
-
 /**
- * Per-feature price inside a workflow, after the free tier where one applies.
- * `freeTier` marks the four features covered by the 500/month allowance.
+ * Per-feature price inside a workflow. Every check is billed from the first
+ * one; the Free plan's monthly credit and a paid plan's monthly credit are
+ * applied to the invoice, they are not a per-feature allowance.
  */
 export const MODULE_PRICE = {
-  "ID Verification": { usd: 0.15, freeTier: true },
-  "Passive Liveness": { usd: 0.1, freeTier: true },
-  "Active Liveness": { usd: 0.15, freeTier: false },
-  "Face Match 1:1": { usd: 0.05, freeTier: true },
-  "Device & IP Analysis": { usd: 0.03, freeTier: true },
-  "NFC Verification": { usd: 0.15, freeTier: false },
-  "Biometric Authentication": { usd: 0.1, freeTier: false },
-  "Email Verification": { usd: 0.03, freeTier: false },
-  "Age Estimation": { usd: 0.1, freeTier: false },
-  "AML Screening": { usd: 0.2, freeTier: false },
-  "Proof of Address": { usd: 0.2, freeTier: false },
-  "Document AI": { usd: 0.2, freeTier: false },
-  Questionnaire: { usd: 0.1, freeTier: false },
-  "White Label": { usd: 0.2, freeTier: false },
-  "Reusable KYC": { usd: 0, freeTier: false },
+  "ID Verification": { usd: 0.15 },
+  "Passive Liveness": { usd: 0.1 },
+  "Active Liveness": { usd: 0.15 },
+  "Face Match 1:1": { usd: 0.05 },
+  "Device & IP Analysis": { usd: 0.03 },
+  "NFC Verification": { usd: 0.15 },
+  "Biometric Authentication": { usd: 0.1 },
+  "Email Verification": { usd: 0.03 },
+  "Age Estimation": { usd: 0.1 },
+  "AML Screening": { usd: 0.2 },
+  "Proof of Address": { usd: 0.2 },
+  "Document AI": { usd: 0.2 },
+  Questionnaire: { usd: 0.1 },
+  "White Label": { usd: 0.2 },
+  "Reusable KYC": { usd: 0 },
 } as const;
 
 /** Prices that are not a flat per-check number. */
 export const VARIABLE_PRICE = {
   /** Dynamic carrier rates on top of the platform fee. */
   phoneVerification: "$0.04 + carrier fee",
-  /** Per successful query, per service; $0.05-$7.00 and never free-tier. */
+  /** Per successful query, per service; $0.05-$7.00. */
   databaseValidation: "varies by country",
   amlMonitoring: "$0.07 / year",
 } as const;
@@ -89,11 +80,12 @@ export function usd(amount: number): string {
 }
 
 /**
- * The one line a demo card shows. Free-tier flows lead with the allowance,
- * because that is the honest headline for a flow a visitor can run for free.
+ * The one line a demo card shows: the real per-check price. Demo cards never
+ * show a free allowance, because none exists any more (from 1 Nov 2026 the
+ * Free plan carries $10 of monthly credit usable on any feature).
  */
-export function freeTierPrice(afterFreeTier: number): string {
-  return `Free · ${FREE_TIER_MONTHLY} checks / month, then ${usd(afterFreeTier)}`;
+export function perCheckPrice(amount: number, unit = "check"): string {
+  return `${usd(amount)} per ${unit}`;
 }
 
 /**

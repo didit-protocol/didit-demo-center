@@ -135,7 +135,7 @@ export type Demo = {
    * Backend-only features this flow would run (AML Screening, Database
    * Validation). They execute automatically once their dependencies are met -
    * the user never sees a step for them - and they are billed from the first
-   * check with no free tier. A demo that runs one spends money on every
+   * check, with no free allowance. A demo that runs one spends money on every
    * completed session with nothing on screen to warn you, which is why the
    * public catalogue shows their result as a sample decision instead.
    * See docs.didit.me/console/workflows#feature-node-categories.
@@ -157,11 +157,11 @@ export const DEMOS: Demo[] = [
     title: "Core KYC",
     subtitle: "ID + liveness + face match",
     blurb:
-      "The free plan. Scan a government ID, pass a passive liveness check, get a decision in under 10 seconds.",
+      "Scan a government ID, pass a passive liveness check, get a decision in under 10 seconds.",
     longDescription:
-      "Our foundational onboarding flow and the core of the Free KYC plan - a fast, compliant way to verify new users with no cost for the essential checks.",
+      "Our foundational onboarding flow and a fast, compliant way to verify new users with ID verification, passive liveness, face match and device and IP analysis, priced per check.",
     chips: ["ID Verification", "Passive Liveness", "Face Match 1:1"],
-    price: "Free · 500 checks / month, then $0.33",
+    price: "$0.33 per full KYC",
     cta: "Launch session",
     workflowId: pick(
       "7c1e467d-fe91-4ade-aa72-ec022fc67971",
@@ -170,7 +170,7 @@ export const DEMOS: Demo[] = [
     stats: [
       { value: "220+", label: "Countries" },
       { value: "<10s", label: "Avg decision" },
-      { value: "Free", label: "Core plan" },
+      { value: "$0.33", label: "Per full KYC" },
     ],
     steps: [
       {
@@ -221,7 +221,7 @@ export const DEMOS: Demo[] = [
     blurb:
       "Active liveness plus real-time screening against sanctions, PEP and adverse-media datasets.",
     longDescription:
-      "Built for regulated industries that need the highest assurance: robust KYC, higher-security active liveness, and real-time AML screening in one session. AML runs as a backend-only check - there is no step for it in the flow - and it is billed per screening with no free tier, so this demo shows the decision it produces rather than screening a real person every time someone opens the page. Run the Core KYC demo to see the live half.",
+      "Built for regulated industries that need the highest assurance: robust KYC, higher-security active liveness, and real-time AML screening in one session. AML runs as a backend-only check - there is no step for it in the flow - and it is billed per screening from the first check, so this demo shows the decision it produces rather than screening a real person every time someone opens the page. Run the Core KYC demo to see the live half.",
     chips: ["Active Liveness", "AML Screening", "Face Match 1:1"],
     price: "$0.38 KYC · AML $0.20 when you add it",
     cta: "Open sample decision",
@@ -267,7 +267,7 @@ export const DEMOS: Demo[] = [
       method: "POST",
       url: `${V3}/session/`,
       docsPath: "sessions-api/create-session",
-      note: "The same session endpoint as any hosted flow - only the workflow_id changes. AML is a backend-only node inside that workflow: it runs automatically after ID Verification, with no step for the user, and is billed per screening with no free tier.",
+      note: "The same session endpoint as any hosted flow - only the workflow_id changes. AML is a backend-only node inside that workflow: it runs automatically after ID Verification, with no step for the user, and is billed per screening from the first check.",
       body: `{
   "workflow_id": "<your-kyc-aml-workflow-id>",
   "vendor_data": "550e8400-e29b-41d4-a716-446655440000",
@@ -387,7 +387,7 @@ export const DEMOS: Demo[] = [
     longDescription:
       "Confirm that a real, live person is performing a specific action without verifying identity against a document. A powerful tool against bots, deepfakes and injection attacks.",
     chips: ["Active Liveness", "Passive Liveness", "iBeta L2"],
-    price: "Free · 500 checks / month, then $0.10",
+    price: "$0.10 per check",
     cta: "Launch session",
     workflowId: pick(
       "b5d5523f-bd45-4aa3-9ec5-0490172a22c1",
@@ -1624,7 +1624,7 @@ export const DEMOS: Demo[] = [
       method: "POST",
       url: `${V3}/aml/`,
       docsPath: "standalone-apis/aml-screening",
-      note: "Standalone server-to-server API - no hosted flow, and priced outside the workflow free tier. nationality is ISO 3166-1 alpha-2; send an Idempotency-Key header when retrying so a timeout never bills twice.",
+      note: "Standalone server-to-server API - no hosted flow, and priced per screening, separately from the workflow features. nationality is ISO 3166-1 alpha-2; send an Idempotency-Key header when retrying so a timeout never bills twice.",
       body: `{
   "full_name": "Ivan Petrov",
   "entity_type": "person",
@@ -1928,7 +1928,7 @@ vendor_data=user-8821`,
     longDescription:
       "A CAPTCHA powered by liveness verification. Users complete a quick face check instead of solving puzzles - better experience, and far harder to farm out than image grids. Requires a liveness-only workflow in the console.",
     chips: ["Bot resistance", "Drop-in widget", "Liveness-backed"],
-    price: "Free · 500 liveness checks / month",
+    price: "$0.10 per liveness check",
     cta: "Try the widget",
     workflowId: "82f7360c-276e-4525-b7b3-59d8051e973c",
     note: "The dedicated CAPTCHA liveness workflow, also used by /api/didit-captcha.",
@@ -1977,13 +1977,13 @@ vendor_data=user-8821`,
     blurb:
       "VPN, data-centre and geo-distance signals attached to every verification you run.",
     longDescription:
-      "On the free tier of every workflow - 500 checks a month, then $0.03. We attach the network and device context of the session - VPN or Tor use, data-centre ranges, carrier, platform - plus the distance between the IP, the ID document's issuing state and the address on a proof-of-address document.",
+      "Available in every workflow at $0.03 per session. We attach the network and device context of the session - VPN or Tor use, data-centre ranges, carrier, platform - plus the distance between the IP, the ID document's issuing state and the address on a proof-of-address document.",
     chips: ["VPN / Tor", "Data centre", "Geo distance"],
-    price: "Free · 500 checks / month, then $0.03",
+    price: "$0.03 per session",
     cta: "Open sample signals",
     workflowId: null,
     stats: [
-      { value: "500 free", label: "Per month, then $0.03" },
+      { value: "$0.03", label: "Per session" },
       { value: "3-point", label: "Geo distance" },
       { value: "Per session", label: "Attached" },
     ],
@@ -2014,7 +2014,7 @@ vendor_data=user-8821`,
       method: "GET",
       url: `${V3}/session/{session_id}/decision/`,
       docsPath: "sessions-api/retrieve-session",
-      note: "IP_ANALYSIS is a workflow feature on the free tier, not a separate call - the signals arrive inside ip_analyses on the session decision you already fetch.",
+      note: "IP_ANALYSIS is a workflow feature, not a separate call - the signals arrive inside ip_analyses on the session decision you already fetch.",
       body: "",
     },
     sample: {

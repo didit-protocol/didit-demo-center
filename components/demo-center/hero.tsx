@@ -34,7 +34,7 @@ export function Hero({ onStartFirst }: { onStartFirst: () => void }) {
               type="button"
               onClick={onStartFirst}
             >
-              Start with free KYC
+              Start with KYC
               <ArrowRight className="size-6" />
             </button>
             <a
