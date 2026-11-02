@@ -40,13 +40,9 @@ transaction and event. `DIDIT_REDIRECT_URI` defaults to this site's
 Without a key every demo keeps its own sign-in and the Authentication parts
 stay hidden.
 
-The Authentication packages, `@didit-protocol/signals` 0.1.0 and
-`@didit-protocol/sdk-web` 0.5.0 are not on npm yet, so `vendor/didit-sdk/`
-holds their `npm pack` builds from the didit-protocol/sdk-web repository
-(commit `35dd5ac`, "Prepare the 0.5.0 release"). Once they are published,
-switch each `file:vendor/didit-sdk/…` entry in `package.json` to its version
-(and drop the `overrides` and `pnpm.overrides` that point at the same files),
-then delete `vendor/didit-sdk/`.
+`vendor/didit-sdk/` holds `npm pack` builds from the didit-protocol/sdk-web repository: the Authentication packages, `@didit-protocol/signals` 0.1.0 and `@didit-protocol/sdk-web` 0.5.4.
+The sdk-web tarball is built from didit-protocol/sdk-web `master` at `7778d66` (#37, which keeps the host page out of the full-screen phone modal on iOS), and 0.5.4 is not on npm yet.
+Once a package is published, switch its `file:vendor/didit-sdk/…` entry in `package.json` to its version (and drop the `overrides` and `pnpm.overrides` that point at the same file), then delete its tarball.
 
 ## Two kinds of demo
 

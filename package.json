@@ -29,7 +29,7 @@
     "@didit-protocol/auth": "file:vendor/didit-sdk/didit-protocol-auth-0.1.0.tgz",
     "@didit-protocol/auth-nextjs": "file:vendor/didit-sdk/didit-protocol-auth-nextjs-0.1.0.tgz",
     "@didit-protocol/auth-react": "file:vendor/didit-sdk/didit-protocol-auth-react-0.1.0.tgz",
-    "@didit-protocol/sdk-web": "file:vendor/didit-sdk/didit-protocol-sdk-web-0.5.3.tgz",
+    "@didit-protocol/sdk-web": "file:vendor/didit-sdk/didit-protocol-sdk-web-0.5.4.tgz",
     "@didit-protocol/signals": "file:vendor/didit-sdk/didit-protocol-signals-0.1.0.tgz",
     "@radix-ui/react-checkbox": "^1.1.3",
     "@radix-ui/react-dialog": "^1.1.5",
