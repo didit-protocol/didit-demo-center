@@ -101,7 +101,9 @@ test("sessions.create sends the workflow, the visitor and the callback with the 
 test("decisions, transaction tokens, monitoring tokens and users hit their endpoints", async () => {
   const { calls, env } = recorder();
 
-  await server.didit.sessions.decision("a/b", env);
+  const refused = await server.didit.sessions.decision("a/b", env);
+
+  await server.didit.sessions.decision("6f1c2a9e-4b7d-4c3e-9a10-2b5d8e7f0c11", env);
   await server.didit.transactions.sdkToken({ vendorData: "aurora-play-u1" }, env);
   await server.didit.events.sdkToken({ vendorData: "aurora-play-u1" }, env);
   await server.didit.users.get("aurora-play-u1", env);
@@ -110,13 +112,15 @@ test("decisions, transaction tokens, monitoring tokens and users hit their endpo
   assert.deepEqual(
     calls.map((call) => `${call.method} ${call.url.replace("https://api.test", "")}`),
     [
-      "GET /v3/session/a%2Fb/decision/",
+      "GET /v3/session/6f1c2a9e-4b7d-4c3e-9a10-2b5d8e7f0c11/decision/",
       "POST /v3/transactions/sdk-token/",
       "POST /v3/events/sdk-token/",
       "GET /v3/users/aurora-play-u1/",
       "GET /v3/transactions/?limit=1",
     ],
   );
+  // An id that would add a segment never reaches Didit.
+  assert.equal(refused.status, 400);
   assert.deepEqual(calls[1].body, { vendor_data: "aurora-play-u1", ttl_seconds: 900, max_uses: 30 });
   assert.equal(calls[2].body.vendor_data, "aurora-play-u1");
   assert.ok(calls[2].body.allowed_event_categories.includes("auth"));

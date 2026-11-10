@@ -14,13 +14,15 @@
 
 import type { LiveDemo } from "./define";
 
+import { createHash, createHmac } from "node:crypto";
+
 import {
   type DiditCall,
   type DiditEnv,
   didit,
   diditMessage,
 } from "../didit/server";
-import { diditUrls, vendorDataFor } from "../didit/config";
+import { apiKey, diditUrls, vendorDataFor } from "../didit/config";
 
 export const VISITOR_COOKIE = "didit-demo-visitor";
 export const VENDOR_PREFIX = "product-demo-";
@@ -30,9 +32,32 @@ export function newVisitorId(): string {
   return crypto.randomUUID().replace(/-/g, "");
 }
 
-/** The visitor's `vendor_data`, or null when the id is not one of ours. */
-export function vendorFor(visitorId: string | null | undefined): string | null {
-  return visitorId ? vendorDataFor(VENDOR_PREFIX, visitorId) : null;
+const VISITOR_ID = /^[0-9a-f]{32}$/;
+
+/**
+ * The visitor's `vendor_data`, or null when the id is not one of ours.
+ *
+ * The cookie is the visitor's only proof that a session is theirs, while
+ * `vendor_data` travels with the session (session lists, the console,
+ * webhooks). So `vendor_data` is a keyed one-way hash of the cookie, never the
+ * cookie itself: whoever reads a session's `vendor_data` still cannot present
+ * its visitor's cookie. The key is derived from the server-side API key, so
+ * the demo needs no extra secret and the key itself is never used directly.
+ */
+export function vendorFor(
+  visitorId: string | null | undefined,
+  key: string = apiKey(),
+): string | null {
+  if (!visitorId || !VISITOR_ID.test(visitorId)) return null;
+  const secret = createHash("sha256")
+    .update(`didit-demo-center/product-demo-visitor/${key}`)
+    .digest();
+  const hashed = createHmac("sha256", secret)
+    .update(visitorId)
+    .digest("hex")
+    .slice(0, 40);
+
+  return vendorDataFor(VENDOR_PREFIX, hashed);
 }
 
 export interface Answer {

@@ -11,7 +11,7 @@ import {
   noStore,
   readPlayer,
 } from "@/lib/igaming/server";
-import { didit as diditClient } from "@/lib/didit/server";
+import { apiPath, didit as diditClient } from "@/lib/didit/server";
 
 export const dynamic = "force-dynamic";
 
@@ -79,11 +79,15 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const entry = await didit("POST", `/v3/lists/${verifiedList}/entries/`, {
-    value: playerId,
-    display_label: playerId,
-    comment: `ID verified in session ${session.sessionId}`,
-  });
+  const entry = await didit(
+    "POST",
+    apiPath`/v3/lists/${verifiedList}/entries/`,
+    {
+      value: playerId,
+      display_label: playerId,
+      comment: `ID verified in session ${session.sessionId}`,
+    },
+  );
 
   calls.push(entry.call);
   const duplicate =

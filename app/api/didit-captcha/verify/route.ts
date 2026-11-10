@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { VERIFICATION_BASE_URL } from "@/lib/auth-service";
+import { captchaDecision } from "@/lib/didit/catalogue";
 
 export const dynamic = "force-dynamic";
 
@@ -17,38 +17,16 @@ function withNoStore<T>(data: T, init?: ResponseInit) {
 }
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const sessionId = searchParams.get("sessionId");
-
-  if (!sessionId) {
-    return withNoStore({ error: "sessionId is required" }, { status: 400 });
-  }
-
-  const apiKey = process.env.API_KEY;
-
-  if (!apiKey) {
-    return withNoStore(
-      { error: "Server is not configured for Didit" },
-      { status: 500 },
-    );
-  }
-
-  const res = await fetch(
-    `${VERIFICATION_BASE_URL}/v2/session/${sessionId}/decision/`,
-    {
-      method: "GET",
-      headers: {
-        accept: "application/json",
-        "X-Api-Key": apiKey,
-      },
-      cache: "no-store",
-    },
+  const result = await captchaDecision(
+    req.nextUrl.searchParams.get("sessionId"),
   );
 
-  if (!res.ok) {
-    const text = await res.text();
+  if (!result) {
+    return withNoStore({ error: "That is not a session id." }, { status: 400 });
+  }
 
-    console.error("Didit decision error", res.status, text);
+  if (!result.ok || !result.data) {
+    console.error("Didit decision error", result.status);
 
     return withNoStore(
       { error: "Failed to retrieve Didit decision" },
@@ -56,16 +34,16 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const data = await res.json();
-
-  const status: string | undefined = data.status;
-  const contactEmail: string | undefined =
-    data.contact_details?.email ?? data.email;
-
-  const verified = status === "Approved";
+  const data = result.data as {
+    status?: string;
+    email?: string;
+    contact_details?: { email?: string };
+  };
+  const status = data.status;
+  const contactEmail = data.contact_details?.email ?? data.email;
 
   return withNoStore({
-    verified,
+    verified: status === "Approved",
     status,
     email: contactEmail ?? null,
   });

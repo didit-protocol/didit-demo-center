@@ -108,7 +108,7 @@ export async function listId(
   const cached = listCache.get(name);
 
   if (cached) return cached;
-  const result = await didit("GET", `/v3/lists/${LISTS_QUERY}`);
+  const result = await didit("GET", "/v3/lists/" + LISTS_QUERY);
 
   calls.push(result.call);
   const found = (
