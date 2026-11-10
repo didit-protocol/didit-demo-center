@@ -50,6 +50,17 @@ test("a transfer to a new payee carries what the step-up rule reads", () => {
   assert.equal(payload.counterparty.paymentMethod.accountId, "DE44 •••• 4931");
   // The subject's vendor_data comes from the token, never the browser.
   assert.equal(payload.subject.externalUserId, undefined);
+  assert.deepEqual(payload.subject, { fullName: "Lena Fischer" });
+});
+
+test("a payment always names its subject (Didit refuses one without full_name)", () => {
+  const payload = alder.paymentPayload(
+    { kind: "account_funding", amount: 500, counterparty: "Alder card top-up" },
+    { id: "alder-0f3a9c21d4e85b7a6c19e2d0", name: "" },
+    Date.UTC(2026, 10, 9),
+  );
+
+  assert.deepEqual(payload.subject, { fullName: "Alder customer" });
 });
 
 test("money in and out: the first week adds up to the balance on the boards", () => {

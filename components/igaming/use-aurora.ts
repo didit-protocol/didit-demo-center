@@ -21,6 +21,7 @@ import {
   projectTransaction,
 } from "@/lib/igaming/records";
 import { openVerification, submitTransaction } from "@/lib/didit/browser";
+import { subjectName } from "@/lib/didit/subject";
 
 /** What just happened with Didit, for the live layer. */
 export type AuroraSignal =
@@ -461,7 +462,18 @@ export function useAurora(
       if (!player) return null;
 
       const payload = buildCashierPayload(
-        { kind, amount, playerName: player.name, detail: detail ?? undefined },
+        {
+          kind,
+          amount,
+          // Signed in with Didit Authentication, a player has only an email
+          // until the ID check reads their name.
+          playerName: subjectName(
+            player.kyc?.summary?.fullName,
+            player.name,
+            player.email,
+          ),
+          detail: detail ?? undefined,
+        },
         player.playerId,
         Date.now(),
       );

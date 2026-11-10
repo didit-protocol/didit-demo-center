@@ -13,6 +13,7 @@
  */
 
 import { auroraPlay } from "../didit/demos.ts";
+import { subjectName } from "../didit/subject.ts";
 
 export const OPERATOR_NAME = auroraPlay.brand.name;
 
@@ -150,7 +151,9 @@ export function buildCashierPayload(
         ? { paymentDetails: "Card (demo)" }
         : {}),
     },
-    subject: { fullName: request.playerName },
+    subject: {
+      fullName: subjectName(request.playerName, `${OPERATOR_NAME} player`),
+    },
     customProperties: {
       operator: OPERATOR_NAME,
       ...(request.detail ? { detail: request.detail } : {}),

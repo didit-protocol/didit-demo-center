@@ -61,6 +61,27 @@ test("cashier payloads carry no vendor_data, device data or account id", () => {
   assert.doesNotMatch(JSON.stringify(deposit), /vendor_data|accountId|device/);
 });
 
+test("a cashier payload always names its subject (Didit refuses one without full_name)", () => {
+  // Signed in with Didit Authentication, a player has no typed name: the
+  // caller passes the email, and a blank name still never reaches Didit.
+  for (const playerName of ["", "   "]) {
+    const deposit = policy.buildCashierPayload(
+      { kind: "deposit", amount: 500, playerName },
+      PLAYER,
+      1,
+    );
+
+    assert.deepEqual(deposit.subject, { fullName: "Aurora Play player" });
+  }
+  const named = policy.buildCashierPayload(
+    { kind: "deposit", amount: 500, playerName: " mm@example.com " },
+    PLAYER,
+    1,
+  );
+
+  assert.deepEqual(named.subject, { fullName: "mm@example.com" });
+});
+
 test("each cashier kind maps to the Didit category and direction", () => {
   const cases = {
     deposit: ["finance", "in"],

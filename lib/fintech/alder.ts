@@ -16,6 +16,7 @@
  */
 
 import { alder } from "../didit/demos.ts";
+import { subjectName } from "../didit/subject.ts";
 
 export const BANK = alder.brand.name;
 
@@ -182,7 +183,7 @@ export function paymentPayload(
       actionType: request.kind,
       ...(request.detail ? { paymentDetails: request.detail } : {}),
     },
-    subject: customer.name ? { fullName: customer.name } : {},
+    subject: { fullName: subjectName(customer.name, `${BANK} customer`) },
     counterparty: {
       type: request.kind === "transfer" ? "individual" : "company",
       fullName: request.counterparty,
