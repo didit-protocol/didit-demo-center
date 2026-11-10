@@ -116,69 +116,28 @@ test("isUuid takes one UUID and nothing around it", () => {
   }
 });
 
-test("GET /api/verification: the reported payloads are refused before any call", async () => {
-  for (const sessionId of [...REPORTED, null, "", `${SESSION}/../../v3/users`]) {
-    const { calls, env } = recorder();
-    const answer = await catalogue.readCatalogueDecision(sessionId, env);
+test("there is no public read of a session's decision", async () => {
+  const route = await import("../app/api/verification/route.ts");
 
-    assert.equal(answer.status, 400, String(sessionId));
-    assert.equal(calls.length, 0);
-  }
+  assert.equal(route.GET, undefined);
+  assert.equal(typeof route.POST, "function");
+  assert.equal(catalogue.readCatalogueDecision, undefined);
 });
 
-test("GET /api/verification returns only the decision of the session asked for", async () => {
-  const now = Date.parse("2026-11-11T01:00:00Z");
-  const decision = (overrides = {}) => ({
-    session_id: SESSION,
-    session_number: 7,
-    status: "Approved",
-    created_at: "2026-11-11T00:30:00Z",
-    ...overrides,
-  });
-
-  {
-    const { calls, env } = recorder(() => ({ status: 200, body: decision() }));
-    const answer = await catalogue.readCatalogueDecision(SESSION, env, now);
-
-    assert.equal(calls[0].url, `https://api.test/v3/session/${SESSION}/decision/`);
-    assert.equal(answer.status, 200);
-    assert.equal(answer.body.session_number, undefined);
-    assert.equal(answer.body.status, "Approved");
-  }
-  {
-    // Didit answered for a different session (or with a list): nothing passes.
-    const { env } = recorder(() => ({ status: 200, body: decision({ session_id: OTHER }) }));
-
-    assert.equal((await catalogue.readCatalogueDecision(SESSION, env, now)).status, 502);
-  }
-  {
-    const { env } = recorder(() => ({ status: 200, body: { count: 100, results: [] } }));
-
-    assert.equal((await catalogue.readCatalogueDecision(SESSION, env, now)).status, 502);
-  }
-  {
-    // No readable created_at counts as expired, not as fresh.
-    const { env } = recorder(() => ({ status: 200, body: decision({ created_at: undefined }) }));
-
-    assert.equal((await catalogue.readCatalogueDecision(SESSION, env, now)).status, 410);
-  }
-  {
-    const { env } = recorder(() => ({ status: 200, body: decision({ created_at: "2026-11-10T23:59:00Z" }) }));
-
-    assert.equal((await catalogue.readCatalogueDecision(SESSION, env, now)).status, 410);
-  }
-  {
-    const { env } = recorder(() => ({ status: 404, body: { detail: "Not found." } }));
-
-    assert.equal((await catalogue.readCatalogueDecision(SESSION, env, now)).status, 404);
-  }
-});
-
-test("POST /api/verification creates the session through the shared client", async () => {
+test("POST /api/verification: the server owns vendor_data and the callback origin", async () => {
+  // Regression for the 2026-11-11 report: vendor_data and callback came from
+  // the browser, so a caller naming another visitor's vendor_data got that
+  // visitor's unfinished session token back and repointed its callback.
   const { calls, env } = recorder(() => ({ status: 201, body: { session_id: SESSION, url: "https://verify.test/x" } }));
   const answer = await catalogue.createCatalogueSession(
-    { workflow_id: OTHER, vendor_data: "v", callback: "https://demos.test/cb", portrait_image: "b64" },
+    {
+      workflow_id: OTHER,
+      vendor_data: "product-demo-3831798e90984c2684cb43ee00fe8207",
+      callback: "https://attacker.example/after?x=1",
+      portrait_image: "b64",
+    },
     env,
+    () => "fresh-id",
   );
 
   assert.equal(answer.status, 200);
@@ -186,24 +145,67 @@ test("POST /api/verification creates the session through the shared client", asy
   assert.equal(calls[0].url, "https://api.test/v3/session/");
   assert.deepEqual(calls[0].body, {
     workflow_id: OTHER,
-    vendor_data: "v",
-    callback: "https://demos.test/cb",
+    vendor_data: "demo-center-fresh-id",
+    callback: "https://demos.staging.didit.me/after?x=1",
     callback_method: "both",
     portrait_image: "b64",
   });
 
-  const missing = await catalogue.createCatalogueSession({ workflow_id: OTHER }, env);
+  // Two visitors never share a session: each call gets its own vendor_data.
+  const twice = recorder(() => ({ status: 201, body: {} }));
 
-  assert.equal(missing.status, 400);
+  await catalogue.createCatalogueSession({ workflow_id: OTHER, callback: "/verification/callback" }, twice.env);
+  await catalogue.createCatalogueSession({ workflow_id: OTHER, callback: "/verification/callback" }, twice.env);
+  assert.notEqual(twice.calls[0].body.vendor_data, twice.calls[1].body.vendor_data);
+  assert.match(twice.calls[0].body.vendor_data, /^demo-center-[0-9a-f-]{36}$/);
+  assert.equal(twice.calls[0].body.callback, "https://demos.staging.didit.me/verification/callback");
 
-  const refused = recorder(() => ({ status: 400, body: { workflow_id: ["Invalid workflow_id."] } }));
+  for (const callback of [undefined, "", "javascript:alert(1)", "data:text/html,x"]) {
+    const refused = await catalogue.createCatalogueSession({ workflow_id: OTHER, callback }, env);
+
+    assert.equal(refused.status, 400, String(callback));
+  }
+  assert.equal(calls.length, 1, "refused requests never reach Didit");
+
+  const apiRefusal = recorder(() => ({ status: 400, body: { workflow_id: ["Invalid workflow_id."] } }));
   const error = await catalogue.createCatalogueSession(
-    { workflow_id: OTHER, vendor_data: "v", callback: "https://demos.test/cb" },
-    refused.env,
+    { workflow_id: OTHER, callback: "https://demos.staging.didit.me/cb" },
+    apiRefusal.env,
   );
 
   assert.equal(error.status, 400);
   assert.equal(error.body.error, "Invalid workflow_id.");
+});
+
+test("the CAPTCHA session is the server's: the same email never shares one", async () => {
+  const { calls, env } = recorder(() => ({ status: 201, body: { session_id: SESSION, url: "https://verify.test/s" } }));
+  const body = { email: "victim@example.com", vendorData: "victim@example.com", callback: "https://attacker.example/after" };
+
+  const first = await catalogue.createCaptchaSession(body, env);
+  await catalogue.createCaptchaSession(body, env);
+
+  assert.deepEqual(first, { status: 200, body: { sessionId: SESSION, sessionUrl: "https://verify.test/s" } });
+  assert.equal(calls[0].url, "https://api.test/v2/session/");
+  assert.equal(calls[0].body.workflow_id, catalogue.CAPTCHA_WORKFLOW_ID);
+  assert.match(calls[0].body.vendor_data, /^didit-captcha-[0-9a-f-]{36}$/);
+  assert.notEqual(calls[0].body.vendor_data, calls[1].body.vendor_data);
+  assert.equal(calls[0].body.callback, "https://demos.staging.didit.me/after");
+  assert.deepEqual(calls[0].body.contact_details, { email: "victim@example.com", email_lang: "en" });
+
+  const noCallback = recorder(() => ({ status: 201, body: { session_id: SESSION } }));
+
+  await catalogue.createCaptchaSession({ email: "a@b.c" }, noCallback.env);
+  assert.equal(noCallback.calls[0].body.callback, "https://demos.staging.didit.me/didit-captcha/callback");
+  assert.equal((await catalogue.createCaptchaSession({ email: " " }, env)).status, 400);
+});
+
+test("siteCallback keeps the path and query on this site's origin only", () => {
+  assert.equal(catalogue.siteCallback("/accs/callback?component=age"), "https://demos.staging.didit.me/accs/callback?component=age");
+  assert.equal(catalogue.siteCallback("//attacker.example/x"), "https://demos.staging.didit.me/x");
+  assert.equal(catalogue.siteCallback("https://attacker.example/x#frag"), "https://demos.staging.didit.me/x");
+  for (const bad of [null, 42, "", "javascript:alert(1)", "mailto:a@b.c"]) {
+    assert.equal(catalogue.siteCallback(bad), null, String(bad));
+  }
 });
 
 test("the CAPTCHA decision read takes a session id only, and only its own decision", async () => {

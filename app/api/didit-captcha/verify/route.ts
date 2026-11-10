@@ -34,17 +34,9 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  const data = result.data as {
-    status?: string;
-    email?: string;
-    contact_details?: { email?: string };
-  };
-  const status = data.status;
-  const contactEmail = data.contact_details?.email ?? data.email;
+  const status = (result.data as { status?: string }).status;
 
-  return withNoStore({
-    verified: status === "Approved",
-    status,
-    email: contactEmail ?? null,
-  });
+  // Status only: the widget needs nothing else, and the session's contact
+  // details are not this endpoint's to hand out.
+  return withNoStore({ verified: status === "Approved", status });
 }

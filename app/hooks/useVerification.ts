@@ -77,23 +77,6 @@ export function useVerification() {
     }
   };
 
-  const getSessionDecision = async (sessionId: string) => {
-    try {
-      const response = await fetch(`/api/verification?sessionId=${sessionId}`);
-      const data = await response.json();
-
-      if (!response.ok) {
-        return { error: data.error };
-      }
-
-      return data;
-    } catch (err) {
-      console.error("Error fetching session decision:", err);
-
-      return { error: "Failed to fetch verification data" };
-    }
-  };
-
   const resetSession = () => {
     setSessionData(null);
     setDecisionData(null);
@@ -106,7 +89,6 @@ export function useVerification() {
     isLoading,
     error,
     createSession,
-    getSessionDecision,
     resetSession,
   };
 }
