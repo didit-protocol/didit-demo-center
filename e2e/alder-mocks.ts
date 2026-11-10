@@ -5,6 +5,8 @@ import path from "node:path";
 
 import { projectSession } from "../lib/igaming/records";
 
+import { refusedTransaction } from "./transaction-rules";
+
 /**
  * The Didit side of /fintech (Alder) for the E2E suite.
  *
@@ -17,8 +19,11 @@ import { projectSession } from "../lib/igaming/records";
  * not switched on for the staging application. Didit's hosted flow is
  * replaced by a stand-in page that reports completion with a postMessage.
  *
- * Authentication is off in this suite (no publishable key), which is the
- * production path today: Alder's own sign-up creates the customer.
+ * Authentication is off in this suite (no publishable key): Alder's own
+ * sign-up creates the customer with a typed name. Production runs with Didit
+ * Authentication on, where the customer has only an email until the KYC, so
+ * the transactions mock refuses a nameless subject the way Didit does
+ * (e2e/transaction-rules.ts).
  */
 
 const FIXTURES = path.join(__dirname, "..", "tests", "fixtures", "alder");
@@ -313,6 +318,9 @@ export async function mockAlder(
       return json(route, stored);
     }
     const body = request.postDataJSON() as Record<string, unknown>;
+    const refused = refusedTransaction(body);
+
+    if (refused) return json(route, refused, 400);
     const info = body.info as Record<string, string>;
     const props = (body.props ?? {}) as Record<string, unknown>;
     const counterparty = (body.counterparty ?? {}) as Record<string, string>;

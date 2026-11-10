@@ -5,6 +5,8 @@ import path from "node:path";
 
 import { projectSession } from "../lib/igaming/records";
 
+import { refusedTransaction } from "./transaction-rules";
+
 /**
  * The Didit side of /igaming (Aurora Play) for the E2E suite.
  *
@@ -16,8 +18,11 @@ import { projectSession } from "../lib/igaming/records";
  * liveness check. Didit's hosted flow is replaced by a stand-in page on the
  * same host that reports completion the way it does, with a postMessage.
  *
- * Authentication is off in this suite (no publishable key), which is the
- * production path today: the casino's own sign-up creates the player.
+ * Authentication is off in this suite (no publishable key): the casino's own
+ * sign-up creates the player with a typed name. Production runs with Didit
+ * Authentication on, where the player has only an email until the ID check,
+ * so the transactions mock refuses a nameless subject the way Didit does
+ * (e2e/transaction-rules.ts).
  */
 
 const FIXTURES = path.join(__dirname, "..", "tests", "fixtures", "igaming");
@@ -245,6 +250,9 @@ export async function mockAurora(page: Page): Promise<AuroraMock> {
       return json(route, stored);
     }
     const body = request.postDataJSON() as Record<string, unknown>;
+    const refused = refusedTransaction(body);
+
+    if (refused) return json(route, refused, 400);
     const info = body.info as Record<string, string>;
     const kind = info.type;
     const amount = Number(info.amount);

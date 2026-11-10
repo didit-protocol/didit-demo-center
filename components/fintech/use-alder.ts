@@ -20,6 +20,7 @@ import {
   projectTransaction,
 } from "@/lib/igaming/records";
 import { openVerification, submitTransaction } from "@/lib/didit/browser";
+import { subjectName } from "@/lib/didit/subject";
 import { callRoute, fetchTransaction } from "@/lib/fintech/client";
 
 /** What just happened with Didit, for the live layer. */
@@ -343,7 +344,13 @@ export function useAlder(
         request,
         {
           id: customer.customerId,
-          name: customer.onboarding?.summary?.fullName ?? customer.name,
+          // Signed in with Didit Authentication, the customer has only an
+          // email until the KYC reads their name.
+          name: subjectName(
+            customer.onboarding?.summary?.fullName,
+            customer.name,
+            customer.email,
+          ),
         },
         now,
       );
