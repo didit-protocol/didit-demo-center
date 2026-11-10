@@ -19,7 +19,7 @@ import type { MarketWorkflows } from "./config.ts";
 import type { MarketState, SellerRecord } from "./state.ts";
 import type { KybSummary, TransactionSummary } from "./summaries.ts";
 
-import { callDidit } from "../didit/server.ts";
+import { apiPath, callDidit } from "../didit/server.ts";
 
 import { BRAND, isSellerCountry } from "./catalog.ts";
 import { consoleLink, type ConsoleLink } from "./console-links.ts";
@@ -209,7 +209,11 @@ async function readDecision(
   env: MarketEnv,
   sessionId: string,
 ): Promise<{ kyb: KybSummary | null; error: string | null; raw: Json | null }> {
-  const result = await didit(env, "GET", `/v3/session/${sessionId}/decision/`);
+  const result = await didit(
+    env,
+    "GET",
+    apiPath`/v3/session/${sessionId}/decision/`,
+  );
 
   if (!result.ok || !isRecord(result.data)) {
     return {
@@ -261,7 +265,7 @@ async function readTransaction(
   env: MarketEnv,
   uuid: string,
 ): Promise<{ raw: Json | null; result: ApiResult }> {
-  const result = await didit(env, "GET", `/v3/transactions/${uuid}/`);
+  const result = await didit(env, "GET", apiPath`/v3/transactions/${uuid}/`);
 
   return {
     raw: result.ok && isRecord(result.data) ? result.data : null,

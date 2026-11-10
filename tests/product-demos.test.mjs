@@ -221,7 +221,7 @@ function recorder(answer) {
 test("startSession creates the session with the demo's own workflow for the visitor", async () => {
   const { calls, env } = recorder(() => ({ status: 201, body: { session_id: "s-1", url: "https://verify.test/s-1" } }));
   const demo = getProductDemo("liveness");
-  const vendor = vendorFor("abc123def456");
+  const vendor = vendorFor("0123456789abcdef0123456789abcdef");
   const answer = await startSession(demo, vendor, {}, env);
 
   assert.equal(answer.status, 200);
@@ -232,7 +232,7 @@ test("startSession creates the session with the demo's own workflow for the visi
   });
   assert.equal(calls[0].url, "https://api.test/v3/session/");
   assert.equal(calls[0].body.workflow_id, demo.workflow);
-  assert.equal(calls[0].body.vendor_data, "product-demo-abc123def456");
+  assert.equal(calls[0].body.vendor_data, vendor);
   assert.equal(calls[0].body.callback, "https://demos.staging.didit.me/product-demos/liveness");
   assert.deepEqual(calls[0].body.metadata, { demo: "liveness" });
 });
@@ -250,6 +250,23 @@ test("startSession refuses an unpublished workflow and a missing portrait, witho
 
   await startSession(getProductDemo("biometric-authentication"), "v", { portrait: "data:image/png;base64,iVBORw0K" }, env);
   assert.equal(calls[0].body.portrait_image, "iVBORw0K");
+});
+
+test("a session's vendor_data never reveals the visitor cookie behind it", () => {
+  // Regression for the 2026-11-11 report: vendor_data was "product-demo-" plus
+  // the cookie, so a leaked session list handed out every visitor's cookie.
+  const cookie = "0123456789abcdef0123456789abcdef";
+  const vendor = vendorFor(cookie, "key-a");
+
+  assert.match(vendor, /^product-demo-[0-9a-f]{40}$/);
+  assert.equal(vendor.includes(cookie), false);
+  assert.equal(vendorFor(cookie, "key-a"), vendor, "stable for one key");
+  assert.notEqual(vendorFor(cookie, "key-b"), vendor, "keyed");
+  // Presenting a leaked vendor_data suffix as the cookie maps somewhere else.
+  assert.notEqual(vendorFor(vendor.slice("product-demo-".length, 45), "key-a"), vendor);
+  for (const bad of ["", "abc123def456", `${cookie}x`, "../../v3/users", null, undefined]) {
+    assert.equal(vendorFor(bad, "key-a"), null, String(bad));
+  }
 });
 
 test("readSession returns a decision only to the visitor who ran it", async () => {

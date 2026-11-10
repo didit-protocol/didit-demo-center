@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { VERIFICATION_BASE_URL } from "@/lib/auth-service";
+import { captchaDecision } from "@/lib/didit/catalogue";
 
 export const dynamic = "force-dynamic";
 
@@ -27,31 +27,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const apiKey = process.env.API_KEY;
-
-    if (!apiKey) {
-      return withNoStore(
-        { error: "Server is not configured for Didit" },
-        { status: 500 },
-      );
-    }
-
     // Retrieve decision again to be sure
-    const res = await fetch(
-      `${VERIFICATION_BASE_URL}/v2/session/${diditSessionId}/decision/`,
-      {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          "X-Api-Key": apiKey,
-        },
-      },
-    );
+    const result = await captchaDecision(diditSessionId);
 
-    if (!res.ok) {
-      const text = await res.text();
-
-      console.error("Didit decision error (submit)", res.status, text);
+    if (!result || !result.ok || !result.data) {
+      console.error("Didit decision error (submit)", result?.status ?? 400);
 
       return withNoStore(
         { error: "Could not verify Didit CAPTCHA" },
@@ -59,7 +39,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const data = await res.json();
+    const data = result.data as {
+      status?: string;
+      email?: string;
+      contact_details?: { email?: string };
+    };
     const status: string | undefined = data.status;
     const contactEmail: string | undefined =
       data.contact_details?.email ?? data.email;

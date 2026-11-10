@@ -46,6 +46,62 @@ export function serverEnv(): DiditEnv {
   };
 }
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** A Didit id (session, transaction, list): exactly one UUID, nothing else. */
+export function isUuid(value: unknown): value is string {
+  return typeof value === "string" && UUID.test(value);
+}
+
+/**
+ * An API path from a template, each value encoded as exactly one segment:
+ * apiPath`/v3/session/${id}/decision/`. A value can never add a segment, a
+ * query or a fragment; one that is empty, `.` or `..` would still move the
+ * path, and `callDidit` refuses the result before anything is sent.
+ */
+export function apiPath(
+  strings: TemplateStringsArray,
+  ...values: (string | number)[]
+): string {
+  return strings.reduce(
+    (path, part, index) =>
+      `${path}${encodeURIComponent(String(values[index - 1]))}${part}`,
+  );
+}
+
+/**
+ * The URL `path` names under `base`, or null when the request would reach a
+ * different endpoint than the one written: dot segments (`..`, `%2e%2e`),
+ * empty segments, encoded slashes, backslashes, fragments, or another origin.
+ * Every call that carries the API key passes through here, so a value that
+ * escaped its segment can never turn into a different Didit endpoint.
+ */
+export function apiUrl(base: string, path: string): string | null {
+  const pathname = path.split("?", 1)[0];
+
+  if (
+    !pathname.startsWith("/") ||
+    /\/\/|%2f|%5c/i.test(pathname) ||
+    /[#\\]/.test(path)
+  ) {
+    return null;
+  }
+
+  try {
+    const root = new URL(base);
+    const url = new URL(`${base}${path}`);
+    const prefix = root.pathname.replace(/\/$/, "");
+
+    if (url.origin !== root.origin || url.pathname !== `${prefix}${pathname}`) {
+      return null;
+    }
+
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
 /** One call to the Didit API with the server-side key. Never throws. */
 export async function callDidit<T = unknown>(
   method: Method,
@@ -53,8 +109,19 @@ export async function callDidit<T = unknown>(
   body?: unknown,
   env: DiditEnv = serverEnv(),
 ): Promise<DiditResult<T>> {
+  const url = apiUrl(env.apiBase, path);
+
+  if (!url) {
+    return {
+      ok: false,
+      status: 400,
+      data: { detail: "That is not a Didit API path." } as T,
+      call: { method, path, status: 400 },
+    };
+  }
+
   try {
-    const response = await env.fetch(`${env.apiBase}${path}`, {
+    const response = await env.fetch(url, {
       method,
       headers: { "x-api-key": env.apiKey, "Content-Type": "application/json" },
       body: body === undefined ? undefined : JSON.stringify(body),
@@ -94,8 +161,6 @@ export function diditMessage(result: DiditResult, fallback: string): string {
 
   return result.status === 0 ? "The Didit API could not be reached." : fallback;
 }
-
-const encode = encodeURIComponent;
 
 export interface CreateSessionInput {
   workflowId: string;
@@ -157,7 +222,7 @@ export const didit = {
     decision(sessionId: string, env?: DiditEnv) {
       return callDidit<Record<string, unknown>>(
         "GET",
-        `/v3/session/${encode(sessionId)}/decision/`,
+        apiPath`/v3/session/${sessionId}/decision/`,
         undefined,
         env,
       );
@@ -187,7 +252,7 @@ export const didit = {
     get(id: string, env?: DiditEnv) {
       return callDidit<Record<string, unknown>>(
         "GET",
-        `/v3/transactions/${encode(id)}/`,
+        apiPath`/v3/transactions/${id}/`,
         undefined,
         env,
       );
@@ -199,7 +264,7 @@ export const didit = {
 
       return callDidit<{ results?: Record<string, unknown>[] }>(
         "GET",
-        `/v3/transactions/?${search}`,
+        `/v3/transactions/?${search.toString()}`,
         undefined,
         env,
       );
@@ -244,7 +309,7 @@ export const didit = {
     get(vendorData: string, env?: DiditEnv) {
       return callDidit<Record<string, unknown>>(
         "GET",
-        `/v3/users/${encode(vendorData)}/`,
+        apiPath`/v3/users/${vendorData}/`,
         undefined,
         env,
       );

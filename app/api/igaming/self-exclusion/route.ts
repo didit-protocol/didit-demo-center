@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 
+import { apiPath } from "@/lib/didit/server";
 import { SELF_EXCLUSION_REASON } from "@/lib/igaming/policy";
 import { diditErrorMessage, projectUser } from "@/lib/igaming/records";
 import { didit, noPlayer, noStore, readPlayer } from "@/lib/igaming/server";
@@ -19,7 +20,7 @@ export async function POST(request: NextRequest) {
 
   const result = await didit(
     "PATCH",
-    `/v3/users/${encodeURIComponent(playerId)}/update-status/`,
+    apiPath`/v3/users/${playerId}/update-status/`,
     { status: "BLOCKED", reason: SELF_EXCLUSION_REASON },
   );
 
