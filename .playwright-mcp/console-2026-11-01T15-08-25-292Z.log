@@ -1,0 +1,10 @@
+[    5680ms] [INFO] [SessionWebSocket] Closing connection @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[    5681ms] [WARNING] WebSocket connection to 'wss://verification.staging.didit.me/ws/session_status/?session_token=kVAulVzwaeb2&device_events=1&device_id=didit-fp-8817f5290a493390' failed: WebSocket is closed before the connection is established. @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[    5681ms] [LOG] [getInitialAppStepAction] currentStep OCR @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[    5681ms] [LOG] [getInitialAppStepAction] status Not Started @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[    5693ms] [LOG] [useAppStepsNavigation] navigateToSessionStart @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[    6177ms] [INFO] [SessionWebSocket] opened @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[    6233ms] [INFO] [SessionWebSocket] Received: {current_step: OCR, current_step_v2: OCR, current_node_id: feature_ocr} @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[    6233ms] [INFO] [Welcome] Session update received: {current_step: OCR, current_step_v2: OCR, current_node_id: feature_ocr} @ https://verify.staging.didit.me/_next/static/chunks/pages/session/%5Btoken%5D-cc3eb7efec581493.js:1
+[    6410ms] [INFO] speedMbpsFromVerificationApi: 0.44361010830324904 returning {photoMaxSizeKb: 200, videoMaxSizeKb: 500, loadDocumentModel: true, loadFaceModel: true} @ https://verify.staging.didit.me/_next/static/chunks/pages/_app-2c9bf569d5eb4be0.js:1
+[    6410ms] [INFO] speedMbpsFromNextApi: 1.3653333333333335 returning {photoMaxSizeKb: 200, videoMaxSizeKb: 500, loadDocumentModel: true, loadFaceModel: true} @ https://verify.staging.didit.me/_next/static/chunks/pages/_app-2c9bf569d5eb4be0.js:1

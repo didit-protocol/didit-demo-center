@@ -1,0 +1,501 @@
+{
+  "translation_v1": {
+    "chrome": {
+      "header": {
+        "developers": {
+          "primary": {
+            "mcpServer": "MCP Server",
+            "quickstart": "Mwongozo wa Haraka",
+            "docs": "Nyaraka",
+            "apiReference": "Marejeleo ya API"
+          },
+          "quickstartCard": {
+            "description": "Unganisha Didit kwa dakika 5. Pata ufunguo wa sandbox, POST session yako ya kwanza, thibitisha webhook, mwongozo wa curl.",
+            "cta": "Soma mwongozo wa haraka",
+            "eyebrow": "UNGANISHA KWA DAKIKA 5"
+          },
+          "buildLinks": {
+            "heading": "Jenga",
+            "sessionsApi": "Sessions API",
+            "webhooks": "Webhooks",
+            "sdks": "SDKs",
+            "openApi": "OpenAPI / Postman",
+            "agentSkills": "Ujuzi wa Wakala",
+            "codingAgentIntegration": "Ujumuishaji wa Wakala wa Kuweka Misimbo"
+          },
+          "ship": {
+            "integrationPrompt": "Kidokezo cha ujumuishaji",
+            "heading": "Zindua",
+            "sandbox": "Sandbox",
+            "changelog": "Mabadiliko",
+            "status": "Hali ya Huduma"
+          },
+          "viewAll": "Kituo cha Wasanidi Programu"
+        },
+        "resources": {
+          "hero": {
+            "blog": "Blogu",
+            "successStories": "Hadithi za Mafanikio",
+            "helpCenter": "Kituo cha Usaidizi",
+            "demoCenter": "Kituo cha Maonyesho",
+            "roiCalculator": "Kikokotoo cha ROI",
+            "academy": "Academy"
+          },
+          "foundersCard": {
+            "title": "Kutana na waanzilishi",
+            "description": "Alejandro na Alberto Rosas, ndugu pacha kutoka Barcelona wanaojenga miundombinu ya utambulisho na udanganyifu.",
+            "cta": "Soma kuhusu Didit"
+          },
+          "read": {
+            "heading": "Soma & chunguza"
+          },
+          "company": {
+            "heading": "Kampuni",
+            "about": "Kuhusu sisi",
+            "careers": "Nafasi za kazi",
+            "securityCompliance": "Usalama & Uzingatiaji",
+            "contact": "Wasiliana nasi"
+          },
+          "viewAll": "Nyenzo zote"
+        },
+        "ctas": {
+          "signIn": "Ingia",
+          "signUp": "Jisajili",
+          "startFree": "Anza bure",
+          "talkToUs": "Zungumza nasi",
+          "learnMore": "Jifunze zaidi"
+        },
+        "localeSwitcherLabel": "Lugha",
+        "solutions": {
+          "cards": {
+            "monitoring": {
+              "title": "Ufuatiliaji",
+              "description": "AML inayoendelea, sheria za miamala, KYT ya wallet"
+            },
+            "amlCompliance": {
+              "title": "AML & uzingatiaji",
+              "description": "Vikwazo, PEP, habari mbaya, inayoendelea"
+            },
+            "onboardCustomer": {
+              "title": "Uthibitishaji wa Mtumiaji (KYC)",
+              "description": "KYC bila malipo kwa hadi uthibitishaji 500 kwa mwezi, milele. Kitambulisho, uhai, na ulinganishaji wa nyuso katika kifurushi kimoja.",
+              "iconLabel": "Uthibitishaji wa Mtumiaji (KYC)"
+            },
+            "verifyBusiness": {
+              "title": "Uthibitishaji wa Biashara (KYB)",
+              "description": "Usajili, wamiliki wanufaika, maafisa, na AML ya shirika. Kila UBO hupata kipindi cha KYC kilichounganishwa mara moja."
+            },
+            "stopFraud": {
+              "title": "Ufuatiliaji wa Miamala",
+              "description": "Injini ya sheria ya wakati halisi kwa fiat na crypto. Usimamizi wa kesi, mtiririko wa kazi wa SAR, na marekebisho ya kiotomatiki kwa KYC iliyounganishwa.",
+              "iconLabel": "Zuia ulaghai"
+            },
+            "complyAml": {
+              "title": "Kuzingatia AML",
+              "description": "Chunguza dhidi ya vikwazo 1,300+, PEP, na orodha za habari mbaya. Ufuatiliaji unaoendelea kila siku kwa $0.07 kwa mtumiaji / mwaka.",
+              "iconLabel": "Kuzingatia AML"
+            },
+            "authentication": {
+              "title": "Uthibitishaji",
+              "description": "Uhai, uthibitishaji wa kibayometriki, IP na kifaa"
+            },
+            "verification": {
+              "title": "Uhakiki",
+              "description": "KYC, KYB, hati, na ukaguzi wa usajili"
+            }
+          },
+          "byUseCase": {
+            "heading": "Matumizi",
+            "fullKycOnboarding": "Usajili kamili wa KYC",
+            "ageVerification": "Uthibitishaji wa umri",
+            "cryptoOnramp": "KYC + KYT ya Crypto on-ramp",
+            "accountTakeover": "Zuia unyakuzi wa akaunti",
+            "multiAccountAbuse": "Zuia matumizi mabaya ya akaunti nyingi",
+            "proofOfHuman": "Uthibitisho wa binadamu",
+            "gigWorker": "Sajili wafanyakazi wa gig",
+            "botDetection": "Zuia bots",
+            "passwordRecovery": "Kurejesha nenosiri",
+            "seeAll": "Matumizi yote"
+          },
+          "byIndustry": {
+            "heading": "Kwa sekta",
+            "fintech": "Fintech",
+            "crypto": "Crypto",
+            "marketplaces": "Masoko",
+            "mobility": "Uhamaji",
+            "seeAll": "Tazama sekta zote",
+            "fintechDesc": "Benki mpya · malipo · mikopo · udalali",
+            "cryptoDesc": "Mabadilishano · pochi · on / off-ramps · VASPs",
+            "marketplacesDesc": "Gig · usafirishaji · muundaji · e-commerce",
+            "mobilityDesc": "Usafiri wa teksi · meli · usafirishaji wa mwisho",
+            "igaming": "iGaming",
+            "igamingDesc": "Sportsbooks · kasino · bahati nasibu · fantasy sports"
+          },
+          "byModule": {
+            "heading": "Kwa moduli",
+            "freeKyc": "KYC ya bure",
+            "governmentChecks": "Ukaguzi wa serikali",
+            "biometricAuthentication": "Uthibitishaji wa Biometriska",
+            "walletScreening": "Uchunguzi wa Wallet (KYT)",
+            "ageEstimation": "Makadirio ya Umri",
+            "ipAnalysis": "Uchambuzi wa Kifaa & IP",
+            "idVerification": "Uthibitishaji wa Kitambulisho",
+            "whiteLabel": "White Label",
+            "liveness": "Uhai",
+            "faceMatch": "Kulinganisha Nyuso",
+            "seeAll": "Moduli zote 25+"
+          },
+          "viewAll": "Vinjari katalogi kamili"
+        },
+        "nav": {
+          "pricing": "Bei",
+          "products": "Bidhaa",
+          "image": {
+            "alt": {
+              "didit": "Didit"
+            }
+          },
+          "solutions": {
+            "cards": {
+              "verifyBusiness": {
+                "iconLabel": "Uthibitishaji wa Biashara (KYB)"
+              }
+            }
+          },
+          "developers": {
+            "primary": {
+              "terminal": {
+                "readyOpenDashboard": "→ tayari kwa dakika 5 · fungua dashboard",
+                "integrateDidit": "> unganisha uthibitishaji wa Didit",
+                "sessionScaffolded": "✓ /v3/session/ imetayarishwa",
+                "readingMcp": "↻ inasoma mcp://didit.me",
+                "webhookReady": "✓ webhook handler tayari",
+                "mcpConnected": "✓ MCP server imeunganishwa",
+                "claude": "$ claude"
+              },
+              "quickstartIconLabel": "Anza Haraka"
+            }
+          },
+          "resources": {
+            "foundersCard": {
+              "imageAlt": "Alejandro Rosas (kushoto) na Alberto Rosas (kulia), waanzilishi wenza wa Didit",
+              "iconLabel": "Kuhusu Didit"
+            }
+          },
+          "labels": {
+            "solutions": "Suluhisho",
+            "developers": "Waendelezaji",
+            "resources": "Nyenzo",
+            "pricing": "Bei"
+          }
+        },
+        "products": {
+          "cards": {
+            "userVerification": {
+              "title": "Uthibitishaji wa Mtumiaji",
+              "description": "Kifurushi cha KYC · $0.33"
+            },
+            "businessVerification": {
+              "title": "Uthibitishaji wa Biashara",
+              "description": "KYB · kuanzia $2.00"
+            },
+            "transactionMonitoring": {
+              "title": "Ufuatiliaji wa Miamala",
+              "description": "Sheria za muda halisi · $0.02/muamala"
+            },
+            "walletScreening": {
+              "title": "Uchunguzi wa Wallet (KYT)",
+              "description": "Hatari ya wallet ya on-chain · $0.15"
+            }
+          },
+          "modules": {
+            "headingDocuments": "Nyaraka & Mawasiliano",
+            "headingBiometrics": "Biometrics & Hatari",
+            "idVerification": "Uthibitishaji wa Kitambulisho",
+            "nfcVerification": "Uthibitishaji wa NFC",
+            "proofOfAddress": "Uthibitisho wa Anwani",
+            "databaseValidation": "Uthibitishaji wa Hifadhidata",
+            "questionnaires": "Maswali Maalum",
+            "emailVerification": "Uthibitishaji wa Barua Pepe",
+            "phoneVerification": "Uthibitishaji wa Simu",
+            "liveness": "Uhai",
+            "faceMatch": "Ulinganishaji wa Nyuso 1:1",
+            "faceSearch": "Utafutaji wa Nyuso 1:N",
+            "biometricAuth": "Uthibitishaji wa Kibayometriki",
+            "ageEstimation": "Makadirio ya Umri",
+            "ipAnalysis": "Uchambuzi wa Kifaa & IP",
+            "walletScreening": "Uchunguzi wa Wallet (KYT)",
+            "seeAll": "Tazama moduli zote 25+"
+          },
+          "viewAll": "Vinjari bidhaa zote"
+        }
+      },
+      "announcementBar": {
+        "slot1": {
+          "text": "Didit Yakusanya <amt>$7.5M</amt> Kujenga Miundombinu ya Utambulisho na Udanganyifu",
+          "ctaLabel": "Soma tangazo",
+          "href": "/blog/didit-7-5m-seed-infrastructure-identity-fraud-sw/"
+        },
+        "slot2": {
+          "text": "Mdhibiti wa fedha wa Hispania alitambua Didit kuwa salama kuliko ana kwa ana.",
+          "ctaLabel": "Soma ripoti",
+          "href": "/security-compliance#regulator"
+        },
+        "slot3": {
+          "text": "Uchunguzi wa Wallet kwa $0.15 kwa kila ukaguzi, au tumia mtoa huduma wako wa uchunguzi.",
+          "ctaLabel": "Angalia uchunguzi wa wallet",
+          "href": "/products/wallet-screening"
+        },
+        "slot4": {
+          "text": "Bei za KYB na Ufuatiliaji wa Miamala zimeanza kutumika.",
+          "ctaLabel": "Angalia bei",
+          "href": "/pricing"
+        },
+        "slot5": {
+          "text": "$0.33 kwa KYC kamili. Bure 500 kila mwezi.",
+          "ctaLabel": "Anza bure",
+          "href": "https://business.didit.me"
+        }
+      },
+      "footer": {
+        "tagline": "API moja kwa utambulisho na udanganyifu.",
+        "cols": {
+          "products": {
+            "heading": "Bidhaa",
+            "userVerification": "Uthibitishaji wa Mtumiaji (KYC)",
+            "businessVerification": "Uthibitishaji wa Biashara (KYB)",
+            "transactionMonitoring": "Ufuatiliaji wa Miamala",
+            "walletScreening": "Uchunguzi wa Wallet (KYT)",
+            "amlScreening": "Uchunguzi wa AML",
+            "idVerification": "Uthibitishaji wa Kitambulisho",
+            "liveness": "Uhai",
+            "faceMatch1to1": "Kulinganisha Nyuso 1:1",
+            "faceSearch1toN": "Utafutaji wa Uso 1:N",
+            "biometricAuth": "Uthibitishaji wa Kibayometriki",
+            "ageEstimation": "Makadirio ya Umri",
+            "nfcReading": "Usomaji wa NFC",
+            "databaseValidation": "Uthibitishaji wa Hifadhidata",
+            "ipAnalysis": "Uchambuzi wa Kifaa & IP",
+            "emailVerification": "Uthibitishaji wa Barua Pepe",
+            "phoneVerification": "Uthibitishaji wa Simu",
+            "workflowOrchestrator": "Mratibu wa Mtiririko wa Kazi",
+            "whiteLabel": "White Label",
+            "seeAllModules": "Bidhaa zote"
+          },
+          "solutions": {
+            "heading": "Suluhisho",
+            "fullKycOnboarding": "Usajili kamili wa KYC",
+            "ageVerification": "Uthibitishaji wa umri",
+            "cryptoOnramp": "KYC + KYT ya Crypto on-ramp",
+            "accountTakeover": "Zuia udhibiti wa akaunti",
+            "multiAccountAbuse": "Zuia matumizi mabaya ya akaunti nyingi",
+            "proofOfHuman": "Uthibitisho wa binadamu",
+            "botDetection": "Zuia bots",
+            "gigWorkerVerification": "Uthibitishaji wa mfanyakazi wa gig",
+            "igamingResponsibleGaming": "Michezo ya kubahatisha inayowajibika ya iGaming",
+            "micaCrypto": "Uthibitishaji wa mtumiaji wa crypto wa MiCA",
+            "cryptoTravelRule": "Sheria ya Usafiri ya Crypto",
+            "uboVerification": "Uthibitishaji wa UBO (6AMLD)",
+            "bnplUnderwriting": "Uandikishaji wa BNPL",
+            "psd3Sca": "PSD3 SCA",
+            "marketplaceSellerKyb": "KYB ya muuzaji wa soko",
+            "employeeOnboarding": "Usajili wa wafanyakazi",
+            "nfcEpassport": "Usajili wa ePassport wa NFC",
+            "passwordRecovery": "Urejeshaji wa nenosiri",
+            "seeAll": "Matumizi yote"
+          },
+          "industries": {
+            "heading": "Sekta",
+            "fintech": "Fintech",
+            "crypto": "Crypto / Web3",
+            "marketplaces": "Masoko",
+            "mobility": "Uhamaji",
+            "gambling": "iGaming / Kamari",
+            "banking": "Benki",
+            "insurance": "Bima",
+            "ecommerce": "Biashara ya mtandaoni",
+            "telecom": "Mawasiliano",
+            "seeAll": "Sekta zote"
+          },
+          "developers": {
+            "heading": "Waendelezaji",
+            "documentation": "Nyaraka",
+            "apiReference": "API Reference",
+            "quickstart": "Anza Haraka, Dakika 5",
+            "integrationPrompt": "Ushirikiano wa haraka",
+            "mcp": "MCP Server",
+            "agentSkills": "Ujuzi wa Wakala",
+            "sdks": "SDKs",
+            "sandbox": "Sandbox (bure)",
+            "changelog": "Mabadiliko",
+            "status": "Hali ya Huduma",
+            "demoCenter": "Kituo cha Maonyesho"
+          },
+          "comparePricing": {
+            "heading": "Bei na Kulinganisha",
+            "pricing": "Bei",
+            "roiCalculator": "Kikokotoo cha ROI",
+            "sumsub": "dhidi ya Sumsub",
+            "veriff": "dhidi ya Veriff",
+            "onfido": "dhidi ya Onfido",
+            "jumio": "dhidi ya Jumio",
+            "persona": "dhidi ya Persona",
+            "stripeIdentity": "dhidi ya Stripe Identity",
+            "allSwitch": "Milinganisho yote ya washindani",
+            "countries": "Nchi zinazotumika",
+            "supportedDocuments": "Nyaraka zinazotumika"
+          },
+          "resources": {
+            "heading": "Rasilimali",
+            "securityCompliance": "Usalama na Uzingatiaji",
+            "supportedDocuments": "Nyaraka Zinazotumika",
+            "roiCalculator": "Kikokotoo cha ROI",
+            "status": "Hali ya Huduma",
+            "demoCenter": "Kituo cha Maonyesho"
+          },
+          "company": {
+            "heading": "Kampuni",
+            "about": "Kuhusu sisi",
+            "blog": "Blogu",
+            "successStories": "Hadithi za Mafanikio",
+            "securityCompliance": "Usalama na Uzingatiaji",
+            "contact": "Wasiliana Nasi",
+            "getDemo": "Pata onyesho",
+            "careers": "Kazi",
+            "brand": "Vifaa vya chapa",
+            "support": "Usaidizi",
+            "helpCenter": "Kituo cha Usaidizi"
+          },
+          "backedby": {
+            "investors": {
+              "name": {
+                "yCombinator": "Y Combinator"
+              }
+            }
+          }
+        },
+        "askAi": {
+          "eyebrow": "Uliza AI ifupishe ukurasa huu",
+          "openIn": "Fungua ukurasa huu katika {provider}"
+        },
+        "trustStrip": "SOC 2 · ISO 27001 · iBeta PAD L1 · GDPR · eIDAS 2.0 · MiCA · AMLD6 · DORA-aligned",
+        "regulatorMicroline": "Imetambuliwa na Tesoro ya Uhispania, Banco de España, na SEPBLAC kama salama zaidi kuliko uthibitishaji wa ana kwa ana.",
+        "regulatorReadReport": "Soma ripoti",
+        "backedBy": "Inaungwa mkono na",
+        "hq": "San Francisco, Marekani · Makao Makuu",
+        "legal": {
+          "copyright": "© 2026 Didit",
+          "privacy": "Faragha",
+          "cookies": "Vidakuzi",
+          "businessTerms": "Masharti ya Biashara",
+          "subProcessors": "Wachakataji wadogo",
+          "contact": "Wasiliana"
+        },
+        "social": {
+          "labels": {
+            "linkedin": "LinkedIn",
+            "x": "X (Twitter)",
+            "github": "GitHub"
+          },
+          "ariaLabel": "Didit kwenye {network}"
+        },
+        "g2Aria": "Didit imekadiriwa 4.9 kati ya 5 kwenye G2",
+        "g2Tagline": "Miundombinu ya utambulisho na udanganyifu"
+      }
+    },
+    "localeswitcher": {
+      "language": "Lugha",
+      "ariaLabel": {
+        "language": "Lugha",
+        "languageColumn1": "Lugha (safu 1)",
+        "languageColumn2": "Lugha (safu 2)",
+        "changeLanguage": "Badilisha lugha. Lugha ya sasa: {current}."
+      }
+    },
+    "ui": {
+      "navbar": {
+        "image": {
+          "sizes": {
+            "minWidth1024px480px": "(min-width: 1024px) 480px, 100vw"
+          },
+          "alt": {
+            "didit": "Didit"
+          }
+        },
+        "dropdownPanel": {
+          "subtleDarkening": {
+            "description": "Kugiza kidogo chini tu, inatosha tu\n                        kushikilia maandishi bila kufifisha sehemu ya juu\n                        ya picha. h-[55%] inaanza chini kabisa\n                        ya nyuso za waanzilishi."
+          },
+          "accentVariant": {
+            "description": "Aina ya lafudhi, funga kiungo kwenye kidonge cha Didit Blue ili\n            // kisomeke kama wito wa kubadilisha wenye ufanisi mkubwa."
+          },
+          "heroStrip": {
+            "heading": "Ukanda wa shujaa, kadi za gradient katika safu moja ya mlalo."
+          },
+          "linkColumnsRow": {
+            "heading": "Safu ya viungo, Moduli · Matumizi · Sekta."
+          },
+          "imageBackgroundVariant": {
+            "description": "Aina ya mandharinyuma ya picha, inatumika kwa kadi ya \"Kutana na waanzilishi\" kwenye menyu ya Rasilimali.\n                  // Next/Image inajaza kadi; kizuizi cha maandishi kilichopangwa kushoto\n                  // (kichwa + maelezo + CTA) kinakaa chini upande wa kushoto-chini\n                  // ili picha itawale ~80% ya kadi. Hakuna giza la gradient, usomaji wa maandishi\n                  // unasaidiwa na kivuli chembamba cha maandishi kwenye\n                  // aina ya canvas-white. Kulingana na Alberto: \"ondoa\n                  // opacity hapa chini na uifanye kama hapo awali upande wa\n                  // kushoto uliopangwa hakikisha tu inaanza chini zaidi\n                  // kama hapo awali.\""
+          },
+          "titleRow": {
+            "description": "Safu ya kichwa, ikoni ndani ya mstari KUSHOTO mwa kichwa (hakuna chip\n                    mandharinyuma, hakuna pete, hakuna kivuli). Inatumia familia ya ikoni\n                    sawa na ile inayotumiwa na `/pricing` kupitia ConsoleModuleIcon (ambayo\n                    inaakisi usajili wa fe-application-console workflow-feature-\n                    icon); inarudi kwenye mask ya iconSrc\n                    wakati `moduleKey` haipo."
+          },
+          "accentSideColumn": {
+            "description": "`accent` kwenye kiungo cha safu ya pembeni inakifanya kionekane kwa rangi ya Didit\n                  // Bluu na mshale unaofuata, inatumika kwa \"Angalia moduli zote 25+\",\n                  // \"Sekta zote 15\", \"Vinjari zote …\" aina za viingilio\n                  // ili visomeke kama CTA za kuchunguza zaidi badala\n                  // ya viungo vya kawaida vya moduli."
+          }
+        },
+        "searchDidit": "Tafuta Didit",
+        "closeSearch": "Funga utafutaji",
+        "openMenu": "Fungua menyu",
+        "closeMenu": "Funga menyu"
+      },
+      "topBar": {
+        "announcementAriaLabel": "Tangazo",
+        "dismissAnnouncementAriaLabel": "Funga tangazo"
+      },
+      "navTerminalCard": {
+        "diditZsh": "~/didit · zsh",
+        "navTerminalCard": {
+          "live": "LIVE"
+        }
+      },
+      "logoContextMenu": {
+        "aria": "Rasilimali za chapa ya Didit",
+        "eyebrow": "Kifaa cha chapa",
+        "copyLogo": "Nakili nembo kama SVG",
+        "copied": "Imenakiliwa",
+        "downloadSvg": "Pakua nembo (SVG)",
+        "downloadPng": "Pakua nembo (PNG)",
+        "downloadMark": "Pakua alama (SVG)",
+        "copyColor": "Nakili rangi ya chapa",
+        "guidelines": "Miongozo ya chapa"
+      },
+      "footer": {
+        "legalTagline": "Miundombinu ya utambulisho kwa timu zinazohitaji uaminifu."
+      },
+      "backedBy": {
+        "label": "Inaungwa mkono na"
+      }
+    },
+    "blog": {
+      "archive": {
+        "eyebrow": "Kumbukumbu ya blogu",
+        "title": "Vinjari <blue>makala zote za Didit</blue>.",
+        "titleAccent": "makala za Didit",
+        "description": "Makala zote zilizochapishwa kuhusu utambulisho na udanganyifu zimepangwa katika kurasa nyepesi ili uzivinjari kwa haraka.",
+        "browseAll": "Vinjari makala zote",
+        "navigationAria": "Kurasa za kumbukumbu ya blogu",
+        "pageOf": "Ukurasa wa {page} kati ya {total}",
+        "range": "Makala {start}–{end}",
+        "articleCount": "Makala {count}",
+        "metadata": {
+          "title": "Kumbukumbu ya blogu | Didit",
+          "pageTitle": "Kumbukumbu ya blogu, ukurasa wa {page} | Didit",
+          "description": "Vinjari kumbukumbu kamili ya blogu ya Didit kwa makala za utambulisho, udanganyifu, uzingatiaji, masasisho ya bidhaa na habari za kampuni.",
+          "pageDescription": "Vinjari ukurasa wa {page} wa kumbukumbu ya blogu ya Didit kwa makala za utambulisho, udanganyifu, uzingatiaji na habari za kampuni."
+        }
+      }
+    }
+  }
+}

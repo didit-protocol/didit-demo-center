@@ -1,0 +1,145 @@
+{
+  "_source": "Assembled from the documented examples on https://docs.didit.me/business-verification/response-schema (top-level structure, registry_checks, company block, officer, beneficial owner, key_people_checks, submitted party and document_verifications). Staging has no KYB workflow yet, so there is no recorded business decision to use instead.",
+  "session_id": "6f1c9b8e-2a4d-4f3b-9c1e-7d5a8b0e4c21",
+  "session_kind": "business",
+  "session_number": 89,
+  "session_url": "https://verify.didit.me/session/REDACTED_TOKEN",
+  "status": "Awaiting User",
+  "workflow_id": "wf_kyb_standard",
+  "features": ["KYB_REGISTRY", "KYB_COMPANY_AML", "KYB_DOCUMENTS", "KYB_KEY_PEOPLE"],
+  "vendor_data": "mkt-seller-0123456789ab",
+  "metadata": { "demo_app": "marketplace", "shop": "Atelier Nord" },
+  "callback": null,
+  "registry_checks": [
+    {
+      "status": "Approved",
+      "node_id": "feature_kyb_registry",
+      "data_resolved": true,
+      "company": {
+        "uuid": "a1b2c3d4-0000-4000-8000-000000000001",
+        "node_id": "feature_kyb_registry",
+        "status": "Approved",
+        "registry_status": "active",
+        "data_resolved": true,
+        "company_name": "Acme Corporation Limited",
+        "registration_number": "12345678",
+        "country_code": "GBR",
+        "company_type": "Private Limited",
+        "incorporation_date": "2010-05-14",
+        "registered_address": "1 Main Street, London EC1A 1AA, United Kingdom",
+        "tax_number": "SAMPLE-TAX-12345",
+        "risk_level": "LOW",
+        "verification_status": "verified",
+        "is_from_registry": true,
+        "fetch_status": "resolved",
+        "email": "alex.sample@example.com",
+        "phone": "+15550101000",
+        "officers": [
+          {
+            "uuid": "a1b2c3d4-0000-4000-8000-000000000002",
+            "name": "Jane Doe",
+            "first_name": "Jane",
+            "last_name": "Doe",
+            "date_of_birth": null,
+            "date_of_birth_year": 1983,
+            "date_of_birth_month": 2,
+            "address": "1 Example Street, London",
+            "appointment_date": "2024-07-01",
+            "termination_date": null,
+            "designation": "Director",
+            "role": "director",
+            "nationality": "USA",
+            "is_active": true,
+            "kyc_status": "Approved",
+            "kyc_session_url": "https://verify.didit.me/session/REDACTED_TOKEN"
+          }
+        ],
+        "beneficial_owners": [
+          {
+            "uuid": "a1b2c3d4-0000-4000-8000-000000000003",
+            "name": "John Doe",
+            "first_name": "John",
+            "last_name": "Doe",
+            "entity_type": "person",
+            "date_of_birth": null,
+            "roles": ["ubo"],
+            "ownership_min_shares": "40",
+            "ownership_max_shares": "40",
+            "is_active": true,
+            "kyc_status": "Pending",
+            "kyc_session_url": "https://verify.didit.me/session/REDACTED_TOKEN",
+            "effective_ownership_percent": 40.0
+          }
+        ]
+      },
+      "warnings": []
+    }
+  ],
+  "aml_screenings": [{ "status": "Approved", "total_hits": 0, "hits": [] }],
+  "document_verifications": [
+    {
+      "status": "Approved",
+      "node_id": "feature_kyb_documents",
+      "items": [
+        {
+          "uuid": "a1b2c3d4-0000-4000-8000-000000000004",
+          "document_type": "certificate_of_incorporation",
+          "status": "Approved",
+          "file_url": "https://didit-storage.s3.example/certificate.pdf",
+          "ocr_data": {
+            "company_name": "Acme Corporation Limited",
+            "registration_number": "12345678",
+            "incorporation_date": "2010-05-14"
+          }
+        }
+      ]
+    }
+  ],
+  "key_people_checks": [
+    {
+      "status": "Awaiting User",
+      "node_id": "feature_kyb_key_people",
+      "registry": { "officers": [], "beneficial_owners": [] },
+      "submitted": {
+        "parties": [
+          {
+            "uuid": "a1b2c3d4-0000-4000-8000-000000000005",
+            "entity_type": "person",
+            "name": "Alice Chen",
+            "first_name": "Alice",
+            "last_name": "Chen",
+            "email": "alex.sample@example.com",
+            "role": "ubo",
+            "ownership_percent": 35.0,
+            "nationality": "USA",
+            "position": "CEO",
+            "date_of_birth": "1990-01-01",
+            "phone_number": "+34600000000",
+            "source": "USER",
+            "requires_verification": true,
+            "is_skipped": false,
+            "kyc_session_id": "a1b2c3d4-0000-4000-8000-000000000006",
+            "kyc_session_status": "Not Started",
+            "kyc_session_url": "https://verify.didit.me/session/REDACTED_TOKEN",
+            "kyc_session_deleted": false,
+            "custom_fields": {}
+          }
+        ]
+      },
+      "ubo_kyc_summary": { "total": 2, "approved": 1, "flagged": 0, "pending": 1 },
+      "warnings": []
+    }
+  ],
+  "phone_verifications": null,
+  "email_verifications": null,
+  "questionnaire_responses": null,
+  "ip_analyses": null,
+  "reviews": [],
+  "contact_details": null,
+  "expected_details": {
+    "company_name": "Acme Corporation Limited",
+    "registry_country": "GB"
+  },
+  "created_at": "2026-04-16T10:00:00Z",
+  "expires_at": "2026-04-23T10:00:00Z"
+}

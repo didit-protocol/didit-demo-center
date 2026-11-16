@@ -1,0 +1,316 @@
+{
+  "uuid": "f2696d47-5277-417c-9268-e1fc07a7f3f8",
+  "environment": "live",
+  "transaction_number": 211,
+  "txn_id": "kestrel-dep-2a16a39c-ca6c-4df9-ac5f-fe4ff25f1a86",
+  "txn_date": "2026-10-27T13:11:54.743948Z",
+  "zone_id": null,
+  "transaction_type": "finance",
+  "action_type": "deposit",
+  "direction": "INBOUND",
+  "status": "APPROVED",
+  "source": "LIVE",
+  "amount": "0.25",
+  "currency": "BTC",
+  "currency_type": "crypto",
+  "amount_in_default_currency": null,
+  "default_currency_code": null,
+  "preferred_currency_amount": "20020.013277884515",
+  "preferred_currency_code": "USD",
+  "payment_details": "Deposit from own wallet",
+  "payment_txn_id": null,
+  "score": 0,
+  "severity": null,
+  "decision_reason_code": null,
+  "decision_reason_label": null,
+  "vendor_data": "kestrel-0f6c2a51-3c4e-4d7b-9a1f-2b8e5d6c7a90",
+  "metadata": {
+    "subject": {
+      "full_name": "Avery Quinn",
+      "entity_type": "individual",
+      "vendor_data": "kestrel-0f6c2a51-3c4e-4d7b-9a1f-2b8e5d6c7a90"
+    },
+    "counterparty": {
+      "full_name": "Avery Quinn",
+      "entity_type": "individual",
+      "payment_method": {
+        "account_id": "bc1q7p76rqpwr55pcg9c9nptkwvdztkywsqk4u6tp0",
+        "method_type": "unhosted_wallet"
+      }
+    }
+  },
+  "props": {
+    "demo_app": "crypto-exchange",
+    "wallet_risk": null,
+    "sanctions_hit": false,
+    "deposit_source": "own-wallet",
+    "aml_risk_factors": [],
+    "pep_counterparty": null,
+    "wallet_risk_score": 0,
+    "wallet_sanctioned": false,
+    "aml_screening_type": "WALLET_SCREENING",
+    "aml_screening_status": "COMPLETED",
+    "aml_counterparty_count": 0,
+    "aml_high_risk_exposure_pct": 0,
+    "aml_sanctions_exposure_pct": 0
+  },
+  "tags": [],
+  "parties": [
+    {
+      "uuid": "5b06b23e-93c6-4d7e-bf90-70c5b1ad0911",
+      "role": "APPLICANT",
+      "entity_type": "individual",
+      "kind": "USER",
+      "vendor_data": "kestrel-0f6c2a51-3c4e-4d7b-9a1f-2b8e5d6c7a90",
+      "full_name": "Avery Quinn",
+      "first_name": null,
+      "last_name": null,
+      "country_code": null,
+      "dob": null,
+      "address": {},
+      "institution_info": {},
+      "device": {},
+      "external_party_snapshot": null
+    },
+    {
+      "uuid": "7cc9c8bc-e686-4e7c-a98c-1aa4df126a66",
+      "role": "COUNTERPARTY",
+      "entity_type": "individual",
+      "kind": "EXTERNAL",
+      "vendor_data": null,
+      "full_name": "Avery Quinn",
+      "first_name": null,
+      "last_name": null,
+      "country_code": null,
+      "dob": null,
+      "address": {},
+      "institution_info": {},
+      "device": {},
+      "external_party_snapshot": {
+        "address": {},
+        "country": null,
+        "full_name": "Avery Quinn",
+        "last_name": null,
+        "first_name": null,
+        "entity_type": "individual",
+        "vendor_data": null,
+        "date_of_birth": null,
+        "device_context": {},
+        "institution_details": {}
+      }
+    }
+  ],
+  "payment_methods": [
+    {
+      "uuid": "b92826a9-1126-4efa-bca2-96853619a87a",
+      "payment_method_type": "unhosted_wallet",
+      "label": null,
+      "fingerprint": "ddc5da1c9ef1a82a8cbaae3b7c4b68a90d13d483b10defb485793fa395db1c87",
+      "account_id": "bc1q7p76rqpwr55pcg9c9nptkwvdztkywsqk4u6tp0",
+      "issuing_country": null,
+      "owner_kind": "EXTERNAL",
+      "vendor_data": null,
+      "owner_name": "Avery Quinn",
+      "institution_info": {},
+      "details": {
+        "account_id": "bc1q7p76rqpwr55pcg9c9nptkwvdztkywsqk4u6tp0",
+        "method_type": "unhosted_wallet"
+      },
+      "external_owner_snapshot": {
+        "country": null,
+        "full_name": "Avery Quinn",
+        "entity_type": "individual",
+        "vendor_data": null
+      },
+      "role": "SOURCE"
+    }
+  ],
+  "documents": [],
+  "activities": [
+    {
+      "uuid": "c14abfea-bbdf-4bb2-a153-c4621a91fbc4",
+      "activity_type": "TRANSACTION_CREATED",
+      "source": "TRANSACTION",
+      "status": "APPROVED",
+      "title": "deposit",
+      "description": null,
+      "metadata": {
+        "amount": "0.250000000000000000",
+        "currency": "BTC",
+        "direction": "INBOUND",
+        "action_type": "deposit"
+      },
+      "occurred_at": "2026-10-27T13:11:54.748365Z"
+    }
+  ],
+  "alerts": [],
+  "rule_runs": [
+    {
+      "uuid": "8b0841b7-eb81-4ad9-b0a0-765da8ee48e9",
+      "rule": "1dc67bf0-c815-4ce8-acad-5c74508246f4",
+      "rule_title": "Sender != Receiver (verify)",
+      "rule_description": "",
+      "rule_category": "velocity",
+      "matched": true,
+      "is_test": true,
+      "mode": "TEST",
+      "severity": null,
+      "score_delta": 0,
+      "status_target": null,
+      "action_summary": null,
+      "metadata": {
+        "conditions": [
+          {
+            "field": "subject_payment_method_account_id",
+            "matched": true,
+            "operator": "ne",
+            "group_index": 0,
+            "group_logic": "OR",
+            "field_source": null,
+            "current_value": null,
+            "expected_value": "counterparty_payment_method_account_id",
+            "_groups_overall": true
+          }
+        ],
+        "scope_match": true,
+        "aggregations": []
+      },
+      "created_at": "2026-10-27T13:11:55.531255Z"
+    }
+  ],
+  "provider_results": [
+    {
+      "uuid": "071c096e-2174-4373-9068-19d1b5cd8a0e",
+      "provider": "merklescience",
+      "result_type": "WALLET_SCREENING",
+      "status": "SCREENED",
+      "severity": "UNKNOWN",
+      "score": 0,
+      "summary": "Merkle Science risk: No Risk Detected (0/5)",
+      "payload": {
+        "status": "SCREENED",
+        "fee_usd": null,
+        "summary": "Merkle Science risk: No Risk Detected (0/5)",
+        "provider": "merklescience",
+        "severity": "UNKNOWN",
+        "blockchain": "BTC",
+        "risk_score": 0,
+        "sender_rows": [],
+        "raw_response": {
+          "tags": {
+            "user": {},
+            "owner": {}
+          },
+          "type": null,
+          "balance": 0,
+          "workspace": {
+            "name": "Didit",
+            "slug": "didit"
+          },
+          "blockchain": 0,
+          "created_at": "2026-10-27T13:11:55.200771Z",
+          "identifier": "bc1q7p76rqpwr55pcg9c9nptkwvdztkywsqk4u6tp0",
+          "originator": [],
+          "risk_level": 0,
+          "updated_at": "2026-10-27T13:11:55.216460Z",
+          "beneficiary": [],
+          "customer_id": null,
+          "type_verbose": null,
+          "digital_assets": [
+            {
+              "name": "Bitcoin",
+              "symbol": "BTC"
+            }
+          ],
+          "blockchain_verbose": "Bitcoin",
+          "risk_level_verbose": "No Risk Detected",
+          "total_incoming_value": "0.0000",
+          "total_outgoing_value": "0.0000",
+          "latest_transaction_time": null,
+          "total_incoming_value_usd": "0.00",
+          "total_outgoing_value_usd": "0.00",
+          "earliest_transaction_time": null
+        },
+        "risk_factors": [],
+        "network_edges": [],
+        "network_nodes": [],
+        "receiver_rows": [],
+        "sanctions_hit": false,
+        "screening_type": "WALLET_SCREENING",
+        "wallet_address": "bc1q7p76rqpwr55pcg9c9nptkwvdztkywsqk4u6tp0",
+        "block_timestamp": null,
+        "source_of_funds": [],
+        "total_value_usd": null,
+        "pep_counterparty": null,
+        "transaction_hash": null,
+        "transaction_flows": [],
+        "destination_of_funds": [],
+        "dominant_risk_category": null,
+        "transaction_flows_error": null,
+        "counterparty_connections": [],
+        "transaction_flows_status": null
+      },
+      "created_at": "2026-10-27T13:11:55.334562Z"
+    }
+  ],
+  "travel_rule": null,
+  "network_snapshot": {
+    "uuid": "ecdabb9c-7863-403b-ad84-cb42223c2e20",
+    "nodes": [
+      {
+        "id": "bc1q7p76rqpwr55pcg9c9nptkwvdztkywsqk4u6tp0",
+        "label": "bc1q7p...6tp0",
+        "metadata": {
+          "fee_usd": null,
+          "full_address": "bc1q7p76rqpwr55pcg9c9nptkwvdztkywsqk4u6tp0",
+          "screening_type": "WALLET_SCREENING",
+          "block_timestamp": null,
+          "total_value_usd": null,
+          "transaction_hash": null
+        },
+        "is_target": true,
+        "node_type": "wallet",
+        "risk_level": "unknown"
+      }
+    ],
+    "edges": [],
+    "metrics": {
+      "fee_usd": null,
+      "provider": "merklescience",
+      "severity": "UNKNOWN",
+      "risk_score": 0,
+      "total_edges": 0,
+      "total_nodes": 1,
+      "sanctions_hit": false,
+      "screening_type": "WALLET_SCREENING",
+      "block_timestamp": null,
+      "total_value_usd": null,
+      "omitted_incoming": 0,
+      "omitted_outgoing": 0
+    }
+  },
+  "remediation": null,
+  "action_required": null,
+  "cost_breakdown": {
+    "total_price": 0.17,
+    "items": [
+      {
+        "usage_type": "transaction_aml_monitoring",
+        "price": 0.15,
+        "details": {
+          "is_byok": false,
+          "product": "transactions"
+        },
+        "created_at": "2026-10-27T13:11:55.552615Z"
+      },
+      {
+        "usage_type": "transaction_monitoring",
+        "price": 0.02,
+        "details": {
+          "product": "transactions"
+        },
+        "created_at": "2026-10-27T13:11:55.552604Z"
+      }
+    ]
+  }
+}
