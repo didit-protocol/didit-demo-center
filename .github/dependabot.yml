@@ -1,9 +1,12 @@
 version: 2
 updates:
   # Follow the published Didit packages: one grouped pull request a day when
-  # any @didit-protocol/* package has a new version. Nothing else is updated.
+  # any @didit-protocol/* package has a new version. No other version update is opened.
+  # `target-branch` makes this entry govern version updates only, so the Didit-only
+  # `allow` list below does not narrow security updates for the other dependencies.
   - package-ecosystem: "npm"
     directory: "/"
+    target-branch: "main"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 2
