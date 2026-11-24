@@ -40,7 +40,7 @@ transaction and event. `DIDIT_REDIRECT_URI` defaults to this site's
 Without a key every demo keeps its own sign-in and the Authentication parts
 stay hidden.
 
-The Didit packages (`@didit-protocol/auth`, `auth-nextjs`, `auth-react`, `sdk-web` and `signals`) come from npm with caret ranges in `package.json`, so the demos follow what is published.
+The Didit packages (`@didit-protocol/auth`, `auth-nextjs`, `auth-react`, `sdk-web` and `signals`) come from npm at the exact versions in `package.json`, so a build of a commit always installs the Didit code that commit was tested with.
 Dependabot (`.github/dependabot.yml`) opens one grouped pull request daily whenever a new version of any `@didit-protocol/*` package is published.
 
 ## Two kinds of demo
