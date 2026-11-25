@@ -1,0 +1,35 @@
+/* Support sheet for the VENDORED didit.me chrome (vendor/didit-website).
+ *
+ * The chrome compiles from the SAME Tailwind build as the rest of this app
+ * (tailwind.config.js uses the website's own preset and scans the vendor tree),
+ * and preflight is on, so - unlike the help centre - none of Tailwind's base
+ * layer has to be re-created here.
+ *
+ * What is left is the pair of behavioural rules the website's globals.css
+ * carries for the chrome, copied verbatim in intent:
+ *
+ *  - `scrollbar-gutter: stable`, so the sticky header keeps its width when a
+ *    dialog locks scroll;
+ *  - neutralising the `overflow: hidden` that Radix (and the vendored navbar's
+ *    own `data-menu-open`) puts on <body>. Left alone it turns body into a
+ *    scroll container, and `position: sticky` then binds to body's scroll
+ *    origin instead of the viewport - the header rides up off-screen the
+ *    moment a modal opens below the fold. The page is locked on <html>
+ *    instead, which keeps the chrome pinned AND stops background scroll.
+ */
+
+html {
+  scrollbar-gutter: stable;
+}
+
+html body[data-scroll-locked],
+html body[data-menu-open] {
+  overflow-x: clip !important;
+  overflow-y: visible !important;
+  margin-right: 0 !important;
+}
+
+html:has(body[data-scroll-locked]),
+html:has(body[data-menu-open]) {
+  overflow: hidden;
+}

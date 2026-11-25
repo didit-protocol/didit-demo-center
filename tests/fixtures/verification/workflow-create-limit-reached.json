@@ -1,0 +1,8 @@
+{
+  "recorded": "2026-10-22, verification.staging.didit.me, staging demo application",
+  "source": "real response: POST /v3/workflows/ on an application already holding 50 or more workflows",
+  "status": 400,
+  "response": {
+    "non_field_errors": ["Maximum of 50 workflows per application reached."]
+  }
+}

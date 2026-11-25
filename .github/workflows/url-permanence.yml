@@ -1,0 +1,40 @@
+# A published demos.didit.me URL is permanent (CLAUDE.md, "URLs are
+# permanent"): every listed path keeps its page, every legacy /?demo= link
+# keeps reaching its product demo, and no path may leave
+# data/published-urls.json. Both checks read the repository only, so the job
+# installs nothing.
+name: url-permanence
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: url-permanence-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  url-permanence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      # The pull request checkout is the merge commit, so this compares exactly
+      # what merging would publish.
+      - name: Published URL list only grows
+        if: github.event_name == 'pull_request'
+        run: |
+          git fetch --no-tags --depth=1 origin "${{ github.event.pull_request.base.sha }}"
+          node scripts/check-published-urls.mjs --base "${{ github.event.pull_request.base.sha }}"
+
+      - name: Published URLs keep their pages
+        run: node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test tests/url-permanence.test.mjs tests/check-published-urls.test.mjs
