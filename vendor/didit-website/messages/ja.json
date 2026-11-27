@@ -1,0 +1,501 @@
+{
+  "translation_v1": {
+    "chrome": {
+      "header": {
+        "developers": {
+          "primary": {
+            "mcpServer": "MCPサーバー",
+            "quickstart": "クイックスタート",
+            "docs": "ドキュメント",
+            "apiReference": "APIリファレンス"
+          },
+          "quickstartCard": {
+            "description": "Diditを5分で連携。サンドボックスキーを取得し、最初のセッションをPOST、Webhookを確認するまでの手順をcurlで解説します。",
+            "cta": "クイックスタートを読む",
+            "eyebrow": "5分で連携"
+          },
+          "buildLinks": {
+            "heading": "構築",
+            "sessionsApi": "Sessions API",
+            "webhooks": "Webhooks",
+            "sdks": "SDKs",
+            "openApi": "OpenAPI / Postman",
+            "agentSkills": "エージェントスキル",
+            "codingAgentIntegration": "コーディングエージェント連携"
+          },
+          "ship": {
+            "integrationPrompt": "連携プロンプト",
+            "heading": "リリース",
+            "sandbox": "サンドボックス",
+            "changelog": "変更履歴",
+            "status": "サービス稼働状況"
+          },
+          "viewAll": "開発者ハブ"
+        },
+        "resources": {
+          "hero": {
+            "blog": "ブログ",
+            "successStories": "導入事例",
+            "helpCenter": "ヘルプセンター",
+            "demoCenter": "デモセンター",
+            "roiCalculator": "ROI計算ツール",
+            "academy": "Academy"
+          },
+          "foundersCard": {
+            "title": "創業者について",
+            "description": "アレハンドロとアルベルト・ロサスは、バルセロナ出身の双子の兄弟で、本人確認と不正対策のインフラを構築しています。",
+            "cta": "Diditについて読む"
+          },
+          "read": {
+            "heading": "読む・探す"
+          },
+          "company": {
+            "heading": "会社情報",
+            "about": "会社概要",
+            "careers": "採用情報",
+            "securityCompliance": "セキュリティとコンプライアンス",
+            "contact": "お問い合わせ"
+          },
+          "viewAll": "すべてのリソース"
+        },
+        "ctas": {
+          "signIn": "サインイン",
+          "signUp": "サインアップ",
+          "startFree": "無料で始める",
+          "talkToUs": "お問い合わせ",
+          "learnMore": "詳細を見る"
+        },
+        "localeSwitcherLabel": "言語",
+        "solutions": {
+          "cards": {
+            "monitoring": {
+              "title": "モニタリング",
+              "description": "継続的なAML、取引ルール、ウォレットKYT"
+            },
+            "amlCompliance": {
+              "title": "AML＆コンプライアンス",
+              "description": "制裁、PEP、ネガティブメディア、継続的モニタリング"
+            },
+            "onboardCustomer": {
+              "title": "ユーザー認証 (KYC)",
+              "description": "月500件まで永久無料のKYC。本人確認、ライブネス、顔認証をワンパッケージで提供します。",
+              "iconLabel": "ユーザー認証 (KYC)"
+            },
+            "verifyBusiness": {
+              "title": "法人認証 (KYB)",
+              "description": "登記情報、実質的支配者、役員、法人AMLに対応。すべての実質的支配者に対し、連携されたKYCセッションをすぐに利用可能です。"
+            },
+            "stopFraud": {
+              "title": "取引モニタリング",
+              "description": "法定通貨と暗号資産に対応したリアルタイムのルールエンジン。ケース管理、SARワークフロー、連携KYCへの自動修復機能を提供します。",
+              "iconLabel": "不正利用防止"
+            },
+            "complyAml": {
+              "title": "AMLコンプライアンス",
+              "description": "1,300以上の制裁リスト、PEP、ネガティブメディアリストに対してスクリーニング。ユーザーあたり年間$0.07で毎日継続的なモニタリングを提供します。",
+              "iconLabel": "AMLコンプライアンス"
+            },
+            "authentication": {
+              "title": "認証",
+              "description": "ライブネス、生体認証、IPおよびデバイス"
+            },
+            "verification": {
+              "title": "確認",
+              "description": "KYC、KYB、書類、登記チェック"
+            }
+          },
+          "byUseCase": {
+            "heading": "ユースケース",
+            "fullKycOnboarding": "フルKYCオンボーディング",
+            "ageVerification": "年齢確認",
+            "cryptoOnramp": "暗号資産オンランプKYC + KYT",
+            "accountTakeover": "アカウント乗っ取り防止",
+            "multiAccountAbuse": "複数アカウントの不正利用をブロック",
+            "proofOfHuman": "人間であることの証明",
+            "gigWorker": "ギグワーカーのオンボーディング",
+            "botDetection": "ボット対策",
+            "passwordRecovery": "パスワードリカバリー",
+            "seeAll": "すべてのユースケース"
+          },
+          "byIndustry": {
+            "heading": "業界別",
+            "fintech": "フィンテック",
+            "crypto": "暗号資産",
+            "marketplaces": "マーケットプレイス",
+            "mobility": "モビリティ",
+            "seeAll": "すべての業界を見る",
+            "fintechDesc": "ネオバンク · 決済 · 融資 · 証券",
+            "cryptoDesc": "取引所 · ウォレット · オン/オフランプ · VASP",
+            "marketplacesDesc": "ギグ · デリバリー · クリエイター · Eコマース",
+            "mobilityDesc": "ライドヘイル · フリート · ラストワンマイル配送",
+            "igaming": "iGaming",
+            "igamingDesc": "スポーツブック · カジノ · 宝くじ · ファンタジースポーツ"
+          },
+          "byModule": {
+            "heading": "モジュール別",
+            "freeKyc": "無料KYC",
+            "governmentChecks": "政府機関チェック",
+            "biometricAuthentication": "生体認証",
+            "walletScreening": "ウォレットスクリーニング (KYT)",
+            "ageEstimation": "年齢推定",
+            "ipAnalysis": "デバイス＆IP分析",
+            "idVerification": "本人確認",
+            "whiteLabel": "ホワイトラベル",
+            "liveness": "ライブネス",
+            "faceMatch": "顔照合",
+            "seeAll": "全25以上のモジュール"
+          },
+          "viewAll": "全カタログを見る"
+        },
+        "nav": {
+          "products": "製品",
+          "pricing": "料金",
+          "image": {
+            "alt": {
+              "didit": "Didit"
+            }
+          },
+          "solutions": {
+            "cards": {
+              "verifyBusiness": {
+                "iconLabel": "法人確認 (KYB)"
+              }
+            }
+          },
+          "developers": {
+            "primary": {
+              "terminal": {
+                "readyOpenDashboard": "→ 5分で準備完了 · ダッシュボードを開く",
+                "integrateDidit": "> Didit認証を統合",
+                "sessionScaffolded": "✓ /v3/session/ スキャフォールド済み",
+                "readingMcp": "↻ mcp://didit.me を読み込み中",
+                "webhookReady": "✓ webhookハンドラー準備完了",
+                "mcpConnected": "✓ MCPサーバー接続済み",
+                "claude": "$ claude"
+              },
+              "quickstartIconLabel": "クイックスタート"
+            }
+          },
+          "resources": {
+            "foundersCard": {
+              "imageAlt": "Didit共同創設者のアレハンドロ・ロサス（左）とアルベルト・ロサス（右）",
+              "iconLabel": "Diditについて"
+            }
+          },
+          "labels": {
+            "solutions": "ソリューション",
+            "developers": "開発者",
+            "resources": "リソース",
+            "pricing": "料金"
+          }
+        },
+        "products": {
+          "cards": {
+            "userVerification": {
+              "title": "ユーザー認証",
+              "description": "KYCバンドル · $0.33"
+            },
+            "businessVerification": {
+              "title": "法人認証",
+              "description": "KYB · $2.00から"
+            },
+            "transactionMonitoring": {
+              "title": "トランザクションモニタリング",
+              "description": "リアルタイムルール · $0.02/tx"
+            },
+            "walletScreening": {
+              "title": "ウォレットスクリーニング (KYT)",
+              "description": "オンチェーンウォレットリスク · $0.15"
+            }
+          },
+          "modules": {
+            "headingDocuments": "書類と連絡先",
+            "headingBiometrics": "生体認証とリスク",
+            "idVerification": "ID認証",
+            "nfcVerification": "NFC確認",
+            "proofOfAddress": "住所確認",
+            "databaseValidation": "データベース検証",
+            "questionnaires": "カスタムアンケート",
+            "emailVerification": "メールアドレス確認",
+            "phoneVerification": "電話番号確認",
+            "liveness": "ライブネス",
+            "faceMatch": "顔認証 1:1",
+            "faceSearch": "顔検索 1:N",
+            "biometricAuth": "生体認証",
+            "ageEstimation": "年齢推定",
+            "ipAnalysis": "デバイス＆IP分析",
+            "walletScreening": "ウォレットスクリーニング (KYT)",
+            "seeAll": "全25以上のモジュールを見る"
+          },
+          "viewAll": "全製品を見る"
+        }
+      },
+      "announcementBar": {
+        "slot1": {
+          "text": "Diditが<amt>750万ドル</amt>を調達、本人確認と不正対策のインフラを構築",
+          "ctaLabel": "発表を読む",
+          "href": "/blog/didit-7-5m-seed-infrastructure-identity-fraud-ja/"
+        },
+        "slot2": {
+          "text": "スペインの金融規制当局がDiditを対面よりも安全と認定しました。",
+          "ctaLabel": "レポートを読む",
+          "href": "/security-compliance#regulator"
+        },
+        "slot3": {
+          "text": "ウォレットスクリーニングは1チェックあたり$0.15。または、お好みのスクリーニングプロバイダーをご利用ください。",
+          "ctaLabel": "ウォレットスクリーニングを見る",
+          "href": "/products/wallet-screening"
+        },
+        "slot4": {
+          "text": "KYBとトランザクションモニタリングの料金が公開されました。",
+          "ctaLabel": "料金を見る",
+          "href": "/pricing"
+        },
+        "slot5": {
+          "text": "フルKYCは$0.33。毎月500件まで無料です。",
+          "ctaLabel": "無料で始める",
+          "href": "https://business.didit.me"
+        }
+      },
+      "footer": {
+        "cols": {
+          "solutions": {
+            "seeAll": "すべてのユースケース",
+            "heading": "ソリューション",
+            "fullKycOnboarding": "フルKYCオンボーディング",
+            "ageVerification": "年齢確認",
+            "cryptoOnramp": "暗号資産オンランプ KYC + KYT",
+            "accountTakeover": "アカウント乗っ取り防止",
+            "multiAccountAbuse": "複数アカウントの不正利用防止",
+            "proofOfHuman": "人間であることの証明",
+            "botDetection": "ボット対策",
+            "gigWorkerVerification": "ギグワーカー認証",
+            "igamingResponsibleGaming": "iGaming責任あるゲーミング",
+            "micaCrypto": "MiCA暗号資産ユーザー認証",
+            "cryptoTravelRule": "暗号資産トラベルルール",
+            "uboVerification": "UBO認証 (6AMLD)",
+            "bnplUnderwriting": "BNPL与信審査",
+            "psd3Sca": "PSD3 SCA",
+            "marketplaceSellerKyb": "マーケットプレイス出品者KYB",
+            "employeeOnboarding": "従業員オンボーディング",
+            "nfcEpassport": "NFC eパスポートオンボーディング",
+            "passwordRecovery": "パスワードリカバリー"
+          },
+          "industries": {
+            "heading": "業界",
+            "fintech": "フィンテック",
+            "crypto": "暗号資産 / Web3",
+            "marketplaces": "マーケットプレイス",
+            "mobility": "モビリティ",
+            "gambling": "iGaming / ギャンブル",
+            "banking": "銀行",
+            "insurance": "保険",
+            "ecommerce": "Eコマース",
+            "telecom": "通信",
+            "seeAll": "すべての業界"
+          },
+          "developers": {
+            "heading": "開発者向け",
+            "documentation": "ドキュメント",
+            "apiReference": "APIリファレンス",
+            "quickstart": "クイックスタート, 5分",
+            "integrationPrompt": "連携プロンプト",
+            "mcp": "MCPサーバー",
+            "agentSkills": "エージェントスキル",
+            "sdks": "SDK",
+            "sandbox": "サンドボックス (無料)",
+            "changelog": "変更履歴",
+            "status": "サービス稼働状況",
+            "demoCenter": "デモセンター"
+          },
+          "comparePricing": {
+            "heading": "料金と比較",
+            "pricing": "料金",
+            "roiCalculator": "ROI計算ツール",
+            "sumsub": "vs Sumsub",
+            "veriff": "vs Veriff",
+            "onfido": "vs Onfido",
+            "jumio": "vs Jumio",
+            "persona": "vs Persona",
+            "stripeIdentity": "vs Stripe Identity",
+            "allSwitch": "競合比較一覧",
+            "countries": "対応国",
+            "supportedDocuments": "対応書類"
+          },
+          "resources": {
+            "heading": "リソース",
+            "securityCompliance": "セキュリティとコンプライアンス",
+            "supportedDocuments": "対応書類",
+            "roiCalculator": "ROI計算ツール",
+            "status": "サービス稼働状況",
+            "demoCenter": "デモセンター"
+          },
+          "products": {
+            "heading": "製品",
+            "userVerification": "ユーザー本人確認 (KYC)",
+            "businessVerification": "事業者確認 (KYB)",
+            "transactionMonitoring": "取引モニタリング",
+            "walletScreening": "ウォレットスクリーニング (KYT)",
+            "amlScreening": "AMLスクリーニング",
+            "idVerification": "ID確認",
+            "liveness": "ライブネス",
+            "faceMatch1to1": "顔照合 1:1",
+            "faceSearch1toN": "顔検索 1:N",
+            "biometricAuth": "生体認証",
+            "ageEstimation": "年齢推定",
+            "nfcReading": "NFC読み取り",
+            "databaseValidation": "データベース検証",
+            "ipAnalysis": "デバイス＆IP分析",
+            "emailVerification": "メール認証",
+            "phoneVerification": "電話番号認証",
+            "workflowOrchestrator": "ワークフローオーケストレーター",
+            "whiteLabel": "ホワイトラベル",
+            "seeAllModules": "すべての製品"
+          },
+          "company": {
+            "heading": "会社情報",
+            "about": "会社概要",
+            "blog": "ブログ",
+            "successStories": "導入事例",
+            "securityCompliance": "セキュリティとコンプライアンス",
+            "contact": "お問い合わせ",
+            "getDemo": "デモを依頼",
+            "careers": "採用情報",
+            "brand": "ブランドキット",
+            "support": "サポート",
+            "helpCenter": "ヘルプセンター"
+          },
+          "backedby": {
+            "investors": {
+              "name": {
+                "yCombinator": "Y Combinator"
+              }
+            }
+          }
+        },
+        "askAi": {
+          "eyebrow": "AIにこのページの要約を依頼する",
+          "openIn": "{provider}でこのページを開く"
+        },
+        "tagline": "本人確認と不正対策のための単一API。",
+        "trustStrip": "SOC 2 · ISO 27001 · iBeta PAD L1 · GDPR · eIDAS 2.0 · MiCA · AMLD6 · DORA-aligned",
+        "regulatorMicroline": "スペイン財務省、スペイン銀行、SEPBLACにより、対面確認よりも安全であると認定されています。",
+        "regulatorReadReport": "レポートを読む",
+        "backedBy": "支援企業",
+        "hq": "米国サンフランシスコ · 本社",
+        "legal": {
+          "copyright": "© 2026 Didit",
+          "privacy": "プライバシー",
+          "cookies": "Cookie",
+          "businessTerms": "ビジネス規約",
+          "subProcessors": "サブプロセッサー",
+          "contact": "お問い合わせ"
+        },
+        "social": {
+          "labels": {
+            "linkedin": "LinkedIn",
+            "x": "X (Twitter)",
+            "github": "GitHub"
+          },
+          "ariaLabel": "{network}上のDidit"
+        },
+        "g2Aria": "DiditはG2で5点満点中4.9と評価されています",
+        "g2Tagline": "本人確認と不正対策のインフラ"
+      }
+    },
+    "localeswitcher": {
+      "language": "言語",
+      "ariaLabel": {
+        "language": "言語",
+        "languageColumn1": "言語 (1列目)",
+        "languageColumn2": "言語 (2列目)",
+        "changeLanguage": "言語を変更。現在の言語: {current}。"
+      }
+    },
+    "ui": {
+      "navbar": {
+        "image": {
+          "sizes": {
+            "minWidth1024px480px": "(min-width: 1024px) 480px, 100vw"
+          },
+          "alt": {
+            "didit": "Didit"
+          }
+        },
+        "dropdownPanel": {
+          "subtleDarkening": {
+            "description": "微妙な下部のみの暗化, 写真の上部を暗くすることなく、\n                        テキストを固定するのに十分な暗さです。h-[55%]は\n                        創業者の顔よりかなり下から始まります。"
+          },
+          "accentVariant": {
+            "description": "アクセントバリアント, リンクをDidit Blueのピルで囲み、\n            // 高いコンバージョンを促すコールアウトとして機能させます。"
+          },
+          "heroStrip": {
+            "heading": "ヒーローストリップ, グラデーションカードを1列に並べたもの。"
+          },
+          "linkColumnsRow": {
+            "heading": "リンクカラム行, モジュール・ユースケース・業界。"
+          },
+          "imageBackgroundVariant": {
+            "description": "画像背景バリアント, リソースメニューの「創業者に会う」カードに使用されます。\n                  // Next/Imageがカードを埋め、左揃えの積み重ねられたテキストブロック\n                  // (タイトル + 説明 + CTA)が左下隅に配置され、写真がカードの約80%を占めます。\n                  // 暗いグラデーションオーバーレイはなく、キャンバスホワイトのテキストに\n                  // タイトなテキストシャドウを適用することで、テキストの可読性を確保しています。\n                  // Alberto氏のコメント：「下の不透明度を削除し、以前のように左揃えにしてください。\n                  // ただし、以前よりも下の方から始まるようにしてください。」"
+          },
+          "titleRow": {
+            "description": "タイトル行, アイコンはタイトルの左にインラインで配置されます\n                    （チップ背景、リング、シャドウなし）。\n                    `/pricing`がConsoleModuleIcon経由で使用するのと同じアイコンファミリーを使用します\n                    （これはfe-application-consoleのworkflow-feature-iconレジストリをミラーリングします）。\n                    `moduleKey`がない場合はiconSrcマスクにフォールバックします。"
+          },
+          "accentSideColumn": {
+            "description": "サイドカラムリンクの`accent`は、Didit Blueと末尾の矢印で表示されます。\n                  // 「全25以上のモジュールを見る」、「全15業界」、「すべて閲覧する」といった\n                  // エントリに使用され、通常のモジュールリンクではなく、探索を促すCTAとして機能します。"
+          }
+        },
+        "searchDidit": "Diditを検索",
+        "closeSearch": "検索を閉じる",
+        "openMenu": "メニューを開く",
+        "closeMenu": "メニューを閉じる"
+      },
+      "topBar": {
+        "announcementAriaLabel": "お知らせ",
+        "dismissAnnouncementAriaLabel": "お知らせを閉じる"
+      },
+      "navTerminalCard": {
+        "diditZsh": "~/didit · zsh",
+        "navTerminalCard": {
+          "live": "ライブ"
+        }
+      },
+      "logoContextMenu": {
+        "aria": "Didit ブランドアセット",
+        "eyebrow": "ブランドキット",
+        "copyLogo": "ロゴを SVG としてコピー",
+        "copied": "コピーしました",
+        "downloadSvg": "ロゴをダウンロード（SVG）",
+        "downloadPng": "ロゴをダウンロード（PNG）",
+        "downloadMark": "シンボルをダウンロード（SVG）",
+        "copyColor": "ブランドカラーをコピー",
+        "guidelines": "ブランドガイドライン"
+      },
+      "footer": {
+        "legalTagline": "信頼を必要とするチームのためのIDインフラストラクチャ。"
+      },
+      "backedBy": {
+        "label": "支援元"
+      }
+    },
+    "blog": {
+      "archive": {
+        "eyebrow": "ブログアーカイブ",
+        "title": "すべての<blue>Didit記事</blue>を見る。",
+        "titleAccent": "Didit記事",
+        "description": "本人確認と不正対策に関する公開済みのすべての記事を、すばやく閲覧できる軽量なページに整理しました。",
+        "browseAll": "すべての記事を見る",
+        "navigationAria": "ブログアーカイブのページ",
+        "pageOf": "{total}ページ中{page}ページ",
+        "range": "記事 {start}～{end}",
+        "articleCount": "{count}件の記事",
+        "metadata": {
+          "title": "ブログアーカイブ | Didit",
+          "pageTitle": "ブログアーカイブ、{page}ページ | Didit",
+          "description": "Diditブログアーカイブでは、本人確認や不正対策、コンプライアンス、製品アップデート、会社ニュースを網羅。eIDAS 2.0やAMLD6などの最新基準、$0.33検証の仕組みや毎月500回まで無料検証の詳細もご紹介しています。業界動向や実務に役立つ情報が満載です。",
+          "pageDescription": "Diditのブログアーカイブ{page}ページでは、本人確認や不正防止、コンプライアンス、製品情報、企業ニュースを詳しく解説。eIDAS 2.0やAMLD6などの最新基準や、1件$0.33の検証ロジック、無料500件/月の検証もご紹介しています。"
+        }
+      }
+    }
+  }
+}

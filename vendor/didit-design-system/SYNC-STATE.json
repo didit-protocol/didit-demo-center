@@ -1,0 +1,23 @@
+{
+  "repo": "didit-protocol/verification-flow-design",
+  "ref": null,
+  "commit": "a6e5d24377cb0cc0503e5a09311cbe3e718f04cb",
+  "files": [
+    "design-system/tokens.css",
+    "design-system/components/bundle.css"
+  ],
+  "blocks": [
+    "root",
+    "type",
+    "button",
+    "button-icon",
+    "status",
+    "tag",
+    "tile",
+    "halftone",
+    "window",
+    "tabs",
+    "wash",
+    "eyebrow"
+  ]
+}
